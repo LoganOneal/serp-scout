@@ -95,7 +95,7 @@ export default async function RunKeywordPage({
       <div className="run-page-head">
         <div className="page-breadcrumb">
           <Link href="/research">Research</Link> <span className="app-topbar-sep">/</span>{' '}
-          <Link href="/research/runs">Market sweep runs</Link>{' '}
+          <Link href="/research">Market sweep runs</Link>{' '}
           <span className="app-topbar-sep">/</span>{' '}
           <Link href={`/research/runs/${runId}`}>#{runId}</Link>{' '}
           <span className="app-topbar-sep">/</span> {detail.keyword}

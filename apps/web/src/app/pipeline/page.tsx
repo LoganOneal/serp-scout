@@ -34,7 +34,7 @@ export default async function PipelinePage() {
         <div className="card empty" style={{ padding: 28 }}>
           Nothing in the pipeline yet.
           <div style={{ marginTop: 10, fontSize: 13 }}>
-            <Link href="/research/scan">Scan a locality</Link> and shortlist a cell, then it appears
+            <Link href="/research">Run research</Link> and shortlist a cell, then it appears
             here until you start targeting.
           </div>
         </div>

@@ -194,7 +194,7 @@ export default async function CellPage({
         {cell.latestScan === null && cell.shortlist === null ? (
           <div className="empty">
             This cell has never been scanned. Run a scan from{' '}
-            <Link href="/research/scan">Locality scan</Link> to measure it — targeting a cell without
+            <Link href="/research">Run research</Link> to measure it — targeting a cell without
             research is allowed, it just means there is no prediction to compare against.
           </div>
         ) : (

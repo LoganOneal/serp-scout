@@ -70,7 +70,7 @@ export default async function MarketsPage() {
 
       {markets.length === 0 ? (
         <div className="empty">
-          No markets yet. <Link href="/research/scan">Scan a locality</Link>, shortlist a cell,
+          No markets yet. <Link href="/research">Run research</Link>, shortlist a cell,
           then start targeting — or open <Link href="/pipeline">Pipeline</Link>.
         </div>
       ) : (
