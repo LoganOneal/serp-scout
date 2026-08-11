@@ -1,0 +1,43 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "jsx": "preserve",
+    "types": [
+      "node",
+      "react",
+      "react-dom"
+    ],
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ],
+    // Must be set HERE, not inherited: the root tsconfig's baseUrl is the repo
+    // root, so "./src/*" would resolve to <repo>/src/* and Next would fail to
+    // find every @/ import.
+    "baseUrl": ".",
+    "paths": {
+      "@rnr/core": [
+        "../../packages/core/src/index.ts"
+      ],
+      "@rnr/data": [
+        "../../packages/data/src/index.ts"
+      ],
+      "@/*": [
+        "./src/*"
+      ]
+    },
+    "incremental": true
+  },
+  "include": [
+    ".next/types/**/*.ts",
+    "next-env.d.ts",
+    "src/**/*.ts",
+    "src/**/*.tsx",
+    ".next-build/types/**/*.ts",
+    "trigger.config.ts"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
+}

@@ -1,0 +1,30 @@
+{
+  "__meta": {
+    "verified": true,
+    "capturedAt": "2026-08-03T00:00:00Z",
+    "source": "captured live from GET /serp/google/organic/locations, the plausible-but-wrong locations path",
+    "note": "TRAP 2. 'Invalid Path.' arrives as a task-level error inside HTTP 200 with a top-level status_code of 20000. Guessing an endpoint path therefore produces 'zero results' rather than an error, and every locality in the corpus silently fails to resolve."
+  },
+  "payload": {
+    "version": "0.1.20260803",
+    "status_code": 20000,
+    "status_message": "Ok.",
+    "time": "0.0201 sec.",
+    "cost": 0,
+    "tasks_count": 1,
+    "tasks_error": 1,
+    "tasks": [
+      {
+        "id": "08031208-1234-0050-0000-c9d0e1f2a3b4",
+        "status_code": 40400,
+        "status_message": "Invalid Path.",
+        "time": "0 sec.",
+        "cost": 0,
+        "result_count": 0,
+        "path": ["v3", "serp", "google", "organic", "locations"],
+        "data": {},
+        "result": null
+      }
+    ]
+  }
+}

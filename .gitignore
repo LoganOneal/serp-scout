@@ -1,0 +1,26 @@
+node_modules/
+.next/
+# NEXT_DIST_DIR=.next-build pnpm build -- verifies a production build without the
+# dev server and the build fighting over .next.
+.next-build/
+.vercel/
+dist/
+.env
+.env.local
+*.log
+
+# Downloaded Census bulk files and the 267k-row provider location dump.
+# Large, immutable, and re-fetchable -- but never re-fetched on every run.
+.cache/
+
+# Playwright MCP scratch output
+.playwright-mcp/
+*.png
+
+# Call recordings. PII, and re-fetchable from Retell only inside its short link
+# window -- so they are backed up, never committed.
+.recordings/
+.recordings-smoke/
+
+.vercel
+.env*.local

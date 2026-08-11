@@ -1,0 +1,30 @@
+{
+  "__meta": {
+    "verified": true,
+    "capturedAt": "2026-08-03T18:19:00Z",
+    "source": "CAPTURED LIVE from GET /serp/../appendix/user_data with valid credentials from a non-whitelisted IP",
+    "note": "A REAL Trap 4 payload, caught in the wild while setting this project up. Look at what the outer envelope says: HTTP 200 on the wire, top-level status_code 20000, status_message \"Ok.\" The ONLY signal that anything went wrong is tasks[0].status_code = 40207, plus tasks_error: 1. A client that checks the HTTP status sees success. A client that checks the top-level status_code ALSO sees success. Both then read result: null as 'this SERP has no competitors' -- and score every market in the corpus as a wide-open jackpot. Note also that the credentials here are perfectly VALID; bad credentials would have produced an honest 401. This failure mode requires everything to be right except one setting."
+  },
+  "payload": {
+    "version": "0.1.20260731",
+    "status_code": 20000,
+    "status_message": "Ok.",
+    "time": "0 sec.",
+    "cost": 0,
+    "tasks_count": 1,
+    "tasks_error": 1,
+    "tasks": [
+      {
+        "id": "08031819-2085-0064-0000-6e62b7d768f2",
+        "status_code": 40207,
+        "status_message": "Access denied. Your IP is not whitelisted. You can modify your IP whitelist in the user panel https://app.dataforseo.com/api-access .",
+        "time": "0 sec.",
+        "cost": 0,
+        "result_count": 0,
+        "path": ["v3", "appendix", "user_data"],
+        "data": { "api": "appendix", "function": "user_data" },
+        "result": null
+      }
+    ]
+  }
+}

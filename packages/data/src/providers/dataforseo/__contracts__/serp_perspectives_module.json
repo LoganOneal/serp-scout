@@ -1,0 +1,1976 @@
+{
+  "__meta": {
+    "verified": true,
+    "capturedAt": "2026-08-10T19:37:46.051Z",
+    "source": "items captured live from /serp/google/organic/live/advanced via discovery run 30 job 4492 (keyword \"plumber\", desktop, location_code 1023191) on 2026-08-10; envelope reconstructed around the stored items array"
+  },
+  "payload": {
+    "status_code": 20000,
+    "tasks": [
+      {
+        "status_code": 20000,
+        "result": [
+          {
+            "items": [
+              {
+                "cid": "6609734378337047053",
+                "url": "https://www.topplumbernyc.com/",
+                "page": 1,
+                "type": "local_pack",
+                "phone": "(646) 392-7164",
+                "title": "A&E NYC Plumbing",
+                "xpath": "/html[1]/body[1]/div[3]/div[1]/div[13]/div[1]/div[2]/div[1]/div[1]/div[1]/div[1]/div[1]/div[1]/div[1]/div[2]/div[1]/div[1]/div[1]/div[1]/div[1]/div[1]/div[1]/div[1]",
+                "domain": "www.topplumbernyc.com",
+                "rating": {
+                  "value": 5,
+                  "rating_max": 5,
+                  "rating_type": "Max5",
+                  "votes_count": 144
+                },
+                "is_paid": false,
+                "position": "left",
+                "rectangle": null,
+                "rank_group": 1,
+                "booking_url": null,
+                "description": "3+ years in business · New York, NY \nOpen · Closes 8 PM \n\"Helped us quickly clean up a drain issue, highly recommended\" \n",
+                "rank_absolute": 1
+              },
+              {
+                "cid": "10132156936265588048",
+                "url": "https://goldflowplumbing.com/jersey-city",
+                "page": 1,
+                "type": "local_pack",
+                "phone": "(201) 903-4804",
+                "title": "Gold Flow Plumbing of Jersey City",
+                "xpath": "/html[1]/body[1]/div[3]/div[1]/div[13]/div[1]/div[2]/div[1]/div[1]/div[1]/div[1]/div[1]/div[1]/div[1]/div[2]/div[1]/div[1]/div[1]/div[1]/div[1]/div[3]/div[1]/div[1]",
+                "domain": "goldflowplumbing.com",
+                "rating": {
+                  "value": 4.9,
+                  "rating_max": 5,
+                  "rating_type": "Max5",
+                  "votes_count": 84
+                },
+                "is_paid": false,
+                "position": "left",
+                "rectangle": null,
+                "rank_group": 2,
+                "booking_url": null,
+                "description": "20+ years in business \nOpen 24 hours \n\"They fixed our water heater efficiently it was priced was very fair.\" \n",
+                "rank_absolute": 2
+              },
+              {
+                "cid": "14600055621032088944",
+                "url": "http://247sewercleaningnyc.com/?GMB",
+                "page": 1,
+                "type": "local_pack",
+                "phone": "(646) 807-3761",
+                "title": "247 Sewer Cleaning NYC",
+                "xpath": "/html[1]/body[1]/div[3]/div[1]/div[13]/div[1]/div[2]/div[1]/div[1]/div[1]/div[1]/div[1]/div[1]/div[1]/div[2]/div[1]/div[1]/div[1]/div[1]/div[1]/div[5]/div[1]/div[1]",
+                "domain": "247sewercleaningnyc.com",
+                "rating": {
+                  "value": 4.8,
+                  "rating_max": 5,
+                  "rating_type": "Max5",
+                  "votes_count": 47
+                },
+                "is_paid": false,
+                "position": "left",
+                "rectangle": null,
+                "rank_group": 3,
+                "booking_url": null,
+                "description": "5+ years in business \nOpen 24 hours \n\"Best service Plumer came right away no way time.\" \n",
+                "rank_absolute": 3
+              },
+              {
+                "page": 1,
+                "type": "product_considerations",
+                "items": [
+                  {
+                    "type": "product_considerations_element",
+                    "title": "What are the common plumbing problems that a plumber handles?",
+                    "expanded_element": [
+                      {
+                        "type": "product_considerations_ai_overview_expanded_element",
+                        "items": [
+                          {
+                            "text": "Common plumbing problems handled by professionals include dripping faucets, running toilets, clogged drains (sinks/showers/toilets), low water pressure, and leaking pipes. Plumbers also resolve water heater issues, sewer line backups, garbage disposal jams, and, in cold climates, frozen or burst pipes. These issues can cause significant water damage or high utility bills.",
+                            "type": "ai_overview_element",
+                            "title": null,
+                            "images": null,
+                            "references": null
+                          },
+                          {
+                            "text": "Leaky Faucets/Fixtures : A constant drip, often caused by worn-out washers, O-rings, or corrosion in sinks and showers. Running Toilets : Waste hundreds of gallons daily due to faulty flappers, fill valves, or chain issues. Clogged Drains : Slow or blocked drains in sinks, tubs, and showers, commonly caused by hair, soap scum, or grease buildup. Low Water Pressure : A weak, trickle-like flow from showerheads or faucets, frequently caused by sediment buildup or pipe leaks. Leaking Pipes/Burst Pipes : Leaks that can cause significant water damage and structural issues, often occurring at joints or due to pressure changes. Water Heater Problems : No hot water, cold showers, or leaking tanks, often caused by sediment buildup, broken heating elements, or old age. Sewer Line Backups : Serious issues indicated by sewage odors, slow toilets, or wastewater backing up into sinks. Garbage Disposal Jams : Humming noises or total failure to run, usually caused by foreign objects or overloading. Toilet Leaks at the Base : Water pooling around the toilet base, typically caused by a failed wax ring sealing it to the floor. Broken/Leaking Hose Bibbs : Outdoor faucets that leak or break, often following winter freezing.",
+                            "type": "ai_overview_element",
+                            "title": "Common Plumbing Problems and Examples",
+                            "images": null,
+                            "references": [
+                              {
+                                "url": "https://www.bayonet-inc.com/blog/10-common-plumbing-problems-and-how-we-fix-them/",
+                                "text": "Aug 18, 2025 —  10 Common Plumbing Problems and How We Fix Them * Leaky Faucets and Fixtures. That constant drip is more than annoyin...",
+                                "type": "ai_overview_reference",
+                                "title": "10 Common Plumbing Problems and How We Fix Them - Blog",
+                                "domain": "www.bayonet-inc.com",
+                                "source": "Bayonet Plumbing, Heating & Air Conditioning"
+                              },
+                              {
+                                "url": "https://www.youtube.com/watch?v=VptodSl2mj0&t=45",
+                                "text": "Jun 27, 2025 — job is confidence it can be hard to be a plumber. it doesn't have to be. it can be hard to keep your pants pulled up.",
+                                "type": "ai_overview_reference",
+                                "title": "Most popular plumbing problems for professional plumbers + people ...",
+                                "domain": "www.youtube.com",
+                                "source": "YouTube ·"
+                              },
+                              {
+                                "url": "https://www.100percentplumbing.com/10-common-plumbing-problems-and-how-to-fix-them-safely-at-home/#:~:text=What%20is%20the%20most%20common,unit%20could%20be%20the%20cause.",
+                                "text": "Aug 10, 2025 — * Plumbing Services. General Plumbing. Central Heating. Hot Water Systems. Air conditioning. Domestic water Supply. Wa...",
+                                "type": "ai_overview_reference",
+                                "title": "10 common plumbing problems and how to fix them safely at home",
+                                "domain": "www.100percentplumbing.com",
+                                "source": "100percentplumbing.com"
+                              },
+                              {
+                                "url": "https://ptt.edu/seven-common-house-problems-a-plumber-can-fix/#:~:text=1.,clumps%20should%20solve%20the%20problem.",
+                                "text": "1. Dripping Faucets. Because of wear and strain, a faucet or tap leaks the most. Finding the exact location of the leak is the fir...",
+                                "type": "ai_overview_reference",
+                                "title": "Seven Common House Problems A Plumber Can Fix",
+                                "domain": "ptt.edu",
+                                "source": "Philadelphia Technician Training Institute"
+                              },
+                              {
+                                "url": "https://calldougtheplumber.com/blog/the-7-most-common-plumbing-problems/#:~:text=Low%20water%20pressure%20is%20a,require%20professional%20assessment%20and%20repair.",
+                                "text": "Low water pressure is a common complaint and can stem from a variety of causes. Mineral buildup inside your pipes, particularly in...",
+                                "type": "ai_overview_reference",
+                                "title": "The 7 Most Common Plumbing Problems and How to Fix Them",
+                                "domain": "calldougtheplumber.com",
+                                "source": "Doug The Plumber"
+                              },
+                              {
+                                "url": "https://cpiservice.com/blog/plumbing-problems/",
+                                "text": "Jun 11, 2025 —  * Leaking Faucets. Even the smallest faucet drip can result in substantial water waste over time and often points to ...",
+                                "type": "ai_overview_reference",
+                                "title": "20 Common Plumbing Problems and Solutions for Homeowners",
+                                "domain": "cpiservice.com",
+                                "source": "CPI Service"
+                              },
+                              {
+                                "url": "https://local.yahoo.com/plumbing/article/common-plumbing-issues-costs-to-fix-140057490.html#:~:text=Water%20heater%20issues,can%20extend%20the%20system's%20lifespan.",
+                                "text": "Jan 27, 2026 — Water heater issues Water heater problems, including lack of hot water, strange noises or leaks around the tank, are c...",
+                                "type": "ai_overview_reference",
+                                "title": "The most common plumbing issues homeowners face, and the costs ...",
+                                "domain": "local.yahoo.com",
+                                "source": "Yahoo Local"
+                              }
+                            ]
+                          },
+                          {
+                            "text": "Clogs: Blockages, stoppages, backups, slow drains, backed-up pipes. Leaks: Drips, seepage, burst pipes, pinhole leaks, broken seals. Water Heater Problems: No hot water, lukewarm water, noisy tank, tank rust, failing TPR valve. Low Pressure: Weak flow, trickling, restricted flow. Running Toilet: Phantom flushing, high water consumption, noisy toilet.",
+                            "type": "ai_overview_element",
+                            "title": "Common Synonyms & Terms for Plumbing Issues",
+                            "images": null,
+                            "references": [
+                              {
+                                "url": "https://www.100percentplumbing.com/10-common-plumbing-problems-and-how-to-fix-them-safely-at-home/#:~:text=What%20is%20the%20most%20common,unit%20could%20be%20the%20cause.",
+                                "text": "Aug 10, 2025 — * Plumbing Services. General Plumbing. Central Heating. Hot Water Systems. Air conditioning. Domestic water Supply. Wa...",
+                                "type": "ai_overview_reference",
+                                "title": "10 common plumbing problems and how to fix them safely at home",
+                                "domain": "www.100percentplumbing.com",
+                                "source": "100percentplumbing.com"
+                              },
+                              {
+                                "url": "https://www.youtube.com/watch?v=VptodSl2mj0&t=45",
+                                "text": "Jun 27, 2025 — job is confidence it can be hard to be a plumber. it doesn't have to be. it can be hard to keep your pants pulled up.",
+                                "type": "ai_overview_reference",
+                                "title": "Most popular plumbing problems for professional plumbers + people ...",
+                                "domain": "www.youtube.com",
+                                "source": "YouTube ·"
+                              },
+                              {
+                                "url": "https://www.gemstatewideplumbing.com/common-plumbing-issues-and-how-local-plumbers-can-fix-them#:~:text=Most%20clogged%20drains%20often%20cause,measures%20to%20resolve%20the%20issue.",
+                                "text": "Most clogged drains often cause slow drainage and unusual gurgling sounds within plumbing systems. Homeowners may also notice unpl...",
+                                "type": "ai_overview_reference",
+                                "title": "Common Plumbing Issues and How Local Plumbers Can Fix Them",
+                                "domain": "www.gemstatewideplumbing.com",
+                                "source": "Gem Statewide Plumbing"
+                              },
+                              {
+                                "url": "https://local.yahoo.com/plumbing/article/common-plumbing-issues-costs-to-fix-140057490.html#:~:text=Water%20heater%20issues,can%20extend%20the%20system's%20lifespan.",
+                                "text": "Jan 27, 2026 — Water heater issues Water heater problems, including lack of hot water, strange noises or leaks around the tank, are c...",
+                                "type": "ai_overview_reference",
+                                "title": "The most common plumbing issues homeowners face, and the costs ...",
+                                "domain": "local.yahoo.com",
+                                "source": "Yahoo Local"
+                              },
+                              {
+                                "url": "https://calldougtheplumber.com/blog/the-7-most-common-plumbing-problems/#:~:text=Low%20water%20pressure%20is%20a,require%20professional%20assessment%20and%20repair.",
+                                "text": "Low water pressure is a common complaint and can stem from a variety of causes. Mineral buildup inside your pipes, particularly in...",
+                                "type": "ai_overview_reference",
+                                "title": "The 7 Most Common Plumbing Problems and How to Fix Them",
+                                "domain": "calldougtheplumber.com",
+                                "source": "Doug The Plumber"
+                              },
+                              {
+                                "url": "https://www.bayonet-inc.com/blog/10-common-plumbing-problems-and-how-we-fix-them/",
+                                "text": "Aug 18, 2025 —  10 Common Plumbing Problems and How We Fix Them * Leaky Faucets and Fixtures. That constant drip is more than annoyin...",
+                                "type": "ai_overview_reference",
+                                "title": "10 Common Plumbing Problems and How We Fix Them - Blog",
+                                "domain": "www.bayonet-inc.com",
+                                "source": "Bayonet Plumbing, Heating & Air Conditioning"
+                              },
+                              {
+                                "url": "https://cpiservice.com/blog/plumbing-problems/",
+                                "text": "Jun 11, 2025 —  * Leaking Faucets. Even the smallest faucet drip can result in substantial water waste over time and often points to ...",
+                                "type": "ai_overview_reference",
+                                "title": "20 Common Plumbing Problems and Solutions for Homeowners",
+                                "domain": "cpiservice.com",
+                                "source": "CPI Service"
+                              }
+                            ]
+                          },
+                          {
+                            "text": "When to Call a Plumber Plumbers are essential for issues that cause water damage (warped floors, water stains), recur frequently (persistent clogs), or involve sewage, gas lines, or the main water supply.",
+                            "type": "ai_overview_element",
+                            "title": null,
+                            "images": null,
+                            "references": [
+                              {
+                                "url": "https://www.christianhvac.com/blog/common-plumbing-problems-explained/#:~:text=Minor%20plumbing%20issues%20are%20usually,damage%2C%20and%20expensive%20emergency%20repairs.",
+                                "text": "Minor plumbing issues are usually less expensive to fix before they escalate into larger problems. When to Call a Professional Plu...",
+                                "type": "ai_overview_reference",
+                                "title": "Common Plumbing Problems at Home (And When to Call a Plumber)",
+                                "domain": "www.christianhvac.com",
+                                "source": "Christian Heating, Cooling, Plumbing and Electrical"
+                              }
+                            ]
+                          }
+                        ],
+                        "references": [
+                          {
+                            "url": "https://www.christianhvac.com/blog/common-plumbing-problems-explained/#:~:text=Minor%20plumbing%20issues%20are%20usually,damage%2C%20and%20expensive%20emergency%20repairs.",
+                            "text": "Minor plumbing issues are usually less expensive to fix before they escalate into larger problems. When to Call a Professional Plu...",
+                            "type": "ai_overview_reference",
+                            "title": "Common Plumbing Problems at Home (And When to Call a Plumber)",
+                            "domain": "www.christianhvac.com",
+                            "source": "Christian Heating, Cooling, Plumbing and Electrical"
+                          },
+                          {
+                            "url": "https://www.100percentplumbing.com/10-common-plumbing-problems-and-how-to-fix-them-safely-at-home/#:~:text=What%20is%20the%20most%20common,unit%20could%20be%20the%20cause.",
+                            "text": "Aug 10, 2025 — * Plumbing Services. General Plumbing. Central Heating. Hot Water Systems. Air conditioning. Domestic water Supply. Wa...",
+                            "type": "ai_overview_reference",
+                            "title": "10 common plumbing problems and how to fix them safely at home",
+                            "domain": "www.100percentplumbing.com",
+                            "source": "100percentplumbing.com"
+                          },
+                          {
+                            "url": "https://www.youtube.com/watch?v=VptodSl2mj0&t=45",
+                            "text": "Jun 27, 2025 — job is confidence it can be hard to be a plumber. it doesn't have to be. it can be hard to keep your pants pulled up.",
+                            "type": "ai_overview_reference",
+                            "title": "Most popular plumbing problems for professional plumbers + people ...",
+                            "domain": "www.youtube.com",
+                            "source": "YouTube ·"
+                          },
+                          {
+                            "url": "https://www.gemstatewideplumbing.com/common-plumbing-issues-and-how-local-plumbers-can-fix-them#:~:text=Most%20clogged%20drains%20often%20cause,measures%20to%20resolve%20the%20issue.",
+                            "text": "Most clogged drains often cause slow drainage and unusual gurgling sounds within plumbing systems. Homeowners may also notice unpl...",
+                            "type": "ai_overview_reference",
+                            "title": "Common Plumbing Issues and How Local Plumbers Can Fix Them",
+                            "domain": "www.gemstatewideplumbing.com",
+                            "source": "Gem Statewide Plumbing"
+                          },
+                          {
+                            "url": "https://ptt.edu/seven-common-house-problems-a-plumber-can-fix/#:~:text=1.,clumps%20should%20solve%20the%20problem.",
+                            "text": "1. Dripping Faucets. Because of wear and strain, a faucet or tap leaks the most. Finding the exact location of the leak is the fir...",
+                            "type": "ai_overview_reference",
+                            "title": "Seven Common House Problems A Plumber Can Fix",
+                            "domain": "ptt.edu",
+                            "source": "Philadelphia Technician Training Institute"
+                          },
+                          {
+                            "url": "https://local.yahoo.com/plumbing/article/common-plumbing-issues-costs-to-fix-140057490.html#:~:text=Water%20heater%20issues,can%20extend%20the%20system's%20lifespan.",
+                            "text": "Jan 27, 2026 — Water heater issues Water heater problems, including lack of hot water, strange noises or leaks around the tank, are c...",
+                            "type": "ai_overview_reference",
+                            "title": "The most common plumbing issues homeowners face, and the costs ...",
+                            "domain": "local.yahoo.com",
+                            "source": "Yahoo Local"
+                          },
+                          {
+                            "url": "https://calldougtheplumber.com/blog/the-7-most-common-plumbing-problems/#:~:text=Low%20water%20pressure%20is%20a,require%20professional%20assessment%20and%20repair.",
+                            "text": "Low water pressure is a common complaint and can stem from a variety of causes. Mineral buildup inside your pipes, particularly in...",
+                            "type": "ai_overview_reference",
+                            "title": "The 7 Most Common Plumbing Problems and How to Fix Them",
+                            "domain": "calldougtheplumber.com",
+                            "source": "Doug The Plumber"
+                          },
+                          {
+                            "url": "https://www.bayonet-inc.com/blog/10-common-plumbing-problems-and-how-we-fix-them/",
+                            "text": "Aug 18, 2025 —  10 Common Plumbing Problems and How We Fix Them * Leaky Faucets and Fixtures. That constant drip is more than annoyin...",
+                            "type": "ai_overview_reference",
+                            "title": "10 Common Plumbing Problems and How We Fix Them - Blog",
+                            "domain": "www.bayonet-inc.com",
+                            "source": "Bayonet Plumbing, Heating & Air Conditioning"
+                          },
+                          {
+                            "url": "https://cpiservice.com/blog/plumbing-problems/",
+                            "text": "Jun 11, 2025 —  * Leaking Faucets. Even the smallest faucet drip can result in substantial water waste over time and often points to ...",
+                            "type": "ai_overview_reference",
+                            "title": "20 Common Plumbing Problems and Solutions for Homeowners",
+                            "domain": "cpiservice.com",
+                            "source": "CPI Service"
+                          }
+                        ]
+                      }
+                    ],
+                    "consideration_category": "Common Problems"
+                  },
+                  {
+                    "type": "product_considerations_element",
+                    "title": "What are the different types of plumbing systems a plumber works with?",
+                    "expanded_element": [
+                      {
+                        "type": "product_considerations_ai_overview_expanded_element",
+                        "items": [
+                          {
+                            "text": "Plumbers work with several distinct, interconnected systems to manage water supply, waste removal, and gas distribution in buildings. The core systems include potable water supply (hot and cold), sanitary drainage and venting, stormwater management, and fuel gas piping, utilizing materials like copper, PEX, and PVC for residential or commercial installations.",
+                            "type": "ai_overview_element",
+                            "title": null,
+                            "images": null,
+                            "references": [
+                              {
+                                "url": "https://ptt.edu/what-is-the-most-common-plumbing/",
+                                "text": "Following are some of the most common plumbing types: * Water Supply Plumbing. A plumber's main task is installing water connecti...",
+                                "type": "ai_overview_reference",
+                                "title": "What Is The Most Common Plumbing?",
+                                "domain": "ptt.edu",
+                                "source": "Philadelphia Technician Training Institute"
+                              },
+                              {
+                                "url": "https://www.theplatinumplumber.com/blog-posts/what-are-the-six-types-of-plumbing",
+                                "text": "Supply plumbing brings clean water into your house under pressure Drainage and waste systems carry dirty water and sewage out Vent...",
+                                "type": "ai_overview_reference",
+                                "title": "What Are The Six Types Of Plumbing? - Platinum Plumber",
+                                "domain": "www.theplatinumplumber.com",
+                                "source": "Platinum Plumber"
+                              },
+                              {
+                                "url": "https://www.superior-service.com/blog/understanding-the-different-types-of-plumbing-systems/",
+                                "text": "Plumbing systems are divided into three main categories: * **Potable water systems** Bring clean water into your home. This system...",
+                                "type": "ai_overview_reference",
+                                "title": "Understanding the Different Types of Plumbing Systems: A Homeowner’s Guide",
+                                "domain": "www.superior-service.com",
+                                "source": "Superior Service"
+                              },
+                              {
+                                "url": "https://flexcrewusa.com/blog/types-of-plumbing-systems/",
+                                "text": "There are three main types of plumbing systems in buildings: * **Water supply systems** These systems deliver clean water from mun...",
+                                "type": "ai_overview_reference",
+                                "title": "Types of Plumbing Systems Every Construction Professional Should Know | Flex Crew",
+                                "domain": "flexcrewusa.com",
+                                "source": "FlexCrew USA"
+                              }
+                            ]
+                          },
+                          {
+                            "text": "Potable Water Supply System : Delivers pressurized, clean water from a municipal source or well to fixtures like sinks, showers, and toilets. Sanitary Drainage System : Removes wastewater (graywater) and sewage (blackwater) from a building, relying on gravity to transport it to a septic tank or sewer system. Venting System : Crucial for safety, these pipes extend through the roof, allowing air into the drain pipes to ensure proper flow and venting sewer gases out of the home. Stormwater Drainage System : Manages rainwater and snowmelt to prevent flooding and protect foundations, often separating runoff from sanitary waste. Fuel Gas Piping : Installs and maintains lines for natural gas or propane, supplying appliances like water heaters and stoves. Hot Water System : A specialized subset of the water supply system that heats water using boilers, heaters, or solar systems.",
+                            "type": "ai_overview_element",
+                            "title": "Key Plumbing Systems:",
+                            "images": null,
+                            "references": [
+                              {
+                                "url": "https://www.superior-service.com/blog/understanding-the-different-types-of-plumbing-systems/",
+                                "text": "Plumbing systems are divided into three main categories: * **Potable water systems** Bring clean water into your home. This system...",
+                                "type": "ai_overview_reference",
+                                "title": "Understanding the Different Types of Plumbing Systems: A Homeowner’s Guide",
+                                "domain": "www.superior-service.com",
+                                "source": "Superior Service"
+                              },
+                              {
+                                "url": "https://flexcrewusa.com/blog/types-of-plumbing-systems/",
+                                "text": "There are three main types of plumbing systems in buildings: * **Water supply systems** These systems deliver clean water from mun...",
+                                "type": "ai_overview_reference",
+                                "title": "Types of Plumbing Systems Every Construction Professional Should Know | Flex Crew",
+                                "domain": "flexcrewusa.com",
+                                "source": "FlexCrew USA"
+                              },
+                              {
+                                "url": "https://nicholselectric.com/what-are-the-major-types-of-plumbing-systems/#:~:text=The%20sanitary%20drainage%20system%20is,into%20the%20stormwater%20drainage%20system.",
+                                "text": "Aug 1, 2022 — The sanitary drainage system is what removes gray and black water out of your home's plumbing and on to a municipal sew...",
+                                "type": "ai_overview_reference",
+                                "title": "What Are the Major Types of Plumbing Systems?",
+                                "domain": "nicholselectric.com",
+                                "source": "Nichols Electric and Plumbing"
+                              },
+                              {
+                                "url": "https://ptt.edu/what-is-the-most-common-plumbing/",
+                                "text": "Following are some of the most common plumbing types: * Water Supply Plumbing. A plumber's main task is installing water connecti...",
+                                "type": "ai_overview_reference",
+                                "title": "What Is The Most Common Plumbing?",
+                                "domain": "ptt.edu",
+                                "source": "Philadelphia Technician Training Institute"
+                              },
+                              {
+                                "url": "https://www.spartanplumbinginc.com/plumbing-systems-how-they-work-components-types-and-solutions/#:~:text=The%20three%20main%20types%20of%20plumbing%20systems,snowmelt%20to%20prevent%20flooding%20and%20foundation%20damage",
+                                "text": "The three main types of plumbing systems are: * **Potable water supply system** Delivers clean drinking water throughout the build...",
+                                "type": "ai_overview_reference",
+                                "title": "Plumbing Systems: How They Work, Components, Types, and Solutions",
+                                "domain": "www.spartanplumbinginc.com",
+                                "source": "Spartan Plumbing Inc"
+                              },
+                              {
+                                "url": "https://www.theplatinumplumber.com/blog-posts/what-are-the-six-types-of-plumbing",
+                                "text": "Supply plumbing brings clean water into your house under pressure Drainage and waste systems carry dirty water and sewage out Vent...",
+                                "type": "ai_overview_reference",
+                                "title": "What Are The Six Types Of Plumbing? - Platinum Plumber",
+                                "domain": "www.theplatinumplumber.com",
+                                "source": "Platinum Plumber"
+                              }
+                            ]
+                          },
+                          {
+                            "text": "PEX (Cross-linked Polyethylene) : Flexible, durable piping used for water supply. Copper : Standard for durable, rigid, hot or cold water lines. PVC & ABS : Commonly used for drainage, waste, and vent lines due to their rigidity and resistance to rust. Flexible/Braided Pipes : Used for final, visible connections to appliances.",
+                            "type": "ai_overview_element",
+                            "title": "Common Pipe Materials & Application Types:",
+                            "images": null,
+                            "references": [
+                              {
+                                "url": "https://www.acehardwarehomeservices.com/blogs/5-common-types-of-plumbing-pipes#:~:text=Cross-linked%20Polyethylene%20(PEX),wide%20range%20of%20plumbing%20projects.",
+                                "text": "Apr 28, 2024 — Cross-linked Polyethylene (PEX) Pipes Cross-linked polyethylene, commonly known as PEX, has become a preferred choice ...",
+                                "type": "ai_overview_reference",
+                                "title": "5 Common Types of Plumbing Pipes - Ace Hardware Home Services",
+                                "domain": "www.acehardwarehomeservices.com",
+                                "source": "Ace Hardware Home Services"
+                              },
+                              {
+                                "url": "https://www.homedepot.com/c/ab/types-of-plumbing-pipes/9ba683603be9fa5395fab90cf2ccbfa#:~:text=for%20exterior%20plumbing.-,Copper%20Pipe,other%20types%20of%20plumbing%20pipes.",
+                                "text": "May 14, 2025 — Copper Pipe Copper pipes are considered by many to be the standard for residential hot or cold water applications. The...",
+                                "type": "ai_overview_reference",
+                                "title": "Types of Plumbing Pipes - The Home Depot",
+                                "domain": "www.homedepot.com",
+                                "source": "The Home Depot"
+                              },
+                              {
+                                "url": "https://www.neit.edu/blog/the-5-types-of-plumbing-pipes#:~:text=3.,causing%20disturbances%20among%20some%20homeowners.",
+                                "text": "3. ABS Pipes. Acrylonitrile butadiene styrene (ABS) pipe is similar to PVC pipes in nature but easy to identify based on their bla...",
+                                "type": "ai_overview_reference",
+                                "title": "Types of Plumbing Pipes | Learn What the Top 5 Are in This Post | NEIT",
+                                "domain": "www.neit.edu",
+                                "source": "New England Institute of Technology | NEIT"
+                              },
+                              {
+                                "url": "https://www.vaia.com/en-us/explanations/engineering/civil-engineering/plumbing-systems/#:~:text=The%20different%20types%20of%20plumbing%20systems%20used,materials%20used%20are%20PVC%2C%20copper%2C%20and%20PEX.",
+                                "text": "Jan 15, 2025 — The different types of plumbing systems used in residential buildings include the water supply system, which delivers ...",
+                                "type": "ai_overview_reference",
+                                "title": "What are the different types of plumbing systems used in residential buildings?",
+                                "domain": "www.vaia.com",
+                                "source": "vaia.com"
+                              },
+                              {
+                                "url": "https://www.thespruce.com/basic-types-of-plumbing-pipes-1822487#:~:text=Flexi%20Pipe%20or%20Braided%20Pipe&text=Flexible%20pipe%2C%20often%20called%20flexi,as%20inside%20walls%20or%20floors.",
+                                "text": "Jan 10, 2026 — Flexi Pipe or Braided Pipe ... Flexible pipe, often called flexi for short or braided pipe, is flexible tubing typical...",
+                                "type": "ai_overview_reference",
+                                "title": "6 Different Types of Home Plumbing Pipes and How to Choose One",
+                                "domain": "www.thespruce.com",
+                                "source": "The Spruce"
+                              }
+                            ]
+                          },
+                          {
+                            "text": "Plumbers also distinguish their work by environment, operating as residential plumbers (homes) or commercial plumbers (large buildings, high-rises), with the latter handling much more complex and extensive systems.",
+                            "type": "ai_overview_element",
+                            "title": null,
+                            "images": null,
+                            "references": [
+                              {
+                                "url": "https://www.plumcore.com/different-types-plumbers/#:~:text=With%20a%20residential%20plumbing%20job,failure%20in%20a%20small%20home.",
+                                "text": "With a residential plumbing job, there are significantly less pipes and outlets to deal with. Additionally, there is in most cases...",
+                                "type": "ai_overview_reference",
+                                "title": "Different Types of Plumbers - plumcore",
+                                "domain": "www.plumcore.com",
+                                "source": "plumcore"
+                              },
+                              {
+                                "url": "https://www.youtube.com/shorts/sAlWE3VCZR8",
+                                "text": "Jan 13, 2024 — now there's different types of Plumbing there's commercial work it's the big Office Buildings in downtown. and I say d...",
+                                "type": "ai_overview_reference",
+                                "title": "The Different Types Of Plumbing",
+                                "domain": "www.youtube.com",
+                                "source": "YouTube ·"
+                              }
+                            ]
+                          }
+                        ],
+                        "references": [
+                          {
+                            "url": "https://ptt.edu/what-is-the-most-common-plumbing/",
+                            "text": "Following are some of the most common plumbing types: * Water Supply Plumbing. A plumber's main task is installing water connecti...",
+                            "type": "ai_overview_reference",
+                            "title": "What Is The Most Common Plumbing?",
+                            "domain": "ptt.edu",
+                            "source": "Philadelphia Technician Training Institute"
+                          },
+                          {
+                            "url": "https://www.plumcore.com/different-types-plumbers/#:~:text=With%20a%20residential%20plumbing%20job,failure%20in%20a%20small%20home.",
+                            "text": "With a residential plumbing job, there are significantly less pipes and outlets to deal with. Additionally, there is in most cases...",
+                            "type": "ai_overview_reference",
+                            "title": "Different Types of Plumbers - plumcore",
+                            "domain": "www.plumcore.com",
+                            "source": "plumcore"
+                          },
+                          {
+                            "url": "https://www.neit.edu/blog/the-5-types-of-plumbing-pipes#:~:text=3.,causing%20disturbances%20among%20some%20homeowners.",
+                            "text": "3. ABS Pipes. Acrylonitrile butadiene styrene (ABS) pipe is similar to PVC pipes in nature but easy to identify based on their bla...",
+                            "type": "ai_overview_reference",
+                            "title": "Types of Plumbing Pipes | Learn What the Top 5 Are in This Post | NEIT",
+                            "domain": "www.neit.edu",
+                            "source": "New England Institute of Technology | NEIT"
+                          },
+                          {
+                            "url": "https://www.thespruce.com/basic-types-of-plumbing-pipes-1822487#:~:text=Flexi%20Pipe%20or%20Braided%20Pipe&text=Flexible%20pipe%2C%20often%20called%20flexi,as%20inside%20walls%20or%20floors.",
+                            "text": "Jan 10, 2026 — Flexi Pipe or Braided Pipe ... Flexible pipe, often called flexi for short or braided pipe, is flexible tubing typical...",
+                            "type": "ai_overview_reference",
+                            "title": "6 Different Types of Home Plumbing Pipes and How to Choose One",
+                            "domain": "www.thespruce.com",
+                            "source": "The Spruce"
+                          },
+                          {
+                            "url": "https://www.youtube.com/shorts/sAlWE3VCZR8",
+                            "text": "Jan 13, 2024 — now there's different types of Plumbing there's commercial work it's the big Office Buildings in downtown. and I say d...",
+                            "type": "ai_overview_reference",
+                            "title": "The Different Types Of Plumbing",
+                            "domain": "www.youtube.com",
+                            "source": "YouTube ·"
+                          },
+                          {
+                            "url": "https://www.homedepot.com/c/ab/types-of-plumbing-pipes/9ba683603be9fa5395fab90cf2ccbfa#:~:text=for%20exterior%20plumbing.-,Copper%20Pipe,other%20types%20of%20plumbing%20pipes.",
+                            "text": "May 14, 2025 — Copper Pipe Copper pipes are considered by many to be the standard for residential hot or cold water applications. The...",
+                            "type": "ai_overview_reference",
+                            "title": "Types of Plumbing Pipes - The Home Depot",
+                            "domain": "www.homedepot.com",
+                            "source": "The Home Depot"
+                          },
+                          {
+                            "url": "https://www.acehardwarehomeservices.com/blogs/5-common-types-of-plumbing-pipes#:~:text=Cross-linked%20Polyethylene%20(PEX),wide%20range%20of%20plumbing%20projects.",
+                            "text": "Apr 28, 2024 — Cross-linked Polyethylene (PEX) Pipes Cross-linked polyethylene, commonly known as PEX, has become a preferred choice ...",
+                            "type": "ai_overview_reference",
+                            "title": "5 Common Types of Plumbing Pipes - Ace Hardware Home Services",
+                            "domain": "www.acehardwarehomeservices.com",
+                            "source": "Ace Hardware Home Services"
+                          },
+                          {
+                            "url": "https://nicholselectric.com/what-are-the-major-types-of-plumbing-systems/#:~:text=The%20sanitary%20drainage%20system%20is,into%20the%20stormwater%20drainage%20system.",
+                            "text": "Aug 1, 2022 — The sanitary drainage system is what removes gray and black water out of your home's plumbing and on to a municipal sew...",
+                            "type": "ai_overview_reference",
+                            "title": "What Are the Major Types of Plumbing Systems?",
+                            "domain": "nicholselectric.com",
+                            "source": "Nichols Electric and Plumbing"
+                          },
+                          {
+                            "url": "https://www.vaia.com/en-us/explanations/engineering/civil-engineering/plumbing-systems/#:~:text=The%20different%20types%20of%20plumbing%20systems%20used,materials%20used%20are%20PVC%2C%20copper%2C%20and%20PEX.",
+                            "text": "Jan 15, 2025 — The different types of plumbing systems used in residential buildings include the water supply system, which delivers ...",
+                            "type": "ai_overview_reference",
+                            "title": "What are the different types of plumbing systems used in residential buildings?",
+                            "domain": "www.vaia.com",
+                            "source": "vaia.com"
+                          },
+                          {
+                            "url": "https://www.theplatinumplumber.com/blog-posts/what-are-the-six-types-of-plumbing",
+                            "text": "Supply plumbing brings clean water into your house under pressure Drainage and waste systems carry dirty water and sewage out Vent...",
+                            "type": "ai_overview_reference",
+                            "title": "What Are The Six Types Of Plumbing? - Platinum Plumber",
+                            "domain": "www.theplatinumplumber.com",
+                            "source": "Platinum Plumber"
+                          },
+                          {
+                            "url": "https://www.superior-service.com/blog/understanding-the-different-types-of-plumbing-systems/",
+                            "text": "Plumbing systems are divided into three main categories: * **Potable water systems** Bring clean water into your home. This system...",
+                            "type": "ai_overview_reference",
+                            "title": "Understanding the Different Types of Plumbing Systems: A Homeowner’s Guide",
+                            "domain": "www.superior-service.com",
+                            "source": "Superior Service"
+                          },
+                          {
+                            "url": "https://flexcrewusa.com/blog/types-of-plumbing-systems/",
+                            "text": "There are three main types of plumbing systems in buildings: * **Water supply systems** These systems deliver clean water from mun...",
+                            "type": "ai_overview_reference",
+                            "title": "Types of Plumbing Systems Every Construction Professional Should Know | Flex Crew",
+                            "domain": "flexcrewusa.com",
+                            "source": "FlexCrew USA"
+                          },
+                          {
+                            "url": "https://www.spartanplumbinginc.com/plumbing-systems-how-they-work-components-types-and-solutions/#:~:text=The%20three%20main%20types%20of%20plumbing%20systems,snowmelt%20to%20prevent%20flooding%20and%20foundation%20damage",
+                            "text": "The three main types of plumbing systems are: * **Potable water supply system** Delivers clean drinking water throughout the build...",
+                            "type": "ai_overview_reference",
+                            "title": "Plumbing Systems: How They Work, Components, Types, and Solutions",
+                            "domain": "www.spartanplumbinginc.com",
+                            "source": "Spartan Plumbing Inc"
+                          }
+                        ]
+                      }
+                    ],
+                    "consideration_category": "Plumbing Systems"
+                  },
+                  {
+                    "type": "product_considerations_element",
+                    "title": "What are the essential tools used by a plumber?",
+                    "expanded_element": [
+                      {
+                        "type": "product_considerations_ai_overview_expanded_element",
+                        "items": [
+                          {
+                            "text": "Essential plumbing tools include pipe wrenches, tongue-and-groove pliers (channel locks), basin wrenches, tubing cutters, and hacksaws for manual tasks, along with power tools like cordless drills, reciprocating saws (Sawzalls), and power augers. These tools enable plumbers to cut, tighten, remove obstructions, and install pipes and fixtures.",
+                            "type": "ai_overview_element",
+                            "title": null,
+                            "images": null,
+                            "references": [
+                              {
+                                "url": "https://blog.whitecap.com/2025/04/25/a-plumbers-toolkit-the-must-haves-for-every-job/#:~:text=Core%20Hand%20Tools&text=Adjustable%20Wrench:%20A%20staple%20in,%2C%20leak-proof%20joints%20quickly.",
+                                "text": "Apr 25, 2025 — Core Hand Tools ... Adjustable Wrench: A staple in any toolbox, adjustable wrenches are great for gripping, tightening...",
+                                "type": "ai_overview_reference",
+                                "title": "A Plumber's Toolkit: The Must-Haves for Every Job - White Cap Blog",
+                                "domain": "blog.whitecap.com",
+                                "source": "White Cap"
+                              },
+                              {
+                                "url": "https://orleanstech.edu/the-5-basic-plumbing-tools-youll-need/",
+                                "text": "The 5 Basic Plumbing Tools You'll Need * Hacksaw: You'll cut through metal pipe, hardware, screws, nuts, bolts, and plastic pipe ...",
+                                "type": "ai_overview_reference",
+                                "title": "The 5 Basic Plumbing Tools You'll Need - Orleans Technical College",
+                                "domain": "orleanstech.edu",
+                                "source": "Orleans Technical College"
+                              },
+                              {
+                                "url": "https://www.larkinplumbingservice.com/blog/what-are-four-power-tools-specific-to-plumbing/#:~:text=The%20four%20power%20tools%20that,work%20with%20concealed%20plumbing%20systems.",
+                                "text": "What Are Four Power Tools That Are Specific To Plumbing? The four power tools that are most commonly associated with plumbing can ...",
+                                "type": "ai_overview_reference",
+                                "title": "What Are Four Power Tools Specific to Plumbing?",
+                                "domain": "www.larkinplumbingservice.com",
+                                "source": "Larkin Plumbing"
+                              }
+                            ]
+                          },
+                          {
+                            "text": "Pipe Wrenches: Designed to grip and turn pipes and fittings, offering high leverage for stubborn joints. Tongue-and-Groove Pliers (Channel Locks): Used for gripping, pulling, and tightening various plumbing components. Basin Wrench : A specialized tool for tightening or loosening nuts in hard-to-reach areas, such as behind sinks or toilets. Tubing/Pipe Cutters : Creates clean, precise cuts on PVC, PEX, or copper pipes. Power Auger (Drain Snake Machine): Used to clear blockages in drains and sewer lines, such as hair, soap residue, or food. Reciprocating Saw (Sawzall): Used for cutting through pipes, walls, and old framing during repairs or remodeling. Propane Torch : Used to solder or \"sweat\" copper pipe and fittings. PEX Crimp Tool : Used to secure crimp rings for PEX pipe connections. Plumber's Tape (Thread Seal Tape): Used to seal pipe threads to prevent leaks.",
+                            "type": "ai_overview_element",
+                            "title": "Essential Plumbing Tools and Usage Examples:",
+                            "images": null,
+                            "references": [
+                              {
+                                "url": "https://blog.whitecap.com/2025/04/25/a-plumbers-toolkit-the-must-haves-for-every-job/#:~:text=Core%20Hand%20Tools&text=Adjustable%20Wrench:%20A%20staple%20in,%2C%20leak-proof%20joints%20quickly.",
+                                "text": "Apr 25, 2025 — Core Hand Tools ... Adjustable Wrench: A staple in any toolbox, adjustable wrenches are great for gripping, tightening...",
+                                "type": "ai_overview_reference",
+                                "title": "A Plumber's Toolkit: The Must-Haves for Every Job - White Cap Blog",
+                                "domain": "blog.whitecap.com",
+                                "source": "White Cap"
+                              },
+                              {
+                                "url": "https://orleanstech.edu/the-5-basic-plumbing-tools-youll-need/",
+                                "text": "The 5 Basic Plumbing Tools You'll Need * Hacksaw: You'll cut through metal pipe, hardware, screws, nuts, bolts, and plastic pipe ...",
+                                "type": "ai_overview_reference",
+                                "title": "The 5 Basic Plumbing Tools You'll Need - Orleans Technical College",
+                                "domain": "orleanstech.edu",
+                                "source": "Orleans Technical College"
+                              },
+                              {
+                                "url": "https://www.hammandsons.plumbing/blog/21-necessary-plumbing-tools#:~:text=Plumbers%20use%20a%20variety%20of%20tools%20to,which%20can%20handle%20almost%20every%20plumbing%20project.",
+                                "text": "Plumbers use a variety of tools to make their jobs faster and easier. Some of the most essential tools include: * **Ratcheting pip...",
+                                "type": "ai_overview_reference",
+                                "title": "21 Must Have Tools | Hamm & Sons",
+                                "domain": "www.hammandsons.plumbing",
+                                "source": "Hamm & Sons Plumbing"
+                              },
+                              {
+                                "url": "https://www.larkinplumbingservice.com/blog/what-are-four-power-tools-specific-to-plumbing/#:~:text=The%20four%20power%20tools%20that,work%20with%20concealed%20plumbing%20systems.",
+                                "text": "What Are Four Power Tools That Are Specific To Plumbing? The four power tools that are most commonly associated with plumbing can ...",
+                                "type": "ai_overview_reference",
+                                "title": "What Are Four Power Tools Specific to Plumbing?",
+                                "domain": "www.larkinplumbingservice.com",
+                                "source": "Larkin Plumbing"
+                              },
+                              {
+                                "url": "https://www.youtube.com/shorts/_eW5poKwgMU",
+                                "text": "Jan 6, 2026 — when the clock's ticking and the water is spraying everywhere the right tools matter check out these five plumbing tool...",
+                                "type": "ai_overview_reference",
+                                "title": "5 Essential Plumbing Tools Every Professional Needs",
+                                "domain": "www.youtube.com",
+                                "source": "YouTube ·"
+                              }
+                            ]
+                          },
+                          {
+                            "text": "Pliers: Channel locks, tongue-and-groove pliers, slip-joint pliers. Wrenches: Pipe wrench, basin wrench, monkey wrench, adjustable wrench (crescent wrench). Cutters: Tubing cutter, hacksaw, electric pipe cutter, sawzall. Augers: Drain snake, plumber's snake, rooter. Torch: Plumber's torch, propane torch, soldering torch.",
+                            "type": "ai_overview_element",
+                            "title": "Synonyms/Related Names for Plumbing Tools:",
+                            "images": null,
+                            "references": [
+                              {
+                                "url": "https://blog.whitecap.com/2025/04/25/a-plumbers-toolkit-the-must-haves-for-every-job/#:~:text=Core%20Hand%20Tools&text=Adjustable%20Wrench:%20A%20staple%20in,%2C%20leak-proof%20joints%20quickly.",
+                                "text": "Apr 25, 2025 — Core Hand Tools ... Adjustable Wrench: A staple in any toolbox, adjustable wrenches are great for gripping, tightening...",
+                                "type": "ai_overview_reference",
+                                "title": "A Plumber's Toolkit: The Must-Haves for Every Job - White Cap Blog",
+                                "domain": "blog.whitecap.com",
+                                "source": "White Cap"
+                              },
+                              {
+                                "url": "https://orleanstech.edu/the-5-basic-plumbing-tools-youll-need/",
+                                "text": "The 5 Basic Plumbing Tools You'll Need * Hacksaw: You'll cut through metal pipe, hardware, screws, nuts, bolts, and plastic pipe ...",
+                                "type": "ai_overview_reference",
+                                "title": "The 5 Basic Plumbing Tools You'll Need - Orleans Technical College",
+                                "domain": "orleanstech.edu",
+                                "source": "Orleans Technical College"
+                              },
+                              {
+                                "url": "https://www.larkinplumbingservice.com/blog/what-are-four-power-tools-specific-to-plumbing/#:~:text=The%20four%20power%20tools%20that,work%20with%20concealed%20plumbing%20systems.",
+                                "text": "What Are Four Power Tools That Are Specific To Plumbing? The four power tools that are most commonly associated with plumbing can ...",
+                                "type": "ai_overview_reference",
+                                "title": "What Are Four Power Tools Specific to Plumbing?",
+                                "domain": "www.larkinplumbingservice.com",
+                                "source": "Larkin Plumbing"
+                              },
+                              {
+                                "url": "https://www.youtube.com/shorts/_eW5poKwgMU",
+                                "text": "Jan 6, 2026 — when the clock's ticking and the water is spraying everywhere the right tools matter check out these five plumbing tool...",
+                                "type": "ai_overview_reference",
+                                "title": "5 Essential Plumbing Tools Every Professional Needs",
+                                "domain": "www.youtube.com",
+                                "source": "YouTube ·"
+                              },
+                              {
+                                "url": "https://www.ferguson.com/content/ideas-and-learning-center/trade-talk/basic-essential-plumbing-tools/",
+                                "text": "Professional plumbers use many tools, including some that are essential and others that can save space and weight. Here are some m...",
+                                "type": "ai_overview_reference",
+                                "title": "The Top 10 Essential Plumbing Tools for Professionals | Ferguson",
+                                "domain": "www.ferguson.com",
+                                "source": "Ferguson"
+                              },
+                              {
+                                "url": "https://www.horizonservices.com/about-us/blog/five-essential-plumbing-tools-every-household-should-have/",
+                                "text": "Plumbers use a variety of tools to maintain pipes and plumbing: * **Plumber's snake or sink auger** This tool is used for sink was...",
+                                "type": "ai_overview_reference",
+                                "title": "Five Essential Plumbing Tools Every Household Should Have | Horizon",
+                                "domain": "www.horizonservices.com",
+                                "source": "Horizon Services"
+                              }
+                            ]
+                          },
+                          {
+                            "text": "These tools, ranging from essential hand tools to advanced power equipment, are critical for maintaining, repairing, and installing plumbing systems.",
+                            "type": "ai_overview_element",
+                            "title": null,
+                            "images": null,
+                            "references": [
+                              {
+                                "url": "https://www.larkinplumbingservice.com/blog/what-are-four-power-tools-specific-to-plumbing/#:~:text=The%20four%20power%20tools%20that,work%20with%20concealed%20plumbing%20systems.",
+                                "text": "What Are Four Power Tools That Are Specific To Plumbing? The four power tools that are most commonly associated with plumbing can ...",
+                                "type": "ai_overview_reference",
+                                "title": "What Are Four Power Tools Specific to Plumbing?",
+                                "domain": "www.larkinplumbingservice.com",
+                                "source": "Larkin Plumbing"
+                              },
+                              {
+                                "url": "https://www.ferguson.com/content/ideas-and-learning-center/trade-talk/basic-essential-plumbing-tools/",
+                                "text": "Professional plumbers use many tools, including some that are essential and others that can save space and weight. Here are some m...",
+                                "type": "ai_overview_reference",
+                                "title": "The Top 10 Essential Plumbing Tools for Professionals | Ferguson",
+                                "domain": "www.ferguson.com",
+                                "source": "Ferguson"
+                              }
+                            ]
+                          }
+                        ],
+                        "references": [
+                          {
+                            "url": "https://blog.whitecap.com/2025/04/25/a-plumbers-toolkit-the-must-haves-for-every-job/#:~:text=Core%20Hand%20Tools&text=Adjustable%20Wrench:%20A%20staple%20in,%2C%20leak-proof%20joints%20quickly.",
+                            "text": "Apr 25, 2025 — Core Hand Tools ... Adjustable Wrench: A staple in any toolbox, adjustable wrenches are great for gripping, tightening...",
+                            "type": "ai_overview_reference",
+                            "title": "A Plumber's Toolkit: The Must-Haves for Every Job - White Cap Blog",
+                            "domain": "blog.whitecap.com",
+                            "source": "White Cap"
+                          },
+                          {
+                            "url": "https://orleanstech.edu/the-5-basic-plumbing-tools-youll-need/",
+                            "text": "The 5 Basic Plumbing Tools You'll Need * Hacksaw: You'll cut through metal pipe, hardware, screws, nuts, bolts, and plastic pipe ...",
+                            "type": "ai_overview_reference",
+                            "title": "The 5 Basic Plumbing Tools You'll Need - Orleans Technical College",
+                            "domain": "orleanstech.edu",
+                            "source": "Orleans Technical College"
+                          },
+                          {
+                            "url": "https://www.larkinplumbingservice.com/blog/what-are-four-power-tools-specific-to-plumbing/#:~:text=The%20four%20power%20tools%20that,work%20with%20concealed%20plumbing%20systems.",
+                            "text": "What Are Four Power Tools That Are Specific To Plumbing? The four power tools that are most commonly associated with plumbing can ...",
+                            "type": "ai_overview_reference",
+                            "title": "What Are Four Power Tools Specific to Plumbing?",
+                            "domain": "www.larkinplumbingservice.com",
+                            "source": "Larkin Plumbing"
+                          },
+                          {
+                            "url": "https://www.youtube.com/shorts/_eW5poKwgMU",
+                            "text": "Jan 6, 2026 — when the clock's ticking and the water is spraying everywhere the right tools matter check out these five plumbing tool...",
+                            "type": "ai_overview_reference",
+                            "title": "5 Essential Plumbing Tools Every Professional Needs",
+                            "domain": "www.youtube.com",
+                            "source": "YouTube ·"
+                          },
+                          {
+                            "url": "https://www.hammandsons.plumbing/blog/21-necessary-plumbing-tools#:~:text=Plumbers%20use%20a%20variety%20of%20tools%20to,which%20can%20handle%20almost%20every%20plumbing%20project.",
+                            "text": "Plumbers use a variety of tools to make their jobs faster and easier. Some of the most essential tools include: * **Ratcheting pip...",
+                            "type": "ai_overview_reference",
+                            "title": "21 Must Have Tools | Hamm & Sons",
+                            "domain": "www.hammandsons.plumbing",
+                            "source": "Hamm & Sons Plumbing"
+                          },
+                          {
+                            "url": "https://www.ferguson.com/content/ideas-and-learning-center/trade-talk/basic-essential-plumbing-tools/",
+                            "text": "Professional plumbers use many tools, including some that are essential and others that can save space and weight. Here are some m...",
+                            "type": "ai_overview_reference",
+                            "title": "The Top 10 Essential Plumbing Tools for Professionals | Ferguson",
+                            "domain": "www.ferguson.com",
+                            "source": "Ferguson"
+                          },
+                          {
+                            "url": "https://www.horizonservices.com/about-us/blog/five-essential-plumbing-tools-every-household-should-have/",
+                            "text": "Plumbers use a variety of tools to maintain pipes and plumbing: * **Plumber's snake or sink auger** This tool is used for sink was...",
+                            "type": "ai_overview_reference",
+                            "title": "Five Essential Plumbing Tools Every Household Should Have | Horizon",
+                            "domain": "www.horizonservices.com",
+                            "source": "Horizon Services"
+                          }
+                        ]
+                      }
+                    ],
+                    "consideration_category": "Tools"
+                  },
+                  {
+                    "type": "product_considerations_element",
+                    "title": "What are the safety precautions a plumber should take?",
+                    "expanded_element": [
+                      {
+                        "type": "product_considerations_ai_overview_expanded_element",
+                        "items": [
+                          {
+                            "text": "Plumbers must prioritize safety by using proper Personal Protective Equipment (PPE) such as safety glasses, gloves, and sturdy boots, along with checking for hazardous materials like mold or lead before starting work. Essential precautions include shutting off water/gas valves, ensuring proper ventilation, wearing respiratory protection, using tools with Ground Fault Circuit Interrupters (GFCIs) for electric safety, and preventing fire hazards when soldering.",
+                            "type": "ai_overview_element",
+                            "title": null,
+                            "images": null,
+                            "references": [
+                              {
+                                "url": "https://www.fm.colostate.edu/wp-dev/wp-content/uploads/CH-12.Plumbing.pdf",
+                                "text": "containers have been properly cleaned and purged. Containers that fall into this category are ones that once contained nitrogen, c...",
+                                "type": "ai_overview_reference",
+                                "title": "PLUMBING SHOP SAFETY PROCEDURES",
+                                "domain": "www.fm.colostate.edu",
+                                "source": "Colorado State University"
+                              },
+                              {
+                                "url": "https://hamiltoncountyhealth.org/services/plumbing/plumber-health-safety/",
+                                "text": "* Use fall protection and other precautions when working at heights. * Use eye protection when cutting or grinding to avoid eye i...",
+                                "type": "ai_overview_reference",
+                                "title": "Plumber Health & Safety - Hamilton County Public Health",
+                                "domain": "hamiltoncountyhealth.org",
+                                "source": "Hamilton County Public Health"
+                              },
+                              {
+                                "url": "https://www.adeedo.com/blog/plumbing-safety-tips-every-homeowner-should-know/#:~:text=Stock%20Up%20on%20Basic%20Personal,you'll%20encounter%20noxious%20gases.",
+                                "text": "Stock Up on Basic Personal Protective Equipment (PPE) Routine plumbing projects, no matter how minor, can expose you to hazards. Y...",
+                                "type": "ai_overview_reference",
+                                "title": "Plumbing Safety Tips Every Homeowner Should Know - Adeedo",
+                                "domain": "www.adeedo.com",
+                                "source": "Adeedo"
+                              },
+                              {
+                                "url": "https://safetymattersweekly.com/weekly-safety-meeting-plumbing-safety/#:~:text=Before%20a%20Job:,attempting%20to%20resolve%20the%20issue.",
+                                "text": "Nov 7, 2021 — Before a Job: Prior to beginning any job, it's imperative for plumbers to assess the risks they could potentially confr...",
+                                "type": "ai_overview_reference",
+                                "title": "Weekly Safety Meeting – Plumbing Safety",
+                                "domain": "safetymattersweekly.com",
+                                "source": "Safety Matters Weekly"
+                              },
+                              {
+                                "url": "https://www.quora.com/What-are-the-safety-precautions-while-working-as-a-plumber-in-an-appointment",
+                                "text": "Make sure the stop valve works, nothing worse than starting a job and finding out you cant turn the water off The same thing with ...",
+                                "type": "ai_overview_reference",
+                                "title": "What are the safety precautions while working as a plumber in an ... - Quora",
+                                "domain": "www.quora.com",
+                                "source": "Quora"
+                              }
+                            ]
+                          },
+                          {
+                            "text": "Personal Protective Equipment (PPE): Always wear safety glasses or goggles, face shields, gloves, and steel-toed, slip-resistant boots. Respiratory and Chemical Safety: Wear masks or respirators to avoid breathing in toxic sewer gases or mold spores. Never mix chemicals (e.g., bleach and acid-based cleaners) as this can create dangerous gases. Electrical Hazards: Always use a Ground Fault Circuit Interrupter (GFCI) when working with power tools in wet environments. Never work on electrical plumbing components without cutting the power. Fire Prevention: When soldering or using a torch, keep a fire extinguisher nearby and ensure the area is clear of flammable materials. Ergonomics and Safety Techniques: Take regular breaks to avoid injury from repetitive tasks or awkward positions. Use a dolly or request assistance when lifting heavy items (50+ lbs). Jobsite Hazards: Use proper ventilation in enclosed spaces. Be prepared for, and protect against, sewage exposure. Pre-work Risk Assessment: Locate and test shut-off valves for both water and gas before starting repairs.",
+                            "type": "ai_overview_element",
+                            "title": "Key Safety Precautions and Examples:",
+                            "images": null,
+                            "references": [
+                              {
+                                "url": "https://www.adeedo.com/blog/plumbing-safety-tips-every-homeowner-should-know/#:~:text=Stock%20Up%20on%20Basic%20Personal,you'll%20encounter%20noxious%20gases.",
+                                "text": "Stock Up on Basic Personal Protective Equipment (PPE) Routine plumbing projects, no matter how minor, can expose you to hazards. Y...",
+                                "type": "ai_overview_reference",
+                                "title": "Plumbing Safety Tips Every Homeowner Should Know - Adeedo",
+                                "domain": "www.adeedo.com",
+                                "source": "Adeedo"
+                              },
+                              {
+                                "url": "https://localplumbers.blob.core.windows.net/white-rock-plumbers/what-safety-precautions-should-be-taken-when-attempting-plumbing-repairs.html#:~:text=Never%20Mix%20Chemicals,protect%20your%20health%20and%20wellbeing.",
+                                "text": "Never Mix Chemicals When dealing with plumbing issues, it might be tempting to try and speed up the process by mixing different cl...",
+                                "type": "ai_overview_reference",
+                                "title": "10 Crucial Safety Precautions When Attempting Plumbing Repairs",
+                                "domain": "localplumbers.blob.core.windows.net",
+                                "source": "localplumbers.blob.core.windows.net"
+                              },
+                              {
+                                "url": "https://hamiltoncountyhealth.org/services/plumbing/plumber-health-safety/",
+                                "text": "* Use fall protection and other precautions when working at heights. * Use eye protection when cutting or grinding to avoid eye i...",
+                                "type": "ai_overview_reference",
+                                "title": "Plumber Health & Safety - Hamilton County Public Health",
+                                "domain": "hamiltoncountyhealth.org",
+                                "source": "Hamilton County Public Health"
+                              },
+                              {
+                                "url": "https://www.quora.com/What-are-the-safety-precautions-while-working-as-a-plumber-in-an-appointment",
+                                "text": "Make sure the stop valve works, nothing worse than starting a job and finding out you cant turn the water off The same thing with ...",
+                                "type": "ai_overview_reference",
+                                "title": "What are the safety precautions while working as a plumber in an ... - Quora",
+                                "domain": "www.quora.com",
+                                "source": "Quora"
+                              },
+                              {
+                                "url": "https://www.fm.colostate.edu/wp-dev/wp-content/uploads/CH-12.Plumbing.pdf",
+                                "text": "containers have been properly cleaned and purged. Containers that fall into this category are ones that once contained nitrogen, c...",
+                                "type": "ai_overview_reference",
+                                "title": "PLUMBING SHOP SAFETY PROCEDURES",
+                                "domain": "www.fm.colostate.edu",
+                                "source": "Colorado State University"
+                              },
+                              {
+                                "url": "https://www.servicetitan.com/blog/plumbing-safety-tips#:~:text=Experts%20recommend%20following%20sanitary%20practices,for%20plumbers%20in%20this%20post.",
+                                "text": "Nov 17, 2023 — Experts recommend following sanitary practices, such as wearing shoe covers, washing hands often, wearing latex gloves...",
+                                "type": "ai_overview_reference",
+                                "title": "9 Plumbing Safety Tips for Plumbers & Plumbing Businesses",
+                                "domain": "www.servicetitan.com",
+                                "source": "ServiceTitan"
+                              },
+                              {
+                                "url": "https://www.merchantsgroup.com/blog/jobsite-safety-tips-for-plumbers/#:~:text=Avoiding%20contamination%20from%20the%20environment&text=It%20can%20also%20be%20in,thoroughly%20after%20handling%20the%20clothing.",
+                                "text": "Jul 20, 2020 — Avoiding contamination from the environment ... It can also be in soil, and can enter the body through the nose or mou...",
+                                "type": "ai_overview_reference",
+                                "title": "Jobsite Safety Tips for Plumbers - Merchants Insurance Group",
+                                "domain": "www.merchantsgroup.com",
+                                "source": "Merchants Insurance Group"
+                              }
+                            ]
+                          },
+                          {
+                            "text": "Safety Precautions: Safety measures, protective measures, safety protocols, health & safety guidelines, safety precautions, security measures. Usage Examples: Using safety equipment, wearing personal protective equipment (PPE), applying protective measures, conducting hazard assessment, utilizing preventative actions.",
+                            "type": "ai_overview_element",
+                            "title": "Synonyms and Related Terms:",
+                            "images": null,
+                            "references": [
+                              {
+                                "url": "https://www.ntitraining.com/safety-practices-for-plumbing-professionals/#:~:text=You%20should%20also%20have%20your,a%20building%20supervisor%2C%20for%20example.",
+                                "text": "Oct 17, 2023 — You should also have your emergency contact information always handy. You never know when you may need to get in touch...",
+                                "type": "ai_overview_reference",
+                                "title": "10 Essential Safety Practices for Plumbing Professionals",
+                                "domain": "www.ntitraining.com",
+                                "source": "National Technical Institute"
+                              },
+                              {
+                                "url": "https://hamiltoncountyhealth.org/services/plumbing/plumber-health-safety/",
+                                "text": "* Use fall protection and other precautions when working at heights. * Use eye protection when cutting or grinding to avoid eye i...",
+                                "type": "ai_overview_reference",
+                                "title": "Plumber Health & Safety - Hamilton County Public Health",
+                                "domain": "hamiltoncountyhealth.org",
+                                "source": "Hamilton County Public Health"
+                              },
+                              {
+                                "url": "https://octanegloves.com/blogs/news/preventing-common-plumbing-injuries-a-safety-guide-for-professionals#:~:text=Plumbing%20professionals%20face%20unique%20risks,standards%20of%20the%20plumbing%20profession.",
+                                "text": "Feb 10, 2025 — Plumbing professionals face unique risks that require vigilance, preparation, and the right safety measures. By wearin...",
+                                "type": "ai_overview_reference",
+                                "title": "Preventing Common Plumbing Injuries: A Safety Guide for ...",
+                                "domain": "octanegloves.com",
+                                "source": "Octane Gloves"
+                              },
+                              {
+                                "url": "https://ptt.edu/plumbing-safety-protocols-what-youll-learn-in-a-plumbing-trade-program/#:~:text=Personal%20Protective%20Equipment%20(PPE),of%20exposure%20to%20such%20dangers.",
+                                "text": "Personal Protective Equipment (PPE) Wearing personal protection gear is vital to plumbing safety. PPE includes various plumbing eq...",
+                                "type": "ai_overview_reference",
+                                "title": "Importance Of Plumbing Safety Protocols For Skilled Plumbers",
+                                "domain": "ptt.edu",
+                                "source": "Philadelphia Technician Training Institute"
+                              },
+                              {
+                                "url": "https://www.adeedo.com/blog/plumbing-safety-tips-every-homeowner-should-know/#:~:text=Stock%20Up%20on%20Basic%20Personal,you'll%20encounter%20noxious%20gases.",
+                                "text": "Stock Up on Basic Personal Protective Equipment (PPE) Routine plumbing projects, no matter how minor, can expose you to hazards. Y...",
+                                "type": "ai_overview_reference",
+                                "title": "Plumbing Safety Tips Every Homeowner Should Know - Adeedo",
+                                "domain": "www.adeedo.com",
+                                "source": "Adeedo"
+                              },
+                              {
+                                "url": "https://safetymattersweekly.com/weekly-safety-meeting-plumbing-safety/#:~:text=Before%20a%20Job:,attempting%20to%20resolve%20the%20issue.",
+                                "text": "Nov 7, 2021 — Before a Job: Prior to beginning any job, it's imperative for plumbers to assess the risks they could potentially confr...",
+                                "type": "ai_overview_reference",
+                                "title": "Weekly Safety Meeting – Plumbing Safety",
+                                "domain": "safetymattersweekly.com",
+                                "source": "Safety Matters Weekly"
+                              },
+                              {
+                                "url": "https://www.safeatworkca.com/safety-articles/plumbing-safety/#:~:text=To%20reduce%20the%20chance%20of%20injury%2C%20plumbers,*%20Awkward%20positions%20*%20Repetitive%20manual%20tasks",
+                                "text": "To reduce the chance of injury, plumbers can: * Use Safety Data Sheets (SDS) to learn about chemical properties and health hazards...",
+                                "type": "ai_overview_reference",
+                                "title": "Common Plumbing Hazards That Go Unnoticed - Safe At Work California",
+                                "domain": "www.safeatworkca.com",
+                                "source": "Safe At Work California"
+                              }
+                            ]
+                          }
+                        ],
+                        "references": [
+                          {
+                            "url": "https://www.fm.colostate.edu/wp-dev/wp-content/uploads/CH-12.Plumbing.pdf",
+                            "text": "containers have been properly cleaned and purged. Containers that fall into this category are ones that once contained nitrogen, c...",
+                            "type": "ai_overview_reference",
+                            "title": "PLUMBING SHOP SAFETY PROCEDURES",
+                            "domain": "www.fm.colostate.edu",
+                            "source": "Colorado State University"
+                          },
+                          {
+                            "url": "https://localplumbers.blob.core.windows.net/white-rock-plumbers/what-safety-precautions-should-be-taken-when-attempting-plumbing-repairs.html#:~:text=Never%20Mix%20Chemicals,protect%20your%20health%20and%20wellbeing.",
+                            "text": "Never Mix Chemicals When dealing with plumbing issues, it might be tempting to try and speed up the process by mixing different cl...",
+                            "type": "ai_overview_reference",
+                            "title": "10 Crucial Safety Precautions When Attempting Plumbing Repairs",
+                            "domain": "localplumbers.blob.core.windows.net",
+                            "source": "localplumbers.blob.core.windows.net"
+                          },
+                          {
+                            "url": "https://www.ntitraining.com/safety-practices-for-plumbing-professionals/#:~:text=You%20should%20also%20have%20your,a%20building%20supervisor%2C%20for%20example.",
+                            "text": "Oct 17, 2023 — You should also have your emergency contact information always handy. You never know when you may need to get in touch...",
+                            "type": "ai_overview_reference",
+                            "title": "10 Essential Safety Practices for Plumbing Professionals",
+                            "domain": "www.ntitraining.com",
+                            "source": "National Technical Institute"
+                          },
+                          {
+                            "url": "https://hamiltoncountyhealth.org/services/plumbing/plumber-health-safety/",
+                            "text": "* Use fall protection and other precautions when working at heights. * Use eye protection when cutting or grinding to avoid eye i...",
+                            "type": "ai_overview_reference",
+                            "title": "Plumber Health & Safety - Hamilton County Public Health",
+                            "domain": "hamiltoncountyhealth.org",
+                            "source": "Hamilton County Public Health"
+                          },
+                          {
+                            "url": "https://www.servicetitan.com/blog/plumbing-safety-tips#:~:text=Experts%20recommend%20following%20sanitary%20practices,for%20plumbers%20in%20this%20post.",
+                            "text": "Nov 17, 2023 — Experts recommend following sanitary practices, such as wearing shoe covers, washing hands often, wearing latex gloves...",
+                            "type": "ai_overview_reference",
+                            "title": "9 Plumbing Safety Tips for Plumbers & Plumbing Businesses",
+                            "domain": "www.servicetitan.com",
+                            "source": "ServiceTitan"
+                          },
+                          {
+                            "url": "https://www.adeedo.com/blog/plumbing-safety-tips-every-homeowner-should-know/#:~:text=Stock%20Up%20on%20Basic%20Personal,you'll%20encounter%20noxious%20gases.",
+                            "text": "Stock Up on Basic Personal Protective Equipment (PPE) Routine plumbing projects, no matter how minor, can expose you to hazards. Y...",
+                            "type": "ai_overview_reference",
+                            "title": "Plumbing Safety Tips Every Homeowner Should Know - Adeedo",
+                            "domain": "www.adeedo.com",
+                            "source": "Adeedo"
+                          },
+                          {
+                            "url": "https://safetymattersweekly.com/weekly-safety-meeting-plumbing-safety/#:~:text=Before%20a%20Job:,attempting%20to%20resolve%20the%20issue.",
+                            "text": "Nov 7, 2021 — Before a Job: Prior to beginning any job, it's imperative for plumbers to assess the risks they could potentially confr...",
+                            "type": "ai_overview_reference",
+                            "title": "Weekly Safety Meeting – Plumbing Safety",
+                            "domain": "safetymattersweekly.com",
+                            "source": "Safety Matters Weekly"
+                          },
+                          {
+                            "url": "https://www.merchantsgroup.com/blog/jobsite-safety-tips-for-plumbers/#:~:text=Avoiding%20contamination%20from%20the%20environment&text=It%20can%20also%20be%20in,thoroughly%20after%20handling%20the%20clothing.",
+                            "text": "Jul 20, 2020 — Avoiding contamination from the environment ... It can also be in soil, and can enter the body through the nose or mou...",
+                            "type": "ai_overview_reference",
+                            "title": "Jobsite Safety Tips for Plumbers - Merchants Insurance Group",
+                            "domain": "www.merchantsgroup.com",
+                            "source": "Merchants Insurance Group"
+                          },
+                          {
+                            "url": "https://octanegloves.com/blogs/news/preventing-common-plumbing-injuries-a-safety-guide-for-professionals#:~:text=Plumbing%20professionals%20face%20unique%20risks,standards%20of%20the%20plumbing%20profession.",
+                            "text": "Feb 10, 2025 — Plumbing professionals face unique risks that require vigilance, preparation, and the right safety measures. By wearin...",
+                            "type": "ai_overview_reference",
+                            "title": "Preventing Common Plumbing Injuries: A Safety Guide for ...",
+                            "domain": "octanegloves.com",
+                            "source": "Octane Gloves"
+                          },
+                          {
+                            "url": "https://ptt.edu/plumbing-safety-protocols-what-youll-learn-in-a-plumbing-trade-program/#:~:text=Personal%20Protective%20Equipment%20(PPE),of%20exposure%20to%20such%20dangers.",
+                            "text": "Personal Protective Equipment (PPE) Wearing personal protection gear is vital to plumbing safety. PPE includes various plumbing eq...",
+                            "type": "ai_overview_reference",
+                            "title": "Importance Of Plumbing Safety Protocols For Skilled Plumbers",
+                            "domain": "ptt.edu",
+                            "source": "Philadelphia Technician Training Institute"
+                          },
+                          {
+                            "url": "https://www.quora.com/What-are-the-safety-precautions-while-working-as-a-plumber-in-an-appointment",
+                            "text": "Make sure the stop valve works, nothing worse than starting a job and finding out you cant turn the water off The same thing with ...",
+                            "type": "ai_overview_reference",
+                            "title": "What are the safety precautions while working as a plumber in an ... - Quora",
+                            "domain": "www.quora.com",
+                            "source": "Quora"
+                          },
+                          {
+                            "url": "https://www.safeatworkca.com/safety-articles/plumbing-safety/#:~:text=To%20reduce%20the%20chance%20of%20injury%2C%20plumbers,*%20Awkward%20positions%20*%20Repetitive%20manual%20tasks",
+                            "text": "To reduce the chance of injury, plumbers can: * Use Safety Data Sheets (SDS) to learn about chemical properties and health hazards...",
+                            "type": "ai_overview_reference",
+                            "title": "Common Plumbing Hazards That Go Unnoticed - Safe At Work California",
+                            "domain": "www.safeatworkca.com",
+                            "source": "Safe At Work California"
+                          }
+                        ]
+                      }
+                    ],
+                    "consideration_category": "Safety Precautions"
+                  },
+                  {
+                    "type": "product_considerations_element",
+                    "title": "What are the typical responsibilities of a plumber?",
+                    "expanded_element": [
+                      {
+                        "type": "product_considerations_ai_overview_expanded_element",
+                        "items": [
+                          {
+                            "text": "Plumbers install, repair, and maintain pipes, fixtures, and drainage systems in residential and commercial buildings. Key responsibilities include fixing leaks, unclogging drains, installing toilets/sinks/water heaters, reading blueprints, adhering to building codes, and providing emergency services to ensure functional water and gas systems.",
+                            "type": "ai_overview_element",
+                            "title": null,
+                            "images": null,
+                            "references": [
+                              {
+                                "url": "https://www.bls.gov/ooh/construction-and-extraction/plumbers-pipefitters-and-steamfitters.htm#:~:text=fixtures%20and%20systems.-,Duties,Maintain%20and%20repair%20plumbing%20sysems",
+                                "text": "Duties. Plumbers, pipefitters, and steamfitters typically do the following: Prepare cost estimates for clients. Read blueprints an...",
+                                "type": "ai_overview_reference",
+                                "title": "Plumbers, Pipefitters, and Steamfitters - Bureau of Labor Statistics",
+                                "domain": "www.bls.gov",
+                                "source": "Bureau of Labor Statistics (.gov)"
+                              },
+                              {
+                                "url": "https://goldbergplumbing.com/understanding-what-does-a-plumber-do-an-in-depth-guide/#:~:text=Key%20Responsibilities%20of%20Plumbers,and%20other%20plumbing%20emergencies%20promptly.",
+                                "text": "Jun 9, 2025 — Key Responsibilities of Plumbers The responsibilities of plumbers are diverse and vital. They include: Installing and r...",
+                                "type": "ai_overview_reference",
+                                "title": "What Does a Plumber Do? Tasks and Responsibilities Explained",
+                                "domain": "goldbergplumbing.com",
+                                "source": "Goldberg Plumbing"
+                              },
+                              {
+                                "url": "https://www.joist.com/workshop/business-tips/what-do-plumbers-do/#:~:text=Residential%20Plumbers,Repairing%20or%20replacing%20water%20heaters",
+                                "text": "Jul 15, 2026 — Quick Summary (TL;DR) Plumbers do a lot more than fix leaks. They install and repair pipes, fixtures, and sometimes ev...",
+                                "type": "ai_overview_reference",
+                                "title": "What Do Plumbers Do? Duties, Skills, and Average Salary - Joist",
+                                "domain": "www.joist.com",
+                                "source": "Joist"
+                              }
+                            ]
+                          },
+                          {
+                            "text": "Installing & Repairing Systems: Installing new plumbing systems in construction and repairing broken, leaking, or frozen pipes. Fixture Installation: Installing and maintaining plumbing fixtures like sinks, bathtubs, toilets, and garbage disposals. Drain Cleaning: Using tools like snakes or water jets to clear clogs in sewer and waste lines. Gas Lines: Installing, testing, and repairing gas pipes for stoves and heaters. Maintenance: Conducting preventative maintenance, including inspecting pipes and testing valves, to prevent future issues. Emergency Service: Responding to urgent calls, such as burst pipes or water heater failures. Compliance: Reading and interpreting blueprints to ensure all installations meet local regulations and plumbing codes.",
+                            "type": "ai_overview_element",
+                            "title": "Typical Responsibilities of a Plumber",
+                            "images": null,
+                            "references": [
+                              {
+                                "url": "https://www.joist.com/workshop/business-tips/what-do-plumbers-do/#:~:text=Residential%20Plumbers,Repairing%20or%20replacing%20water%20heaters",
+                                "text": "Jul 15, 2026 — Quick Summary (TL;DR) Plumbers do a lot more than fix leaks. They install and repair pipes, fixtures, and sometimes ev...",
+                                "type": "ai_overview_reference",
+                                "title": "What Do Plumbers Do? Duties, Skills, and Average Salary - Joist",
+                                "domain": "www.joist.com",
+                                "source": "Joist"
+                              },
+                              {
+                                "url": "https://calcareers.ca.gov/CalHrPublic/FileDownload.aspx?aid=23501024&name=PlumberIJobDescription.pdf",
+                                "text": "Plumbing Systems and Equipment ... Surveys unsafe or defective plumbing conditions (e.g. underground utilities, valves, fixtures,",
+                                "type": "ai_overview_reference",
+                                "title": "Job Description / Duty Statement - CalCareers",
+                                "domain": "calcareers.ca.gov",
+                                "source": "CalCareers (.gov)"
+                              },
+                              {
+                                "url": "https://www.mtsac.edu/hr/jobdescriptions/csea651/plumber_1.pdf",
+                                "text": "EXAMPLES OF ESSENTIAL FUNCTIONS (Illustrative Only) ... fixtures, parts, and equipment; rebuild and replace valves and faucets as ...",
+                                "type": "ai_overview_reference",
+                                "title": "Plumber Job Description - Mt. SAC",
+                                "domain": "www.mtsac.edu",
+                                "source": "Mt. San Antonio College (Mt. SAC)"
+                              },
+                              {
+                                "url": "https://uk.indeed.com/hire/job-description/plumber",
+                                "text": "A Plumber, or Pipefitter, is someone who fixes broken pipes and drains, installs pipework into new construction and retrofits or u...",
+                                "type": "ai_overview_reference",
+                                "title": "Plumber Job description [Updated 2026] - Indeed",
+                                "domain": "uk.indeed.com",
+                                "source": "Indeed"
+                              },
+                              {
+                                "url": "https://goldbergplumbing.com/understanding-what-does-a-plumber-do-an-in-depth-guide/#:~:text=Key%20Responsibilities%20of%20Plumbers,and%20other%20plumbing%20emergencies%20promptly.",
+                                "text": "Jun 9, 2025 — Key Responsibilities of Plumbers The responsibilities of plumbers are diverse and vital. They include: Installing and r...",
+                                "type": "ai_overview_reference",
+                                "title": "What Does a Plumber Do? Tasks and Responsibilities Explained",
+                                "domain": "goldbergplumbing.com",
+                                "source": "Goldberg Plumbing"
+                              },
+                              {
+                                "url": "https://www.staffccs.com/what-does-a-typical-day-look-like-for-a-plumber/#:~:text=Typical%20Plumber%20Duties,Keeping%20records%20of%20work%20assignments",
+                                "text": "Typical Plumber Duties Plumbers often spend their time on the following activities: Reviewing blueprints, building codes, and spec...",
+                                "type": "ai_overview_reference",
+                                "title": "What is a Typical Day for a Plumber? - CCS Construction Staffing",
+                                "domain": "www.staffccs.com",
+                                "source": "CCS Construction Staffing"
+                              },
+                              {
+                                "url": "https://www.bls.gov/ooh/construction-and-extraction/plumbers-pipefitters-and-steamfitters.htm#:~:text=fixtures%20and%20systems.-,Duties,Maintain%20and%20repair%20plumbing%20sysems",
+                                "text": "Duties. Plumbers, pipefitters, and steamfitters typically do the following: Prepare cost estimates for clients. Read blueprints an...",
+                                "type": "ai_overview_reference",
+                                "title": "Plumbers, Pipefitters, and Steamfitters - Bureau of Labor Statistics",
+                                "domain": "www.bls.gov",
+                                "source": "Bureau of Labor Statistics (.gov)"
+                              }
+                            ]
+                          },
+                          {
+                            "text": "\"The plumber performed a preventative maintenance check on the water heater and repaired a broken pipe behind the bathroom wall\". \"We hired a contractor to install new fixtures and unclog a sewer line in the kitchen\". \"After reading the blueprints, the installer installed new pipes for the new addition and ensured compliance with local codes\".",
+                            "type": "ai_overview_element",
+                            "title": "Usage Examples",
+                            "images": null,
+                            "references": [
+                              {
+                                "url": "https://www.joist.com/workshop/business-tips/what-do-plumbers-do/#:~:text=Residential%20Plumbers,Repairing%20or%20replacing%20water%20heaters",
+                                "text": "Jul 15, 2026 — Quick Summary (TL;DR) Plumbers do a lot more than fix leaks. They install and repair pipes, fixtures, and sometimes ev...",
+                                "type": "ai_overview_reference",
+                                "title": "What Do Plumbers Do? Duties, Skills, and Average Salary - Joist",
+                                "domain": "www.joist.com",
+                                "source": "Joist"
+                              },
+                              {
+                                "url": "https://calcareers.ca.gov/CalHrPublic/FileDownload.aspx?aid=23501024&name=PlumberIJobDescription.pdf",
+                                "text": "Plumbing Systems and Equipment ... Surveys unsafe or defective plumbing conditions (e.g. underground utilities, valves, fixtures,",
+                                "type": "ai_overview_reference",
+                                "title": "Job Description / Duty Statement - CalCareers",
+                                "domain": "calcareers.ca.gov",
+                                "source": "CalCareers (.gov)"
+                              },
+                              {
+                                "url": "https://uk.indeed.com/hire/job-description/plumber",
+                                "text": "A Plumber, or Pipefitter, is someone who fixes broken pipes and drains, installs pipework into new construction and retrofits or u...",
+                                "type": "ai_overview_reference",
+                                "title": "Plumber Job description [Updated 2026] - Indeed",
+                                "domain": "uk.indeed.com",
+                                "source": "Indeed"
+                              },
+                              {
+                                "url": "https://www.staffccs.com/what-does-a-typical-day-look-like-for-a-plumber/#:~:text=Typical%20Plumber%20Duties,Keeping%20records%20of%20work%20assignments",
+                                "text": "Typical Plumber Duties Plumbers often spend their time on the following activities: Reviewing blueprints, building codes, and spec...",
+                                "type": "ai_overview_reference",
+                                "title": "What is a Typical Day for a Plumber? - CCS Construction Staffing",
+                                "domain": "www.staffccs.com",
+                                "source": "CCS Construction Staffing"
+                              },
+                              {
+                                "url": "https://www.bls.gov/ooh/construction-and-extraction/plumbers-pipefitters-and-steamfitters.htm#:~:text=fixtures%20and%20systems.-,Duties,Maintain%20and%20repair%20plumbing%20sysems",
+                                "text": "Duties. Plumbers, pipefitters, and steamfitters typically do the following: Prepare cost estimates for clients. Read blueprints an...",
+                                "type": "ai_overview_reference",
+                                "title": "Plumbers, Pipefitters, and Steamfitters - Bureau of Labor Statistics",
+                                "domain": "www.bls.gov",
+                                "source": "Bureau of Labor Statistics (.gov)"
+                              }
+                            ]
+                          },
+                          {
+                            "text": "Pipefitter/Steamfitter: Specialist in high-pressure systems. Plumbing Technician: Focused on maintenance and repair. Drain Cleaner/Sewer Technician: Focused on clearing blockages. Journeyman Plumber: A licensed, experienced plumber.",
+                            "type": "ai_overview_element",
+                            "title": "Synonyms for Plumber's Roles",
+                            "images": null,
+                            "references": [
+                              {
+                                "url": "https://www.bls.gov/ooh/construction-and-extraction/plumbers-pipefitters-and-steamfitters.htm#:~:text=fixtures%20and%20systems.-,Duties,Maintain%20and%20repair%20plumbing%20sysems",
+                                "text": "Duties. Plumbers, pipefitters, and steamfitters typically do the following: Prepare cost estimates for clients. Read blueprints an...",
+                                "type": "ai_overview_reference",
+                                "title": "Plumbers, Pipefitters, and Steamfitters - Bureau of Labor Statistics",
+                                "domain": "www.bls.gov",
+                                "source": "Bureau of Labor Statistics (.gov)"
+                              },
+                              {
+                                "url": "https://uk.indeed.com/hire/job-description/plumber",
+                                "text": "A Plumber, or Pipefitter, is someone who fixes broken pipes and drains, installs pipework into new construction and retrofits or u...",
+                                "type": "ai_overview_reference",
+                                "title": "Plumber Job description [Updated 2026] - Indeed",
+                                "domain": "uk.indeed.com",
+                                "source": "Indeed"
+                              },
+                              {
+                                "url": "https://www.joist.com/workshop/business-tips/what-do-plumbers-do/#:~:text=Residential%20Plumbers,Repairing%20or%20replacing%20water%20heaters",
+                                "text": "Jul 15, 2026 — Quick Summary (TL;DR) Plumbers do a lot more than fix leaks. They install and repair pipes, fixtures, and sometimes ev...",
+                                "type": "ai_overview_reference",
+                                "title": "What Do Plumbers Do? Duties, Skills, and Average Salary - Joist",
+                                "domain": "www.joist.com",
+                                "source": "Joist"
+                              },
+                              {
+                                "url": "https://www.indeed.com/hire/job-description/plumber#:~:text=A%20plumber%2C%20or%20Plumbing%20Maintenance%20Technician%2C%20is,broken%20parts%20and%20testing%20the%20plumbing%20system.",
+                                "text": "A plumber, or Plumbing Maintenance Technician, is a skilled tradesperson in charge of installing, inspecting and repairing pipes a...",
+                                "type": "ai_overview_reference",
+                                "title": "Plumber Job Description [Updated for 2026] - Indeed",
+                                "domain": "www.indeed.com",
+                                "source": "Indeed"
+                              }
+                            ]
+                          },
+                          {
+                            "text": "Pipe installer/fitter: Specialized for new construction. Maintenance mechanic/Technician: Focused on repairing existing systems. Service Technician: Focuses on customer service and emergency calls.",
+                            "type": "ai_overview_element",
+                            "title": "Other common terms used for a plumber's job duties include:",
+                            "images": null,
+                            "references": [
+                              {
+                                "url": "https://www.bls.gov/ooh/construction-and-extraction/plumbers-pipefitters-and-steamfitters.htm#:~:text=fixtures%20and%20systems.-,Duties,Maintain%20and%20repair%20plumbing%20sysems",
+                                "text": "Duties. Plumbers, pipefitters, and steamfitters typically do the following: Prepare cost estimates for clients. Read blueprints an...",
+                                "type": "ai_overview_reference",
+                                "title": "Plumbers, Pipefitters, and Steamfitters - Bureau of Labor Statistics",
+                                "domain": "www.bls.gov",
+                                "source": "Bureau of Labor Statistics (.gov)"
+                              },
+                              {
+                                "url": "https://www.joist.com/workshop/business-tips/what-do-plumbers-do/#:~:text=Residential%20Plumbers,Repairing%20or%20replacing%20water%20heaters",
+                                "text": "Jul 15, 2026 — Quick Summary (TL;DR) Plumbers do a lot more than fix leaks. They install and repair pipes, fixtures, and sometimes ev...",
+                                "type": "ai_overview_reference",
+                                "title": "What Do Plumbers Do? Duties, Skills, and Average Salary - Joist",
+                                "domain": "www.joist.com",
+                                "source": "Joist"
+                              },
+                              {
+                                "url": "https://www.indeed.com/hire/job-description/plumber#:~:text=A%20plumber%2C%20or%20Plumbing%20Maintenance%20Technician%2C%20is,broken%20parts%20and%20testing%20the%20plumbing%20system.",
+                                "text": "A plumber, or Plumbing Maintenance Technician, is a skilled tradesperson in charge of installing, inspecting and repairing pipes a...",
+                                "type": "ai_overview_reference",
+                                "title": "Plumber Job Description [Updated for 2026] - Indeed",
+                                "domain": "www.indeed.com",
+                                "source": "Indeed"
+                              }
+                            ]
+                          }
+                        ],
+                        "references": [
+                          {
+                            "url": "https://www.staffccs.com/what-does-a-typical-day-look-like-for-a-plumber/#:~:text=Typical%20Plumber%20Duties,Keeping%20records%20of%20work%20assignments",
+                            "text": "Typical Plumber Duties Plumbers often spend their time on the following activities: Reviewing blueprints, building codes, and spec...",
+                            "type": "ai_overview_reference",
+                            "title": "What is a Typical Day for a Plumber? - CCS Construction Staffing",
+                            "domain": "www.staffccs.com",
+                            "source": "CCS Construction Staffing"
+                          },
+                          {
+                            "url": "https://www.bls.gov/ooh/construction-and-extraction/plumbers-pipefitters-and-steamfitters.htm#:~:text=fixtures%20and%20systems.-,Duties,Maintain%20and%20repair%20plumbing%20sysems",
+                            "text": "Duties. Plumbers, pipefitters, and steamfitters typically do the following: Prepare cost estimates for clients. Read blueprints an...",
+                            "type": "ai_overview_reference",
+                            "title": "Plumbers, Pipefitters, and Steamfitters - Bureau of Labor Statistics",
+                            "domain": "www.bls.gov",
+                            "source": "Bureau of Labor Statistics (.gov)"
+                          },
+                          {
+                            "url": "https://uk.indeed.com/hire/job-description/plumber",
+                            "text": "A Plumber, or Pipefitter, is someone who fixes broken pipes and drains, installs pipework into new construction and retrofits or u...",
+                            "type": "ai_overview_reference",
+                            "title": "Plumber Job description [Updated 2026] - Indeed",
+                            "domain": "uk.indeed.com",
+                            "source": "Indeed"
+                          },
+                          {
+                            "url": "https://goldbergplumbing.com/understanding-what-does-a-plumber-do-an-in-depth-guide/#:~:text=Key%20Responsibilities%20of%20Plumbers,and%20other%20plumbing%20emergencies%20promptly.",
+                            "text": "Jun 9, 2025 — Key Responsibilities of Plumbers The responsibilities of plumbers are diverse and vital. They include: Installing and r...",
+                            "type": "ai_overview_reference",
+                            "title": "What Does a Plumber Do? Tasks and Responsibilities Explained",
+                            "domain": "goldbergplumbing.com",
+                            "source": "Goldberg Plumbing"
+                          },
+                          {
+                            "url": "https://www.mtsac.edu/hr/jobdescriptions/csea651/plumber_1.pdf",
+                            "text": "EXAMPLES OF ESSENTIAL FUNCTIONS (Illustrative Only) ... fixtures, parts, and equipment; rebuild and replace valves and faucets as ...",
+                            "type": "ai_overview_reference",
+                            "title": "Plumber Job Description - Mt. SAC",
+                            "domain": "www.mtsac.edu",
+                            "source": "Mt. San Antonio College (Mt. SAC)"
+                          },
+                          {
+                            "url": "https://www.joist.com/workshop/business-tips/what-do-plumbers-do/#:~:text=Residential%20Plumbers,Repairing%20or%20replacing%20water%20heaters",
+                            "text": "Jul 15, 2026 — Quick Summary (TL;DR) Plumbers do a lot more than fix leaks. They install and repair pipes, fixtures, and sometimes ev...",
+                            "type": "ai_overview_reference",
+                            "title": "What Do Plumbers Do? Duties, Skills, and Average Salary - Joist",
+                            "domain": "www.joist.com",
+                            "source": "Joist"
+                          },
+                          {
+                            "url": "https://calcareers.ca.gov/CalHrPublic/FileDownload.aspx?aid=23501024&name=PlumberIJobDescription.pdf",
+                            "text": "Plumbing Systems and Equipment ... Surveys unsafe or defective plumbing conditions (e.g. underground utilities, valves, fixtures,",
+                            "type": "ai_overview_reference",
+                            "title": "Job Description / Duty Statement - CalCareers",
+                            "domain": "calcareers.ca.gov",
+                            "source": "CalCareers (.gov)"
+                          },
+                          {
+                            "url": "https://www.indeed.com/hire/job-description/plumber#:~:text=A%20plumber%2C%20or%20Plumbing%20Maintenance%20Technician%2C%20is,broken%20parts%20and%20testing%20the%20plumbing%20system.",
+                            "text": "A plumber, or Plumbing Maintenance Technician, is a skilled tradesperson in charge of installing, inspecting and repairing pipes a...",
+                            "type": "ai_overview_reference",
+                            "title": "Plumber Job Description [Updated for 2026] - Indeed",
+                            "domain": "www.indeed.com",
+                            "source": "Indeed"
+                          }
+                        ]
+                      }
+                    ],
+                    "consideration_category": "Responsibilities"
+                  }
+                ],
+                "title": "Things to know",
+                "xpath": "/html[1]/body[1]/div[3]/div[1]/div[13]/div[2]/div[1]/div[2]/div[1]/div[1]/div[1]/div[1]",
+                "position": "left",
+                "rectangle": null,
+                "rank_group": 1,
+                "rank_absolute": 4
+              },
+              {
+                "page": 1,
+                "type": "people_also_ask",
+                "items": [
+                  {
+                    "type": "people_also_ask_element",
+                    "title": "How much would a plumber charge an hour?",
+                    "xpath": "/html[1]/body[1]/div[3]/div[1]/div[13]/div[2]/div[1]/div[2]/div[1]/div[1]/div[3]/div[1]/div[1]/div[1]/div[1]/div[2]/div[1]",
+                    "seed_question": null,
+                    "expanded_element": [
+                      {
+                        "type": "people_also_ask_ai_overview_expanded_element",
+                        "items": null,
+                        "references": null,
+                        "asynchronous_ai_overview": true
+                      }
+                    ]
+                  },
+                  {
+                    "type": "people_also_ask_element",
+                    "title": "How to find an honest plumber?",
+                    "xpath": "/html[1]/body[1]/div[3]/div[1]/div[13]/div[2]/div[1]/div[2]/div[1]/div[1]/div[3]/div[1]/div[1]/div[1]/div[1]/div[2]/div[2]",
+                    "seed_question": null,
+                    "expanded_element": [
+                      {
+                        "type": "people_also_ask_ai_overview_expanded_element",
+                        "items": null,
+                        "references": null,
+                        "asynchronous_ai_overview": true
+                      }
+                    ]
+                  },
+                  {
+                    "type": "people_also_ask_element",
+                    "title": "What is the definition of a plumber?",
+                    "xpath": "/html[1]/body[1]/div[3]/div[1]/div[13]/div[2]/div[1]/div[2]/div[1]/div[1]/div[3]/div[1]/div[1]/div[1]/div[1]/div[2]/div[3]",
+                    "seed_question": null,
+                    "expanded_element": [
+                      {
+                        "type": "people_also_ask_ai_overview_expanded_element",
+                        "items": null,
+                        "references": null,
+                        "asynchronous_ai_overview": true
+                      }
+                    ]
+                  },
+                  {
+                    "type": "people_also_ask_element",
+                    "title": "How much does a plumber cost per?",
+                    "xpath": "/html[1]/body[1]/div[3]/div[1]/div[13]/div[2]/div[1]/div[2]/div[1]/div[1]/div[3]/div[1]/div[1]/div[1]/div[1]/div[2]/div[4]",
+                    "seed_question": null,
+                    "expanded_element": [
+                      {
+                        "type": "people_also_ask_ai_overview_expanded_element",
+                        "items": null,
+                        "references": null,
+                        "asynchronous_ai_overview": true
+                      }
+                    ]
+                  }
+                ],
+                "xpath": "/html[1]/body[1]/div[3]/div[1]/div[13]/div[2]/div[1]/div[2]/div[1]/div[1]/div[3]/div[1]/div[1]/div[1]",
+                "position": "left",
+                "rectangle": null,
+                "rank_group": 1,
+                "rank_absolute": 5
+              },
+              {
+                "faq": null,
+                "url": "https://agoodplumber.com/",
+                "page": 1,
+                "type": "organic",
+                "links": null,
+                "price": null,
+                "title": "A Good Plumber: Brooklyn Plumbing and Heating - Family ...",
+                "xpath": "/html[1]/body[1]/div[3]/div[1]/div[13]/div[2]/div[1]/div[2]/div[1]/div[1]/div[5]/div[1]/div[1]",
+                "checks": null,
+                "domain": "agoodplumber.com",
+                "images": null,
+                "rating": null,
+                "is_image": false,
+                "is_video": false,
+                "position": "left",
+                "cache_url": null,
+                "rectangle": null,
+                "timestamp": "2026-08-06 22:47:35 +00:00",
+                "breadcrumb": "https://agoodplumber.com",
+                "rank_group": 1,
+                "amp_version": false,
+                "description": "1 day ago — We have been family owned plumbers in Brooklyn for decades! Call Now (718) 648-6838 Request … heating service throughout Brooklyn, Queens,",
+                "highlighted": [
+                  "family owned plumbers in Brooklyn for decades"
+                ],
+                "pre_snippet": "1 day ago",
+                "is_malicious": false,
+                "is_web_story": false,
+                "website_name": "A Good Plumber",
+                "rank_absolute": 6,
+                "related_result": null,
+                "extended_snippet": null,
+                "about_this_result": null,
+                "related_search_url": null,
+                "is_featured_snippet": false,
+                "extended_people_also_search": null
+              },
+              {
+                "faq": null,
+                "url": "https://www.yelp.com/search?find_desc=Plumber&find_loc=New+York%2C+NY",
+                "page": 1,
+                "type": "organic",
+                "links": null,
+                "price": null,
+                "title": "TOP 10 BEST Plumber in New York, NY - Updated 2026",
+                "xpath": "/html[1]/body[1]/div[3]/div[1]/div[13]/div[2]/div[1]/div[2]/div[1]/div[1]/div[7]/div[1]/div[1]",
+                "checks": null,
+                "domain": "www.yelp.com",
+                "images": null,
+                "rating": {
+                  "value": 4.4,
+                  "rating_max": 5,
+                  "rating_type": "Max5",
+                  "votes_count": 2564
+                },
+                "is_image": false,
+                "is_video": false,
+                "position": "left",
+                "cache_url": null,
+                "rectangle": null,
+                "timestamp": null,
+                "breadcrumb": "https://www.yelp.com › Home Services",
+                "rank_group": 2,
+                "amp_version": false,
+                "description": "PPP (5/5 ) M&A Plumbing and Heating (5/5) T.A. Mechanical (5/5) Sam's Plumbing Services (172 reviews) Stitch Coterie (171 reviews) Vuksani Service Group (159 ...",
+                "highlighted": [
+                  "PPP (5/5"
+                ],
+                "pre_snippet": null,
+                "is_malicious": false,
+                "is_web_story": false,
+                "website_name": "Yelp",
+                "rank_absolute": 7,
+                "related_result": null,
+                "extended_snippet": null,
+                "about_this_result": null,
+                "related_search_url": null,
+                "is_featured_snippet": false,
+                "extended_people_also_search": null
+              },
+              {
+                "faq": null,
+                "url": "https://www.thumbtack.com/ny/new-york/plumbers",
+                "page": 1,
+                "type": "organic",
+                "links": null,
+                "price": null,
+                "title": "The Best Plumbers in New York, NY",
+                "xpath": "/html[1]/body[1]/div[3]/div[1]/div[13]/div[2]/div[1]/div[2]/div[1]/div[1]/div[9]/div[1]/div[1]",
+                "checks": null,
+                "domain": "www.thumbtack.com",
+                "images": null,
+                "rating": null,
+                "is_image": false,
+                "is_video": false,
+                "position": "left",
+                "cache_url": null,
+                "rectangle": null,
+                "timestamp": null,
+                "breadcrumb": "https://www.thumbtack.com › NY › New York",
+                "rank_group": 3,
+                "amp_version": false,
+                "description": "Plumbing Drain Repair, invasive, accurate leak detection services … plumbers charge anywhere from $45-$165 per hour.",
+                "highlighted": [
+                  "plumbers charge anywhere from $45-$165 per hour"
+                ],
+                "pre_snippet": null,
+                "is_malicious": false,
+                "is_web_story": false,
+                "website_name": "Thumbtack",
+                "rank_absolute": 8,
+                "related_result": null,
+                "extended_snippet": null,
+                "about_this_result": null,
+                "related_search_url": null,
+                "is_featured_snippet": false,
+                "extended_people_also_search": null
+              },
+              {
+                "faq": null,
+                "url": "https://en.wikipedia.org/wiki/Plumber",
+                "page": 1,
+                "type": "organic",
+                "links": null,
+                "price": null,
+                "title": "Plumber",
+                "xpath": "/html[1]/body[1]/div[3]/div[1]/div[13]/div[2]/div[1]/div[2]/div[1]/div[1]/div[11]/div[1]/div[1]",
+                "checks": null,
+                "domain": "en.wikipedia.org",
+                "images": null,
+                "rating": null,
+                "is_image": false,
+                "is_video": false,
+                "position": "left",
+                "cache_url": null,
+                "rectangle": null,
+                "timestamp": null,
+                "breadcrumb": "https://en.wikipedia.org › wiki › Plumber",
+                "rank_group": 4,
+                "amp_version": false,
+                "description": "A plumber is a tradesperson who specializes in installing and maintaining systems used for potable (drinking) water, hot-water production, sewage and drainage",
+                "highlighted": [
+                  "plumber"
+                ],
+                "pre_snippet": null,
+                "is_malicious": false,
+                "is_web_story": false,
+                "website_name": "Wikipedia",
+                "rank_absolute": 9,
+                "related_result": null,
+                "extended_snippet": null,
+                "about_this_result": null,
+                "related_search_url": null,
+                "is_featured_snippet": false,
+                "extended_people_also_search": null
+              },
+              {
+                "faq": null,
+                "url": "https://www.petriplumbing.com/plumbing-services/",
+                "page": 1,
+                "type": "organic",
+                "links": null,
+                "price": null,
+                "title": "Licensed Plumbers in Brooklyn Near Me",
+                "xpath": "/html[1]/body[1]/div[3]/div[1]/div[13]/div[2]/div[1]/div[2]/div[1]/div[1]/div[13]/div[1]/div[1]",
+                "checks": null,
+                "domain": "www.petriplumbing.com",
+                "images": null,
+                "rating": null,
+                "is_image": false,
+                "is_video": false,
+                "position": "left",
+                "cache_url": null,
+                "rectangle": null,
+                "timestamp": null,
+                "breadcrumb": "https://www.petriplumbing.com › plumbing-services",
+                "rank_group": 5,
+                "amp_version": false,
+                "description": "Serving Brooklyn Since 1906 Call (718) 748-1254. Heating, Cooling & Drain Cleaning right away. Call (718) 748-1254. With a BBB A+ rating held since 2011 and ...",
+                "highlighted": [
+                  "Call (718) 748-1254"
+                ],
+                "pre_snippet": null,
+                "is_malicious": false,
+                "is_web_story": false,
+                "website_name": "Petri Plumbing, Heating, Cooling & Drain Cleaning",
+                "rank_absolute": 10,
+                "related_result": null,
+                "extended_snippet": null,
+                "about_this_result": null,
+                "related_search_url": null,
+                "is_featured_snippet": false,
+                "extended_people_also_search": null
+              },
+              {
+                "page": 1,
+                "type": "perspectives",
+                "items": [
+                  {
+                    "url": "https://www.reddit.com/r/roanoke/comments/1vhcqwh/any_good_nonmaga_plumbers/",
+                    "date": "1 day ago",
+                    "type": "perspectives_element",
+                    "title": "Any good non-MAGA Plumbers?",
+                    "domain": "www.reddit.com",
+                    "source": "r/roanoke",
+                    "timestamp": "2026-08-06 22:47:35 +00:00",
+                    "description": null
+                  },
+                  {
+                    "url": "https://www.facebook.com/groups/hellospringfieldmo/posts/1376879203964390/",
+                    "date": "1 day ago",
+                    "type": "perspectives_element",
+                    "title": "Looking for a plumber to do a rough in on a kitchen sink in my guest house. The unit already has a bathroom! Does anyone have any recommendations on plumbers in the Springfield area?",
+                    "domain": "www.facebook.com",
+                    "source": "Springfield, MO",
+                    "timestamp": "2026-08-06 22:47:35 +00:00",
+                    "description": null
+                  },
+                  {
+                    "url": "https://www.instagram.com/reel/Dbrs26HjXFo/",
+                    "date": "1 day ago",
+                    "type": "perspectives_element",
+                    "title": "Smart  Plumber Trick To Join 3  PVC Pipe\n\n#Crafts #tricks #repair #workshop #plumbing",
+                    "domain": "www.instagram.com",
+                    "source": "kamal_farid96",
+                    "timestamp": "2026-08-06 22:47:35 +00:00",
+                    "description": null
+                  },
+                  {
+                    "url": "https://www.instagram.com/reel/DbvWj55jk8F/",
+                    "date": "3 hours ago",
+                    "type": "perspectives_element",
+                    "title": "An experienced plumber taught me this trick With a plastic bottle cap and tape 💦",
+                    "domain": "www.instagram.com",
+                    "source": "n.t.creative01",
+                    "timestamp": "2026-08-07 19:47:35 +00:00",
+                    "description": null
+                  },
+                  {
+                    "url": "https://www.youtube.com/watch?v=sCaya-QzS5M",
+                    "date": "2 weeks ago",
+                    "type": "perspectives_element",
+                    "title": "Genius Invention By 60-Year-Old Plumber! Endless Free Water Source from Plastic fruit crate/PVC pipe",
+                    "domain": "www.youtube.com",
+                    "source": "Tips Unknown",
+                    "timestamp": "2026-07-24 22:47:35 +00:00",
+                    "description": null
+                  },
+                  {
+                    "url": "https://www.reddit.com/r/AusRenovation/comments/1vgyz7q/look_what_my_plumber_did/",
+                    "date": "1 day ago",
+                    "type": "perspectives_element",
+                    "title": "Look what my plumber did",
+                    "domain": "www.reddit.com",
+                    "source": "r/AusRenovation",
+                    "timestamp": "2026-08-06 22:47:35 +00:00",
+                    "description": null
+                  },
+                  {
+                    "url": "https://www.reddit.com/r/askaplumber/comments/1vgm1a7/plumber_put_piping_for_tub_and_shower_how/",
+                    "date": "2 days ago",
+                    "type": "perspectives_element",
+                    "title": "Plumber put piping for tub and shower. How concerned should I be?",
+                    "domain": "www.reddit.com",
+                    "source": "r/askaplumber",
+                    "timestamp": "2026-08-05 22:47:35 +00:00",
+                    "description": null
+                  },
+                  {
+                    "url": "https://www.facebook.com/groups/1174823293639953/posts/1871942087261400/",
+                    "date": "1 day ago",
+                    "type": "perspectives_element",
+                    "title": "Looking for recommendations for a reliable plumber and a shower remodeling contractor",
+                    "domain": "www.facebook.com",
+                    "source": "PORT ST. LUCIE RECOMMENDATIONS",
+                    "timestamp": "2026-08-06 22:47:35 +00:00",
+                    "description": null
+                  },
+                  {
+                    "url": "https://www.tiktok.com/@80sdeennice/video/7671084419364539679",
+                    "date": "22 hours ago",
+                    "type": "perspectives_element",
+                    "title": "“It’s the plumber. I’ve come to fix the sink.” 😂🚰 One of my favorites from The Electric Company. #70s #80s #genx #theelectriccompany #foryoupage",
+                    "domain": "www.tiktok.com",
+                    "source": "80s Deennice",
+                    "timestamp": "2026-08-07 00:47:35 +00:00",
+                    "description": null
+                  },
+                  {
+                    "url": "https://www.instagram.com/reel/Dbt2FsVv0Eq/",
+                    "date": "24 hours ago",
+                    "type": "perspectives_element",
+                    "title": "Ovi the plumber 😂🥅",
+                    "domain": "www.instagram.com",
+                    "source": "empty.netters",
+                    "timestamp": "2026-08-06 22:47:35 +00:00",
+                    "description": null
+                  },
+                  {
+                    "url": "https://www.facebook.com/groups/354844184692577/posts/3552846724892291/",
+                    "date": "22 hours ago",
+                    "type": "perspectives_element",
+                    "title": "Looking for an affordable plumber.",
+                    "domain": "www.facebook.com",
+                    "source": "Bartlett TN Community",
+                    "timestamp": "2026-08-07 00:47:35 +00:00",
+                    "description": null
+                  },
+                  {
+                    "url": "https://www.instagram.com/reel/DbrP7Invq-W/",
+                    "date": "1 day ago",
+                    "type": "perspectives_element",
+                    "title": "Common plumbing mistakes \n\n#reels #plumber \n\n@bradfordwhitewaterheaters",
+                    "domain": "www.instagram.com",
+                    "source": "kencoplumbingnh",
+                    "timestamp": "2026-08-06 22:47:35 +00:00",
+                    "description": null
+                  }
+                ],
+                "title": "What people are saying",
+                "xpath": "/html[1]/body[1]/div[3]/div[1]/div[13]/div[2]/div[1]/div[2]/div[1]/div[1]/div[15]/div[1]",
+                "position": "left",
+                "rectangle": null,
+                "rank_group": 1,
+                "rank_absolute": 11
+              },
+              {
+                "faq": null,
+                "url": "https://www.craigslist.org/search/area/newyork?hub=plumber",
+                "page": 1,
+                "type": "organic",
+                "links": null,
+                "price": null,
+                "title": "new york plumbers",
+                "xpath": "/html[1]/body[1]/div[3]/div[1]/div[13]/div[2]/div[1]/div[2]/div[1]/div[1]/div[17]/div[1]/div[1]",
+                "checks": null,
+                "domain": "www.craigslist.org",
+                "images": null,
+                "rating": null,
+                "is_image": false,
+                "is_video": false,
+                "position": "left",
+                "cache_url": null,
+                "rectangle": null,
+                "timestamp": null,
+                "breadcrumb": "https://www.craigslist.org › craigslist: new york › services",
+                "rank_group": 6,
+                "amp_version": false,
+                "description": "Plumber #01115- Plumbers, Plumbing. Same Day Service ✅ $0 917-633-9008 - Repairs, Installations You Can Count On DO YOU NEED A PLUMBER?",
+                "highlighted": [
+                  "Plumber",
+                  "Plumbers",
+                  "PLUMBER"
+                ],
+                "pre_snippet": null,
+                "is_malicious": false,
+                "is_web_story": false,
+                "website_name": "Craigslist",
+                "rank_absolute": 12,
+                "related_result": null,
+                "extended_snippet": null,
+                "about_this_result": null,
+                "related_search_url": null,
+                "is_featured_snippet": false,
+                "extended_people_also_search": null
+              },
+              {
+                "faq": null,
+                "url": "https://riteplumbingnyc.com/",
+                "page": 1,
+                "type": "organic",
+                "links": null,
+                "price": null,
+                "title": "Rite Plumbing NYC: Plumber NYC | Best Plumbing New York",
+                "xpath": "/html[1]/body[1]/div[3]/div[1]/div[13]/div[2]/div[1]/div[2]/div[1]/div[1]/div[19]/div[1]/div[1]",
+                "checks": null,
+                "domain": "riteplumbingnyc.com",
+                "images": null,
+                "rating": null,
+                "is_image": false,
+                "is_video": false,
+                "position": "left",
+                "cache_url": null,
+                "rectangle": null,
+                "timestamp": null,
+                "breadcrumb": "https://riteplumbingnyc.com",
+                "rank_group": 7,
+                "amp_version": false,
+                "description": "Rite Plumbing provides expert commercial & residential plumbers in New York City. Call (347) 502-6441 for Free Quote for all your plumbing needs.",
+                "highlighted": [
+                  "expert commercial & residential plumbers in New York City"
+                ],
+                "pre_snippet": null,
+                "is_malicious": false,
+                "is_web_story": false,
+                "website_name": "Rite Plumbing NYC",
+                "rank_absolute": 13,
+                "related_result": null,
+                "extended_snippet": null,
+                "about_this_result": null,
+                "related_search_url": null,
+                "is_featured_snippet": false,
+                "extended_people_also_search": null
+              },
+              {
+                "faq": null,
+                "url": "https://www.airtasker.com/us/services/plumbing/new-york-ny/",
+                "page": 1,
+                "type": "organic",
+                "links": null,
+                "price": {
+                  "current": 72,
+                  "regular": null,
+                  "currency": "USD",
+                  "max_value": 235,
+                  "is_price_range": true,
+                  "displayed_price": "$72.00 to $235.00"
+                },
+                "title": "Find 12 Trusted plumbers in New York",
+                "xpath": "/html[1]/body[1]/div[3]/div[1]/div[13]/div[2]/div[1]/div[2]/div[1]/div[1]/div[21]/div[1]/div[1]",
+                "checks": null,
+                "domain": "www.airtasker.com",
+                "images": null,
+                "rating": {
+                  "value": 5,
+                  "rating_max": 5,
+                  "rating_type": "Max5",
+                  "votes_count": 10
+                },
+                "is_image": false,
+                "is_video": false,
+                "position": "left",
+                "cache_url": null,
+                "rectangle": null,
+                "timestamp": "2026-08-01 22:47:35 +00:00",
+                "breadcrumb": "https://www.airtasker.com › Home › Services › Plumbing",
+                "rank_group": 8,
+                "amp_version": false,
+                "description": "6 days ago — Find 12 experienced plumbers in New York. Get FREE quotes in minutes from reviewed, rated &amp; range from $750 to $1,800, and PVC pipe repairs ...",
+                "highlighted": [
+                  "Get FREE quotes in minutes"
+                ],
+                "pre_snippet": "6 days ago",
+                "is_malicious": false,
+                "is_web_story": false,
+                "website_name": "Airtasker",
+                "rank_absolute": 14,
+                "related_result": null,
+                "extended_snippet": null,
+                "about_this_result": null,
+                "related_search_url": null,
+                "is_featured_snippet": false,
+                "extended_people_also_search": null
+              },
+              {
+                "page": 1,
+                "type": "related_searches",
+                "items": [
+                  "Plumber NYC",
+                  "Plumber near me",
+                  "Plumber Staten Island",
+                  "Plumber Brooklyn",
+                  "Plumber NYC salary",
+                  "Plumber Queens",
+                  "A Good Plumber Brooklyn",
+                  "Plumbers Brooklyn near me"
+                ],
+                "xpath": "/html[1]/body[1]/div[3]/div[1]/div[13]/div[2]/div[2]/div[1]/div[3]/div[1]/div[1]/div[1]/div[1]/div[2]",
+                "position": "left",
+                "rectangle": null,
+                "rank_group": 1,
+                "rank_absolute": 15
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

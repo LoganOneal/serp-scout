@@ -1,0 +1,14 @@
+{
+  "name": "@rnr/core",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./*": "./src/*.ts"
+  },
+  "//": "ZERO runtime dependencies, deliberately. The scoring model is pure functions over plain objects; if this package ever needs a dependency to score a SERP, something has leaked in that shouldn't have. This is also what makes @rnr/core safe to import from a client component.",
+  "dependencies": {
+    "tldts": "^7.4.10"
+  }
+}

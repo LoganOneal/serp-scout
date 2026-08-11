@@ -1,0 +1,320 @@
+{
+  "__meta": {
+    "verified": true,
+    "capturedAt": "2026-08-10T19:31:59.710Z",
+    "source": "captured live from /serp/google/locations"
+  },
+  "payload": {
+    "version": "0.1.20260806",
+    "status_code": 20000,
+    "status_message": "Ok.",
+    "time": "0.1746 sec.",
+    "cost": 0,
+    "tasks_count": 1,
+    "tasks_error": 0,
+    "tasks": [
+      {
+        "id": "08101931-2230-0096-0000-66eba798c8f6",
+        "status_code": 20000,
+        "status_message": "Ok.",
+        "time": "0.1240 sec.",
+        "cost": 0,
+        "result_count": 270385,
+        "path": [
+          "v3",
+          "serp",
+          "google",
+          "locations"
+        ],
+        "data": {
+          "api": "serp",
+          "function": "locations",
+          "se": "google"
+        },
+        "result": [
+          {
+            "location_code": 21182,
+            "location_name": "Wisconsin,United States",
+            "location_code_parent": 2840,
+            "country_iso_code": "US",
+            "location_type": "State"
+          },
+          {
+            "location_code": 1014090,
+            "location_name": "Orange,Orange,California,United States",
+            "location_code_parent": 21137,
+            "country_iso_code": "US",
+            "location_type": "City"
+          },
+          {
+            "location_code": 1026607,
+            "location_name": "McKinney,Collin County,Texas,United States",
+            "location_code_parent": 21176,
+            "country_iso_code": "US",
+            "location_type": "City"
+          },
+          {
+            "location_code": 1028029,
+            "location_name": "Kenosha,Wisconsin,United States",
+            "location_code_parent": 21182,
+            "country_iso_code": "US",
+            "location_type": "City"
+          },
+          {
+            "location_code": 9059912,
+            "location_name": "Kenosha County,Wisconsin,United States",
+            "location_code_parent": 21182,
+            "country_iso_code": "US",
+            "location_type": "County"
+          },
+          {
+            "location_code": 2004,
+            "location_name": "Afghanistan",
+            "location_code_parent": null,
+            "country_iso_code": "AF",
+            "location_type": "Country"
+          },
+          {
+            "location_code": 2060,
+            "location_name": "Bermuda",
+            "location_code_parent": null,
+            "country_iso_code": "BM",
+            "location_type": "Region"
+          },
+          {
+            "location_code": 20008,
+            "location_name": "Salta Province,Argentina",
+            "location_code_parent": 2032,
+            "country_iso_code": "AR",
+            "location_type": "Province"
+          },
+          {
+            "location_code": 20076,
+            "location_name": "Freeport,The Bahamas",
+            "location_code_parent": 2044,
+            "country_iso_code": "BS",
+            "location_type": "District"
+          },
+          {
+            "location_code": 20083,
+            "location_name": "Cochabamba Department,Bolivia",
+            "location_code_parent": 2068,
+            "country_iso_code": "BO",
+            "location_type": "Department"
+          },
+          {
+            "location_code": 20119,
+            "location_name": "Northwest Territories,Canada",
+            "location_code_parent": 2124,
+            "country_iso_code": "CA",
+            "location_type": "Territory"
+          },
+          {
+            "location_code": 20126,
+            "location_name": "Aargau,Switzerland",
+            "location_code_parent": 2756,
+            "country_iso_code": "CH",
+            "location_type": "Canton"
+          },
+          {
+            "location_code": 20269,
+            "location_name": "Andalusia,Spain",
+            "location_code_parent": 2724,
+            "country_iso_code": "ES",
+            "location_type": "Autonomous Community"
+          },
+          {
+            "location_code": 20452,
+            "location_name": "Andaman and Nicobar Islands,India",
+            "location_code_parent": 2356,
+            "country_iso_code": "IN",
+            "location_type": "Union Territory"
+          },
+          {
+            "location_code": 20624,
+            "location_name": "Hokkaido,Japan",
+            "location_code_parent": 2392,
+            "country_iso_code": "JP",
+            "location_type": "Prefecture"
+          },
+          {
+            "location_code": 21458,
+            "location_name": "Dakahlia Governorate,Egypt",
+            "location_code_parent": 2818,
+            "country_iso_code": "EG",
+            "location_type": "Governorate"
+          },
+          {
+            "location_code": 200500,
+            "location_name": "Portland-Auburn, ME,United States",
+            "location_code_parent": 2840,
+            "country_iso_code": "US",
+            "location_type": "DMA Region"
+          },
+          {
+            "location_code": 1000752,
+            "location_name": "Mitterbach am Erlaufsee,Lower Austria,Austria",
+            "location_code_parent": 20044,
+            "country_iso_code": "AT",
+            "location_type": "Municipality"
+          },
+          {
+            "location_code": 1000895,
+            "location_name": "Frauental an der Lassnitz,Styria,Austria",
+            "location_code_parent": 20047,
+            "country_iso_code": "AT",
+            "location_type": "Neighborhood"
+          },
+          {
+            "location_code": 1001155,
+            "location_name": "Borgloon,Flanders,Belgium",
+            "location_code_parent": 9069523,
+            "country_iso_code": "BE",
+            "location_type": "Colloquial Area"
+          },
+          {
+            "location_code": 1006778,
+            "location_name": "Hayling Island,England,United Kingdom",
+            "location_code_parent": 20339,
+            "country_iso_code": "GB",
+            "location_type": "Post town"
+          },
+          {
+            "location_code": 1007716,
+            "location_name": "Jakarta,Jakarta,Indonesia",
+            "location_code_parent": 20440,
+            "country_iso_code": "ID",
+            "location_type": "City Region"
+          },
+          {
+            "location_code": 1009840,
+            "location_name": "Jinhae-gu,Gyeongsangnam-do,South Korea",
+            "location_code_parent": 21332,
+            "country_iso_code": "KR",
+            "location_type": "Borough"
+          },
+          {
+            "location_code": 1012948,
+            "location_name": "Auburn University,Lee County,Alabama,United States",
+            "location_code_parent": 21133,
+            "country_iso_code": "US",
+            "location_type": "University"
+          },
+          {
+            "location_code": 1016261,
+            "location_name": "O'Hare International Airport,Illinois,United States",
+            "location_code_parent": 21147,
+            "country_iso_code": "US",
+            "location_type": "Airport"
+          },
+          {
+            "location_code": 9000000,
+            "location_name": "A0A,Newfoundland and Labrador,Canada",
+            "location_code_parent": 20117,
+            "country_iso_code": "CA",
+            "location_type": "Postal Code"
+          },
+          {
+            "location_code": 9047008,
+            "location_name": "Border,United Kingdom",
+            "location_code_parent": 2826,
+            "country_iso_code": "GB",
+            "location_type": "TV Region"
+          },
+          {
+            "location_code": 9069331,
+            "location_name": "Acadia National Park,Maine,United States",
+            "location_code_parent": 21154,
+            "country_iso_code": "US",
+            "location_type": "National Park"
+          },
+          {
+            "location_code": 9112847,
+            "location_name": "Alaska's At-Large Congressional District 2022 redistricting,Alaska,United States",
+            "location_code_parent": 21132,
+            "country_iso_code": "US",
+            "location_type": "Congressional District"
+          },
+          {
+            "location_code": 9181248,
+            "location_name": "Phek,Nagaland,India",
+            "location_code_parent": 21339,
+            "country_iso_code": "IN",
+            "location_type": "Sub District"
+          },
+          {
+            "location_code": 9190208,
+            "location_name": "Witikon,Zurich,Switzerland",
+            "location_code_parent": 20151,
+            "country_iso_code": "CH",
+            "location_type": "Quarter"
+          },
+          {
+            "location_code": 9190542,
+            "location_name": "Siska District,Ljubljana,Slovenia",
+            "location_code_parent": 9075874,
+            "country_iso_code": "SI",
+            "location_type": "Municipality District"
+          },
+          {
+            "location_code": 9190597,
+            "location_name": "East End,St. Thomas,U.S. Virgin Islands",
+            "location_code_parent": 9070162,
+            "country_iso_code": "VI",
+            "location_type": "Sub-District"
+          },
+          {
+            "location_code": 9195217,
+            "location_name": "Phase 3,Maharashtra,India",
+            "location_code_parent": 20462,
+            "country_iso_code": "IN",
+            "location_type": "Sub-Ward"
+          },
+          {
+            "location_code": 9195471,
+            "location_name": "Caguas,Caguas,Caguas,Puerto Rico",
+            "location_code_parent": 9069609,
+            "country_iso_code": "PR",
+            "location_type": "Barrio"
+          },
+          {
+            "location_code": 9207063,
+            "location_name": "Odense N,Region of Southern Denmark,Denmark",
+            "location_code_parent": 20252,
+            "country_iso_code": "DK",
+            "location_type": "neighborhood"
+          },
+          {
+            "location_code": 9207992,
+            "location_name": "Buon,Sihanoukville,Cambodia",
+            "location_code_parent": 9069950,
+            "country_iso_code": "KH",
+            "location_type": "Commune"
+          },
+          {
+            "location_code": 9208525,
+            "location_name": "Haarlem-Oost,North Holland,Netherlands",
+            "location_code_parent": 20766,
+            "country_iso_code": "NL",
+            "location_type": "district"
+          },
+          {
+            "location_code": 9209773,
+            "location_name": "Tan Hung,Ho Chi Minh,Vietnam",
+            "location_code_parent": 9040373,
+            "country_iso_code": "VN",
+            "location_type": "Ward"
+          },
+          {
+            "location_code": 9214192,
+            "location_name": "Evariwatta,Western Province,Sri Lanka",
+            "location_code_parent": 9069783,
+            "country_iso_code": "LK",
+            "location_type": "Division"
+          }
+        ]
+      }
+    ],
+    "__probe_note": "sampled 40 of 270385 rows"
+  }
+}

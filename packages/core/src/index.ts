@@ -1,0 +1,52 @@
+/**
+ * @rnr/core -- pure functions over plain objects. No database, no network, no
+ * filesystem, no `server-only`. Safe to import from a client component, which is
+ * the other reason this package boundary exists.
+ */
+
+export * from './types.js'
+export * from './money.js'
+export * from './calibration.js'
+
+export * from './scoring/priors.js'
+export * from './scoring/platforms.js'
+export * from './scoring/classify.js'
+export * from './scoring/difficulty.js'
+export * from './scoring/emd.js'
+export * from './scoring/demand.js'
+export * from './scoring/rent.js'
+
+export * from './geography/names.js'
+export * from './geography/slug.js'
+export * from './geography/resolve.js'
+export * from './geography/rollup.js'
+
+export * from './voice/hours.js'
+export * from './voice/normalize.js'
+export * from './voice/triage.js'
+export * from './voice/lead.js'
+export * from './voice/lead-outcome.js'
+export * from './voice/prompt.js'
+export * from './serp/keywords.js'
+export * from './serp/reddit.js'
+export * from './serp/discovery.js'
+export * from './serp/discovery-csv.js'
+export * from './serp/serp-layout.js'
+export * from './serp/google-ads-keywords.js'
+export * from './serp/home-service-geos.js'
+export * from './serp/service-intent-keywords.js'
+export * from './serp/opportunity-score.js'
+export * from './serp/lead-gen-score.js'
+export * from './serp/keyword-planner-link.js'
+export * from './serp/keyword-selection.js'
+export * from './serp/keyword-slug.js'
+export * from './serp/local-serp-url.js'
+export * from './serp/regressions.js'
+export * from './voice/agent-audit.js'
+export { CAPTURED_AGENT, CAPTURED_FLOW } from './voice/__fixtures__/captured-agent.js'
+export * from './domains/normalize.js'
+export * from './domains/classify.js'
+export * from './serp/group-opportunities.js'
+export * from './domains/authority.js'
+export * from './domains/directory-links.js'
+export * from './serp/reddit-volume.js'

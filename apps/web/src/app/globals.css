@@ -1,0 +1,3278 @@
+/* Light enterprise shell (SEMrush-class). Dark is optional via data-theme. */
+:root {
+  --bg: #f3f5f8;
+  --bg-app: #f3f5f8;
+  --bg-sidebar: #ffffff;
+  --surface: #ffffff;
+  --surface-2: #f8fafc;
+  --border: #e5e7eb;
+  --border-strong: #d1d5db;
+  --text: #111827;
+  --text-dim: #4b5563;
+  --text-faint: #9ca3af;
+  --accent: #ff642d;
+  --accent-ink: #111827;
+  --accent-soft: #fff4ef;
+  --link: #0b5fff;
+
+  /**
+   * ==================== BRAND IS NOT A STATE ====================
+   * Selection is the most common state on these screens -- 20 markets and 10
+   * niches are checked before anything happens. Painting each selected row with
+   * the brand orange made "the normal case" look like "the alarm case", and
+   * left no colour available to mean anything. Selection is therefore a NEUTRAL
+   * tint; orange is spent only on the primary action and the active nav marker.
+   * ============================================================
+   */
+  --select-bg: #f4f7fb;
+  --select-bg-hover: #eaf0f8;
+  --select-marker: #94a3b8;
+  /* Solid, high-contrast primary. A 30%-opacity orange reads as disabled. */
+  --primary-bg: #1f2937;
+  --primary-bg-hover: #111827;
+
+  /* Only the 30-day band gets green. It is the only claim that says "go". */
+  --go: #15803d;
+  --go-bg: #ecfdf3;
+  --warn: #b45309;
+  --warn-bg: #fffbeb;
+  --neutral: #64748b;
+  --neutral-bg: #f1f5f9;
+  --stop: #b91c1c;
+  --stop-bg: #fef2f2;
+  --unknown: #64748b;
+  --unknown-bg: #f8fafc;
+
+  --sidebar-width: 232px;
+  --topbar-height: 52px;
+  --radius: 8px;
+  --shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.04);
+  --shadow-md: 0 4px 16px rgba(15, 23, 42, 0.06);
+
+  --mono: ui-monospace, "SF Mono", "Cascadia Mono", Menlo, Consolas, monospace;
+  --sans: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--bg-app);
+  color: var(--text);
+  font-family: var(--sans);
+  font-size: 13.5px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+a {
+  color: var(--link, #0b5fff);
+  text-decoration: none;
+}
+a:hover {
+  text-decoration: underline;
+}
+
+.wrap {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 0 48px;
+}
+
+/* --- App shell (SaaS chrome) -------------------------------------------- */
+
+/**
+ * ==================== THE SHELL OWNS THE SCROLL ====================
+ * Previously the whole document scrolled, so a table could only ever be as tall
+ * as its content and the header scrolled away with it. Pinning the shell to the
+ * viewport and scrolling INSIDE .app-content is what lets a page hand its
+ * remaining height to a table and keep the toolbar and column headers fixed --
+ * the thing that makes Semrush-style grids readable at 200 rows.
+ * ================================================================
+ */
+.app-shell {
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
+  background: var(--bg-app);
+}
+
+.app-sidebar {
+  width: var(--sidebar-width);
+  flex: none;
+  background: var(--bg-sidebar);
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  z-index: 40;
+}
+
+.app-sidebar-brand {
+  padding: 18px 18px 14px;
+  border-bottom: 1px solid var(--border);
+}
+
+.app-logo {
+  display: block;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--text);
+  text-decoration: none;
+}
+.app-logo:hover {
+  text-decoration: none;
+  color: var(--text);
+}
+.app-logo-sub {
+  margin-top: 2px;
+  font-size: 11px;
+  color: var(--text-faint);
+  font-weight: 500;
+}
+
+.app-sidebar-nav {
+  flex: 1;
+  overflow-y: auto;
+  padding: 12px 10px 20px;
+}
+
+.app-nav-group {
+  margin-bottom: 16px;
+}
+.app-nav-group-title {
+  font-size: 10.5px;
+  font-weight: 650;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-faint);
+  padding: 4px 10px 6px;
+}
+.app-nav-group ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.app-nav-link {
+  display: block;
+  padding: 7px 10px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-dim);
+  text-decoration: none;
+  margin-bottom: 1px;
+}
+.app-nav-link:hover {
+  background: var(--surface-2);
+  color: var(--text);
+  text-decoration: none;
+}
+.app-nav-link.active {
+  background: var(--surface-2);
+  color: var(--text);
+  font-weight: 600;
+  box-shadow: inset 2px 0 0 var(--accent);
+}
+
+.app-sidebar-foot {
+  padding: 12px 14px 16px;
+  border-top: 1px solid var(--border);
+}
+.app-nav-foot-link {
+  font-size: 11.5px;
+  color: var(--text-faint);
+}
+.app-nav-foot-link:hover {
+  color: var(--text-dim);
+}
+
+.app-main-col {
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.app-topbar {
+  height: var(--topbar-height);
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 24px;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  z-index: 30;
+}
+.app-topbar-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+}
+.app-topbar-workspace {
+  font-weight: 600;
+  color: var(--text);
+}
+.app-topbar-sep {
+  color: var(--text-faint);
+}
+.app-topbar-product {
+  color: var(--text-dim);
+}
+.app-topbar-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.app-topbar-link {
+  font-size: 12.5px;
+  color: var(--text-dim);
+  font-weight: 500;
+}
+.app-topbar-link:hover {
+  color: var(--text);
+  text-decoration: none;
+}
+
+.pill-live {
+  background: #fef2f2;
+  border-color: #fecaca;
+  color: #b91c1c;
+}
+.pill-fixture {
+  background: #fffbeb;
+  border-color: #fde68a;
+  color: #92400e;
+}
+
+.app-content {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 22px 28px 48px;
+  max-width: 1400px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/**
+ * A page opts into "workspace" mode by rendering .opp-workspace as its root:
+ * full bleed, no page scroll, table takes the leftover height. Uses :has() so
+ * no prop plumbing through the shared layout is needed; browsers without it
+ * simply fall back to the normal padded, page-scrolling layout.
+ */
+.app-content:has(> .opp-workspace) {
+  overflow: hidden;
+  padding: 0;
+  max-width: none;
+  display: flex;
+  flex-direction: column;
+}
+.opp-workspace,
+.opp-fill {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+}
+/* Header/meta is fixed chrome above the workspace. */
+.opp-workspace > .run-page-head .page-header {
+  margin-bottom: 0;
+}
+/* Everything except the table is fixed chrome; the table gets what is left. */
+.opp-fill > .opp-tab-panel,
+.opp-workspace > .opp-tab-panel {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  padding-top: 0;
+}
+.opp-workspace .opp-step,
+.opp-fill .opp-step {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+}
+/* Step header + summary are chrome; only the grid stretches. */
+.opp-workspace .opp-step > .opp-step-head,
+.opp-fill .opp-step > .opp-step-head {
+  flex: none;
+  padding: 8px 20px 6px;
+  margin-bottom: 0;
+}
+/**
+ * The page already says "Research" with a description directly above the tabs;
+ * repeating it as "Niche × market screen" + a second paragraph cost ~90px of
+ * the fold for no new information. The meta line (database / counts) stays --
+ * that is the one part that is not a restatement.
+ */
+.opp-fill .opp-step > .opp-step-head .opp-step-title,
+.opp-fill .opp-step > .opp-step-head .opp-step-desc {
+  display: none;
+}
+.opp-fill .opp-step > .opp-step-head .sm-magic-meta {
+  margin-top: 0;
+}
+/* Filter + quick-picks share one toolbar row instead of stacking two. */
+.opp-fill .sm-toolbar-actions .sm-filter-input {
+  max-width: 260px;
+}
+/**
+ * The run/ack controls and the single-market expander sit under the grid. They
+ * are capped rather than allowed to size themselves: uncapped they took ~480px
+ * of a 950px viewport, so the table they exist to act on got less room than the
+ * buttons. Scrolls internally when it needs more.
+ */
+.opp-workspace .screen-footer,
+.opp-fill .screen-footer {
+  flex: none;
+  max-height: 30vh;
+  overflow-y: auto;
+  padding: 8px 20px;
+  border-top: 1px solid var(--border);
+  background: var(--surface);
+}
+/* Collapse the run card to a single action bar. Its long blurb and its cost
+   estimate both already appear in the summary strip above the grid. */
+.opp-fill .screen-footer .screen-run.card {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px 14px;
+  padding: 4px 0;
+  margin-bottom: 0;
+  border: none;
+  background: transparent;
+}
+.opp-fill .screen-footer .screen-run-summary {
+  font-size: 12.5px;
+  margin: 0;
+}
+.opp-fill .screen-footer .screen-run-summary .sub {
+  display: none;
+}
+.opp-fill .screen-footer .screen-ack {
+  margin: 0;
+}
+.opp-fill .screen-footer .screen-run-actions {
+  margin-left: auto;
+  margin-top: 0;
+}
+.run-page-head {
+  padding: 14px 20px 10px;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface);
+  flex: none;
+}
+.run-page-title-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.job-run-link {
+  color: var(--text);
+}
+.job-run-link:hover {
+  color: var(--link);
+}
+
+.page-header {
+  margin-bottom: 20px;
+}
+.page-breadcrumb {
+  font-size: 12px;
+  color: var(--text-faint);
+  margin-bottom: 6px;
+}
+.page-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.page-title {
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  margin: 0 0 4px;
+  color: var(--text);
+}
+.page-desc {
+  margin: 0;
+  font-size: 12.5px;
+  color: var(--text-faint);
+  max-width: 720px;
+  line-height: 1.4;
+}
+.page-header-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.funnel-strip {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 10px;
+  margin-bottom: 20px;
+}
+.funnel-tile {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 12px 14px;
+  box-shadow: var(--shadow-sm);
+  text-decoration: none;
+  color: inherit;
+  display: block;
+  transition: border-color 0.12s ease;
+}
+a.funnel-tile:hover {
+  border-color: #cbd5e1;
+  text-decoration: none;
+}
+.funnel-value {
+  font-size: 20px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  font-family: var(--mono);
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+}
+.funnel-label {
+  margin-top: 2px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-faint);
+}
+.funnel-tile.tone-warn .funnel-value {
+  color: var(--warn);
+}
+.funnel-tile.tone-danger .funnel-value {
+  color: var(--stop);
+}
+.funnel-tile.tone-ok .funnel-value {
+  color: var(--go);
+}
+
+.quick-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 12px;
+  margin-bottom: 24px;
+}
+.quick-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px 16px 14px;
+  box-shadow: var(--shadow-sm);
+  text-decoration: none;
+  color: inherit;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-height: 118px;
+  transition: border-color 0.12s ease, box-shadow 0.12s ease;
+}
+.quick-card:hover {
+  border-color: #fdba8c;
+  box-shadow: var(--shadow-md);
+  text-decoration: none;
+}
+.quick-card-title {
+  font-size: 14px;
+  font-weight: 650;
+  color: var(--text);
+}
+.quick-card-desc {
+  margin: 0;
+  flex: 1;
+  font-size: 12.5px;
+  color: var(--text-dim);
+  line-height: 1.4;
+}
+.quick-card-cta {
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--accent);
+}
+
+.section-label {
+  font-size: 12px;
+  font-weight: 650;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-faint);
+  margin: 8px 0 10px;
+}
+
+@media (max-width: 900px) {
+  .app-shell {
+    flex-direction: column;
+  }
+  .app-sidebar {
+    width: 100%;
+    height: auto;
+    position: relative;
+    border-right: none;
+    border-bottom: 1px solid var(--border);
+  }
+  .app-sidebar-nav {
+    display: flex;
+    gap: 4px;
+    overflow-x: auto;
+    padding: 8px 10px 12px;
+  }
+  .app-nav-group {
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .app-nav-group-title {
+    display: none;
+  }
+  .app-nav-group ul {
+    display: flex;
+    gap: 2px;
+  }
+  .app-sidebar-foot {
+    display: none;
+  }
+  .app-content {
+    padding: 16px;
+  }
+}
+
+/* --- Banners ------------------------------------------------------------- */
+
+/* Fixture runs must announce themselves permanently, not only while the env
+   var is set. Fabricated markets are otherwise indistinguishable from real ones,
+   in a tool people spend money from. */
+.fixture-banner {
+  background: repeating-linear-gradient(
+    45deg,
+    #4a2c00,
+    #4a2c00 12px,
+    #3a2200 12px,
+    #3a2200 24px
+  );
+  color: #ffd591;
+  border-bottom: 1px solid #6b4000;
+  padding: 10px 20px;
+  font-weight: 600;
+  font-size: 13px;
+  letter-spacing: 0.02em;
+}
+
+/* Methodology lives in Settings; keep class for any residual copy. */
+.honesty-banner {
+  display: none;
+}
+
+/* Legacy header.site kept for any residual markup; shell replaces it. */
+header.site {
+  display: none;
+}
+
+/* --- Typography --------------------------------------------------------- */
+
+h2 {
+  font-size: 17px;
+  font-weight: 650;
+  letter-spacing: -0.015em;
+  margin: 28px 0 6px;
+}
+h3 {
+  font-size: 14px;
+  font-weight: 650;
+  margin: 24px 0 8px;
+  color: var(--text);
+}
+.sub {
+  color: var(--text-dim);
+  font-size: 13px;
+  margin: 0 0 18px;
+}
+.mono {
+  font-family: var(--mono);
+  font-variant-numeric: tabular-nums;
+}
+.dim {
+  color: var(--text-dim);
+}
+.faint {
+  color: var(--text-faint);
+}
+
+/* Nulls render as an em dash, never as 0. */
+.null {
+  color: var(--text-faint);
+}
+
+/* --- Cards / tables ----------------------------------------------------- */
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 18px 20px;
+  margin-bottom: 18px;
+}
+
+.table-scroll {
+  overflow-x: auto;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--surface);
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+  font-size: 13px;
+}
+th {
+  text-align: left;
+  font-weight: 600;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-dim);
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--border-strong);
+  white-space: nowrap;
+  background: var(--surface-2);
+}
+/* Dense by default: these tables exist to be scanned 40 rows at a time. */
+td {
+  padding: 6px 12px;
+  border-bottom: 1px solid var(--border);
+  vertical-align: middle;
+}
+tbody tr:last-child td {
+  border-bottom: none;
+}
+tbody tr:hover {
+  background: #f8fafc;
+}
+td.num,
+th.num {
+  text-align: right;
+  font-family: var(--mono);
+  font-variant-numeric: tabular-nums;
+}
+
+/* --- Difficulty bar ----------------------------------------------------- */
+
+.diff {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  min-width: 150px;
+}
+.diff-value {
+  font-family: var(--mono);
+  font-variant-numeric: tabular-nums;
+  min-width: 24px;
+  text-align: right;
+  font-weight: 600;
+}
+.diff-track {
+  flex: 1;
+  height: 5px;
+  background: var(--surface-2);
+  border-radius: 3px;
+  overflow: hidden;
+  min-width: 56px;
+}
+.diff-fill {
+  height: 100%;
+  border-radius: 3px;
+}
+.coverage {
+  font-size: 10.5px;
+  font-family: var(--mono);
+  color: var(--text-faint);
+  min-width: 34px;
+}
+.coverage.partial {
+  color: var(--warn);
+}
+
+/* --- Badges ------------------------------------------------------------- */
+
+.badge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 11px;
+  font-size: 11.5px;
+  font-weight: 600;
+  white-space: nowrap;
+  border: 1px solid transparent;
+}
+.badge.go {
+  color: #166534;
+  background: var(--go-bg);
+  border-color: #bbf7d0;
+}
+.badge.warn {
+  color: #92400e;
+  background: var(--warn-bg);
+  border-color: #fde68a;
+}
+.badge.neutral {
+  color: var(--text-dim);
+  background: var(--neutral-bg);
+  border-color: var(--border);
+}
+.badge.stop {
+  color: #991b1b;
+  background: var(--stop-bg);
+  border-color: #fecaca;
+}
+.badge.unknown {
+  color: var(--unknown);
+  background: var(--unknown-bg);
+  border-color: var(--border);
+  font-style: italic;
+}
+
+.pill {
+  display: inline-block;
+  padding: 1px 6px;
+  border-radius: 4px;
+  font-size: 10.5px;
+  font-family: var(--mono);
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  color: var(--text-dim);
+}
+
+/* --- Forms / buttons ---------------------------------------------------- */
+
+input[type='text'],
+input[type='search'] {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--text);
+  padding: 9px 11px;
+  font-size: 14px;
+  font-family: var(--sans);
+  width: 100%;
+}
+input:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+button,
+.btn {
+  background: var(--surface);
+  border: 1px solid var(--border-strong);
+  color: var(--text);
+  border-radius: 6px;
+  padding: 7px 13px;
+  font-size: 13px;
+  font-weight: 550;
+  cursor: pointer;
+  font-family: var(--sans);
+  transition:
+    background 0.12s ease,
+    border-color 0.12s ease;
+}
+/**
+ * This used to set `background: #232935` -- a near-black hover left over from a
+ * dark theme -- without touching the text colour, so every default button went
+ * dark-on-dark and unreadable the moment the pointer touched it.
+ */
+button:hover:not(:disabled),
+.btn:hover {
+  border-color: var(--text-faint);
+  background: var(--surface-2);
+  color: var(--text);
+}
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+button.primary,
+.btn.primary,
+a.btn.primary {
+  background: var(--primary-bg);
+  border-color: var(--primary-bg);
+  color: #fff;
+  text-decoration: none;
+}
+button.primary:hover:not(:disabled),
+.btn.primary:hover,
+a.btn.primary:hover {
+  background: var(--primary-bg-hover);
+  border-color: var(--primary-bg-hover);
+  color: #fff;
+  text-decoration: none;
+}
+a.btn {
+  display: inline-block;
+  text-decoration: none;
+  color: var(--text);
+}
+a.btn:hover {
+  text-decoration: none;
+}
+/* `.tiny` was scoped to `button`, so every <a class="btn tiny"> in a table cell
+   silently rendered at full button size and tripled the row height. */
+button.tiny,
+.btn.tiny,
+a.btn.tiny {
+  padding: 3px 9px;
+  font-size: 11.5px;
+  font-weight: 550;
+}
+
+/**
+ * Segmented control — one bordered group, hairline dividers, no gaps.
+ *
+ * Four separate bordered pills for "Top 5 / Top 10 / All / None" read as four
+ * unrelated actions and produce eight vertical edges of visual noise. Joining
+ * them says what is true: pick one of these.
+ */
+.seg {
+  display: inline-flex;
+  align-items: stretch;
+  border: 1px solid var(--border-strong);
+  border-radius: 6px;
+  overflow: hidden;
+  background: var(--surface);
+}
+.seg > button,
+.seg > .btn {
+  border: none;
+  border-radius: 0;
+  border-left: 1px solid var(--border);
+  background: transparent;
+  padding: 4px 10px;
+  font-size: 11.5px;
+  font-weight: 550;
+  color: var(--text-dim);
+  white-space: nowrap;
+}
+.seg > button:first-child,
+.seg > .btn:first-child {
+  border-left: none;
+}
+.seg > button:hover:not(:disabled),
+.seg > .btn:hover {
+  background: var(--surface-2);
+  color: var(--text);
+  border-color: var(--border);
+}
+.seg > button.is-active,
+.seg > .btn.is-active {
+  background: var(--select-bg);
+  color: var(--text);
+  font-weight: 650;
+}
+
+/* A disabled button must say WHY. A silently dead button is indistinguishable
+   from a broken app. */
+.disabled-reason {
+  color: var(--warn);
+  font-size: 12.5px;
+  margin-top: 8px;
+}
+
+/* --- Picker ------------------------------------------------------------- */
+
+.picker {
+  position: relative;
+  max-width: 520px;
+}
+.picker-results {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  right: 0;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  max-height: 340px;
+  overflow-y: auto;
+  z-index: 20;
+  box-shadow: var(--shadow-md);
+}
+.picker-option {
+  display: block;
+  width: 100%;
+  text-align: left;
+  background: none;
+  border: none;
+  border-radius: 0;
+  border-bottom: 1px solid rgba(42, 49, 64, 0.5);
+  padding: 9px 12px;
+  font-size: 13px;
+  cursor: pointer;
+}
+.picker-option:hover {
+  background: var(--surface-2);
+  border-color: rgba(42, 49, 64, 0.5);
+}
+.picker-option:disabled {
+  cursor: not-allowed;
+}
+.picker-option .meta {
+  color: var(--text-faint);
+  font-size: 11.5px;
+  font-family: var(--mono);
+}
+.picker-hint {
+  color: var(--text-faint);
+  font-size: 12px;
+  padding: 10px 12px;
+}
+
+/* --- Components -------------------------------------------------------- */
+
+.kv {
+  display: grid;
+  grid-template-columns: minmax(140px, auto) 1fr;
+  gap: 6px 18px;
+  font-size: 13px;
+}
+.kv dt {
+  color: var(--text-faint);
+}
+.kv dd {
+  margin: 0;
+}
+
+.component-row {
+  display: grid;
+  grid-template-columns: 150px 60px 1fr;
+  gap: 12px;
+  align-items: start;
+  padding: 9px 0;
+  border-bottom: 1px solid rgba(42, 49, 64, 0.5);
+}
+.component-row.unmeasured {
+  opacity: 0.62;
+}
+.component-note {
+  font-size: 12px;
+  color: var(--text-faint);
+  grid-column: 1 / -1;
+  padding-left: 2px;
+}
+
+.blocker {
+  border-left: 2px solid var(--stop);
+  padding: 7px 0 7px 12px;
+  margin-bottom: 10px;
+}
+.blocker code {
+  font-size: 11px;
+  color: var(--text-faint);
+  font-family: var(--mono);
+}
+
+.gate {
+  display: flex;
+  gap: 10px;
+  padding: 7px 0;
+  border-bottom: 1px solid rgba(42, 49, 64, 0.5);
+  font-size: 13px;
+  align-items: baseline;
+}
+.gate-mark {
+  font-family: var(--mono);
+  font-weight: 700;
+  width: 16px;
+  flex: none;
+}
+.gate.pass .gate-mark {
+  color: var(--go);
+}
+.gate.fail .gate-mark {
+  color: var(--stop);
+}
+
+.empty {
+  color: var(--text-faint);
+  padding: 28px 0;
+  text-align: center;
+  font-size: 13px;
+}
+
+.flex {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.spacer {
+  flex: 1;
+}
+.stat {
+  font-family: var(--mono);
+  font-variant-numeric: tabular-nums;
+}
+.warnbox {
+  background: var(--warn-bg);
+  border: 1px solid #fde68a;
+  color: #92400e;
+  border-radius: 6px;
+  padding: 11px 14px;
+  font-size: 13px;
+  margin-bottom: 16px;
+}
+.stopbox {
+  background: var(--stop-bg);
+  border: 1px solid #fecaca;
+  color: #991b1b;
+  border-radius: 6px;
+  padding: 11px 14px;
+  font-size: 13px;
+  margin-bottom: 16px;
+}
+.okbox {
+  background: var(--go-bg);
+  border: 1px solid #bbf7d0;
+  color: #166534;
+  border-radius: 6px;
+  padding: 11px 14px;
+  font-size: 13px;
+}
+
+.fixture-banner {
+  background: repeating-linear-gradient(
+    45deg,
+    #fff7ed,
+    #fff7ed 12px,
+    #ffedd5 12px,
+    #ffedd5 24px
+  );
+  color: #9a3412;
+  border-bottom: 1px solid #fdba74;
+}
+
+/* --- Sites & CRM --------------------------------------------------------- */
+
+/* The KPI row. Every tile can render an em dash, and .null keeps its faint
+   colour so an absent measurement never has the visual weight of a number. */
+.stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(132px, 1fr));
+  gap: 10px;
+  margin: 16px 0 22px;
+}
+.stats .stat {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 10px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+.stat-label {
+  font-family: var(--sans);
+  font-size: 11px;
+  color: var(--text-faint);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.stat-value {
+  font-size: 20px;
+  font-variant-numeric: tabular-nums;
+}
+.stat-value.bad {
+  color: var(--stop);
+}
+
+/* .kv is used with plain spans here as well as dt/dd, so the label column is
+   addressed positionally too. */
+.kv > span:nth-child(odd) {
+  color: var(--text-faint);
+}
+
+.warn-text {
+  color: var(--warn);
+}
+
+/* An emergency lead must be findable by glance in a long table. */
+tr.row-emergency > td {
+  background: var(--stop-bg);
+}
+
+/* --- Create form -------------------------------------------------------- */
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: 12px 16px;
+}
+.form-grid label,
+label.full {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 13px;
+}
+.form-grid label > span:first-child,
+label.full > span:first-child {
+  color: var(--text-dim);
+}
+.form-grid em,
+label.full em {
+  color: var(--text-faint);
+  font-size: 11.5px;
+  font-style: normal;
+  line-height: 1.35;
+}
+label.full {
+  margin-top: 12px;
+}
+label.inline {
+  flex-direction: row;
+  align-items: center;
+  gap: 6px;
+  min-width: 72px;
+}
+
+input,
+select,
+textarea {
+  background: var(--surface-2);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  padding: 6px 8px;
+  font-family: inherit;
+  font-size: 13px;
+}
+input:focus,
+select:focus,
+textarea:focus {
+  outline: 1px solid var(--accent);
+  border-color: var(--accent);
+}
+
+fieldset.hours {
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  margin: 16px 0 0;
+  padding: 10px 14px 14px;
+}
+fieldset.hours legend {
+  color: var(--text-dim);
+  font-size: 12px;
+  padding: 0 6px;
+}
+.hours-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 5px;
+}
+
+/* --- Connection panel --------------------------------------------------- */
+
+.urls {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  margin-bottom: 18px;
+}
+.url-label {
+  font-size: 11.5px;
+  color: var(--text-faint);
+  margin-bottom: 3px;
+}
+.url-value {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 5px 8px;
+  font-family: var(--mono);
+  font-size: 11.5px;
+  overflow-x: auto;
+  white-space: nowrap;
+  flex: 1;
+  min-width: 0;
+}
+
+/* --- Calls -------------------------------------------------------------- */
+
+.player {
+  height: 30px;
+  max-width: 190px;
+}
+
+/* Research wizard steps */
+.wizard-steps {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+}
+.wizard-step {
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--text-faint);
+  padding: 4px 12px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: var(--surface-2);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.wizard-step:hover {
+  border-color: #cbd5e1;
+}
+.wizard-step.active {
+  color: #c2410c;
+  border-color: #fdba8c;
+  background: var(--accent-soft, #fff1eb);
+}
+.wizard-step.done {
+  color: var(--go);
+  border-color: #bbf7d0;
+  background: var(--go-bg);
+}
+.wizard-step-num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  border-radius: 999px;
+  font-size: 10px;
+  font-weight: 700;
+  background: currentColor;
+  color: #fff;
+  opacity: 0.85;
+}
+.wizard-step.active .wizard-step-num,
+.wizard-step.done .wizard-step-num {
+  opacity: 1;
+}
+.research-wizard {
+  border-color: #fdba8c;
+}
+
+/* --- Opportunity funnel / Screen step ----------------------------------- */
+
+.opp-funnel {
+  max-width: 1280px;
+}
+/**
+ * ...but not in workspace mode. `.app-content:has(> .opp-workspace)` already
+ * releases the 1400px page cap so the grid can use the whole window, and this
+ * rule was silently putting a 1280px one straight back. It is why
+ * /domains/[runId] was full-bleed and /research/runs/* was not, for no reason
+ * anyone chose.
+ */
+.opp-workspace .opp-funnel {
+  max-width: none;
+}
+/**
+ * Tabs, Semrush-style: compact text pills in a bar, not two numbered cards with
+ * blurbs. The old version was ~90px tall and pushed the table below the fold on
+ * a laptop -- a tab strip should cost one line of vertical space.
+ */
+.opp-tabs-wrap {
+  flex: none;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  padding: 0 20px;
+}
+.opp-tabs {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+.opp-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 9px 12px;
+  border: none;
+  border-bottom: 2px solid transparent;
+  border-radius: 0;
+  background: transparent;
+  color: var(--text-dim);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.opp-tab:hover:not(:disabled) {
+  color: var(--text);
+  background: var(--surface-2);
+  border-color: transparent;
+}
+.opp-tab.is-active {
+  color: var(--text);
+  border-bottom-color: var(--accent);
+  background: transparent;
+}
+.opp-tab-label {
+  font-size: 13px;
+  font-weight: 600;
+}
+.opp-tab-badge {
+  font-size: 10.5px;
+  font-weight: 600;
+  font-family: var(--mono);
+  font-variant-numeric: tabular-nums;
+  padding: 1px 6px;
+  border-radius: 999px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  color: var(--text-dim);
+}
+.opp-tab.is-active .opp-tab-badge {
+  background: var(--select-bg);
+  border-color: var(--border-strong);
+  color: var(--text);
+}
+.opp-tab-panel {
+  padding-top: 14px;
+}
+.opp-tabs-label {
+  display: none;
+}
+
+/* SEMrush Keyword Magic–style: topics (niches) left, markets table right */
+.sm-magic-page-head {
+  margin-bottom: 14px;
+}
+.sm-magic-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 6px;
+  margin-top: 8px;
+  font-size: 12px;
+  color: var(--text-dim);
+}
+.sm-magic-meta strong {
+  color: var(--text);
+  font-weight: 600;
+}
+.sm-magic-meta-sep {
+  color: var(--text-faint);
+  margin: 0 2px;
+}
+.sm-magic {
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  gap: 0;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  overflow: hidden;
+  background: var(--surface);
+  box-shadow: var(--shadow-sm);
+  margin-bottom: 16px;
+  min-height: 520px;
+}
+/* Inside a workspace the two panes fill the viewport instead of a fixed 520px. */
+.opp-workspace .sm-magic,
+.opp-fill .sm-magic {
+  flex: 1;
+  min-height: 0;
+  margin-bottom: 0;
+  border-left: none;
+  border-right: none;
+  border-bottom: none;
+  border-radius: 0;
+  box-shadow: none;
+}
+.opp-workspace .sm-magic-topics,
+.opp-fill .sm-magic-topics {
+  max-height: none;
+  min-height: 0;
+}
+.opp-workspace .sm-magic-main,
+.opp-fill .sm-magic-main {
+  min-height: 0;
+  height: auto;
+}
+@media (max-width: 900px) {
+  .sm-magic {
+    grid-template-columns: 1fr;
+  }
+}
+.sm-magic-topics {
+  border-right: 1px solid var(--border);
+  background: #f8fafc;
+  display: flex;
+  flex-direction: column;
+  max-height: 620px;
+}
+.sm-magic-topics-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--border);
+  background: #fff;
+}
+.sm-magic-topics-tabs {
+  display: flex;
+  gap: 4px;
+}
+.sm-magic-topics-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-dim);
+  padding: 4px 2px;
+}
+.sm-magic-topics-tab.is-active {
+  color: var(--text);
+  box-shadow: inset 0 -2px 0 var(--accent);
+}
+.sm-badge-new {
+  font-size: 9px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #fff;
+  background: var(--accent);
+  border-radius: 3px;
+  padding: 1px 5px;
+  line-height: 1.4;
+}
+.sm-magic-topics-title {
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-dim);
+}
+.sm-magic-search {
+  margin: 8px 10px 4px;
+  width: calc(100% - 20px);
+  min-width: 0;
+}
+.sm-magic-topics-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  padding: 4px 10px 8px;
+}
+.sm-topic-cols {
+  display: flex;
+  justify-content: space-between;
+  padding: 4px 12px 6px 36px;
+  font-size: 10.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: var(--text-faint);
+  border-bottom: 1px solid var(--border);
+}
+.sm-topic-list {
+  flex: 1;
+  overflow-y: auto;
+  padding-bottom: 8px;
+}
+.sm-topic-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  text-align: left;
+  padding: 9px 12px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  border-left: 3px solid transparent;
+  font-size: 12.5px;
+  color: var(--text);
+  border-bottom: 1px solid #f1f5f9;
+}
+.sm-topic-row:hover {
+  background: #f1f5f9;
+}
+.sm-topic-row.is-selected {
+  background: var(--select-bg);
+  border-left-color: var(--select-marker);
+}
+.sm-topic-row.is-selected:hover {
+  background: var(--select-bg-hover);
+}
+/* Active (the row whose keywords are shown) is the one place brand earns its keep. */
+.sm-topic-row.is-active,
+.sm-topic-row.sm-topic-all.is-active {
+  font-weight: 600;
+  background: #fff;
+  border-left-color: var(--accent);
+}
+.sm-topic-row.sm-topic-all {
+  border-bottom: 1px solid var(--border);
+  background: #fff;
+  font-weight: 600;
+}
+.sm-topic-row input[type='checkbox'] {
+  flex-shrink: 0;
+  width: 14px;
+  height: 14px;
+  pointer-events: none;
+}
+/* Checked boxes are the densest mark on the screen; orange ones made the list
+   look like 20 warnings. Blue reads as "chosen", which is what it means. */
+input[type='checkbox'] {
+  accent-color: var(--link);
+}
+.sm-topic-name {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-weight: 600;
+  line-height: 1.25;
+}
+.sm-topic-meta {
+  font-size: 10.5px;
+  font-weight: 500;
+  color: var(--text-faint);
+  font-family: var(--mono);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.sm-topic-count {
+  font-family: var(--mono);
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text-dim);
+  flex-shrink: 0;
+  min-width: 28px;
+  text-align: right;
+}
+.sm-magic-main {
+  margin: 0 !important;
+  border: none !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  max-height: 620px;
+}
+.sm-magic-main .sm-table-wrap {
+  flex: 1;
+  overflow: auto;
+  min-height: 280px;
+}
+.sm-magic-summary {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--border);
+  background: #fff;
+}
+.sm-magic-summary-stats {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 2px 4px;
+  font-size: 12.5px;
+  color: var(--text-dim);
+}
+.sm-magic-summary-stats strong {
+  color: var(--text);
+  font-weight: 700;
+}
+.sm-magic-summary-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+.sm-device-inline {
+  margin: 0;
+  font-size: 11px;
+  gap: 4px;
+}
+.sm-device-inline select {
+  font-size: 12px;
+  padding: 4px 8px;
+}
+.sm-send-btn {
+  white-space: nowrap;
+  font-weight: 600;
+  padding: 7px 14px !important;
+}
+.sm-kw-cell {
+  font-size: 13px;
+}
+.sm-kw-text {
+  color: var(--link, #0b5fff);
+  font-weight: 500;
+}
+.sm-table tbody tr:hover .sm-kw-text {
+  text-decoration: underline;
+}
+
+/* Tab bar: Import | Screen | Deep dive */
+.opp-tabs-wrap {
+  margin-bottom: 18px;
+}
+.opp-tabs-label {
+  font-size: 10.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-faint);
+  margin-bottom: 8px;
+}
+
+.opp-step-head {
+  margin-bottom: 16px;
+}
+.opp-step-head-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+.opp-step-title {
+  margin: 0 0 3px;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: -0.015em;
+}
+/**
+ * Explanatory copy stays -- an operator about to spend money on 3,200 SERPs
+ * should be told what the button does. It just stops competing with the data:
+ * one notch smaller and dimmer, so the eye lands on the table first.
+ */
+.opp-step-desc {
+  margin: 0;
+  font-size: 12px;
+  color: var(--text-faint);
+  line-height: 1.4;
+  max-width: 78ch;
+}
+.opp-step-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+  margin-top: 16px;
+}
+
+/* Cost summary bar */
+.screen-cost-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 20px;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 14px;
+  margin-bottom: 12px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+}
+.screen-cost-stats {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 6px 8px;
+}
+.screen-cost-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 48px;
+}
+.screen-cost-stat.highlight .screen-cost-n {
+  color: #c2410c;
+}
+.screen-cost-n {
+  font-family: var(--mono);
+  font-size: 18px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  line-height: 1.15;
+}
+.screen-cost-l {
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-faint);
+}
+.screen-cost-x,
+.screen-cost-eq {
+  color: var(--text-faint);
+  font-weight: 600;
+  font-size: 14px;
+  padding: 0 2px;
+  align-self: center;
+}
+.screen-cost-price {
+  font-family: var(--mono);
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--go);
+  margin-left: 8px;
+  align-self: center;
+}
+.screen-cost-price.fixtures {
+  color: var(--text-faint);
+}
+.screen-cost-controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.screen-device-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-muted, #64748b);
+}
+.screen-device-label select {
+  font-size: 12.5px;
+  font-weight: 500;
+  padding: 4px 8px;
+}
+
+/* Quick presets */
+.screen-presets {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 14px;
+}
+.screen-presets-label {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-faint);
+  margin-right: 4px;
+}
+
+/* Dual selection panels */
+.screen-panels {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  margin-bottom: 16px;
+}
+@media (max-width: 800px) {
+  .screen-panels {
+    grid-template-columns: 1fr;
+  }
+}
+.screen-panel {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  overflow: hidden;
+}
+.screen-panel-head {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface-2);
+}
+.screen-panel-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 700;
+}
+.screen-count {
+  font-family: var(--mono);
+  font-weight: 600;
+  font-size: 12px;
+  color: #c2410c;
+  margin-left: 2px;
+}
+.screen-panel-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+.screen-select-all {
+  display: inline-flex;
+  align-items: center;
+  cursor: pointer;
+}
+.screen-panel-filter {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--border);
+}
+.screen-panel-filter input[type='search'] {
+  flex: 1;
+  min-width: 0;
+  font-size: 12.5px;
+  padding: 5px 8px;
+}
+.screen-panel-list {
+  max-height: 340px;
+  overflow: auto;
+}
+.screen-panel-list table {
+  margin: 0;
+}
+.screen-panel-list thead th {
+  position: sticky;
+  top: 0;
+  background: var(--surface);
+  z-index: 1;
+  box-shadow: 0 1px 0 var(--border);
+}
+.screen-panel-list tbody tr {
+  cursor: pointer;
+}
+.screen-panel-list tbody tr:hover {
+  background: var(--surface-2);
+}
+.screen-panel-list tbody tr.row-selected {
+  background: var(--select-bg);
+}
+.screen-panel-list tbody tr.row-selected:hover {
+  background: var(--select-bg-hover);
+}
+.screen-check-col {
+  width: 28px;
+  text-align: center;
+  padding-left: 10px !important;
+  padding-right: 4px !important;
+}
+.screen-kw {
+  font-size: 12px;
+}
+.screen-market {
+  font-size: 12px;
+}
+.screen-empty {
+  padding: 28px 16px;
+  text-align: center;
+  font-size: 12.5px;
+  color: var(--text-faint);
+}
+
+/* Run card */
+.screen-run {
+  border-color: #fdba8c;
+  background: var(--accent-soft, #fff7ed);
+  padding: 14px 16px;
+}
+.screen-run-summary {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: 10px;
+}
+.screen-run-summary .sub {
+  margin: 0;
+  font-size: 12px;
+}
+.screen-ack {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+  font-size: 12.5px;
+  margin-bottom: 10px;
+  cursor: pointer;
+}
+.screen-run-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+/* --- SEMrush-style panels / toolbars / dense tables --------------------- */
+
+.sm-panel {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+  margin-bottom: 16px;
+}
+/**
+ * Full-bleed variant: the panel IS the page. No card chrome, no bottom margin,
+ * and the table body -- not the document -- takes the scroll, so the toolbar and
+ * the sticky column headers stay put while 200 rows move under them.
+ */
+.sm-panel-fill {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  margin-bottom: 0;
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+}
+.sm-panel-fill > .sm-table-wrap {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+}
+/*
+ * DomainCandidatesTable is a `.opp-tab-panel.opp-fill`, not a `.sm-panel-fill`,
+ * so the rule above never reached it -- its sticky header had no bounded height
+ * to stick within and the whole page scrolled instead of the table body.
+ */
+.opp-fill > .sm-table-wrap {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+}
+.sm-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--border);
+  background: linear-gradient(180deg, #fff 0%, #fafbfc 100%);
+}
+.sm-toolbar-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+.sm-toolbar-meta {
+  font-size: 12px;
+}
+.sm-toolbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.sm-count {
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-dim);
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 1px 8px;
+}
+.sm-panel-hint {
+  margin: 0;
+  padding: 8px 14px 0;
+  font-size: 12px;
+}
+.sm-table-wrap {
+  margin: 0;
+  border: none;
+  border-radius: 0;
+}
+.sm-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-size: 12.5px;
+}
+.sm-table thead th {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  background: #f8fafc;
+  border-bottom: 1px solid var(--border-strong, var(--border));
+  color: var(--text-dim);
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  padding: 9px 12px;
+  white-space: nowrap;
+}
+.sm-table tbody td {
+  padding: 9px 12px;
+  border-bottom: 1px solid var(--border);
+  vertical-align: middle;
+}
+.sm-table tbody tr:hover {
+  background: #fafbfc;
+}
+.sm-table tbody tr:last-child td {
+  border-bottom: none;
+}
+/* A score on every row is a column, not a highlight — colouring all 41 of them
+   orange emphasised nothing and cost the palette its only loud colour. */
+.sm-score {
+  font-family: var(--mono);
+  font-variant-numeric: tabular-nums;
+  color: var(--text);
+  font-weight: 650;
+}
+.sm-link {
+  font-weight: 600;
+  color: var(--link, #0b5fff);
+}
+.sm-col-actions {
+  width: 1%;
+  white-space: nowrap;
+  text-align: right;
+}
+.sm-check-col {
+  width: 36px;
+  text-align: center;
+  padding-left: 12px !important;
+  padding-right: 4px !important;
+}
+.sm-filter-input {
+  font-size: 12.5px;
+  padding: 5px 10px;
+  min-width: 180px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: #fff;
+}
+.sm-filter-input:focus {
+  outline: none;
+  border-color: #fdba8c;
+  box-shadow: 0 0 0 3px rgba(255, 100, 45, 0.12);
+}
+.sm-count-sel {
+  background: var(--accent-soft);
+  border-color: #fdba8c;
+  color: #c2410c;
+}
+.sm-bulkbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 8px 14px;
+  border-bottom: 1px solid var(--border);
+  background: #fafbfc;
+}
+.sm-bulkbar.is-active {
+  background: var(--select-bg);
+  border-bottom-color: var(--border-strong);
+}
+.sm-bulkbar-left,
+.sm-bulkbar-right {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+}
+.sm-table tbody tr.row-selected {
+  background: var(--select-bg);
+}
+.sm-table tbody tr.row-selected:hover {
+  background: var(--select-bg-hover);
+}
+
+/* Local SERP verification links (UULE desktop / mobile) */
+.serp-verify-links {
+  display: inline-flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: 4px;
+}
+/**
+ * The device we actually measured is marked, not shouted. This used to be
+ * `.btn.primary` -- a solid filled button in every row of an 80-row grid, which
+ * turned the SERP column into a wall of blocks taller than the data beside it.
+ */
+.btn.is-measured {
+  border-color: var(--text-faint);
+  background: var(--surface-2);
+  font-weight: 650;
+  color: var(--text);
+}
+.serp-verify {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.serp-verify-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.serp-verify-hint {
+  font-size: 11px;
+  margin: 0;
+  line-height: 1.35;
+  max-width: 42rem;
+}
+.serp-verify-hint code {
+  font-size: 10.5px;
+}
+
+/* Opportunity grid clickable rows */
+/**
+ * The keyword column was squeezed to ~130px, so "water damage restoration cost"
+ * wrapped onto three lines and drove every row past 110px tall -- three rows per
+ * screen on a grid whose whole job is comparing dozens.
+ *
+ * TARGETED BY CLASS, NOT POSITION. This was `nth-child(3)` and broke the moment
+ * columns were inserted ahead of it: it ended up padding a NUMERIC column by
+ * 215px while the keyword column it was written for got nothing. Positional CSS
+ * on a table whose columns move is a bug waiting for the next commit.
+ */
+/* ==================== PRESET BAR + COLUMN PICKER ==================== */
+.sm-presetbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 8px 14px;
+  border-bottom: 1px solid var(--border);
+  background: #fcfdfe;
+}
+.sm-colpicker {
+  position: relative;
+}
+/* Sits under the menu, over everything else, so a click anywhere closes it. */
+.sm-colpicker-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  background: transparent;
+  border: 0;
+  padding: 0;
+  cursor: default;
+}
+.sm-colpicker-menu {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 6px);
+  z-index: 41;
+  width: 210px;
+  max-height: 60vh;
+  overflow-y: auto;
+  padding: 6px;
+  border: 1px solid var(--border-strong, var(--border));
+  border-radius: 8px;
+  background: #fff;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.14);
+}
+.sm-colpicker-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 7px;
+  border-radius: 5px;
+  font-size: 12.5px;
+  cursor: pointer;
+}
+.sm-colpicker-item:hover {
+  background: #f1f5f9;
+}
+.sm-colpicker-note {
+  padding: 7px;
+  margin-top: 4px;
+  border-top: 1px solid var(--border);
+  color: var(--text-dim);
+  font-size: 11px;
+  line-height: 1.35;
+}
+
+/*
+ * The identity column stays put while the rest scrolls sideways. The sticky
+ * cells need an OPAQUE background: table rows are transparent by default, so
+ * scrolled columns would otherwise slide visibly underneath the pinned one.
+ */
+.opp-grid-table th.opp-col-keyword,
+.opp-grid-table td.opp-col-keyword {
+  position: sticky;
+  left: 0;
+  z-index: 1;
+  background: #fff;
+  border-right: 1px solid var(--border-strong, var(--border));
+}
+/* Beats the vertically-sticky header, which is already at z-index 2. */
+.opp-grid-table thead th.opp-col-keyword {
+  z-index: 3;
+  background: #f8fafc;
+}
+/* Without this the pinned cell keeps its own white while the row highlights. */
+.opp-grid-table tbody tr:hover td.opp-col-keyword {
+  background: #fafbfc;
+}
+
+.opp-grid-table th.opp-col-keyword,
+.opp-grid-table td.opp-col-keyword {
+  min-width: 215px;
+}
+.opp-grid-table td {
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+/* Row actions sit inline rather than stacking another line under the keyword. */
+.opp-grid-table .vol-source-actions {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+}
+
+.opp-grid-table tbody tr.opp-grid-row-link:hover {
+  background: var(--select-bg);
+}
+.opp-grid-table tbody tr.opp-grid-row-link:hover a {
+  color: #c2410c;
+}
+
+/* Densify main data tables sitewide slightly (SEMrush-like) */
+.table-scroll table thead th {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: var(--text-dim);
+  background: #f8fafc;
+}
+.table-scroll table tbody tr:hover {
+  background: #fafbfc;
+}
+
+/* Row actions (Open / status / Drop) on list tables */
+.row-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  min-width: 160px;
+}
+.row-actions-select {
+  font-size: 11.5px;
+  padding: 3px 6px;
+  max-width: 110px;
+}
+button.btn.danger,
+a.btn.danger,
+.btn.danger {
+  color: #b91c1c;
+  border-color: #fecaca;
+  background: #fef2f2;
+}
+button.btn.danger:hover:not(:disabled),
+.btn.danger:hover:not(:disabled) {
+  border-color: #f87171;
+  background: #fee2e2;
+}
+.market-manage {
+  margin-bottom: 16px;
+  border-color: #cbd5e1;
+}
+
+/* Discovery / job queue status */
+.job-status-block {
+  margin-bottom: 20px;
+}
+.job-live-banner {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  padding: 12px 14px;
+  margin-bottom: 12px;
+  border-radius: var(--radius);
+  border: 1px solid #fcd34d;
+  background: #fffbeb;
+  color: var(--text);
+}
+.job-spinner {
+  width: 16px;
+  height: 16px;
+  margin-top: 2px;
+  flex-shrink: 0;
+  border: 2px solid #fbbf24;
+  border-top-color: #b45309;
+  border-radius: 50%;
+  animation: job-spin 0.7s linear infinite;
+}
+@keyframes job-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+.job-run-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.job-run-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 12px 14px;
+  box-shadow: var(--shadow-sm);
+}
+.job-run-card.is-active {
+  border-color: #fcd34d;
+  background: #fffef7;
+}
+.job-run-card.has-fails {
+  border-color: #fecaca;
+}
+.job-run-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+.job-run-title {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+.job-run-label {
+  font-size: 13px;
+  font-weight: 600;
+}
+.job-progress {
+  display: flex;
+  height: 8px;
+  border-radius: 999px;
+  background: var(--surface-2);
+  overflow: hidden;
+  margin-bottom: 8px;
+}
+.job-progress-done {
+  background: var(--go, #16a34a);
+  transition: width 0.35s ease;
+}
+.job-progress-fail {
+  background: var(--stop, #dc2626);
+  transition: width 0.35s ease;
+}
+.job-progress-pulse {
+  background: repeating-linear-gradient(
+    -45deg,
+    #fde68a,
+    #fde68a 4px,
+    #fef3c7 4px,
+    #fef3c7 8px
+  );
+  animation: job-stripe 0.8s linear infinite;
+  background-size: 12px 12px;
+}
+@keyframes job-stripe {
+  to {
+    background-position: 12px 0;
+  }
+}
+.job-run-stats {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 10px;
+  font-size: 12.5px;
+}
+.job-run-sep {
+  color: var(--text-faint);
+}
+.job-stat-fail {
+  color: #b91c1c;
+}
+.job-run-error {
+  margin-top: 8px;
+  font-size: 12px;
+  color: #b91c1c;
+  line-height: 1.4;
+}
+
+/* Google Ads volume verify */
+.vol-source-link {
+  font-size: 10.5px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.vol-source-block {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.vol-source-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 6px 10px;
+}
+.vol-source-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+/* Collapsible single-market */
+.screen-single {
+  margin-top: 20px;
+  border-top: 1px solid var(--border);
+  padding-top: 12px;
+}
+.screen-single-toggle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  text-align: left;
+  background: transparent;
+  border: none;
+  padding: 6px 0;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+  cursor: pointer;
+}
+.screen-single-toggle:hover {
+  color: #c2410c;
+}
+.screen-single-body {
+  margin-top: 10px;
+  padding: 12px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+pre.transcript {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  padding: 10px 12px;
+  font-size: 12px;
+  line-height: 1.55;
+  white-space: pre-wrap;
+  max-height: 340px;
+  overflow-y: auto;
+  margin: 6px 0 0;
+}
+
+/* --- Lead outcome cell --------------------------------------------------- */
+
+/* Compact enough to sit in a table row without forcing a horizontal scroll. */
+.outcome-cell {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+.outcome-cell select {
+  font-size: 11.5px;
+  padding: 3px 5px;
+  max-width: 130px;
+}
+.outcome-cell input {
+  font-size: 11.5px;
+  padding: 3px 5px;
+}
+.outcome-cell button {
+  font-size: 11px;
+  padding: 3px 7px;
+}
+
+/* Paid-extra toggles in the Screen summary bar (local volume, maps). */
+.screen-extra-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 12px;
+  font-weight: 550;
+  color: var(--text-dim);
+  white-space: nowrap;
+  cursor: pointer;
+}
+.screen-extra-toggle input[type='checkbox'] {
+  width: 13px;
+  height: 13px;
+  margin: 0;
+}
+
+/* ------------------------------------------------------------------ */
+/* ENRICH MODE — domain deep-dive                                      */
+/* ------------------------------------------------------------------ */
+
+.sm-sub {
+  color: var(--text-dim);
+  font-size: 12px;
+}
+.sm-mono {
+  font-family: var(--mono);
+  font-size: 11.5px;
+  color: var(--text-dim);
+}
+/* Evidence is prose in a dense numeric table: cap it so one verbose RDAP
+   reason cannot stretch the row and push the numbers off screen. */
+.sm-evidence {
+  max-width: 320px;
+  white-space: normal;
+  line-height: 1.4;
+}
+.sm-score-partial {
+  color: var(--warn);
+  font-size: 10.5px;
+  font-family: var(--sans);
+  letter-spacing: 0.02em;
+}
+
+/* Sortable headers: a button that reads as a header, not as a control. */
+.sm-sort-btn {
+  background: none;
+  border: 0;
+  padding: 0;
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+}
+.sm-sort-btn:hover {
+  color: var(--accent);
+}
+.sm-sort-btn.active {
+  color: var(--accent);
+}
+.sm-sort-caret {
+  font-size: 9px;
+  line-height: 1;
+}
+
+.enrich-start {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+  padding: 14px 16px;
+  margin-bottom: 14px;
+}
+.enrich-start-fields {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 12px;
+}
+.enrich-field {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  min-width: 200px;
+  flex: 1 1 200px;
+}
+.enrich-field-narrow {
+  flex: 0 0 150px;
+  min-width: 150px;
+}
+.enrich-field-submit {
+  flex: 0 0 auto;
+  min-width: 0;
+}
+.enrich-field-label {
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--text-dim);
+  letter-spacing: 0.02em;
+}
+.enrich-start-note {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 10px;
+  font-size: 12px;
+  color: var(--text-dim);
+}
+.enrich-start-result {
+  margin-top: 10px;
+  padding: 8px 10px;
+  border-radius: var(--radius);
+  font-size: 12.5px;
+  border: 1px solid var(--border);
+}
+.enrich-start-result.ok {
+  border-color: var(--go);
+  color: var(--text);
+}
+.enrich-start-result.err {
+  border-color: var(--stop);
+  background: var(--stop-bg);
+  color: var(--text);
+}
+/* Says out loud which columns are empty for want of a key, so a dash is not
+   read as "this domain has no backlinks". */
+.enrich-caveat {
+  margin-top: 8px;
+  font-size: 12px;
+  color: var(--text-dim);
+}
+
+/* Keyword variations nested under a niche × market row ---------------- */
+
+.opp-expand {
+  display: inline-block;
+  margin-top: 3px;
+  padding: 1px 6px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--surface-2);
+  color: var(--text-dim);
+  font-size: 10.5px;
+  font-family: var(--sans);
+  cursor: pointer;
+  line-height: 1.5;
+}
+.opp-expand:hover {
+  color: var(--accent);
+  border-color: var(--accent);
+}
+/* Variation rows are evidence for the row above, not peers of it — the tint
+   and the rule keep a 12-row expansion from reading as 12 opportunities. */
+.opp-variation-row > td {
+  background: var(--surface-2);
+  font-size: 11.5px;
+}
+.opp-variation-row:last-child > td {
+  border-bottom: 1px solid var(--border-strong);
+}
+.opp-variation-cell {
+  padding-left: 22px !important;
+  border-left: 2px solid var(--border-strong);
+}
+
+/* Expiry watchlist emphasis. A near date on a LIVE row is a watch signal,
+   not a buy signal, so it is coloured but never styled as a verdict. */
+.sm-expiry-urgent {
+  color: var(--stop);
+  font-weight: 650;
+}
+.sm-expiry-soon {
+  color: var(--warn);
+  font-weight: 600;
+}
+
+/* ------------------------------------------------------------------ */
+/* Paid-options modal                                                  */
+/* ------------------------------------------------------------------ */
+
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  z-index: 100;
+}
+.modal-card {
+  background: var(--surface);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius);
+  box-shadow: 0 18px 48px rgba(0, 0, 0, 0.4);
+  width: min(680px, 100%);
+  max-height: 88vh;
+  display: flex;
+  flex-direction: column;
+}
+.modal-head {
+  padding: 16px 20px 12px;
+  border-bottom: 1px solid var(--border);
+}
+.modal-title {
+  margin: 0 0 2px;
+  font-size: 17px;
+}
+.modal-body {
+  padding: 16px 20px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+.modal-foot {
+  padding: 14px 20px;
+  border-top: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.modal-actions {
+  display: flex;
+  gap: 8px;
+}
+.opt-free-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+.opt-list {
+  margin: 0 0 8px;
+  padding-left: 20px;
+  font-size: 12.5px;
+  color: var(--text-dim);
+  line-height: 1.65;
+}
+.opt-paid {
+  border-top: 1px solid var(--border);
+  padding-top: 16px;
+}
+.opt-row {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  padding: 10px 0;
+  font-size: 13px;
+  cursor: pointer;
+}
+.opt-row-sub {
+  align-items: center;
+  padding-left: 26px;
+  font-size: 12.5px;
+  color: var(--text-dim);
+  cursor: default;
+}
+.opt-number {
+  width: 72px;
+}
+/* The price sits with its toggle, not only in the total — an operator should
+   see what each switch costs, not just what everything costs together. */
+.opt-price {
+  margin-top: 4px;
+  font-family: var(--mono);
+  font-size: 11.5px;
+  color: var(--warn);
+}
+.opt-total {
+  font-size: 13px;
+}
+
+/* A blank quality cell means NOT CHECKED, never "clean" — so it is styled as
+   absent data rather than as a passing value. */
+.sm-unchecked {
+  color: var(--text-faint);
+}
+.sm-spam-bad {
+  color: var(--stop);
+  font-weight: 650;
+}
+.sm-serp-rank {
+  font-family: var(--mono);
+  color: var(--accent);
+  font-weight: 600;
+}
+
+/* Listing links -------------------------------------------------------- */
+
+.sm-links-cell {
+  max-width: 250px;
+}
+.sm-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+.sm-link-chip {
+  display: inline-block;
+  padding: 1px 6px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  font-size: 10.5px;
+  line-height: 1.6;
+  color: var(--text-dim);
+  text-decoration: none;
+  white-space: nowrap;
+}
+.sm-link-chip:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+/* An exact link opens one record; a confirmed one is backed by the link index;
+   a plain search may find nothing. The operator should be able to tell before
+   clicking, not after. */
+.sm-link-exact {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+.sm-link-confirmed {
+  border-color: var(--go);
+  color: var(--go);
+  font-weight: 600;
+}
+
+/* SERP winnability ------------------------------------------------------ */
+
+.sm-diff-easy { color: var(--go); font-weight: 650; }
+.sm-diff-mid  { color: var(--warn); }
+.sm-diff-hard { color: var(--text-dim); }
+
+.sm-verdicts { display: inline-flex; align-items: center; gap: 3px; white-space: nowrap; }
+.sm-verdict {
+  padding: 0 4px;
+  border-radius: 3px;
+  font-family: var(--mono);
+  font-size: 10.5px;
+  cursor: help;
+}
+.sm-verdict-sep { color: var(--text-faint); font-size: 10px; }
+.sm-verdict-fast { color: var(--go); font-weight: 700; }
+.sm-verdict-good { color: var(--go); }
+.sm-verdict-slow { color: var(--warn); }
+.sm-verdict-no   { color: var(--text-faint); }
+/* "unknown" is not "hard" — it must not read as a verdict at all. */
+.sm-verdict-unknown { color: var(--text-faint); font-style: italic; }
+
+.sm-winnable-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 12px;
+  color: var(--text-dim);
+  cursor: pointer;
+  margin-left: 10px;
+}
+
+/* Reddit reachable-audience estimate. Coloured because it is the top-line for
+   the Reddit strategy, but never styled as a measured figure — it is volume
+   multiplied by a CTR prior. */
+.sm-reddit-vol {
+  color: var(--accent);
+  font-weight: 650;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ==================== CELL RUN PICKER + STORED SERPS ==================== */
+.cell-run-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 12px 16px;
+}
+.cell-run-chip {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 7px 12px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: #fff;
+  text-decoration: none;
+  color: inherit;
+  line-height: 1.25;
+}
+.cell-run-chip:hover {
+  border-color: var(--border-strong, var(--border));
+  background: #f8fafc;
+}
+.cell-run-chip.active {
+  border-color: var(--accent, #2563eb);
+  background: #eff6ff;
+  box-shadow: inset 0 0 0 1px var(--accent, #2563eb);
+}
+.cell-run-id {
+  font-weight: 700;
+  font-size: 12.5px;
+}
+.cell-run-meta {
+  font-size: 11px;
+  color: var(--text-dim);
+  white-space: nowrap;
+}
+
+.stored-serp-list {
+  display: flex;
+  flex-direction: column;
+}
+.stored-serp {
+  border-bottom: 1px solid var(--border);
+}
+.stored-serp:last-child {
+  border-bottom: none;
+}
+.stored-serp-head {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  width: 100%;
+  padding: 10px 16px;
+  background: none;
+  border: 0;
+  text-align: left;
+  cursor: pointer;
+  font: inherit;
+}
+.stored-serp-head:hover {
+  background: #fafbfc;
+}
+.stored-serp.is-open .stored-serp-head {
+  background: #f8fafc;
+}
+.stored-serp-kw {
+  font-weight: 650;
+  font-size: 13px;
+}
+.stored-serp-meta {
+  flex: 1;
+  font-size: 11.5px;
+  color: var(--text-dim);
+}
+.stored-serp-caret {
+  color: var(--text-dim);
+  font-size: 11px;
+}
+/* Nested module entries sit under their container, visibly subordinate. */
+.stored-serp-table tr.stored-serp-nested td:first-child,
+.stored-serp-table tr.stored-serp-nested td:nth-child(2) {
+  padding-left: 26px;
+}
+.stored-serp-table tr.stored-serp-nested {
+  background: #fcfdfe;
+}
+.serp-type {
+  font-size: 10.5px;
+  font-weight: 650;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  color: var(--text-dim);
+}
+/* Organic is the baseline; everything else is a module competing with it. */
+.serp-type-organic {
+  color: var(--go, #15803d);
+}
+.serp-type-local,
+.serp-type-maps {
+  color: #b45309;
+}
+.serp-type-perspectives,
+.serp-type-discussions {
+  color: #7c3aed;
+}
+.serp-type-paid,
+.serp-type-ads {
+  color: var(--stop, #b91c1c);
+}
+
+/* ==================== PER-KEYWORD SERP DETAIL ==================== */
+.opp-kw-link {
+  color: var(--accent, #2563eb);
+  text-decoration: none;
+}
+.opp-kw-link:hover {
+  text-decoration: underline;
+}
+
+.run-page-meta {
+  font-size: 12.5px;
+  color: var(--text-dim);
+  margin-top: 4px;
+}
+
+.kw-extras {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 16px;
+  padding: 14px 16px;
+}
+.kw-extra-head {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: var(--text-dim);
+  margin-bottom: 6px;
+}
+.kw-extra-list {
+  margin: 0;
+  padding-left: 18px;
+  font-size: 12.5px;
+  line-height: 1.6;
+}
+
+.run-serp-toggle {
+  background: none;
+  border: 0;
+  padding: 0;
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.run-serp-toggle:hover {
+  color: var(--accent, #2563eb);
+}
+
+/* ==================== KEYWORD SERP PAGE ====================
+   Semrush leads with a few large numbers over a dense reference grid, and
+   keeps result rows to one line each so a page of them can be scanned. The
+   previous version gave every metric equal weight in a wrapping grid and let
+   sentence-length titles wrap to three lines, which made both unreadable. */
+
+.kw-hero {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(148px, 1fr));
+  border-top: 1px solid var(--border);
+  background: var(--border);
+  gap: 1px;
+}
+.kw-hero-metric {
+  background: #fff;
+  padding: 14px 16px 12px;
+}
+.kw-hero-label {
+  font-size: 10.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-dim);
+}
+.kw-hero-value {
+  font-size: 26px;
+  font-weight: 680;
+  line-height: 1.15;
+  margin-top: 4px;
+  font-variant-numeric: tabular-nums;
+}
+.kw-hero-accent {
+  color: var(--accent, #2563eb);
+}
+.kw-hero-sub {
+  font-size: 11px;
+  color: var(--text-dim);
+  margin-top: 2px;
+}
+
+.kw-stat-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(132px, 1fr));
+  border-top: 1px solid var(--border);
+}
+/* Cell borders rather than a background grid: an incomplete last row was
+   showing the grid's grey through as an orphan block. */
+.kw-stat {
+  padding: 8px 12px 9px;
+  border-right: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+.kw-stat-label {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: var(--text-dim);
+  /* One line, always: "Winnable (fresh EMD)" wrapping made the row heights
+     jagged and left a hole in the grid. */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.kw-stat-value {
+  font-size: 13.5px;
+  font-weight: 620;
+  margin-top: 2px;
+}
+
+/* ---- Reddit threads ---- */
+.kw-threads {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.kw-thread {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  padding: 11px 16px;
+  border-top: 1px solid var(--border);
+}
+.kw-thread:hover {
+  background: #fafbfc;
+}
+.kw-thread-rank {
+  flex: none;
+  min-width: 38px;
+  padding: 3px 8px;
+  border-radius: 5px;
+  background: #f1f5f9;
+  color: var(--text-dim);
+  font-size: 11.5px;
+  font-weight: 700;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+.kw-thread-body {
+  min-width: 0;
+}
+.kw-thread-title {
+  display: block;
+  font-size: 13px;
+  font-weight: 560;
+  line-height: 1.4;
+  color: var(--text, #0f172a);
+  text-decoration: none;
+}
+.kw-thread-title:hover {
+  color: var(--accent, #2563eb);
+  text-decoration: underline;
+}
+.kw-thread-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 5px;
+}
+.kw-chip {
+  font-size: 10.5px;
+  font-weight: 650;
+  padding: 2px 7px;
+  border-radius: 999px;
+  background: #f1f5f9;
+  color: var(--text-dim);
+}
+.kw-chip-organic {
+  background: #dcfce7;
+  color: #15803d;
+}
+.kw-chip-pack {
+  background: #ede9fe;
+  color: #6d28d9;
+}
+
+/* ---- The stored page ---- */
+.kw-serp-table td {
+  vertical-align: top;
+}
+.kw-serp-rank {
+  width: 44px;
+  color: var(--text-dim);
+  font-variant-numeric: tabular-nums;
+}
+.kw-serp-result {
+  /* The one flexible column. Without a bound the ellipsis never engages. */
+  max-width: 0;
+  width: 100%;
+}
+.kw-serp-domain {
+  font-family: var(--mono, ui-monospace, monospace);
+  font-size: 11.5px;
+  font-weight: 650;
+  color: var(--text, #0f172a);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.kw-serp-title {
+  display: block;
+  font-size: 12.5px;
+  color: var(--text-dim);
+  text-decoration: none;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+a.kw-serp-title:hover {
+  color: var(--accent, #2563eb);
+  text-decoration: underline;
+}
+/* Module entries sit under their container and read as subordinate. */
+.kw-serp-table tr.stored-serp-nested td:first-child {
+  border-left: 2px solid var(--border-strong, var(--border));
+}
+.kw-serp-table tr.stored-serp-nested .kw-serp-title,
+.kw-serp-table tr.stored-serp-nested .kw-serp-domain {
+  padding-left: 14px;
+}
+
+/* ==================== PANELS MUST NOT BE SQUASHED ====================
+   .opp-workspace is a flex column so the run grid can fill the viewport. A
+   flex item defaults to flex-shrink: 1, so on a page of ordinary stacked
+   panels every one of them was compressed below its content -- and .sm-panel
+   sets overflow: hidden, so the remainder was clipped rather than scrolled.
+   On the keyword SERP page that measured 139px of box around 246px of
+   content: the secondary metric grid and the second Reddit thread were
+   rendered, laid out, and then hidden.
+
+   Only a panel that ASKS to fill (sm-panel-fill, set by fullHeight) should
+   flex; everything else keeps its natural height and the page scrolls. */
+.opp-workspace > .sm-panel,
+.opp-workspace > section.sm-panel {
+  flex: none;
+}
+.opp-workspace > .sm-panel-fill {
+  flex: 1;
+  min-height: 0;
+}
+
+/* Actions stay on one line. Wrapping them doubled every row's height, and a
+   grid is only scannable while its rows are a constant size. */
+.row-actions {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 6px;
+  align-items: center;
+}
+
+/* A Reddit thread with no volume behind it. Muted, because it is not an
+   estimate -- but present, because the alternative was an em dash identical to
+   "no Reddit at all" in the first column of the Reddit preset. */
+.sm-reddit-novol {
+  color: var(--text-dim);
+  font-weight: 620;
+}

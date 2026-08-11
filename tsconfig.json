@@ -1,0 +1,29 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "lib": ["ES2023", "DOM", "DOM.Iterable"],
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "resolveJsonModule": true,
+    "allowJs": false,
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+    "exactOptionalPropertyTypes": false,
+    "noEmit": true,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "isolatedModules": true,
+    "jsx": "preserve",
+    "types": ["node"],
+    "baseUrl": ".",
+    "paths": {
+      "@rnr/core": ["packages/core/src/index.ts"],
+      "@rnr/core/*": ["packages/core/src/*"],
+      "@rnr/data": ["packages/data/src/index.ts"],
+      "@rnr/data/*": ["packages/data/src/*"],
+      "@/*": ["apps/web/src/*"]
+    }
+  },
+  "include": ["packages/**/*.ts", "apps/**/*.ts", "apps/**/*.tsx", "*.ts"],
+  "exclude": ["node_modules", "**/node_modules", "apps/web/.next"]
+}

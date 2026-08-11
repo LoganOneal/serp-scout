@@ -1,0 +1,32 @@
+{
+  "name": "@rnr/web",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "trigger:dev": "trigger dev",
+    "trigger:deploy": "trigger deploy",
+    "trigger:smoke": "tsx --conditions=react-server scripts/trigger-smoke.mts"
+  },
+  "dependencies": {
+    "@rnr/core": "workspace:*",
+    "@rnr/data": "workspace:*",
+    "@trigger.dev/sdk": "4.5.9",
+    "@vercel/functions": "^3.7.7",
+    "dotenv": "^16.4.7",
+    "next": "^15.1.4",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  },
+  "devDependencies": {
+    "@trigger.dev/build": "4.5.9",
+    "@types/react": "^19.0.4",
+    "@types/react-dom": "^19.0.2",
+    "import-in-the-middle": "^3.3.3",
+    "require-in-the-middle": "^8.0.1",
+    "trigger.dev": "4.5.9"
+  }
+}

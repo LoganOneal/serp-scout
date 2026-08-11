@@ -1,0 +1,36 @@
+# What NEVER leaves this machine.
+#
+# ==================== THIS FILE REPLACES .gitignore, IT DOES NOT EXTEND IT ====================
+# Once a .vercelignore exists, Vercel stops consulting .gitignore -- so anything that was
+# excluded only by .gitignore has to be repeated here. Two of the entries below are the
+# reason this file exists at all rather than being left to the default:
+#
+#   .recordings/  6.5MB of recorded calls. Strangers describing their homes and leaving
+#                 phone numbers. It belongs in a private blob store, not in a build context.
+#   .cache/       49MB of Census bulk files. Re-fetchable, and nothing at runtime reads it.
+# ============================================================================================
+
+.env
+.env.local
+
+.recordings/
+.recordings-smoke/
+.cache/
+
+node_modules/
+.next/
+.next-build/
+dist/
+.vercel/
+
+.git/
+*.log
+.playwright-mcp/
+*.png
+
+# Tests do not run in the build, and the e2e suite would need a database.
+# NOTE: __fixtures__ directories are deliberately NOT excluded -- the provider seam loads
+# them whenever LIVE_CALLS_ENABLED is not exactly "true", which includes any misconfigured
+# deploy. Dropping them would turn a $0 fallback into a crash.
+**/*.test.ts
+**/*.e2e.test.ts

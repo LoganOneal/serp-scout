@@ -1,0 +1,53 @@
+{
+  "name": "rank-and-rent",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "packageManager": "pnpm@9.15.0",
+  "engines": {
+    "node": ">=20.11"
+  },
+  "scripts": {
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "e2e": "vitest run --config vitest.e2e.config.ts",
+    "typecheck": "tsc --noEmit",
+    "db:push": "drizzle-kit push --config=packages/data/drizzle.config.ts",
+    "db:extras": "tsx --conditions=react-server packages/data/src/scripts/db-extras.ts",
+    "db:studio": "drizzle-kit studio --config=packages/data/drizzle.config.ts",
+    "seed:niches": "tsx --conditions=react-server packages/data/src/scripts/seed-niches.ts",
+    "ingest:geo": "tsx --conditions=react-server packages/data/src/scripts/ingest-geo.ts",
+    "backfill:perspectives": "tsx --conditions=react-server packages/data/src/scripts/backfill-perspectives.ts",
+    "probe:dfs": "tsx --conditions=react-server packages/data/src/scripts/probe-dfs.ts",
+    "scan": "tsx --conditions=react-server packages/data/src/scripts/scan.ts",
+    "worker": "tsx --conditions=react-server packages/data/src/worker/main.ts",
+    "outcomes:check": "tsx --conditions=react-server packages/data/src/scripts/check-outcomes.ts",
+    "voice:simulate": "tsx --conditions=react-server packages/data/src/scripts/simulate-call.ts",
+    "sites:provision": "tsx --conditions=react-server packages/data/src/scripts/provision-site.ts",
+    "twilio:setup-trunk": "tsx --conditions=react-server packages/data/src/scripts/setup-trunk.ts",
+    "voice:agent-config": "tsx --conditions=react-server packages/data/src/scripts/agent-config.ts",
+    "voice:agent-pull": "tsx --conditions=react-server packages/data/src/scripts/agent-pull.ts",
+    "voice:agent-apply": "tsx --conditions=react-server packages/data/src/scripts/agent-apply.ts",
+    "dev": "pnpm --filter @rnr/web dev",
+    "build": "pnpm --filter @rnr/web build",
+    "trigger:dev": "pnpm --filter @rnr/web trigger:dev",
+    "trigger:deploy": "pnpm --filter @rnr/web trigger:deploy",
+    "//cost": "EVERY `ship` IS A BILLED VERCEL BUILD. 13 production builds went out in nine hours because a deploy was being appended to every commit; nothing was auto-deploying, there is no git remote, each one was an explicit choice. Commit freely, deploy deliberately. Use ship:app or ship:worker when only one half changed -- most changes touch only one.",
+    "//ship": "PUSHING TO PROD MEANS BOTH HALVES. NB: not named \"deploy\" -- that is a reserved pnpm command and pnpm runs its own workspace deploy instead of this script, silently shipping nothing. Vercel serves the app; Trigger.dev runs the workers that drain discovery jobs and domain enrichment. They are separate deployments. For three days only the Vercel half was shipped, so the perspectives SERP fix was live in the UI, in tests and in every script, while the worker that actually parses SERPs kept running the old bundle and recording zero Reddit hits on every new run. Nothing failed; the number was just wrong. Deploy both or neither.",
+    "ship": "vercel --prod --yes && pnpm trigger:deploy",
+    "ship:app": "vercel --prod --yes",
+    "ship:worker": "pnpm trigger:deploy",
+    "trigger:smoke": "pnpm --filter @rnr/web trigger:smoke",
+    "seed:research-catalog": "tsx packages/data/src/scripts/seed-research-catalog.mts",
+    "enrich:niche-gads": "tsx --conditions=react-server packages/data/src/scripts/enrich-niche-gads.mts",
+    "voice:retarget-tools": "tsx --conditions=react-server packages/data/src/scripts/retarget-tools.ts"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.5",
+    "dotenv": "^16.4.7",
+    "drizzle-kit": "^0.30.1",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.3",
+    "vitest": "^2.1.8"
+  }
+}

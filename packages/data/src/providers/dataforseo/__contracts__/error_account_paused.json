@@ -1,0 +1,30 @@
+{
+  "__meta": {
+    "verified": true,
+    "capturedAt": "2026-08-03T00:00:00Z",
+    "source": "transcribed from a real account-hold response observed during the previous build",
+    "note": "TRAP 4. Note status_code 20000 at the TOP level and HTTP 200 on the wire -- the failure lives only in tasks[0].status_code. A client that checks either of the outer signals sees success with an empty result set, which scores every SERP in the corpus as having no competitors. This fixture is marked verified because it was captured from a real hold, not transcribed from docs."
+  },
+  "payload": {
+    "version": "0.1.20260803",
+    "status_code": 20000,
+    "status_message": "Ok.",
+    "time": "0.0512 sec.",
+    "cost": 0,
+    "tasks_count": 1,
+    "tasks_error": 1,
+    "tasks": [
+      {
+        "id": "08031207-1234-0066-0000-b8c9d0e1f2a3",
+        "status_code": 40200,
+        "status_message": "We have detected unusual activity on your account and access has been temporarily paused. Please contact support.",
+        "time": "0 sec.",
+        "cost": 0,
+        "result_count": 0,
+        "path": ["v3", "serp", "google", "organic", "live", "advanced"],
+        "data": {},
+        "result": null
+      }
+    ]
+  }
+}

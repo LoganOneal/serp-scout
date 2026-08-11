@@ -1,0 +1,57 @@
+{
+  "__meta": {
+    "verified": true,
+    "capturedAt": "2026-08-10T19:32:08.721Z",
+    "source": "captured live from /backlinks/bulk_spam_score/live"
+  },
+  "payload": {
+    "version": "0.1.20260806",
+    "status_code": 20000,
+    "status_message": "Ok.",
+    "time": "0.3108 sec.",
+    "cost": 0.024072,
+    "tasks_count": 1,
+    "tasks_error": 0,
+    "tasks": [
+      {
+        "id": "08101932-2230-0482-0000-88805212bf4b",
+        "status_code": 20000,
+        "status_message": "Ok.",
+        "time": "0.2486 sec.",
+        "cost": 0.024072,
+        "result_count": 1,
+        "path": [
+          "v3",
+          "backlinks",
+          "bulk_spam_score",
+          "live"
+        ],
+        "data": {
+          "api": "backlinks",
+          "function": "bulk_spam_score",
+          "targets": [
+            "yelp.com",
+            "kenoshatreeservice.com"
+          ]
+        },
+        "result": [
+          {
+            "items_count": 2,
+            "items": [
+              {
+                "type": "backlinks_bulk_spam_score",
+                "target": "yelp.com",
+                "spam_score": 4
+              },
+              {
+                "type": "backlinks_bulk_spam_score",
+                "target": "kenoshatreeservice.com",
+                "spam_score": 48
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,12 @@
+-- Lead-sell economics + Google Ads measured demand on niches
+ALTER TABLE "niches" ADD COLUMN IF NOT EXISTS "avg_ticket_micros" bigint;
+ALTER TABLE "niches" ADD COLUMN IF NOT EXISTS "lead_commission_rate_bps" integer;
+ALTER TABLE "niches" ADD COLUMN IF NOT EXISTS "lead_value_micros" bigint;
+ALTER TABLE "niches" ADD COLUMN IF NOT EXISTS "economics_source" text;
+ALTER TABLE "niches" ADD COLUMN IF NOT EXISTS "gads_avg_monthly_searches" integer;
+ALTER TABLE "niches" ADD COLUMN IF NOT EXISTS "gads_competition_index" integer;
+ALTER TABLE "niches" ADD COLUMN IF NOT EXISTS "gads_competition" text;
+ALTER TABLE "niches" ADD COLUMN IF NOT EXISTS "gads_top_of_page_bid_low_micros" bigint;
+ALTER TABLE "niches" ADD COLUMN IF NOT EXISTS "gads_top_of_page_bid_high_micros" bigint;
+ALTER TABLE "niches" ADD COLUMN IF NOT EXISTS "gads_keyword" text;
+ALTER TABLE "niches" ADD COLUMN IF NOT EXISTS "gads_measured_at" timestamptz;

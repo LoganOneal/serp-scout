@@ -1,0 +1,166 @@
+{
+  "__meta": {
+    "verified": false,
+    "capturedAt": null,
+    "source": "transcribed from DataForSEO documentation + observed discussions_and_forums item shapes -- NOT verified against the live API",
+    "note": "Includes organic Reddit and a discussions_and_forums pack. Discovery extractRedditHitsFromDfsResult must surface both; normaliseOrganicResult must still keep only type=organic (and rank_group).",
+    "constructed": "Scenario fixture: the SAME Reddit post appears both as an organic result and inside the discussions pack, so findRedditPlacement can be tested for the \"both surfaces\" case. Google does not reliably return that arrangement -- a live capture of \"plumber new york city\" came back with no discussion module at all -- so this cannot be captured on demand. Real captured payloads for each module name live in serp_perspectives_module and serp_discussions_and_forums_module; use those to verify SHAPE. This one only exercises the two-surface branch."
+  },
+  "payload": {
+    "version": "0.1.20260804",
+    "status_code": 20000,
+    "status_message": "Ok.",
+    "time": "2.1000 sec.",
+    "cost": 0.002,
+    "tasks_count": 1,
+    "tasks_error": 0,
+    "tasks": [
+      {
+        "id": "08041200-0000-0066-0000-discovery-discussions",
+        "status_code": 20000,
+        "status_message": "Ok.",
+        "time": "2.0000 sec.",
+        "cost": 0.002,
+        "result_count": 1,
+        "path": [
+          "v3",
+          "serp",
+          "google",
+          "organic",
+          "live",
+          "advanced"
+        ],
+        "data": {
+          "api": "serp",
+          "function": "live",
+          "se": "google",
+          "se_type": "organic",
+          "keyword": "electrician near me",
+          "location_code": 1013509,
+          "language_code": "en",
+          "device": "desktop",
+          "os": "windows",
+          "depth": 10
+        },
+        "result": [
+          {
+            "keyword": "electrician near me",
+            "type": "organic",
+            "se_domain": "google.com",
+            "location_code": 1013509,
+            "language_code": "en",
+            "check_url": "https://www.google.com/search?q=electrician%20near%20me",
+            "datetime": "2026-08-04 12:00:00 +00:00",
+            "spell": null,
+            "item_types": [
+              "discussions_and_forums",
+              "organic",
+              "local_pack",
+              "people_also_ask"
+            ],
+            "se_results_count": 184000000,
+            "items_count": 8,
+            "items": [
+              {
+                "type": "discussions_and_forums",
+                "rank_group": 1,
+                "rank_absolute": 1,
+                "position": "left",
+                "title": "Discussions and forums",
+                "items": [
+                  {
+                    "type": "discussions_and_forums_element",
+                    "rank_group": 1,
+                    "rank_absolute": 1,
+                    "domain": "www.reddit.com",
+                    "url": "https://www.reddit.com/r/Tucson/comments/1pack01/need_electrician_recommendations/",
+                    "title": "Need electrician recommendations",
+                    "timestamp": "2025-11-01 00:00:00 +00:00"
+                  },
+                  {
+                    "type": "discussions_and_forums_element",
+                    "rank_group": 2,
+                    "rank_absolute": 1,
+                    "domain": "www.quora.com",
+                    "url": "https://www.quora.com/Who-is-the-best-electrician-in-Tucson",
+                    "title": "Who is the best electrician in Tucson?",
+                    "timestamp": "2025-10-01 00:00:00 +00:00"
+                  },
+                  {
+                    "type": "discussions_and_forums_element",
+                    "rank_group": 3,
+                    "rank_absolute": 1,
+                    "domain": "reddit.com",
+                    "url": "https://www.reddit.com/r/electricians/comments/1pack02/tucson_panel_upgrade/",
+                    "title": "Tucson panel upgrade \u2014 who to call?",
+                    "timestamp": "2025-09-01 00:00:00 +00:00"
+                  }
+                ]
+              },
+              {
+                "type": "local_pack",
+                "rank_group": 1,
+                "rank_absolute": 2,
+                "position": "left",
+                "title": "Mr Electric of Tucson",
+                "domain": "mrelectric.com",
+                "url": "https://www.mrelectric.com/tucson"
+              },
+              {
+                "type": "organic",
+                "rank_group": 1,
+                "rank_absolute": 3,
+                "position": "left",
+                "domain": "www.yelp.com",
+                "title": "THE BEST 10 Electricians in TUCSON, AZ - Yelp",
+                "url": "https://www.yelp.com/search?find_desc=Electricians&find_loc=Tucson%2C+AZ",
+                "breadcrumb": "https://www.yelp.com \u203a search",
+                "description": "Best Electricians in Tucson, AZ...",
+                "is_featured_snippet": false,
+                "is_paid": false
+              },
+              {
+                "type": "organic",
+                "rank_group": 2,
+                "rank_absolute": 4,
+                "position": "left",
+                "domain": "www.reddit.com",
+                "title": "Best electrician in Tucson? : r/Tucson",
+                "url": "https://www.reddit.com/r/Tucson/comments/1org001/best_electrician_in_tucson/",
+                "breadcrumb": "https://www.reddit.com \u203a r \u203a Tucson",
+                "description": "Looking for a licensed electrician...",
+                "is_featured_snippet": false,
+                "is_paid": false
+              },
+              {
+                "type": "organic",
+                "rank_group": 3,
+                "rank_absolute": 5,
+                "position": "left",
+                "domain": "www.angi.com",
+                "title": "10 Best Electricians - Tucson AZ | Angi",
+                "url": "https://www.angi.com/companylist/us/az/tucson/electricians.htm",
+                "breadcrumb": "https://www.angi.com \u203a companylist",
+                "description": "Find the best electricians...",
+                "is_featured_snippet": false,
+                "is_paid": false
+              },
+              {
+                "type": "people_also_ask",
+                "rank_group": 1,
+                "rank_absolute": 6,
+                "items": [
+                  {
+                    "type": "people_also_ask_element",
+                    "title": "How much does an electrician cost?",
+                    "url": "https://www.homewyse.com/services/cost_to_hire_an_electrician.html"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}
