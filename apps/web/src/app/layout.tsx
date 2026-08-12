@@ -3,7 +3,7 @@ import './globals.css'
 import { AppShell } from '@/components/shell/AppShell'
 
 export const metadata: Metadata = {
-  title: 'Rank & Rent',
+  title: 'SERP Scout',
   description: 'Research local niches, save markets, monitor SERPs, and operate rank-and-rent sites.',
 }
 

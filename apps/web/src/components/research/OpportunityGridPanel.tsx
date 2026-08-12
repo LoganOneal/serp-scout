@@ -1,7 +1,14 @@
 'use client'
 
 import { useEffect, useMemo, useRef, useState, useTransition } from 'react'
-import { groupByNicheMarket } from '@rnr/core'
+import {
+  groupByNicheMarket,
+  opportunitySignals,
+  signalExplanation,
+  signalStrength,
+  SIGNAL_LABEL,
+  type OpportunitySignal,
+} from '@rnr/core'
 import { useRouter } from 'next/navigation'
 import {
   deleteOpportunityCellAction,
@@ -156,15 +163,29 @@ export interface OpportunityGridPanelProps {
  * ==============================================================
  */
 export type ColumnId =
-  | 'select' | 'keyword' | 'market' | 'redditVol' | 'redditRank' | 'volume'
+  | 'select' | 'signal' | 'keyword' | 'market' | 'redditVol' | 'redditRank' | 'volume'
   | 'leadValue' | 'score' | 'liveSerp' | 'difficulty' | 'slotsOpen' | 'winnable'
   | 'cpc' | 'comp' | 'device' | 'firstOrganic' | 'ads' | 'lsa' | 'gbp' | 'map'
   | 'maps' | 'forums' | 'topOrganic' | 'gbpLeaders' | 'openQ' | 'why' | 'actions'
 
 /** Always rendered: identity and the row controls. Never hideable. */
-const PINNED: ColumnId[] = ['select', 'keyword', 'market', 'actions']
+/**
+ * Signal is pinned because it is the conclusion. Hiding it would leave the grid
+ * back where it started: 27 columns of evidence and nothing that says what the
+ * row is offering.
+ */
+const PINNED: ColumnId[] = ['select', 'signal', 'keyword', 'market', 'actions']
 
 export const COLUMN_PRESETS: Record<string, { label: string; columns: ColumnId[] }> = {
+  /**
+   * The landing view, and deliberately opinionated. Twenty-seven columns is a
+   * reference view, not a working one; everything omitted here is one click
+   * away under "+ Columns".
+   */
+  opportunities: {
+    label: 'Opportunities',
+    columns: ['redditVol', 'volume', 'leadValue', 'difficulty', 'slotsOpen', 'liveSerp'],
+  },
   reddit: {
     label: 'Reddit',
     columns: ['redditVol', 'redditRank', 'volume', 'leadValue', 'score', 'liveSerp'],
@@ -192,7 +213,7 @@ export const COLUMN_PRESETS: Record<string, { label: string; columns: ColumnId[]
 
 /** Label shown in the picker. Kept beside the presets so the two cannot drift. */
 const COLUMN_LABELS: Record<ColumnId, string> = {
-  select: 'Select', keyword: 'Niche / keyword', market: 'Market', redditVol: 'Reddit vol',
+  select: 'Select', signal: 'Signal', keyword: 'Niche / keyword', market: 'Market', redditVol: 'Reddit vol',
   redditRank: 'Reddit #', volume: 'Vol', leadValue: 'Lead $', score: 'Score',
   liveSerp: 'Live SERP', difficulty: 'Diff', slotsOpen: 'Open', winnable: 'Winnable?',
   cpc: 'CPC', comp: 'Comp', device: 'Device', firstOrganic: '1st org', ads: 'Ads↑',
@@ -319,7 +340,7 @@ export function OpportunityGridPanel(props: OpportunityGridPanelProps) {
    * initialiser: this component server-renders, and touching localStorage
    * during render is a hydration mismatch.
    */
-  const [preset, setPreset] = useState<string>('reddit')
+  const [preset, setPreset] = useState<string>('opportunities')
   const [overrides, setOverrides] = useState<Partial<Record<ColumnId, boolean>>>({})
   const [pickerOpen, setPickerOpen] = useState(false)
 
@@ -385,15 +406,42 @@ export function OpportunityGridPanel(props: OpportunityGridPanelProps) {
   }, [visibleColumns, filteredGrid])
 
   const groupedAll = useMemo(() => groupByNicheMarket(filteredGrid), [filteredGrid])
-  const grouped = useMemo(
-    () =>
-      winnableOnly
-        ? groupedAll.filter(
-            (g) => g.verdictAcquired === 'likely_30d' || g.verdictAcquired === 'likely_90d',
-          )
-        : groupedAll,
-    [groupedAll, winnableOnly],
-  )
+  const grouped = useMemo(() => {
+    const base = winnableOnly
+      ? groupedAll.filter(
+          (g) => g.verdictAcquired === 'likely_30d' || g.verdictAcquired === 'likely_90d',
+        )
+      : groupedAll
+    /**
+     * Ordered by what a group is OFFERING, not by its score.
+     *
+     * groupByNicheMarket already sorts by opportunityScore, which is a blend --
+     * so a market with a live Reddit thread could sit below one with a slightly
+     * better composite and nothing you can act on. Signal first, then the
+     * existing order within a signal tier, which is what the score is good at.
+     */
+    return [...base].sort(
+      (a, b) =>
+        signalStrength({
+          redditVisits: b.redditVisits,
+          redditHitCount: b.redditHitCount,
+          volume: b.volume,
+          verdictAcquired: b.verdictAcquired,
+          slotsOpen: b.slotsOpen,
+          emdAvailable: b.bestVariation?.emdAvailable ?? null,
+        }) -
+          signalStrength({
+            redditVisits: a.redditVisits,
+            redditHitCount: a.redditHitCount,
+            volume: a.volume,
+            verdictAcquired: a.verdictAcquired,
+            slotsOpen: a.slotsOpen,
+            emdAvailable: a.bestVariation?.emdAvailable ?? null,
+          }) ||
+        (b.opportunityScore ?? -1) - (a.opportunityScore ?? -1) ||
+        a.label.localeCompare(b.label),
+    )
+  }, [groupedAll, winnableOnly])
   const toggleExpanded = (k: string) =>
     setExpanded((prev) => {
       const n = new Set(prev)
@@ -641,6 +689,14 @@ export function OpportunityGridPanel(props: OpportunityGridPanelProps) {
               </th>
               )}
 
+              {show('signal') && (
+              <th
+                title="What this row is offering. REDDIT: a thread on page 1 with demand behind it, commentable without a site. BUILD: winnable on an acquired domain with slots open. DOMAIN: the exact-match domain is registrable. PARTIAL: a thread exists but its reach cannot be estimated."
+              >
+                Signal
+              </th>
+              )}
+
               {show('score') && (
               <th className="num">Score</th>
               )}
@@ -674,6 +730,7 @@ export function OpportunityGridPanel(props: OpportunityGridPanelProps) {
                 Winnable?
               </th>
               )}
+
 
               {show('keyword') && (
               <th className="opp-col-keyword">Niche / keyword</th>
@@ -866,6 +923,42 @@ export function OpportunityGridPanel(props: OpportunityGridPanelProps) {
                   </td>
                   )}
 
+                  {show('signal') && (
+                  <td className="opp-col-signal">
+                    {(() => {
+                      const input = {
+                        redditVisits: isHead ? g.redditVisits : row.redditVisits,
+                        redditHitCount: isHead ? g.redditHitCount : row.redditHitCount,
+                        volume: isHead ? g.volume : row.volume,
+                        verdictAcquired: isHead ? g.verdictAcquired : row.verdictAcquired,
+                        slotsOpen: isHead ? g.slotsOpen : row.slotsOpen,
+                        emdAvailable: row.emdAvailable ?? null,
+                      }
+                      const signals = opportunitySignals(input)
+                      if (signals.length === 0) {
+                        return (
+                          <span className="null" title="No play this row supports yet.">
+                            —
+                          </span>
+                        )
+                      }
+                      return (
+                        <span className="opp-signals">
+                          {signals.map((sig: OpportunitySignal) => (
+                            <span
+                              key={sig}
+                              className={`opp-sig opp-sig-${sig}`}
+                              title={signalExplanation(sig, input)}
+                            >
+                              {SIGNAL_LABEL[sig]}
+                            </span>
+                          ))}
+                        </span>
+                      )
+                    })()}
+                  </td>
+                  )}
+
                   {show('score') && (
                   <td className="num">
                     <strong className="sm-score">{row.opportunityScore ?? '—'}</strong>
@@ -1002,6 +1095,7 @@ export function OpportunityGridPanel(props: OpportunityGridPanelProps) {
                     )}
                   </td>
                   )}
+
 
                   {show('keyword') && (
                   <td

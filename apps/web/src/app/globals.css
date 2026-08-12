@@ -3285,3 +3285,30 @@ a.kw-serp-title:hover {
   gap: 8px;
   margin: 0 0 18px;
 }
+
+/* ==================== OPPORTUNITY SIGNALS ====================
+   The one column in the grid that states a conclusion rather than evidence.
+   Each chip names a play with its own cost and its own next action, so they
+   are visually distinct from each other rather than shades of one ramp. */
+.opp-col-signal { white-space: nowrap; }
+.opp-signals { display: inline-flex; gap: 4px; flex-wrap: wrap; }
+.opp-sig {
+  font-size: 9.5px;
+  font-weight: 750;
+  letter-spacing: 0.05em;
+  padding: 2px 6px;
+  border-radius: 4px;
+  white-space: nowrap;
+}
+/* Comment on a thread: no site, no spend. */
+.opp-sig-reddit { background: #ede9fe; color: #6d28d9; }
+/* Buy a domain and rank it: weeks of work. */
+.opp-sig-build { background: #dcfce7; color: #15803d; }
+/* Acquire the name before someone else does. */
+.opp-sig-domain { background: #e4effd; color: #1d4ed8; }
+/* Something is here; its evidence is not complete. Deliberately quiet. */
+.opp-sig-partial {
+  background: var(--surface-2, #f8fafc);
+  color: var(--text-dim);
+  border: 1px solid var(--border);
+}

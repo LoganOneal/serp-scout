@@ -6,7 +6,7 @@ export function TopBar({ live }: { live: boolean }) {
       <div className="app-topbar-left">
         <span className="app-topbar-workspace">Workspace</span>
         <span className="app-topbar-sep">/</span>
-        <span className="app-topbar-product">Rank &amp; Rent</span>
+        <span className="app-topbar-product">SERP Scout</span>
       </div>
       <div className="app-topbar-right">
         {live ? (
