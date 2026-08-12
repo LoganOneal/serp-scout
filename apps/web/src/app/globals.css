@@ -3434,3 +3434,130 @@ a.kw-serp-title:hover {
   opacity: 0.7;
 }
 .kwrev-num { font-variant-numeric: tabular-nums; min-width: 38px; text-align: right; }
+
+/* ── The run card: the whole first screen ────────────────────────────────
+   Replaces a 344-control page with a sentence, a size, and one button. The
+   pickers still exist -- `.sm-magic[hidden]` below -- they are just no longer
+   the opening move. */
+.runcard {
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--surface, #fff);
+  padding: 22px 24px;
+  margin-bottom: 16px;
+  /* The workspace is full-bleed so the grids can use it. Prose cannot -- a
+     sentence set across 1,300px is not read, it is scanned past. */
+  max-width: 880px;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+}
+.runcard-title {
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: -0.015em;
+  margin: 0 0 4px;
+  text-wrap: balance;
+}
+.runcard-cost {
+  font-size: 14px;
+  color: var(--text-dim);
+  display: flex;
+  align-items: baseline;
+  gap: 7px;
+  flex-wrap: wrap;
+}
+.runcard-jobs { font-size: 17px; color: var(--text); font-variant-numeric: tabular-nums; }
+.runcard-sep { color: var(--border); }
+
+/* Size: three named options, priced from live settings. */
+.runcard-scales { display: flex; gap: 8px; flex-wrap: wrap; margin: 16px 0 14px; }
+.runcard-scale {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 8px 14px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--surface, #fff);
+  cursor: pointer;
+  text-align: left;
+  font: inherit;
+  transition: border-color 0.12s, background 0.12s;
+}
+.runcard-scale:hover { border-color: var(--text-dim); }
+.runcard-scale.is-active {
+  border-color: var(--accent, #ea580c);
+  background: var(--accent-soft, #fff7ed);
+}
+.runcard-scale-name { font-size: 13px; font-weight: 650; }
+.runcard-scale-meta { font-size: 11.5px; color: var(--text-dim); font-variant-numeric: tabular-nums; }
+
+/* Settings, said out loud. A folded-away dial must still be visible as text. */
+.runcard-settings {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  flex-wrap: wrap;
+  font-size: 12px;
+  color: var(--text-dim);
+  padding-top: 12px;
+  border-top: 1px solid var(--border);
+}
+.runcard-setting:not(:last-of-type)::after { content: ' ·'; color: var(--border); }
+.runcard-setting.is-changed {
+  color: var(--accent, #ea580c);
+  font-weight: 650;
+}
+.runcard-link {
+  border: 0;
+  background: none;
+  padding: 0;
+  font: inherit;
+  font-size: 12px;
+  color: var(--link, #2563eb);
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.runcard-actions {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+  margin-top: 16px;
+}
+.runcard-go { font-size: 14.5px; padding: 9px 18px; }
+.runcard-reassure { font-size: 12px; }
+
+.runcard-more {
+  display: flex;
+  gap: 22px;
+  flex-wrap: wrap;
+  margin-top: 16px;
+  padding-top: 14px;
+  border-top: 1px solid var(--border);
+}
+.runcard-disclosure {
+  border: 0;
+  background: none;
+  padding: 0;
+  font: inherit;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--text);
+  cursor: pointer;
+  text-align: left;
+}
+.runcard-disclosure:hover { color: var(--accent, #ea580c); }
+.runcard-disclosure .faint { font-weight: 400; }
+
+/* Advanced: the six dials, on request. */
+.advanced-panel { margin-bottom: 16px; padding: 16px 18px; }
+.advanced-grid { display: flex; gap: 18px; flex-wrap: wrap; margin-bottom: 12px; }
+.advanced-toggles { display: flex; gap: 16px; flex-wrap: wrap; }
+.advanced-note { font-size: 11.5px; margin: 12px 0 0; max-width: 78ch; line-height: 1.5; }
+
+/* `hidden` loses to the pickers' own display rules without this. */
+.sm-magic[hidden] { display: none; }
+
+/* Panels the run card opens line up with it rather than going full-bleed. */
+.runcard-panel { max-width: 880px; margin-bottom: 16px; }

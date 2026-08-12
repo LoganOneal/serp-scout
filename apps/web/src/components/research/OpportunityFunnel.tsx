@@ -15,6 +15,7 @@ import type { NicheOption } from '@/components/research/ResearchWizard'
 import { VolumeSourceLink } from '@/components/VolumeSourceLink'
 import { OpenLocalSerpLinks } from '@/components/OpenLocalSerpLinks'
 import { DiscoveryRunStatus } from '@/components/DiscoveryRunStatus'
+import { ScanRunList, type ScanRunRow } from '@/components/research/ScanRunList'
 import { useAutoRefresh } from '@/hooks/useAutoRefresh'
 
 export interface ScreenGeo {
@@ -71,6 +72,12 @@ export type OpportunityFunnelProps = {
   searchLocalities: (q: string) => Promise<PickerOption[]>
   niches: NicheOption[]
   live: boolean
+  /**
+   * Locality scans. They live under this step, beside the sweep runs, because
+   * a scan IS a run -- listing them above the flow on the research page put a
+   * history table between the operator and the thing they came to do.
+   */
+  scanRuns: ScanRunRow[]
 }
 
 /** /serp/google/organic/live/advanced — $0.002 per call. */
@@ -169,6 +176,40 @@ const KW_PER_NICHE = 8
 
 type FunnelStep = 'screen' | 'keywords' | 'sweep'
 
+/**
+ * Run size as a single choice, named by what it is for.
+ *
+ * These are the same two combined presets that used to sit as loose buttons in
+ * the bulk bar, plus the default in between. Their prices are computed from
+ * the live settings rather than written down -- a label that says "$6" is a
+ * claim about pricing, and pricing has already moved once this month.
+ */
+const SCALES = [
+  { id: 'narrow', label: 'Narrow', niches: 5, geos: 20 },
+  { id: 'standard', label: 'Standard', niches: 10, geos: 20 },
+  { id: 'wide', label: 'Wide', niches: 10, geos: 50 },
+] as const
+
+/**
+ * Provider errors arrive as raw JSON and were rendered verbatim -- a card in
+ * the keyword review showed `503: { "error": { "code": 503, "message": ... }`
+ * with a googleapis type URL, which tells an operator nothing except that
+ * something broke. Keep the sentence a human wrote; keep the code, because
+ * "temporarily unavailable" and "bad credentials" need different responses.
+ */
+function tidyProviderNote(note: string): string {
+  const code = note.match(/^(\d{3})\b/)?.[1]
+  const message = note.match(/"message"\s*:\s*"([^"]+)"/)?.[1]
+  if (message) return code ? `${message} (${code})` : message
+  return note.length > 150 ? `${note.slice(0, 150)}…` : note
+}
+
+/** True when `picked` is exactly the first `n` of `ordered`. */
+function isTopN<T extends { id: number }>(picked: Set<number>, ordered: T[], n: number): boolean {
+  if (picked.size !== n || ordered.length < n) return false
+  return ordered.slice(0, n).every((x) => picked.has(x.id))
+}
+
 export function OpportunityFunnel(props: OpportunityFunnelProps) {
   const router = useRouter()
   /**
@@ -219,6 +260,9 @@ export function OpportunityFunnel(props: OpportunityFunnelProps) {
   const [nicheFilter, setNicheFilter] = useState('')
   const [geoFilter, setGeoFilter] = useState('')
   const [singleMarketOpen, setSingleMarketOpen] = useState(false)
+  /** The niche and market pickers -- the old first screen, now on request. */
+  const [pickersOpen, setPickersOpen] = useState(false)
+  const [advancedOpen, setAdvancedOpen] = useState(false)
 
   const deviceN = devices === 'both' ? 2 : 1
   /**
@@ -400,6 +444,52 @@ export function OpportunityFunnel(props: OpportunityFunnelProps) {
     })
   }
 
+  /** Which named size the current selection is, if it is one of them. */
+  const activeScale = useMemo(() => {
+    const hit = SCALES.find(
+      (s) => isTopN(nicheIds, nicheList, s.niches) && isTopN(geoIds, props.geos, s.geos),
+    )
+    return hit?.id ?? null
+  }, [nicheIds, geoIds, nicheList, props.geos])
+
+  /**
+   * The run in one sentence.
+   *
+   * "The top 10 niches across the top 20 markets" when the selection is still
+   * the ranked head, because that is what it is and saying "10 niches" hides
+   * the ordering the tool did for you. Once you edit it by hand, it stops
+   * claiming an order it no longer has.
+   */
+  const scopeSentence = useMemo(() => {
+    if (nicheIds.size === 0 || geoIds.size === 0) return 'Pick niches and markets to sweep'
+    const nicheTop = SCALES.some((s) => s.niches === nicheIds.size) && isTopN(nicheIds, nicheList, nicheIds.size)
+    const geoTop = SCALES.some((s) => s.geos === geoIds.size) && isTopN(geoIds, props.geos, geoIds.size)
+    const n = `${nicheTop ? 'the top ' : ''}${nicheIds.size} niche${nicheIds.size === 1 ? '' : 's'}`
+    const g = `${geoTop ? 'the top ' : ''}${geoIds.size} market${geoIds.size === 1 ? '' : 's'}`
+    return `Sweep ${n} across ${g}`
+  }, [nicheIds, geoIds, nicheList, props.geos])
+
+  /**
+   * Every setting, said out loud, with anything off-default marked.
+   *
+   * The point of folding the dials away is that you stop reading six controls
+   * on every visit. The point of this line is that folding them away must not
+   * let one hide -- "kw + city" doubles the SERP count, and a doubled bill
+   * should never be a surprise hidden behind a closed disclosure.
+   */
+  const advancedSummary = useMemo(
+    () => [
+      { label: devices === 'both' ? 'Desktop + mobile' : 'Desktop only', isDefault: devices === 'both' },
+      { label: `${kwPerNiche} kw/niche`, isDefault: kwPerNiche === KW_PER_NICHE },
+      { label: fetchVolume ? 'Local volume on' : 'No local volume', isDefault: fetchVolume },
+      ...(fetchMaps ? [{ label: 'Maps on', isDefault: false }] : []),
+      ...(useQueuedSerp ? [{ label: 'Queued SERPs', isDefault: false }] : []),
+      ...(includeGeoExplicit ? [{ label: '“kw + city” — 2× SERPs', isDefault: false }] : []),
+    ],
+    [devices, kwPerNiche, fetchVolume, fetchMaps, useQueuedSerp, includeGeoExplicit],
+  )
+
+  const runsUnderTab = props.deepDiveRuns.length + props.scanRuns.length
   const canRun = nicheIds.size > 0 && geoIds.size > 0
   const needsAck = localEst.jobs > 50 && props.live
   const jobsActive = props.deepDiveRuns.some(
@@ -430,11 +520,13 @@ export function OpportunityFunnel(props: OpportunityFunnelProps) {
     {
       id: 'sweep',
       label: '3 · Sweep',
-      ready: props.deepDiveRuns.length > 0,
+      ready: runsUnderTab > 0,
+      // Counts scans too: they are listed under this tab, so the badge must
+      // describe what is behind it rather than only half of it.
       badge: jobsActive
         ? 'live'
-        : props.deepDiveRuns.length > 0
-          ? `${props.deepDiveRuns.length} run${props.deepDiveRuns.length === 1 ? '' : 's'}`
+        : runsUnderTab > 0
+          ? `${runsUnderTab} run${runsUnderTab === 1 ? '' : 's'}`
           : null,
     },
   ]
@@ -492,33 +584,6 @@ export function OpportunityFunnel(props: OpportunityFunnelProps) {
       {/* ── Screen: niches × markets (SEMrush Keyword Magic layout) ── */}
       {step === 'screen' && (
         <section className="opp-step">
-          <header className="opp-step-head sm-magic-page-head">
-            <div>
-              <h2 className="opp-step-title">Niche × market screen</h2>
-              <p className="opp-step-desc" style={{ marginBottom: 0 }}>
-                Evaluate <strong>niches</strong> against <strong>markets</strong> — not raw keywords.
-                Each niche expands to {kwPerNiche} buy-intent keyword{kwPerNiche === 1 ? '' : 's'} when you sweep.
-              </p>
-              <div className="sm-magic-meta">
-                <span>
-                  Database: <strong>United States</strong>
-                </span>
-                <span className="sm-magic-meta-sep">·</span>
-                <span>
-                  Niches: <strong>{nicheList.length}</strong>
-                </span>
-                <span className="sm-magic-meta-sep">·</span>
-                <span>
-                  Markets: <strong>{props.geoTotal}</strong>
-                </span>
-                <span className="sm-magic-meta-sep">·</span>
-                <span>
-                  Niche priors + GAds national · Market sweep volume = DataForSEO @ market location
-                </span>
-              </div>
-            </div>
-          </header>
-
           {nicheList.length === 0 && (
             <div className="stopbox" style={{ marginBottom: 14 }}>
               No niches seeded. Run <code>pnpm seed:niches</code> and{' '}
@@ -526,7 +591,298 @@ export function OpportunityFunnel(props: OpportunityFunnelProps) {
             </div>
           )}
 
-          {/* SEMrush-style: Topics (niches) | Markets table */}
+          {/**
+           * ==================== ONE QUESTION, NOT FIVE ====================
+           * This screen used to open on 344 controls: 58 niche rows, 200 market
+           * rows, three separate preset mechanisms, four paid/free toggles, two
+           * dropdowns, and the same primary button twice -- every one of which
+           * has a default the tool already knows, because it ranks niches by
+           * composite score and markets by rank.
+           *
+           * So it now opens on the sentence those defaults add up to, and one
+           * button. Nothing was removed; the pickers are one disclosure away.
+           * ===============================================================
+           */}
+          <div className="runcard">
+            <div className="runcard-scope">
+              <h2 className="runcard-title">{scopeSentence}</h2>
+              <div className="runcard-cost">
+                <strong className="runcard-jobs">{localEst.jobs.toLocaleString()}</strong> SERPs
+                <span className="runcard-sep">·</span>
+                <span className={props.live ? '' : 'faint'}>
+                  {props.live ? `about $${localEst.usd.toFixed(2)}` : '$0 · fixtures'}
+                </span>
+              </div>
+            </div>
+
+            {/**
+             * Scale as one choice. The same intent used to be expressible three
+             * ways -- niche presets, market presets, and combined presets -- so
+             * the page asked twice for an answer it could take once.
+             */}
+            <div className="runcard-scales" role="group" aria-label="Run size">
+              {SCALES.map((s) => {
+                const on = activeScale === s.id
+                const est = estCost(
+                  s.niches * kwPerNiche * (includeGeoExplicit ? 2 : 1),
+                  s.geos,
+                  deviceN,
+                  s.niches,
+                  { volume: fetchVolume, maps: fetchMaps },
+                )
+                return (
+                  <button
+                    key={s.id}
+                    type="button"
+                    className={`runcard-scale${on ? ' is-active' : ''}`}
+                    aria-pressed={on}
+                    onClick={() => {
+                      selectTopNiches(s.niches)
+                      selectTopGeo(s.geos)
+                    }}
+                  >
+                    <span className="runcard-scale-name">{s.label}</span>
+                    <span className="runcard-scale-meta">
+                      {s.niches} × {s.geos}
+                      {props.live ? ` · $${est.usd.toFixed(2)}` : ''}
+                    </span>
+                  </button>
+                )
+              })}
+            </div>
+
+            {/**
+             * Settings said out loud. A toggle that doubles the SERP count must
+             * not be able to hide inside a closed disclosure, so anything moved
+             * off its default is named here and marked.
+             */}
+            <div className="runcard-settings">
+              {advancedSummary.map((s) => (
+                <span
+                  key={s.label}
+                  className={s.isDefault ? 'runcard-setting' : 'runcard-setting is-changed'}
+                  title={s.isDefault ? undefined : 'Changed from the default'}
+                >
+                  {s.label}
+                </span>
+              ))}
+              <button
+                type="button"
+                className="runcard-link"
+                onClick={() => setAdvancedOpen((v) => !v)}
+                aria-expanded={advancedOpen}
+              >
+                {advancedOpen ? 'Hide settings' : 'Change'}
+              </button>
+            </div>
+
+            <div className="runcard-actions">
+              <button
+                type="button"
+                className="primary runcard-go"
+                disabled={pending || !canRun}
+                onClick={reviewKeywords}
+                title="Free: asks Google Ads what these niches are actually searched as in these markets, and prices the run. Nothing is bought until the next step."
+              >
+                {pending ? 'Checking…' : 'Review keywords →'}
+              </button>
+              <span className="runcard-reassure faint">
+                Nothing is bought yet — the next step shows the keywords first.
+              </span>
+            </div>
+
+            {!canRun && (
+              <p className="disabled-reason" style={{ margin: '10px 0 0' }}>
+                Select at least one niche and one market to run.
+              </p>
+            )}
+
+            <div className="runcard-more">
+              <button
+                type="button"
+                className="runcard-disclosure"
+                onClick={() => setPickersOpen((v) => !v)}
+                aria-expanded={pickersOpen}
+              >
+                <span aria-hidden>{pickersOpen ? '▾' : '▸'}</span> Change what&apos;s included
+                <span className="faint">
+                  {' '}
+                  {nicheIds.size} of {nicheList.length} niches, {geoIds.size} of{' '}
+                  {props.geos.length} markets
+                </span>
+              </button>
+              {/**
+               * Promoted out of a collapsed disclosure at the bottom of a page
+               * nobody scrolled to the bottom of. It answers a different
+               * question -- one market thoroughly, rather than many shallowly --
+               * and that makes it a door, not a footnote.
+               */}
+              <button
+                type="button"
+                className="runcard-disclosure"
+                onClick={() => setSingleMarketOpen((v) => !v)}
+                aria-expanded={singleMarketOpen}
+              >
+                <span aria-hidden>{singleMarketOpen ? '▾' : '▸'}</span> Research one market deeply
+                <span className="faint"> one place × ~24 buy-intent keywords · ~$0.10</span>
+              </button>
+            </div>
+
+            {preview && !preview.ok && (
+              <div className="stopbox" style={{ marginTop: 12 }}>
+                {preview.error ?? preview.detail}
+              </div>
+            )}
+            {msg && (
+              <div className={msg.ok ? 'okbox' : 'stopbox'} style={{ marginTop: 12 }}>
+                {msg.error ?? msg.detail}
+                {msg.ok && (
+                  <div style={{ marginTop: 8 }}>
+                    <button type="button" className="btn tiny" onClick={() => setStep('sweep')}>
+                      Watch progress →
+                    </button>
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
+
+          {advancedOpen && (
+            <div className="advanced-panel card runcard-panel">
+              <div className="advanced-grid">
+                <label
+                  className="screen-device-label"
+                  title="Each niche expands to this many service-intent queries. Every query is a SERP call per market per device — this multiplies the whole run."
+                >
+                  Keywords / niche
+                  <select
+                    value={kwPerNiche}
+                    onChange={(e) => {
+                      setKwPerNiche(Number(e.target.value))
+                      setPreview(null)
+                    }}
+                  >
+                    <option value={1}>1 · head term (widest screen)</option>
+                    <option value={3}>3 · head + 2 variants</option>
+                    <option value={8}>8 · full intent cluster</option>
+                  </select>
+                </label>
+                <label className="screen-device-label">
+                  Devices
+                  <select
+                    value={devices}
+                    onChange={(e) => {
+                      setDevices(e.target.value as 'desktop' | 'both')
+                      setPreview(null)
+                    }}
+                  >
+                    <option value="desktop">Desktop</option>
+                    <option value="both">Desktop + mobile</option>
+                  </select>
+                </label>
+              </div>
+              <div className="advanced-toggles">
+                <label
+                  className="screen-extra-toggle"
+                  title="Per-market search volume and competition from Google Ads. Free — this project already holds the credentials, and the paid DataForSEO route was removed. Leave it on: without it the Vol column, the Reddit-volume estimate and the 30-day winnability band are all blank. Markets Google Ads cannot resolve come back empty rather than being bought elsewhere."
+                >
+                  <input
+                    type="checkbox"
+                    checked={fetchVolume}
+                    onChange={(e) => {
+                      setFetchVolume(e.target.checked)
+                      setPreview(null)
+                    }}
+                  />
+                  Local volume
+                  <span className="faint"> free</span>
+                </label>
+                <label
+                  className="screen-extra-toggle"
+                  title="Google Maps pack depth and the domains competing in it — $0.002 per niche x market. Off by default: nothing scores off it, it fills one display column."
+                >
+                  <input
+                    type="checkbox"
+                    checked={fetchMaps}
+                    onChange={(e) => {
+                      setFetchMaps(e.target.checked)
+                      setPreview(null)
+                    }}
+                  />
+                  Maps
+                  <span className="faint">
+                    {' '}
+                    +${(nicheIds.size * geoIds.size * MAPS_UNIT).toFixed(2)}
+                  </span>
+                </label>
+                <label
+                  className="screen-extra-toggle"
+                  title="Buy SERPs through DataForSEO's queue: $0.0006 each instead of $0.0020, a 70% saving. Results arrive in minutes rather than seconds, so the run finishes later — use it for big sweeps, not when you need an answer now."
+                >
+                  <input
+                    type="checkbox"
+                    checked={useQueuedSerp}
+                    onChange={(e) => {
+                      setUseQueuedSerp(e.target.checked)
+                      setPreview(null)
+                    }}
+                  />
+                  Queued SERPs
+                  <span className="faint"> −70%</span>
+                </label>
+                <label
+                  className="screen-extra-toggle"
+                  title={
+                    'Also measure "<keyword> <city>" — e.g. "plumber new york city" — alongside the city-free keyword. ' +
+                    'The two return different pages: the city-free keyword at a location code shows who holds the local slots, ' +
+                    'while the typed-out string is where city-specific Reddit threads live. ' +
+                    'Doubles the SERP count for this run.'
+                  }
+                >
+                  <input
+                    type="checkbox"
+                    checked={includeGeoExplicit}
+                    onChange={(e) => {
+                      setIncludeGeoExplicit(e.target.checked)
+                      setPreview(null)
+                    }}
+                  />
+                  “kw + city”
+                  <span className="faint"> ×2 SERPs</span>
+                </label>
+              </div>
+              <p className="faint advanced-note">
+                Hard cap 5,000 jobs ($10). SERPs use each market&apos;s geo location code, so they
+                are the pages someone in that market would see. Volume is Google Ads at the market
+                location, not map-pack listings.
+              </p>
+            </div>
+          )}
+
+          {singleMarketOpen && (
+            <div className="card runcard-panel">
+              <p className="sub" style={{ fontSize: 12.5, marginTop: 0 }}>
+                One locality, expanded into its full buy-intent keyword cluster — the follow-up
+                after the grid picks a winner. Or scan every seed niche in one place at once.
+              </p>
+              {/* Opening the disclosure IS the "start one" gesture -- making it
+                  render a button that opens the same thing again is one click
+                  of pure ceremony. */}
+              <ResearchWizard
+                searchLocalities={props.searchLocalities}
+                niches={props.niches}
+                initialOpen
+              />
+            </div>
+          )}
+
+          {/**
+           * Not rendered until asked for, rather than rendered and hidden.
+           * Selection lives in `nicheIds` / `geoIds`, so unmounting the pickers
+           * cannot lose it -- and shipping 328 controls nobody can see is the
+           * same page weight as the screen this replaced.
+           */}
+          {pickersOpen && (
           <div className="sm-magic">
             <aside className="sm-magic-topics" aria-label="Niches">
               <div className="sm-magic-topics-head">
@@ -617,142 +973,6 @@ export function OpportunityFunnel(props: OpportunityFunnelProps) {
             </aside>
 
             <div className="sm-magic-main sm-panel">
-              {/* Summary strip — mirrors SEMrush “All keywords / Total volume” */}
-              <div className="sm-magic-summary">
-                <div className="sm-magic-summary-stats">
-                  <span>
-                    Selected niches: <strong>{nicheIds.size}</strong>
-                  </span>
-                  <span className="sm-magic-meta-sep">·</span>
-                  <span>
-                    Keywords/niche: <strong>{kwPerNiche}</strong>
-                  </span>
-                  <span className="sm-magic-meta-sep">·</span>
-                  <span>
-                    Selected markets: <strong>{geoIds.size}</strong>
-                    <span className="faint"> / {props.geos.length}</span>
-                  </span>
-                  <span className="sm-magic-meta-sep">·</span>
-                  <span>
-                    Est. SERPs:{' '}
-                    <strong className="sm-score">{localEst.jobs.toLocaleString()}</strong>
-                  </span>
-                  <span className="sm-magic-meta-sep">·</span>
-                  <span className={props.live ? '' : 'faint'}>
-                    {props.live ? `$${localEst.usd.toFixed(2)}` : '$0 fixtures'}
-                  </span>
-                </div>
-                <div className="sm-magic-summary-actions">
-                  <label
-                    className="screen-device-label sm-device-inline"
-                    title="Each niche expands to this many service-intent queries. Every query is a SERP call per market per device — this multiplies the whole run."
-                  >
-                    Keywords / niche
-                    <select
-                      value={kwPerNiche}
-                      onChange={(e) => {
-                        setKwPerNiche(Number(e.target.value))
-                        setPreview(null)
-                      }}
-                    >
-                      <option value={1}>1 · head term (widest screen)</option>
-                      <option value={3}>3 · head + 2 variants</option>
-                      <option value={8}>8 · full intent cluster</option>
-                    </select>
-                  </label>
-                  <label className="screen-device-label sm-device-inline">
-                    Devices
-                    <select
-                      value={devices}
-                      onChange={(e) => {
-                        setDevices(e.target.value as 'desktop' | 'both')
-                        setPreview(null)
-                      }}
-                    >
-                      <option value="desktop">Desktop</option>
-                      <option value="both">Desktop + mobile</option>
-                    </select>
-                  </label>
-                  <label
-                    className="screen-extra-toggle"
-                    title="Per-market search volume and competition from Google Ads. Free — this project already holds the credentials, and the paid DataForSEO route was removed. Leave it on: without it the Vol column, the Reddit-volume estimate and the 30-day winnability band are all blank. Markets Google Ads cannot resolve come back empty rather than being bought elsewhere."
-                  >
-                    <input
-                      type="checkbox"
-                      checked={fetchVolume}
-                      onChange={(e) => {
-                        setFetchVolume(e.target.checked)
-                        setPreview(null)
-                      }}
-                    />
-                    Local volume
-                    <span className="faint"> free</span>
-                  </label>
-                  <label
-                    className="screen-extra-toggle"
-                    title="Google Maps pack depth and the domains competing in it — $0.002 per niche x market. Off by default: nothing scores off it, it fills one display column."
-                  >
-                    <input
-                      type="checkbox"
-                      checked={fetchMaps}
-                      onChange={(e) => {
-                        setFetchMaps(e.target.checked)
-                        setPreview(null)
-                      }}
-                    />
-                    Maps
-                    <span className="faint">
-                      {' '}
-                      +${(nicheIds.size * geoIds.size * MAPS_UNIT).toFixed(2)}
-                    </span>
-                  </label>
-                  <label
-                    className="screen-extra-toggle"
-                    title="Buy SERPs through DataForSEO's queue: $0.0006 each instead of $0.0020, a 70% saving. Results arrive in minutes rather than seconds, so the run finishes later — use it for big sweeps, not when you need an answer now."
-                  >
-                    <input
-                      type="checkbox"
-                      checked={useQueuedSerp}
-                      onChange={(e) => {
-                        setUseQueuedSerp(e.target.checked)
-                        setPreview(null)
-                      }}
-                    />
-                    Queued SERPs
-                    <span className="faint"> −70%</span>
-                  </label>
-                  <label
-                    className="screen-extra-toggle"
-                    title={
-                      'Also measure "<keyword> <city>" — e.g. "plumber new york city" — alongside the city-free keyword. ' +
-                      'The two return different pages: the city-free keyword at a location code shows who holds the local slots, ' +
-                      'while the typed-out string is where city-specific Reddit threads live. ' +
-                      'Doubles the SERP count for this run.'
-                    }
-                  >
-                    <input
-                      type="checkbox"
-                      checked={includeGeoExplicit}
-                      onChange={(e) => {
-                        setIncludeGeoExplicit(e.target.checked)
-                        setPreview(null)
-                      }}
-                    />
-                    “kw + city”
-                    <span className="faint"> ×2 SERPs</span>
-                  </label>
-                  <button
-                    type="button"
-                    className="primary sm-send-btn"
-                    disabled={pending || !canRun}
-                    onClick={reviewKeywords}
-                    title="Free: asks Google Ads what this niche is actually searched as in these markets, and prices the run, before anything is bought."
-                  >
-                    {pending ? 'Checking…' : 'Review keywords →'}
-                  </button>
-                </div>
-              </div>
-
               <div className="sm-toolbar">
                 <div className="sm-toolbar-title">
                   Markets
@@ -788,12 +1008,6 @@ export function OpportunityFunnel(props: OpportunityFunnelProps) {
 
               <div className="sm-bulkbar">
                 <div className="sm-bulkbar-left">
-                  <SelectAllCheckbox
-                    visibleIds={filteredGeoIds}
-                    selected={geoIds}
-                    onChange={setVisibleGeo}
-                    label="Select all visible markets"
-                  />
                   <span className="faint" style={{ fontSize: 12 }}>
                     {filteredGeos.length === props.geos.length
                       ? `${props.geos.length} markets`
@@ -805,26 +1019,6 @@ export function OpportunityFunnel(props: OpportunityFunnelProps) {
                       </>
                     )}
                   </span>
-                  <button
-                    type="button"
-                    className="btn tiny"
-                    onClick={() => {
-                      selectTopNiches(5)
-                      selectTopGeo(20)
-                    }}
-                  >
-                    Top 5 niches × 20 mkts
-                  </button>
-                  <button
-                    type="button"
-                    className="btn tiny"
-                    onClick={() => {
-                      selectTopNiches(10)
-                      selectTopGeo(50)
-                    }}
-                  >
-                    Top 10 × Top 50
-                  </button>
                 </div>
               </div>
 
@@ -892,88 +1086,8 @@ export function OpportunityFunnel(props: OpportunityFunnelProps) {
               </div>
             </div>
           </div>
+          )}
 
-          {/* Secondary actions live below the grid, capped so the table keeps the page. */}
-          <div className="screen-footer">
-          {/* Run / ack footer */}
-          <div className="screen-run card">
-            <div className="screen-run-summary">
-              <strong>
-                Market sweep · {nicheIds.size} niche{nicheIds.size === 1 ? '' : 's'} × {kwPerNiche}{' '}
-                keywords × {geoIds.size} market{geoIds.size === 1 ? '' : 's'}
-                {deviceN > 1 ? ` × ${deviceN} devices` : ''} = {localEst.jobs.toLocaleString()} SERPs
-              </strong>
-              <span className="sub">
-                Keywords are generated from each niche&apos;s service-intent cluster at enqueue —
-                you pick niches and markets only. Est.{' '}
-                {props.live ? `$${localEst.usd.toFixed(2)}` : '$0 fixtures'} · hard cap 5,000 jobs
-                ($10). SERPs use each market&apos;s geo location code.
-              </span>
-            </div>
-
-            <div className="screen-run-actions">
-              <button
-                type="button"
-                className="primary"
-                disabled={pending || !canRun}
-                onClick={reviewKeywords}
-              >
-                {pending ? 'Checking…' : 'Review keywords →'}
-              </button>
-              <button type="button" className="btn" onClick={() => setStep('sweep')}>
-                Past runs →
-              </button>
-            </div>
-
-            {!canRun && (
-              <p className="disabled-reason" style={{ marginBottom: 0 }}>
-                Select at least one niche and one market to run.
-              </p>
-            )}
-
-            {preview && !preview.ok && (
-              <div className="stopbox" style={{ marginTop: 12 }}>
-                {preview.error ?? preview.detail}
-              </div>
-            )}
-            {msg && (
-              <div className={msg.ok ? 'okbox' : 'stopbox'} style={{ marginTop: 12 }}>
-                {msg.error ?? msg.detail}
-                {msg.ok && (
-                  <div style={{ marginTop: 8 }}>
-                    <button type="button" className="btn tiny" onClick={() => setStep('sweep')}>
-                      Watch progress on Market sweep tab →
-                    </button>
-                  </div>
-                )}
-              </div>
-            )}
-          </div>
-
-          <div className="screen-single">
-            <button
-              type="button"
-              className="screen-single-toggle"
-              onClick={() => setSingleMarketOpen((v) => !v)}
-              aria-expanded={singleMarketOpen}
-            >
-              <span>{singleMarketOpen ? '▾' : '▸'}</span>
-              Deepen one market (full service cluster)
-              <span className="faint" style={{ fontWeight: 400, marginLeft: 6 }}>
-                ~24 buy-intent keywords × devices · ~$0.10
-              </span>
-            </button>
-            {singleMarketOpen && (
-              <div className="screen-single-body">
-                <p className="sub" style={{ fontSize: 12.5, marginTop: 0 }}>
-                  After you find winners on the grid, expand one locality into a full buy-intent
-                  keyword cluster.
-                </p>
-                <ResearchWizard searchLocalities={props.searchLocalities} niches={props.niches} />
-              </div>
-            )}
-          </div>
-          </div>
         </section>
       )}
 
@@ -1115,7 +1229,9 @@ export function OpportunityFunnel(props: OpportunityFunnelProps) {
                       </span>
                     </div>
                     {d.note && d.source === 'template' && (
-                      <div className="faint kwrev-note">{d.note}</div>
+                      <div className="faint kwrev-note" title={d.note}>
+                        {tidyProviderNote(d.note)}
+                      </div>
                     )}
                     <ul className="kwrev-list">
                       {d.keywords.map((k) => (
@@ -1200,6 +1316,8 @@ export function OpportunityFunnel(props: OpportunityFunnelProps) {
             runHref={(id) => `/scout/runs/${id}`}
           />
 
+          <ScanRunList runs={props.scanRuns} />
+
           {pending && (
             <div className="job-live-banner" role="status" style={{ marginBottom: 16 }}>
               <span className="job-spinner" aria-hidden />
@@ -1221,8 +1339,10 @@ export function OpportunityFunnel(props: OpportunityFunnelProps) {
             <button type="button" className="btn" onClick={() => router.refresh()}>
               Refresh results
             </button>
-            <a href="/pipeline" className="btn primary">
-              Go to Pipeline
+            {/* Pipeline stopped being a page when the nav was consolidated;
+                the destination after research is the portfolio. */}
+            <a href="/portfolio" className="btn primary">
+              Open Portfolio →
             </a>
           </div>
         </section>

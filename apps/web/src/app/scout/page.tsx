@@ -10,7 +10,6 @@ import {
   researchCatalogEnabled,
 } from '@rnr/data'
 import { PageHeader } from '@/components/shell/PageHeader'
-import { ScanRunList } from '@/components/research/ScanRunList'
 import { OpportunityFunnel } from '@/components/research/OpportunityFunnel'
 import { searchLocalitiesAction } from '@/app/actions'
 import type { PickerOption } from '@/components/LocalityPicker'
@@ -81,7 +80,7 @@ export default async function ResearchPage() {
       <div className="run-page-head">
         <PageHeader
           title="Research"
-          description="Screen niches × markets (each niche expands to buy-intent keywords), then sweep geo SERPs. Local volume is DataForSEO Keywords Data at the market location_code (not map-pack listings)."
+          description="Find markets worth renting: sweep local SERPs for niches × markets, then act on what the grid shows."
         />
 
         {!liveCallsEnabled() && (
@@ -91,18 +90,6 @@ export default async function ResearchPage() {
           </div>
         )}
       </div>
-
-      <ScanRunList
-        runs={scanRuns.map((r) => ({
-          id: r.id,
-          status: r.status,
-          locality: `${r.localityName}, ${r.stateCode}`,
-          nicheCount: r.nicheCount,
-          spendUsd: Number(r.spendMicros) / 1_000_000,
-          usedFixtures: r.usedFixtures,
-          createdAt: r.createdAt.toISOString(),
-        }))}
-      />
 
       {!catalogOn ? (
         <div className="stopbox">Catalog research is disabled (RESEARCH_CATALOG_ENABLED=false).</div>
@@ -138,6 +125,15 @@ export default async function ResearchPage() {
           searchLocalities={searchLocalities}
           niches={nicheList}
           live={liveCallsEnabled()}
+          scanRuns={scanRuns.map((r) => ({
+            id: r.id,
+            status: r.status,
+            locality: `${r.localityName}, ${r.stateCode}`,
+            nicheCount: r.nicheCount,
+            spendUsd: Number(r.spendMicros) / 1_000_000,
+            usedFixtures: r.usedFixtures,
+            createdAt: r.createdAt.toISOString(),
+          }))}
         />
       )}
     </div>
