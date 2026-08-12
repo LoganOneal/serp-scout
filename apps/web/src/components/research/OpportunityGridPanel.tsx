@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation'
 import {
   deleteOpportunityCellAction,
   deleteOpportunityCellsBulkAction,
-} from '@/app/markets/actions'
+} from '@/app/portfolio/actions'
 import { VolumeSourceLink } from '@/components/VolumeSourceLink'
 import { OpenLocalSerpLinks } from '@/components/OpenLocalSerpLinks'
 
@@ -820,7 +820,7 @@ export function OpportunityGridPanel(props: OpportunityGridPanelProps) {
                */
               const serpHref =
                 props.runId != null && row.serpPath && (!isHead || g.variations.length === 1)
-                  ? `/research/runs/${props.runId}/serp/${row.serpPath}`
+                  ? `/scout/runs/${props.runId}/serp/${row.serpPath}`
                   : null
               const href = serpHref ?? row.marketHref
               const marketLabel = `${row.market}${row.stateAbbr ? `, ${row.stateAbbr}` : ''}`
@@ -1027,7 +1027,7 @@ export function OpportunityGridPanel(props: OpportunityGridPanelProps) {
                       <a
                         className="mono opp-kw-link"
                         style={{ fontSize: 11.5 }}
-                        href={`/research/runs/${props.runId}/serp/${row.serpPath}`}
+                        href={`/scout/runs/${props.runId}/serp/${row.serpPath}`}
                         title="Open the stored SERP and every measurement for this keyword"
                         onClick={(e) => e.stopPropagation()}
                       >

@@ -179,6 +179,51 @@ export async function getRunResults(db: Database, runId: number): Promise<Result
   }))
 }
 
+/**
+ * Every locality scan, newest first.
+ *
+ * ==================== THESE WERE UNREACHABLE ====================
+ * There was no list of scan runs anywhere in the product. The only way into
+ * one was the result screen of a wizard, nested in a collapsed disclosure,
+ * inside a tab -- so navigating away from a scan lost it permanently. Six runs
+ * and 123 scored niches existed and could not be found.
+ * ================================================================
+ */
+export async function listScanRuns(
+  db: Database,
+  limit = 50,
+): Promise<
+  Array<{
+    id: number
+    status: string
+    localityName: string
+    stateCode: string
+    nicheCount: number | null
+    spendMicros: bigint
+    usedFixtures: boolean
+    createdAt: Date
+    finishedAt: Date | null
+  }>
+> {
+  const rows = await db
+    .select({
+      id: scanRuns.id,
+      status: scanRuns.status,
+      localityName: localities.name,
+      stateCode: localities.stateCode,
+      nicheCount: scanRuns.nicheCount,
+      spendMicros: scanRuns.spendMicros,
+      usedFixtures: scanRuns.usedFixtures,
+      createdAt: scanRuns.createdAt,
+      finishedAt: scanRuns.finishedAt,
+    })
+    .from(scanRuns)
+    .innerJoin(localities, eq(scanRuns.localityId, localities.id))
+    .orderBy(desc(scanRuns.createdAt))
+    .limit(limit)
+  return rows
+}
+
 export async function getRun(db: Database, runId: number) {
   const [row] = await db
     .select({

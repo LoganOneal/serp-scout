@@ -3276,3 +3276,12 @@ a.kw-serp-title:hover {
   color: var(--text-dim);
   font-weight: 620;
 }
+
+/* Portfolio view filters. Reuses the tab pills so the two apps share one
+   vocabulary for "which slice am I looking at". */
+.portfolio-views {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0 0 18px;
+}

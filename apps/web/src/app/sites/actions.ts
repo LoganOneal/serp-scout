@@ -293,9 +293,9 @@ export async function refetchRecordingAction(callId: number): Promise<void> {
     revalidatePath(`/sites/${call.siteId}`)
     const detail = await getSiteDetail(database, call.siteId)
     if (detail) {
-      revalidatePath(`/markets/${detail.localitySlug}/${detail.nicheSlug}`)
+      revalidatePath(`/portfolio/${detail.localitySlug}/${detail.nicheSlug}`)
     }
-    revalidatePath('/markets')
+    revalidatePath('/portfolio')
   }
 }
 

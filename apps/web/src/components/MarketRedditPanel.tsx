@@ -9,7 +9,7 @@ import {
   promoteDiscoveryHitAction,
   type MarketRedditScanResult,
   type PromoteResultView,
-} from '@/app/markets/actions'
+} from '@/app/portfolio/actions'
 import { VolumeSourceLink } from '@/components/VolumeSourceLink'
 import { OpenLocalSerpLinks } from '@/components/OpenLocalSerpLinks'
 import { DiscoveryRunStatus, JobsInFlightBanner } from '@/components/DiscoveryRunStatus'

@@ -989,7 +989,7 @@ export async function listOpportunityGrid(
     })
 
     const marketHref =
-      localitySlug && nicheSlug ? `/markets/${localitySlug}/${nicheSlug}` : null
+      localitySlug && nicheSlug ? `/portfolio/${localitySlug}/${nicheSlug}` : null
 
     out.push({
       metricId: m.id,

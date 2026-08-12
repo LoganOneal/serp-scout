@@ -24,7 +24,7 @@ import {
   importKeywordsAction,
   removeKeywordAction,
   startTargetingAction,
-} from '@/app/markets/actions'
+} from '@/app/portfolio/actions'
 import { MarketManagePanel } from '@/components/MarketManagePanel'
 import { MarketDomainsPanel } from '@/components/markets/MarketDomainsPanel'
 import { CellRunPicker } from '@/components/markets/CellRunPicker'
@@ -144,7 +144,7 @@ export default async function CellPage({
   return (
     <div>
       <div className="page-breadcrumb">
-        <Link href="/markets">Markets</Link>
+        <Link href="/portfolio">Markets</Link>
         <span className="faint"> / </span>
         {cell.localityName}, {cell.stateCode}
         <span className="faint"> / </span>
@@ -154,7 +154,7 @@ export default async function CellPage({
         <h1 className="page-title" style={{ marginBottom: 4 }}>
           {cell.localityName}, {cell.stateCode} · {cell.nicheLabel}
         </h1>
-        <Link href="/markets" className="btn tiny">
+        <Link href="/portfolio" className="btn tiny">
           ← All markets
         </Link>
       </div>
@@ -194,7 +194,7 @@ export default async function CellPage({
         {cell.latestScan === null && cell.shortlist === null ? (
           <div className="empty">
             This cell has never been scanned. Run a scan from{' '}
-            <Link href="/research">Run research</Link> to measure it — targeting a cell without
+            <Link href="/scout">Run research</Link> to measure it — targeting a cell without
             research is allowed, it just means there is no prediction to compare against.
           </div>
         ) : (
@@ -255,7 +255,7 @@ export default async function CellPage({
                 <span>Scanned</span>
                 <span className="mono" style={{ fontSize: 11.5 }}>
                   {cell.latestScan.createdAt.toISOString().slice(0, 10)}{' '}
-                  <Link href={`/scan/${cell.latestScan.scanRunId}/${cell.latestScan.scanTargetId}`}>
+                  <Link href={`/scout/scans/${cell.latestScan.scanRunId}/${cell.latestScan.scanTargetId}`}>
                     full audit →
                   </Link>
                 </span>
@@ -299,7 +299,7 @@ export default async function CellPage({
             {cell.shortlist !== null && (
               <PipelineRowActions
                 shortlistId={cell.shortlist.id}
-                href={`/markets/${cell.localitySlug}/${cell.nicheSlug}`}
+                href={`/portfolio/${cell.localitySlug}/${cell.nicheSlug}`}
                 label={`${cell.localityName}, ${cell.stateCode} · ${cell.nicheLabel}`}
                 showOpen={false}
               />
@@ -335,7 +335,7 @@ export default async function CellPage({
       />
 
       <CellRunPicker
-        basePath={`/markets/${cell.localitySlug}/${cell.nicheSlug}`}
+        basePath={`/portfolio/${cell.localitySlug}/${cell.nicheSlug}`}
         selectedRunId={selectedRunId}
         runs={cellRuns.map((r) => ({
           runId: r.runId,

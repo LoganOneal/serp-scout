@@ -8,7 +8,7 @@ import {
   deleteOpportunityCellsBulkAction,
   opportunityDeepDiveAction,
   type CatalogResearchResult,
-} from '@/app/markets/actions'
+} from '@/app/portfolio/actions'
 import { ResearchWizard } from '@/components/research/ResearchWizard'
 import type { PickerOption } from '@/components/LocalityPicker'
 import type { NicheOption } from '@/components/research/ResearchWizard'
@@ -982,7 +982,7 @@ export function OpportunityFunnel(props: OpportunityFunnelProps) {
             emptyHint="No sweep runs yet. Use the Screen tab to pick niches × markets and start one."
             autoRefresh={false}
             onDeleteRun={deleteDiscoveryRunAction}
-            runHref={(id) => `/research/runs/${id}`}
+            runHref={(id) => `/scout/runs/${id}`}
           />
 
           {pending && (

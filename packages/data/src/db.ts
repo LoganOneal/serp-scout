@@ -43,7 +43,7 @@ export function getDirectDatabaseUrl(env: NodeJS.ProcessEnv = process.env): stri
  * ==================== NEVER 1. A PAGE ISSUES CONCURRENT QUERIES ====================
  * This function first shipped returning 1 on Vercel, reasoning that a serverless instance
  * serves one request at a time so a pool is waste. That reasoning is wrong twice over: a
- * single render issues several queries at once (`/markets` does `Promise.all` over three),
+ * single render issues several queries at once (`/portfolio` does `Promise.all` over three),
  * and an instance may handle concurrent requests anyway.
  *
  * The failure was not a clean pool-timeout error. Against Supabase's transaction pooler,
@@ -118,7 +118,7 @@ export function createDb(
      * hang is the one failure that produces no evidence.
      *
      * Ten seconds converts that into a real error, which the pages already handle: each
-     * query on `/markets` is `.catch()`-wrapped, so a refused connection renders em dashes
+     * query on `/portfolio` is `.catch()`-wrapped, so a refused connection renders em dashes
      * and a diagnosable message instead of a browser spinning until the platform gives up.
      * Slower than a hang to nobody, and infinitely easier to diagnose.
      * ================================================================================

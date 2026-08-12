@@ -85,7 +85,7 @@ export function LocalityPicker({
         setError(result.error ?? 'Could not start the scan.')
         return
       }
-      window.location.href = `/scan/${result.runId}`
+      window.location.href = `/scout/scans/${result.runId}`
     })
   }
 

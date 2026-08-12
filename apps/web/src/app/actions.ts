@@ -73,17 +73,15 @@ export async function startScanAction(localityId: number): Promise<StartScanResu
 
 export async function saveToShortlistAction(scanTargetId: number, runId: number): Promise<void> {
   await saveToShortlist(db(), scanTargetId)
-  revalidatePath(`/scan/${runId}`)
+  revalidatePath(`/scout/scans/${runId}`)
   revalidatePath('/shortlist')
-  revalidatePath('/pipeline')
-  revalidatePath('/markets')
+  revalidatePath('/portfolio')
 }
 
 export async function removeFromShortlistAction(itemId: number): Promise<void> {
   await removeFromShortlist(db(), itemId)
   revalidatePath('/shortlist')
-  revalidatePath('/pipeline')
-  revalidatePath('/markets')
+  revalidatePath('/portfolio')
 }
 
 export async function setShortlistStateAction(
@@ -92,10 +90,9 @@ export async function setShortlistStateAction(
 ): Promise<void> {
   await setShortlistState(db(), itemId, state)
   revalidatePath('/shortlist')
-  revalidatePath('/pipeline')
-  revalidatePath('/markets')
+  revalidatePath('/portfolio')
 }
 
 export async function goToScan(runId: number): Promise<void> {
-  redirect(`/scan/${runId}`)
+  redirect(`/scout/scans/${runId}`)
 }

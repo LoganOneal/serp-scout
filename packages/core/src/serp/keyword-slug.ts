@@ -2,7 +2,7 @@
  * URL slugs for a measured keyword inside a run.
  *
  * ==================== WHY A SLUG AND NOT AN ID ====================
- * `/research/runs/38/serp/best-roofing-san-jose` says what it opens. A metrics
+ * `/scout/runs/38/serp/best-roofing-san-jose` says what it opens. A metrics
  * id does not, and an operator cannot guess, share or edit one.
  *
  * The cost is ambiguity, and it is real: a catalog sweep measures the SAME

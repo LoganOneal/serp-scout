@@ -2,7 +2,7 @@
 
 import { useActionState, useRef, useState } from 'react'
 import { useFormStatus } from 'react-dom'
-import { startEnrichRun, type StartEnrichState } from '@/app/domains/actions'
+import { startEnrichRun, type StartEnrichState } from '@/app/scout/domains/actions'
 import {
   DEFAULT_PAID_OPTIONS,
   EnrichOptionsModal,

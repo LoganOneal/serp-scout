@@ -60,7 +60,7 @@ export default async function DetailPage({
       )}
 
       <p className="sub" style={{ marginTop: 16 }}>
-        <a href={`/scan/${runId}`}>
+        <a href={`/scout/scans/${runId}`}>
           ← {locality.name}, {locality.stateCode}
         </a>
       </p>

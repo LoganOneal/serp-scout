@@ -718,7 +718,7 @@ export async function cellPathForSite(db: Database, siteId: number): Promise<str
     .innerJoin(niches, eq(sites.nicheId, niches.id))
     .where(eq(sites.id, siteId))
     .limit(1)
-  return row === undefined ? null : `/markets/${row.localitySlug}/${row.nicheSlug}`
+  return row === undefined ? null : `/portfolio/${row.localitySlug}/${row.nicheSlug}`
 }
 
 /** Shortlisted cells with no site yet -- the "decided but not started" section of /markets. */

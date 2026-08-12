@@ -3,18 +3,50 @@
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 
-type NavItem = { href: string; label: string; exact?: boolean }
+/**
+ * Two apps, split on the decision boundary.
+ *
+ * ==================== WHY TWO AND NOT FIVE ====================
+ * The nav used to carry Research / Pipeline / Markets / Domains / Tracking as
+ * peers. They were not peers. Pipeline rendered a table that Markets already
+ * showed, from the same query with the same row actions; Tracking re-ran the
+ * markets query with fewer columns and no actions of its own; Domains was a
+ * kind of research run wearing a section's clothes.
+ *
+ * The real boundary is whether you are still deciding:
+ *
+ *   Scout      -- which markets are worth money, and which are already taken?
+ *   Portfolio  -- are the ones I picked doing what I expected?
+ *
+ * Everything that spends money to learn something lives in Scout. Everything
+ * about a market already committed to lives in Portfolio.
+ * ==============================================================
+ */
+
+type NavItem = { href: string; label: string; exact?: boolean; hint?: string }
 type NavGroup = { title: string; items: NavItem[] }
 
 const GROUPS: NavGroup[] = [
   {
-    title: 'Work',
+    title: 'Scout',
     items: [
-      { href: '/research', label: 'Research', exact: true },
-      { href: '/pipeline', label: 'Pipeline' },
-      { href: '/markets', label: 'Markets' },
-      { href: '/domains', label: 'Domains' },
-      { href: '/tracking', label: 'Tracking' },
+      {
+        href: '/scout',
+        label: 'Research',
+        exact: true,
+        hint: 'Screen niches × markets, then sweep their SERPs',
+      },
+      {
+        href: '/scout/domains',
+        label: 'Domains',
+        hint: 'Find acquirable domains in a market',
+      },
+    ],
+  },
+  {
+    title: 'Portfolio',
+    items: [
+      { href: '/portfolio', label: 'Markets', hint: 'Markets you have committed to' },
     ],
   },
   {
@@ -27,9 +59,16 @@ const GROUPS: NavGroup[] = [
 ]
 
 function isActive(pathname: string, item: NavItem): boolean {
-  if (item.exact) return pathname === item.href
-  if (item.href === '/markets') {
-    return pathname === '/markets' || pathname.startsWith('/markets/')
+  if (item.exact) {
+    /**
+     * Research is `exact` so it does not stay lit while you are in Domains --
+     * but sweep runs and locality scans ARE research, so they light it too.
+     */
+    return (
+      pathname === item.href ||
+      pathname.startsWith('/scout/runs') ||
+      pathname.startsWith('/scout/scans')
+    )
   }
   return pathname === item.href || pathname.startsWith(`${item.href}/`)
 }
@@ -40,8 +79,8 @@ export function SidebarNav() {
   return (
     <aside className="app-sidebar">
       <div className="app-sidebar-brand">
-        <Link href="/research" className="app-logo">
-          Rank &amp; Rent
+        <Link href="/scout" className="app-logo">
+          SERP Scout
         </Link>
         <div className="app-logo-sub">Local SEO markets</div>
       </div>
@@ -59,6 +98,7 @@ export function SidebarNav() {
                       href={item.href}
                       className={active ? 'app-nav-link active' : 'app-nav-link'}
                       aria-current={active ? 'page' : undefined}
+                      title={item.hint}
                     >
                       {item.label}
                     </Link>

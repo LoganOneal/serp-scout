@@ -7,7 +7,7 @@ import { SITE_STATUSES, type SiteStatus } from '@rnr/core'
 import {
   dropMarketAction,
   setMarketStatusAction,
-} from '@/app/markets/actions'
+} from '@/app/portfolio/actions'
 
 /**
  * Per-row controls on the Markets list: open, change status, drop.

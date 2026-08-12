@@ -24,7 +24,7 @@ describe('poolMax', () => {
   /**
    * ==================== THE REGRESSION THIS PINS ====================
    * A pool of 1 shipped to production and took every database-backed page down: concurrent
-   * queries -- which one render does routinely, `/markets` awaits three at once -- never
+   * queries -- which one render does routinely, `/portfolio` awaits three at once -- never
    * completed against the transaction pooler. No error, no log, zero bytes, killed at 300
    * seconds. Route handlers kept working because they queried sequentially, so the app
    * looked half-alive rather than broken.

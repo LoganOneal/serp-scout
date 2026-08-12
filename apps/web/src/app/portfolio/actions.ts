@@ -86,9 +86,8 @@ export async function startTargetingAction(fd: FormData): Promise<SimpleResult> 
     return { ok: false, error: m }
   }
 
-  revalidatePath(`/markets/${localitySlug}/${nicheSlug}`)
-  revalidatePath('/markets')
-  revalidatePath('/pipeline')
+  revalidatePath(`/portfolio/${localitySlug}/${nicheSlug}`)
+  revalidatePath('/portfolio')
   return { ok: true }
 }
 
@@ -97,12 +96,11 @@ function revalidateMarketPaths(opts: {
   localitySlug?: string | null
   nicheSlug?: string | null
 }) {
-  revalidatePath('/markets')
-  revalidatePath('/pipeline')
+  revalidatePath('/portfolio')
   revalidatePath('/sites')
   if (opts.siteId) revalidatePath(`/sites/${opts.siteId}`)
   if (opts.localitySlug && opts.nicheSlug) {
-    revalidatePath(`/markets/${opts.localitySlug}/${opts.nicheSlug}`)
+    revalidatePath(`/portfolio/${opts.localitySlug}/${opts.nicheSlug}`)
   }
 }
 
@@ -209,8 +207,7 @@ export async function removePipelineItemAction(fd: FormData): Promise<SimpleResu
     return { ok: false, error: 'Missing pipeline item.' }
   }
   await removeFromShortlist(db(), shortlistId)
-  revalidatePath('/pipeline')
-  revalidatePath('/markets')
+  revalidatePath('/portfolio')
   revalidatePath('/shortlist')
   return { ok: true }
 }
@@ -221,8 +218,8 @@ export async function deleteDiscoveryRunAction(fd: FormData): Promise<SimpleResu
   if (!Number.isInteger(runId) || runId <= 0) return { ok: false, error: 'Missing run.' }
   const res = await deleteDiscoveryRun(db(), runId)
   if (!res.ok) return res
-  revalidatePath('/research')
-  revalidatePath('/markets')
+  revalidatePath('/scout')
+  revalidatePath('/portfolio')
   return { ok: true }
 }
 
@@ -238,7 +235,7 @@ export async function deleteOpportunityCellAction(fd: FormData): Promise<SimpleR
   }
   const res = await deleteOpportunityCellMetrics(db(), { researchKeywordId, researchGeoId })
   if (!res.ok) return res
-  revalidatePath('/research')
+  revalidatePath('/scout')
   return { ok: true }
 }
 
@@ -264,7 +261,7 @@ export async function deleteOpportunityCellsBulkAction(
   }
   const res = await deleteOpportunityCellsBulk(db(), pairs)
   if (!res.ok) return res
-  revalidatePath('/research')
+  revalidatePath('/scout')
   return { ok: true, deleted: res.deleted }
 }
 
@@ -300,7 +297,7 @@ export async function importKeywordsAction(fd: FormData): Promise<ImportResult> 
 
   try {
     const s = await importKeywordCsv(db(), { siteId, csv })
-    revalidatePath('/markets')
+    revalidatePath('/portfolio')
     return {
       ok: true,
       detail:
@@ -325,7 +322,7 @@ export async function addSerpTargetAction(fd: FormData): Promise<SimpleResult> {
 
   try {
     await addSerpTarget(db(), { keywordId, permalinkOrUrl: permalink })
-    revalidatePath('/markets')
+    revalidatePath('/portfolio')
     return { ok: true }
   } catch (e) {
     if (e instanceof SerpTargetError) return { ok: false, error: e.message }
@@ -365,8 +362,8 @@ export async function promoteDiscoveryHitAction(fd: FormData): Promise<PromoteRe
       nicheId: nicheId !== undefined && Number.isInteger(nicheId) ? nicheId : undefined,
       commentPermalink,
     })
-    revalidatePath('/markets')
-    if (localitySlug && nicheSlug) revalidatePath(`/markets/${localitySlug}/${nicheSlug}`)
+    revalidatePath('/portfolio')
+    if (localitySlug && nicheSlug) revalidatePath(`/portfolio/${localitySlug}/${nicheSlug}`)
     return {
       ok: true,
       warning: res.warning ?? undefined,
@@ -439,9 +436,9 @@ export async function enqueueMarketRedditAction(fd: FormData): Promise<MarketRed
       localityId,
       nicheId,
     })
-    revalidatePath(`/markets/${localitySlugOut}/${nicheSlugOut}`)
-    revalidatePath('/markets')
-    revalidatePath('/research')
+    revalidatePath(`/portfolio/${localitySlugOut}/${nicheSlugOut}`)
+    revalidatePath('/portfolio')
+    revalidatePath('/scout')
     return {
       ok: true,
       runId: run.id,
@@ -635,8 +632,8 @@ export async function opportunityDeepDiveAction(fd: FormData): Promise<CatalogRe
       }
     }
 
-    revalidatePath('/research')
-    revalidatePath('/markets')
+    revalidatePath('/scout')
+    revalidatePath('/portfolio')
     return {
       ok: true,
       runId: run.id,
@@ -675,7 +672,7 @@ export async function catalogCellResearchAction(fd: FormData): Promise<CatalogRe
       dryRun: false,
     })
     revalidatePath('/')
-    revalidatePath('/markets')
+    revalidatePath('/portfolio')
     return {
       ok: true,
       runId: run!.id,

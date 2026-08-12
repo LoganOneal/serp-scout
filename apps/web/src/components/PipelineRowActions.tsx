@@ -3,7 +3,7 @@
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useState, useTransition } from 'react'
-import { removePipelineItemAction } from '@/app/markets/actions'
+import { removePipelineItemAction } from '@/app/portfolio/actions'
 
 export function PipelineRowActions({
   shortlistId,

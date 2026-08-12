@@ -3,7 +3,7 @@
 import { useRouter } from 'next/navigation'
 import { useState, useTransition } from 'react'
 import { SITE_STATUSES } from '@rnr/core'
-import { dropMarketAction, updateMarketAction } from '@/app/markets/actions'
+import { dropMarketAction, updateMarketAction } from '@/app/portfolio/actions'
 
 /**
  * Edit / drop a targeted market on the cell page.
@@ -57,7 +57,7 @@ export function MarketManagePanel({
     startTransition(async () => {
       const res = await dropMarketAction(fd)
       if (res.ok) {
-        router.push('/markets')
+        router.push('/portfolio')
         router.refresh()
       } else {
         setMsg({ ok: false, text: res.error ?? 'Could not drop market.' })

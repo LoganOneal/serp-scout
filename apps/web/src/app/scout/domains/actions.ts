@@ -58,7 +58,7 @@ export async function startEnrichRun(
     try {
       const { domainEnrich } = await import('@/trigger/domain-enrich')
       await domainEnrich.trigger({ runId }, { idempotencyKey: `domain-enrich-run-${runId}` })
-      revalidatePath('/domains')
+      revalidatePath('/scout/domains')
       return {
         ok: true,
         runId,
@@ -66,21 +66,21 @@ export async function startEnrichRun(
       }
     } catch (err) {
       await failEnrichRun(database, runId, `Trigger.dev kickoff failed: ${(err as Error).message}`)
-      revalidatePath('/domains')
+      revalidatePath('/scout/domains')
       return { ok: false, runId, message: `Could not start run #${runId}: ${(err as Error).message}` }
     }
   }
 
   try {
     const result = await executeEnrichRun(database, runId, { concurrency: 6 })
-    revalidatePath('/domains')
+    revalidatePath('/scout/domains')
     return {
       ok: true,
       runId,
       message: `Run #${runId} complete — ${result.candidates} candidate(s) from ${result.uniqueDomains} domain(s).`,
     }
   } catch (err) {
-    revalidatePath('/domains')
+    revalidatePath('/scout/domains')
     return { ok: false, runId, message: `Run #${runId} failed: ${(err as Error).message}` }
   }
 }
@@ -91,7 +91,7 @@ export async function deleteEnrichRun(formData: FormData): Promise<void> {
   // Candidates cascade; the spend_ledger line does not reference the run, so
   // the money stays on the books exactly as it does for discovery runs.
   await deleteEnrichRunById(db(), runId)
-  revalidatePath('/domains')
+  revalidatePath('/scout/domains')
 }
 
 /**
@@ -108,6 +108,6 @@ export async function startEnrichForMarket(
 ): Promise<StartEnrichState> {
   const result = await startEnrichRun(prev, formData)
   // 'layout' so every /markets/[locality]/[niche] cell picks up the new run.
-  revalidatePath('/markets', 'layout')
+  revalidatePath('/portfolio', 'layout')
   return result
 }

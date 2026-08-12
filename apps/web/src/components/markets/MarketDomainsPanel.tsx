@@ -3,7 +3,7 @@
 import Link from 'next/link'
 import { useActionState, useRef, useState } from 'react'
 import { useFormStatus } from 'react-dom'
-import { startEnrichForMarket, type StartEnrichState } from '@/app/domains/actions'
+import { startEnrichForMarket, type StartEnrichState } from '@/app/scout/domains/actions'
 import {
   DEFAULT_PAID_OPTIONS,
   EnrichOptionsModal,
@@ -129,7 +129,7 @@ export function MarketDomainsPanel(props: {
               {props.runs.map((r) => (
                 <tr key={r.id}>
                   <td className="num">
-                    <Link className="sm-link" href={`/domains/${r.id}`}>
+                    <Link className="sm-link" href={`/scout/domains/${r.id}`}>
                       #{r.id}
                     </Link>
                   </td>

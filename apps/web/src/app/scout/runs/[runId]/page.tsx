@@ -59,7 +59,7 @@ export default async function DeepDiveRunPage({
     <div className="opp-workspace">
       <div className="run-page-head">
         <div className="page-breadcrumb">
-          <Link href="/research">Research</Link> <span className="app-topbar-sep">/</span> Market sweep
+          <Link href="/scout">Research</Link> <span className="app-topbar-sep">/</span> Market sweep
           runs <span className="app-topbar-sep">/</span> #{run.id}
         </div>
         <div className="run-page-title-row">
@@ -67,7 +67,7 @@ export default async function DeepDiveRunPage({
             {run.label ?? `Sweep #${run.id}`}
           </h1>
           <div className="page-header-actions">
-            <Link href="/research" className="btn">
+            <Link href="/scout" className="btn">
               ← All runs
             </Link>
           </div>
@@ -121,7 +121,7 @@ export default async function DeepDiveRunPage({
         jobsActive={active}
         fullHeight
         emptyAction={
-          <Link href="/research" className="btn primary">
+          <Link href="/scout" className="btn primary">
             ← Back to Research
           </Link>
         }

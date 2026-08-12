@@ -18,7 +18,7 @@ const row = (over: Partial<GroupableRow> = {}): GroupableRow => ({
   market: 'Indianapolis',
   stateAbbr: 'IN',
   localitySlug: 'indianapolis-in',
-  marketHref: '/markets/indianapolis-in/fire-damage-restoration',
+  marketHref: '/portfolio/indianapolis-in/fire-damage-restoration',
   ...over,
 })
 

@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation'
 import {
   enqueueMarketRedditAction,
   type MarketRedditScanResult,
-} from '@/app/markets/actions'
+} from '@/app/portfolio/actions'
 import { startScanAction } from '@/app/actions'
 import type { PickerOption } from '@/components/LocalityPicker'
 
@@ -374,7 +374,7 @@ export function ResearchWizard({
                   : 'Scan failed.')}
               {scanResult.ok && scanResult.runId != null && (
                 <div style={{ marginTop: 8 }}>
-                  <a href={`/scan/${scanResult.runId}`}>Open scan #{scanResult.runId}</a>
+                  <a href={`/scout/scans/${scanResult.runId}`}>Open scan #{scanResult.runId}</a>
                 </div>
               )}
             </div>
@@ -383,7 +383,7 @@ export function ResearchWizard({
             {place && niche && !scanAll && (
               <a
                 className="btn primary"
-                href={`/markets/${place.slug}/${niche.slug}`}
+                href={`/portfolio/${place.slug}/${niche.slug}`}
               >
                 Open market cell
               </a>

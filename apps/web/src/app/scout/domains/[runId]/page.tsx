@@ -70,14 +70,14 @@ export default async function DomainEnrichRunPage({
     <div className="opp-workspace">
       <div className="run-page-head">
         <div className="page-breadcrumb">
-          <Link href="/domains">Domains</Link> <span className="app-topbar-sep">/</span> Searches <span className="app-topbar-sep">/</span> #{run.id}
+          <Link href="/scout/domains">Domains</Link> <span className="app-topbar-sep">/</span> Searches <span className="app-topbar-sep">/</span> #{run.id}
         </div>
         <div className="run-page-title-row">
           <h1 className="page-title" style={{ margin: 0 }}>
             {run.niche} — {run.locality}
           </h1>
           <div className="page-header-actions">
-            <Link href="/domains" className="btn">
+            <Link href="/scout/domains" className="btn">
               ← All runs
             </Link>
           </div>

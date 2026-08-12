@@ -100,7 +100,7 @@ export default async function ScanPage({ params }: { params: Promise<{ runId: st
                 {rows.map((r) => (
                   <tr key={r.scanTargetId}>
                     <td>
-                      <a href={`/scan/${runId}/${r.scanTargetId}`}>{r.nicheLabel}</a>
+                      <a href={`/scout/scans/${runId}/${r.scanTargetId}`}>{r.nicheLabel}</a>
                       <div className="faint mono" style={{ fontSize: 11 }}>
                         {r.keyword}
                       </div>

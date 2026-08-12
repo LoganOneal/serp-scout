@@ -52,7 +52,7 @@ export default async function RunKeywordPage({
       <div className="opp-workspace">
         <div className="run-page-head">
           <div className="page-breadcrumb">
-            <Link href={`/research/runs/${runId}`}>Run #{runId}</Link>{' '}
+            <Link href={`/scout/runs/${runId}`}>Run #{runId}</Link>{' '}
             <span className="app-topbar-sep">/</span> {segments.join('/')}
           </div>
           <h1 className="page-title" style={{ margin: 0 }}>
@@ -64,7 +64,7 @@ export default async function RunKeywordPage({
             {resolved.options.map((o) => (
               <Link
                 key={o.path}
-                href={`/research/runs/${runId}/serp/${o.path}`}
+                href={`/scout/runs/${runId}/serp/${o.path}`}
                 className="cell-run-chip"
               >
                 <span className="cell-run-id">
@@ -94,10 +94,10 @@ export default async function RunKeywordPage({
     <div className="opp-workspace">
       <div className="run-page-head">
         <div className="page-breadcrumb">
-          <Link href="/research">Research</Link> <span className="app-topbar-sep">/</span>{' '}
-          <Link href="/research">Market sweep runs</Link>{' '}
+          <Link href="/scout">Research</Link> <span className="app-topbar-sep">/</span>{' '}
+          <Link href="/scout">Market sweep runs</Link>{' '}
           <span className="app-topbar-sep">/</span>{' '}
-          <Link href={`/research/runs/${runId}`}>#{runId}</Link>{' '}
+          <Link href={`/scout/runs/${runId}`}>#{runId}</Link>{' '}
           <span className="app-topbar-sep">/</span> {detail.keyword}
         </div>
 
@@ -105,7 +105,7 @@ export default async function RunKeywordPage({
           <h1 className="page-title" style={{ margin: 0 }}>
             {detail.keyword}
           </h1>
-          <Link href={`/research/runs/${runId}`} className="btn tiny">
+          <Link href={`/scout/runs/${runId}`} className="btn tiny">
             ← Back to run
           </Link>
         </div>
@@ -133,7 +133,7 @@ export default async function RunKeywordPage({
             <span>
               {' '}
               ·{' '}
-              <Link href={`/markets/${detail.localitySlug}/${detail.nicheSlug}`}>
+              <Link href={`/portfolio/${detail.localitySlug}/${detail.nicheSlug}`}>
                 Market page →
               </Link>
             </span>
