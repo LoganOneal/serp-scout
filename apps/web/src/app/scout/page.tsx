@@ -115,6 +115,8 @@ export default async function ResearchPage() {
             jobsSkipped: r.jobsSkipped,
             hitCount: r.hitCount,
             label: r.label,
+            devices: r.devices,
+            scope: r.scope,
             error: r.error,
             createdAt: r.createdAt.toISOString(),
             usedFixtures: r.usedFixtures,

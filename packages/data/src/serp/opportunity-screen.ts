@@ -10,7 +10,9 @@ import {
 } from '@rnr/core'
 import type { Database } from '../db.js'
 import {
+  discoveryGeos,
   discoveryHits,
+  discoveryNiches,
   discoveryRuns,
   discoverySerpMetrics,
   localities,
@@ -1384,12 +1386,57 @@ export async function listNicheEconomicsRanked(db: Database): Promise<NicheEcono
 }
 
 export async function listRecentDeepDiveRuns(db: Database, limit = 10) {
-  return db
+  const runs = await db
     .select()
     .from(discoveryRuns)
     .where(eq(discoveryRuns.source, 'catalog'))
     .orderBy(desc(discoveryRuns.createdAt))
     .limit(limit)
+
+  if (runs.length === 0) return []
+
+  const runIds = runs.map((run) => run.id)
+  const [nicheRows, geoRows] = await Promise.all([
+    db
+      .select({ runId: discoveryNiches.runId, label: discoveryNiches.label })
+      .from(discoveryNiches)
+      .where(inArray(discoveryNiches.runId, runIds))
+      .orderBy(asc(discoveryNiches.id)),
+    db
+      .select({
+        runId: discoveryGeos.runId,
+        market: discoveryGeos.rawName,
+        state: discoveryGeos.rawState,
+      })
+      .from(discoveryGeos)
+      .where(inArray(discoveryGeos.runId, runIds))
+      .orderBy(asc(discoveryGeos.id)),
+  ])
+
+  const nichesByRun = new Map<number, string[]>()
+  for (const row of nicheRows) {
+    const labels = nichesByRun.get(row.runId) ?? []
+    if (labels.length < 3 && !labels.includes(row.label)) labels.push(row.label)
+    nichesByRun.set(row.runId, labels)
+  }
+
+  const marketsByRun = new Map<number, string[]>()
+  for (const row of geoRows) {
+    const markets = marketsByRun.get(row.runId) ?? []
+    const label = `${row.market}${row.state ? `, ${row.state}` : ''}`
+    if (markets.length < 3 && !markets.includes(label)) markets.push(label)
+    marketsByRun.set(row.runId, markets)
+  }
+
+  return runs.map((run) => ({
+    ...run,
+    scope: {
+      nicheCount: run.nicheCount,
+      geoCount: run.geoCount,
+      niches: nichesByRun.get(run.id) ?? [],
+      markets: marketsByRun.get(run.id) ?? [],
+    },
+  }))
 }
 
 /** One deep-dive run, for its own detail page. NULL when it was deleted. */

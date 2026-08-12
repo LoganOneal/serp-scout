@@ -14,6 +14,14 @@ export interface DiscoveryRunView {
   jobsSkipped?: number
   hitCount: number
   label: string | null
+  devices?: string
+  scope?: {
+    nicheCount: number
+    geoCount: number
+    /** Deliberately capped by the server; the card is a summary, not a dump. */
+    niches: string[]
+    markets: string[]
+  }
   error: string | null
   createdAt: string
   usedFixtures?: boolean
@@ -71,6 +79,55 @@ function formatWhen(iso: string): string {
   } catch {
     return iso.slice(0, 16)
   }
+}
+
+function runPurpose(run: DiscoveryRunView): string {
+  const scope = run.scope
+  if (!scope || (scope.nicheCount === 0 && scope.geoCount === 0)) {
+    return run.label ?? 'Research run'
+  }
+
+  const niche = scope.niches[0]
+  const market = scope.markets[0]
+  if (scope.nicheCount === 1 && scope.geoCount === 1 && niche && market) {
+    return `${niche} × ${market}`
+  }
+  if (scope.nicheCount === 1) {
+    return `${niche ?? '1 niche'} × ${scope.geoCount} markets`
+  }
+  if (scope.geoCount === 1) {
+    return `${scope.nicheCount} niches × ${market ?? '1 market'}`
+  }
+  return `${scope.nicheCount} niches × ${scope.geoCount} markets`
+}
+
+function RunScopeLine({
+  label,
+  count,
+  items,
+}: {
+  label: string
+  count: number
+  items: string[]
+}) {
+  const remaining = Math.max(0, count - items.length)
+  return (
+    <div className="job-run-scope-line">
+      <span className="job-run-scope-label">
+        {label} <strong>{count}</strong>
+      </span>
+      <div className="job-run-scope-items">
+        {items.map((item) => (
+          <span key={item} className="job-run-scope-chip">
+            {item}
+          </span>
+        ))}
+        {remaining > 0 ? (
+          <span className="job-run-scope-more">+{remaining} more</span>
+        ) : null}
+      </div>
+    </div>
+  )
 }
 
 /**
@@ -183,11 +240,12 @@ export function DiscoveryRunStatus({
                   <span className="mono faint">#{r.id}</span>
                   {runHref ? (
                     <a className="job-run-label job-run-link" href={runHref(r.id)}>
-                      {r.label ?? 'Research run'}
+                      {runPurpose(r)}
                     </a>
                   ) : (
-                    <span className="job-run-label">{r.label ?? 'Research run'}</span>
+                    <span className="job-run-label">{runPurpose(r)}</span>
                   )}
+                  {r.devices ? <span className="badge">{r.devices.replace(',', ' + ')}</span> : null}
                   {r.usedFixtures && <span className="badge warn">fixtures</span>}
                 </div>
                 <div className="row-actions">
@@ -210,6 +268,21 @@ export function DiscoveryRunStatus({
                   )}
                 </div>
               </div>
+
+              {r.scope ? (
+                <div className="job-run-scope" aria-label="Run scope">
+                  <RunScopeLine
+                    label="Niches"
+                    count={r.scope.nicheCount}
+                    items={r.scope.niches}
+                  />
+                  <RunScopeLine
+                    label="Markets"
+                    count={r.scope.geoCount}
+                    items={r.scope.markets}
+                  />
+                </div>
+              ) : null}
 
               <div className="job-progress" title={`${finished} of ${r.jobCount} finished`}>
                 <div className="job-progress-done" style={{ width: `${donePct}%` }} />

@@ -63,6 +63,7 @@ export function VolumeSourceLink({
     if (!keyword) return <span className="faint">—</span>
     return (
       <span className="vol-source-actions" title={verify.howTo}>
+        {sourceLabel ? <span className="metric-row-source">{sourceLabel}</span> : null}
         <a
           href={verify.href}
           target="_blank"
