@@ -86,6 +86,35 @@ describe('runNextAction', () => {
     )
   })
 
+  /**
+   * The state that exposed the fallback: run #43 held 3,852 measured SERPs and
+   * 3,000 Reddit threads, and the card offered no advice at all.
+   */
+  it('treats a budget stop with results as readable, not broken', () => {
+    const a = runNextAction(
+      run({ status: 'budget_exceeded', jobCount: 4984, jobsDone: 3852, hitCount: 3000 }),
+    )
+    expect(a.tone).toBe('act')
+    expect(a.cta).toBe('open-results')
+    expect(a.detail).toContain('3852 of 4984')
+    expect(a.detail[0]).toBe(a.detail[0]!.toUpperCase())
+  })
+
+  it('stops on a budget or cancel that bought nothing', () => {
+    for (const status of ['budget_exceeded', 'cancelled']) {
+      const a = runNextAction(run({ status, jobsDone: 0, hitCount: 0 }))
+      expect(a.tone).toBe('stop')
+      expect(a.cta).toBe('delete-and-retry')
+    }
+  })
+
+  it('distinguishes a cancel from a cap in what it tells you to change', () => {
+    const cancelled = runNextAction(run({ status: 'cancelled', jobsDone: 0, hitCount: 0 }))
+    const capped = runNextAction(run({ status: 'budget_exceeded', jobsDone: 0, hitCount: 0 }))
+    expect(cancelled.detail).toMatch(/leave it running/i)
+    expect(capped.detail).toMatch(/higher cap/i)
+  })
+
   it('does not invent advice for an unknown status', () => {
     const a = runNextAction(run({ status: 'quantum' }))
     expect(a.tone).toBe('wait')

@@ -110,6 +110,37 @@ export function runNextAction(run: RunStateInput): RunNextAction {
     }
   }
 
+  /**
+   * Stopped early on purpose -- the budget cap fired, or someone cancelled.
+   *
+   * These are the states most easily mistaken for failures, and they are the
+   * opposite: everything bought before the stop is measured and stored. Run
+   * #43 hit its cap with 3,852 SERPs and 3,000 Reddit threads on disk and
+   * showed "this run is in a state the UI does not have advice for yet".
+   */
+  if (run.status === 'budget_exceeded' || run.status === 'cancelled') {
+    const stoppedBy = run.status === 'cancelled' ? 'Cancelled' : 'Stopped at the budget cap'
+    if (run.jobsDone === 0) {
+      return {
+        tone: 'stop',
+        headline: run.status === 'cancelled' ? 'Cancelled before any results' : 'Stopped before any results',
+        detail: `${stoppedBy} with nothing measured. Nothing was kept — start again, ${
+          run.status === 'cancelled' ? 'or leave it running this time.' : 'with a higher cap or a smaller selection.'
+        }`,
+        cta: 'delete-and-retry',
+      }
+    }
+    return {
+      tone: 'act',
+      headline: `${stoppedBy} — partial results`,
+      detail:
+        `${run.jobsDone} of ${run.jobCount} SERPs were bought before it stopped. ` +
+        'Everything measured up to that point is real and worth reading; the rest of the selection was never queried. ' +
+        'To finish it, sweep the missing pairs as a new run.',
+      cta: 'open-results',
+    }
+  }
+
   if (run.status === 'failed') {
     return {
       tone: 'stop',
