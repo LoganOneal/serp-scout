@@ -285,6 +285,26 @@ a:hover {
   flex: 1;
   min-height: 0;
 }
+/**
+ * ==================== 707px OF UNREACHABLE PAGE ====================
+ * `.app-content` clips to `overflow: hidden` for any page that opens a
+ * workspace, so a grid can own the height and scroll inside its own panel
+ * instead of the whole page moving under a sticky header. That is right for
+ * grid pages -- and silently fatal for the ones that are documents.
+ *
+ * /scout/runs/*<!-- -->/serp/* is stacked panels with no inner scroller: it
+ * measured 1,780px of content in a 1,073px box, so the bottom 707px could not
+ * be reached by any means. Nothing looked broken; the page just ended early.
+ *
+ * `auto` rather than `scroll` fixes it in one place for both shapes. A grid
+ * page's child already takes exactly the height available, so there is
+ * nothing to overflow and no scrollbar appears; a document page overflows and
+ * gets one. The rule cannot know which shape it is, and does not need to.
+ * ===================================================================
+ */
+.opp-workspace {
+  overflow-y: auto;
+}
 /* Header/meta is fixed chrome above the workspace. */
 .opp-workspace > .run-page-head .page-header {
   margin-bottom: 0;
