@@ -174,7 +174,7 @@ function SelectAllCheckbox({
  */
 const KW_PER_NICHE = 8
 
-type FunnelStep = 'screen' | 'keywords' | 'sweep'
+type FunnelStep = 'screen' | 'runs'
 
 /**
  * Provider errors arrive as raw JSON and were rendered verbatim -- a card in
@@ -384,7 +384,7 @@ export function OpportunityFunnel(props: OpportunityFunnelProps) {
       setMsg(null)
       const res = await opportunityDeepDiveAction(fd)
       setPreview(res)
-      if (res.ok) setStep('keywords')
+      if (res.ok) setStep('runs')
     })
   }
 
@@ -423,6 +423,20 @@ export function OpportunityFunnel(props: OpportunityFunnelProps) {
     [keywordPreview],
   )
 
+  /** A priced, unbought run. Its keyword list is the thing under review. */
+  const hasDraft = keywordPreview.length > 0
+
+  /**
+   * Throw the draft away. Without this the only ways out of a priced run were
+   * buying it or reloading the page, which is a poor pair of options to give
+   * someone who has just seen a keyword list they do not like.
+   */
+  const discardDraft = useCallback(() => {
+    setPreview(null)
+    setMsg(null)
+    setStep('screen')
+  }, [])
+
   const sharedKeywords = Math.max(
     0,
     previewKeywordCount - (preview?.keywordCount ?? previewKeywordCount),
@@ -445,7 +459,13 @@ export function OpportunityFunnel(props: OpportunityFunnelProps) {
       const res = await opportunityDeepDiveAction(fd)
       setMsg(res)
       if (res.ok) {
-        setStep('sweep')
+        /**
+         * The draft becomes a run, so it stops being a draft. Leaving it up
+         * would offer to buy the same SERPs a second time, one click away,
+         * directly above the run that just bought them.
+         */
+        setPreview(null)
+        setStep('runs')
         router.refresh()
         window.setTimeout(() => router.refresh(), 1200)
       }
@@ -517,23 +537,17 @@ export function OpportunityFunnel(props: OpportunityFunnelProps) {
           : null,
     },
     {
-      id: 'keywords',
-      label: '2 · Keywords',
-      ready: keywordPreview.length > 0,
-      // Deduped, so the badge matches the number the summary and cost use.
-      badge: keywordPreview.length > 0 ? `${preview?.keywordCount ?? previewKeywordCount}` : null,
-    },
-    {
-      id: 'sweep',
-      label: '3 · Sweep',
-      ready: runsUnderTab > 0,
-      // Counts scans too: they are listed under this tab, so the badge must
-      // describe what is behind it rather than only half of it.
-      badge: jobsActive
-        ? 'live'
-        : runsUnderTab > 0
-          ? `${runsUnderTab} run${runsUnderTab === 1 ? '' : 's'}`
-          : null,
+      id: 'runs',
+      label: '2 · Runs',
+      ready: hasDraft || runsUnderTab > 0,
+      // An unpaid draft is the thing you most need telling about.
+      badge: hasDraft
+        ? 'draft'
+        : jobsActive
+          ? 'live'
+          : runsUnderTab > 0
+            ? `${runsUnderTab}`
+            : null,
     },
   ]
 
@@ -570,18 +584,18 @@ export function OpportunityFunnel(props: OpportunityFunnelProps) {
         aria-labelledby={`opp-tab-${step}`}
       >
 
-      {jobsActive && step !== 'sweep' && (
+      {jobsActive && step !== 'runs' && (
         <div
           className="job-live-banner"
           role="status"
           style={{ marginBottom: 14, cursor: 'pointer' }}
-          onClick={() => setStep('sweep')}
+          onClick={() => setStep('runs')}
         >
           <span className="job-spinner" aria-hidden />
           <div>
             <strong>Sweep jobs are running</strong>
             <div className="faint" style={{ fontSize: 12, marginTop: 2 }}>
-              Auto-refreshing · click to open the Market sweep tab for progress.
+              Auto-refreshing · click to open Runs for progress.
             </div>
           </div>
         </div>
@@ -689,7 +703,7 @@ export function OpportunityFunnel(props: OpportunityFunnelProps) {
                 {msg.error ?? msg.detail}
                 {msg.ok && (
                   <div style={{ marginTop: 8 }}>
-                    <button type="button" className="btn tiny" onClick={() => setStep('sweep')}>
+                    <button type="button" className="btn tiny" onClick={() => setStep('runs')}>
                       Watch progress →
                     </button>
                   </div>
@@ -1045,263 +1059,149 @@ export function OpportunityFunnel(props: OpportunityFunnelProps) {
       )}
 
       {/* ── Step 2: what this run would actually buy ─────────────────────── */}
-      {step === 'keywords' && (
+      {/* ── Step 2: the run you are about to make, and the ones you made ── */}
+      {step === 'runs' && (
         <section className="opp-step">
           {/**
-           * Same shape as step 1: a flush bar that states the run and offers the
-           * one action, then the content taking the rest of the page.
+           * ==================== KEYWORDS ARE PART OF A RUN ====================
+           * These were two tabs, "Keywords" and "Sweep", and the split did not
+           * survive the question "what is a keyword list, if not the thing a
+           * run buys?" It is a run that has not been paid for yet -- so it
+           * belongs above the runs that have been, not in a section of its own
+           * that vanishes the moment you buy it.
            *
-           * This step was a header paragraph, a floating summary card, a warning
-           * box and a grid of cards adrift above empty space -- four visual
-           * languages for one question: is this the right list to pay for?
+           * One tab, two states: a draft at the top while one exists, and the
+           * history under it always.
+           * ====================================================================
            */}
           <div className="composer">
-            <div className="composer-scope">
-              <h2 className="composer-title">
-                {preview?.keywordCount ?? previewKeywordCount} keyword
-                {(preview?.keywordCount ?? previewKeywordCount) === 1 ? '' : 's'} across{' '}
-                {keywordPreview.length} niche{keywordPreview.length === 1 ? '' : 's'}
-              </h2>
-              <div className="composer-cost">
-                <strong className="composer-jobs">
-                  {(preview?.jobCount ?? localEst.jobs).toLocaleString()}
-                </strong>{' '}
-                SERPs
-                <span className="composer-sep">·</span>
-                <span className={props.live ? '' : 'faint'}>
-                  {props.live
-                    ? `est. ${preview?.estimatedCost ?? `$${localEst.usd.toFixed(2)}`}`
-                    : '$0 · fixtures'}
-                </span>
-              </div>
-            </div>
-
-            <div className="composer-controls">
-              <span className="composer-settings">
-                <span className="composer-setting">
-                  {geoIds.size} market{geoIds.size === 1 ? '' : 's'}
-                  {deviceN > 1 ? ' × 2 devices' : ''}
-                </span>
-                {/**
-                 * Niches overlap. Without this the lists below add up to more
-                 * than the number being bought, and the SERP count stops
-                 * multiplying out.
-                 */}
-                {sharedKeywords > 0 && (
-                  <span
-                    className="composer-setting"
-                    title="The per-niche lists below overlap; a keyword claimed by two niches is bought once."
-                  >
-                    {previewKeywordCount} picked, {sharedKeywords} shared
-                  </span>
-                )}
-                <span className="composer-setting">
-                  Volume is national; the sweep measures each one again per market
-                </span>
-              </span>
-
-              {needsAck && (
-                <label className="screen-ack" style={{ margin: 0 }}>
-                  <input
-                    type="checkbox"
-                    checked={workerAck}
-                    onChange={(e) => setWorkerAck(e.target.checked)}
-                  />
-                  I understand this large run drains via cron over many minutes
-                </label>
-              )}
-
-              <button
-                type="button"
-                className="primary composer-go"
-                disabled={pending || !canRun || (needsAck && !workerAck)}
-                onClick={runConfirm}
-              >
-                {pending
-                  ? 'Queuing…'
-                  : `Buy ${(preview?.jobCount ?? localEst.jobs).toLocaleString()} SERPs`}
-              </button>
-            </div>
-
-            <div className="composer-more">
-              <button
-                type="button"
-                className="composer-disclosure"
-                onClick={() => setStep('screen')}
-              >
-                ← Change selection
-              </button>
-              <span className="composer-reassure faint">
-                Nothing has been bought yet. Google Ads was asked what each niche is actually
-                searched as in these markets — free, and already done.
-              </span>
-            </div>
-          </div>
-
-          {/**
-           * Named, not buried. A niche whose whole list is a template guess is
-           * the case that produced "bathroom remodeling installation" -- a
-           * phrase with no demand anywhere, swept at full price across every
-           * market in the run.
-           */}
-          {unmeasuredNiches.length > 0 && (
-            <div className="kwrev-warn">
-              <strong>
-                {unmeasuredNiches.length} niche{unmeasuredNiches.length === 1 ? '' : 's'} fell back
-                to template keywords.
-              </strong>{' '}
-              Google Ads returned nothing usable for{' '}
-              {unmeasuredNiches.map((d) => nicheLabel(d.nicheSlug)).join(', ')}, so those keywords
-              are generated from a pattern and nobody has confirmed anyone searches them. They cost
-              the same as the measured ones — go back and deselect those niches if you would rather
-              not pay for guesses.
-            </div>
-          )}
-
-          {keywordPreview.length === 0 ? (
-            <div className="card empty" style={{ margin: 20, padding: 20 }}>
-              No keyword list came back. Go back and select at least one niche.
-            </div>
-          ) : (
-            <div className="kwrev-scroll">
-              <div className="kwrev-grid">
-                {orderedKeywordPreview.map((d) => {
-                  const measured = d.keywords.filter((k) => k.volume != null)
-                  const topVol = measured.reduce((m, k) => Math.max(m, k.volume ?? 0), 0)
-                  const totalVol = measured.reduce((m, k) => m + (k.volume ?? 0), 0)
-                  return (
-                    <section key={d.nicheSlug} className="kwrev-niche">
-                      <header className="kwrev-niche-head">
-                        <span className="kwrev-niche-name">{nicheLabel(d.nicheSlug)}</span>
-                        <span
-                          className={`badge ${d.source === 'google_ads' ? 'go' : 'warn'}`}
-                          title={
-                            d.source === 'google_ads'
-                              ? 'Keywords come from Google Ads search data for these markets.'
-                              : d.note ?? 'Google Ads returned nothing; these are template-generated.'
-                          }
-                        >
-                          {d.source === 'google_ads' ? 'measured' : 'template'}
-                        </span>
-                      </header>
-                      <div className="kwrev-niche-meta">
-                        {d.keywords.length} keyword{d.keywords.length === 1 ? '' : 's'}
-                        {totalVol > 0 && (
-                          <>
-                            {' · '}
-                            <strong>{formatVol(totalVol)}</strong> searches/mo
-                          </>
-                        )}
-                        {d.rejected > 0 && (
-                          <span title="Ideas discovery threw away for intent or volume.">
-                            {' · '}
-                            {d.rejected} rejected
-                          </span>
-                        )}
-                      </div>
-                      {d.note && d.source === 'template' && (
-                        <div className="kwrev-note" title={d.note}>
-                          {tidyProviderNote(d.note)}
-                        </div>
-                      )}
-                      <ul className="kwrev-list">
-                        {d.keywords.map((k) => (
-                          <li key={k.keyword} className="kwrev-row">
-                            <span className="kwrev-kw">{k.keyword}</span>
-                            {k.volume == null ? (
-                              <span
-                                className="kwrev-novol"
-                                title="Google Ads has no figure for this phrase, so nobody has confirmed it is searched."
-                              >
-                                no vol
-                              </span>
-                            ) : (
-                              <span className="kwrev-vol">
-                                {/* Bar in a fixed track: a percentage on a flex
-                                    item resolves against whatever width the text
-                                    left over, which made every bar the same tick. */}
-                                <span className="kwrev-track" aria-hidden>
-                                  <span
-                                    className="kwrev-bar"
-                                    style={{
-                                      width: `${topVol > 0 ? Math.max(4, Math.round((k.volume / topVol) * 100)) : 4}%`,
-                                    }}
-                                  />
-                                </span>
-                                <span className="kwrev-num">{formatVol(k.volume)}</span>
-                              </span>
-                            )}
-                          </li>
-                        ))}
-                      </ul>
-                    </section>
-                  )
-                })}
-              </div>
-
-              {msg && (
-                <div className={msg.ok ? 'okbox' : 'stopbox'} style={{ margin: '0 20px 20px' }}>
-                  {msg.error ?? msg.detail}
+            {hasDraft ? (
+              <>
+                <div className="composer-scope">
+                  <h2 className="composer-title">
+                    Draft: {preview?.keywordCount ?? previewKeywordCount} keyword
+                    {(preview?.keywordCount ?? previewKeywordCount) === 1 ? '' : 's'} across{' '}
+                    {keywordPreview.length} niche{keywordPreview.length === 1 ? '' : 's'}
+                  </h2>
+                  <div className="composer-cost">
+                    <strong className="composer-jobs">
+                      {(preview?.jobCount ?? localEst.jobs).toLocaleString()}
+                    </strong>{' '}
+                    SERPs
+                    <span className="composer-sep">·</span>
+                    <span className={props.live ? '' : 'faint'}>
+                      {props.live
+                        ? `est. ${preview?.estimatedCost ?? `$${localEst.usd.toFixed(2)}`}`
+                        : '$0 · fixtures'}
+                    </span>
+                  </div>
                 </div>
-              )}
-            </div>
-          )}
-        </section>
-      )}
 
-      {/* ── Step 3: everything this workspace has run ───────────────────── */}
-      {step === 'sweep' && (
-        <section className="opp-step">
-          {/**
-           * The same bar as steps 1 and 2. This step's title and description are
-           * hidden by the workspace CSS as restatements of the page header,
-           * which left the header as an empty band with two buttons adrift in
-           * the right of it -- chrome that said nothing and used 47px saying it.
-           */}
-          <div className="composer">
-            <div className="composer-scope">
-              <h2 className="composer-title">Runs</h2>
-              <div className="composer-cost">
-                <strong className="composer-jobs">{props.deepDiveRuns.length}</strong> sweep
-                {props.deepDiveRuns.length === 1 ? '' : 's'}
-                {props.scanRuns.length > 0 && (
-                  <>
-                    <span className="composer-sep">·</span>
-                    <strong className="composer-jobs">{props.scanRuns.length}</strong> locality scan
-                    {props.scanRuns.length === 1 ? '' : 's'}
-                  </>
-                )}
-                {jobsActive && (
-                  <>
-                    <span className="composer-sep">·</span>
-                    <span className="badge warn">live</span>
-                  </>
-                )}
-              </div>
-            </div>
+                <div className="composer-controls">
+                  <span className="composer-settings">
+                    <span className="composer-setting">
+                      {geoIds.size} market{geoIds.size === 1 ? '' : 's'}
+                      {deviceN > 1 ? ' × 2 devices' : ''}
+                    </span>
+                    {sharedKeywords > 0 && (
+                      <span
+                        className="composer-setting"
+                        title="The per-niche lists below overlap; a keyword claimed by two niches is bought once."
+                      >
+                        {previewKeywordCount} picked, {sharedKeywords} shared
+                      </span>
+                    )}
+                    <span className="composer-setting">Nothing bought yet</span>
+                  </span>
 
-            <div className="composer-controls">
-              <span className="composer-settings">
-                <span className="composer-setting">
-                  Deleting a run clears its results so the same selection can be swept again
-                </span>
-              </span>
-              <button
-                type="button"
-                className="btn composer-go"
-                onClick={() => router.refresh()}
-                disabled={pending}
-              >
-                {jobsActive ? 'Refreshing…' : 'Refresh'}
-              </button>
-              <a href="/portfolio" className="btn primary">
-                Open Portfolio →
-              </a>
-            </div>
+                  {needsAck && (
+                    <label className="screen-ack" style={{ margin: 0 }}>
+                      <input
+                        type="checkbox"
+                        checked={workerAck}
+                        onChange={(e) => setWorkerAck(e.target.checked)}
+                      />
+                      I understand this large run drains via cron over many minutes
+                    </label>
+                  )}
+
+                  <button
+                    type="button"
+                    className="primary composer-go"
+                    disabled={pending || !canRun || (needsAck && !workerAck)}
+                    onClick={runConfirm}
+                  >
+                    {pending
+                      ? 'Queuing…'
+                      : `Buy ${(preview?.jobCount ?? localEst.jobs).toLocaleString()} SERPs`}
+                  </button>
+                </div>
+
+                <div className="composer-more">
+                  <button
+                    type="button"
+                    className="composer-disclosure"
+                    onClick={() => setStep('screen')}
+                  >
+                    ← Change selection
+                  </button>
+                  <button type="button" className="composer-link" onClick={discardDraft}>
+                    Discard draft
+                  </button>
+                  <span className="composer-reassure faint">
+                    Google Ads was asked what each niche is actually searched as in these markets —
+                    free, and already done. Volume is national; the sweep measures each one again
+                    per market.
+                  </span>
+                </div>
+              </>
+            ) : (
+              <>
+                <div className="composer-scope">
+                  <h2 className="composer-title">Runs</h2>
+                  <div className="composer-cost">
+                    <strong className="composer-jobs">{props.deepDiveRuns.length}</strong> sweep
+                    {props.deepDiveRuns.length === 1 ? '' : 's'}
+                    {props.scanRuns.length > 0 && (
+                      <>
+                        <span className="composer-sep">·</span>
+                        <strong className="composer-jobs">{props.scanRuns.length}</strong> locality
+                        scan{props.scanRuns.length === 1 ? '' : 's'}
+                      </>
+                    )}
+                    {jobsActive && (
+                      <>
+                        <span className="composer-sep">·</span>
+                        <span className="badge warn">live</span>
+                      </>
+                    )}
+                  </div>
+                </div>
+
+                <div className="composer-controls">
+                  <span className="composer-settings">
+                    <span className="composer-setting">
+                      Deleting a run clears its results so the same selection can be swept again
+                    </span>
+                  </span>
+                  <button
+                    type="button"
+                    className="btn composer-go"
+                    onClick={() => router.refresh()}
+                    disabled={pending}
+                  >
+                    {jobsActive ? 'Refreshing…' : 'Refresh'}
+                  </button>
+                  <a href="/portfolio" className="btn primary">
+                    Open Portfolio →
+                  </a>
+                </div>
+              </>
+            )}
           </div>
 
           <div className="step-scroll">
-            {pending && (
+            {pending && !hasDraft && (
               <div className="job-live-banner" role="status" style={{ marginBottom: 16 }}>
                 <span className="job-spinner" aria-hidden />
                 <div>
@@ -1309,6 +1209,120 @@ export function OpportunityFunnel(props: OpportunityFunnelProps) {
                   <div className="faint" style={{ fontSize: 12, marginTop: 2 }}>
                     Creating SERP jobs. Status cards update when the run appears.
                   </div>
+                </div>
+              </div>
+            )}
+
+            {msg && (
+              <div className={msg.ok ? 'okbox' : 'stopbox'} style={{ marginBottom: 16 }}>
+                {msg.error ?? msg.detail}
+              </div>
+            )}
+
+            {hasDraft && (
+              <div className="draft">
+                <div className="draft-head">
+                  <span className="draft-tag">Draft</span>
+                  <span className="draft-title">Keywords this run would buy</span>
+                  <span className="faint" style={{ fontSize: 12 }}>
+                    Review before paying — this is the only moment the list is free to change.
+                  </span>
+                </div>
+
+                {/**
+                 * Named, not buried. A niche whose whole list is a template
+                 * guess is the case that produced "bathroom remodeling
+                 * installation" -- a phrase with no demand anywhere, swept at
+                 * full price across every market in the run.
+                 */}
+                {unmeasuredNiches.length > 0 && (
+                  <div className="kwrev-warn">
+                    <strong>
+                      {unmeasuredNiches.length} niche{unmeasuredNiches.length === 1 ? '' : 's'} fell
+                      back to template keywords.
+                    </strong>{' '}
+                    Google Ads returned nothing usable for{' '}
+                    {unmeasuredNiches.map((d) => nicheLabel(d.nicheSlug)).join(', ')}, so those
+                    keywords are generated from a pattern and nobody has confirmed anyone searches
+                    them. They cost the same as the measured ones — go back and deselect those
+                    niches if you would rather not pay for guesses.
+                  </div>
+                )}
+
+                <div className="kwrev-grid">
+                  {orderedKeywordPreview.map((d) => {
+                    const measured = d.keywords.filter((k) => k.volume != null)
+                    const topVol = measured.reduce((m, k) => Math.max(m, k.volume ?? 0), 0)
+                    const totalVol = measured.reduce((m, k) => m + (k.volume ?? 0), 0)
+                    return (
+                      <section key={d.nicheSlug} className="kwrev-niche">
+                        <header className="kwrev-niche-head">
+                          <span className="kwrev-niche-name">{nicheLabel(d.nicheSlug)}</span>
+                          <span
+                            className={`badge ${d.source === 'google_ads' ? 'go' : 'warn'}`}
+                            title={
+                              d.source === 'google_ads'
+                                ? 'Keywords come from Google Ads search data for these markets.'
+                                : d.note ??
+                                  'Google Ads returned nothing; these are template-generated.'
+                            }
+                          >
+                            {d.source === 'google_ads' ? 'measured' : 'template'}
+                          </span>
+                        </header>
+                        <div className="kwrev-niche-meta">
+                          {d.keywords.length} keyword{d.keywords.length === 1 ? '' : 's'}
+                          {totalVol > 0 && (
+                            <>
+                              {' · '}
+                              <strong>{formatVol(totalVol)}</strong> searches/mo
+                            </>
+                          )}
+                          {d.rejected > 0 && (
+                            <span title="Ideas discovery threw away for intent or volume.">
+                              {' · '}
+                              {d.rejected} rejected
+                            </span>
+                          )}
+                        </div>
+                        {d.note && d.source === 'template' && (
+                          <div className="kwrev-note" title={d.note}>
+                            {tidyProviderNote(d.note)}
+                          </div>
+                        )}
+                        <ul className="kwrev-list">
+                          {d.keywords.map((k) => (
+                            <li key={k.keyword} className="kwrev-row">
+                              <span className="kwrev-kw">{k.keyword}</span>
+                              {k.volume == null ? (
+                                <span
+                                  className="kwrev-novol"
+                                  title="Google Ads has no figure for this phrase, so nobody has confirmed it is searched."
+                                >
+                                  no vol
+                                </span>
+                              ) : (
+                                <span className="kwrev-vol">
+                                  {/* Bar in a fixed track: a percentage on a flex
+                                      item resolves against whatever width the text
+                                      left over, which made every bar the same tick. */}
+                                  <span className="kwrev-track" aria-hidden>
+                                    <span
+                                      className="kwrev-bar"
+                                      style={{
+                                        width: `${topVol > 0 ? Math.max(4, Math.round((k.volume / topVol) * 100)) : 4}%`,
+                                      }}
+                                    />
+                                  </span>
+                                  <span className="kwrev-num">{formatVol(k.volume)}</span>
+                                </span>
+                              )}
+                            </li>
+                          ))}
+                        </ul>
+                      </section>
+                    )
+                  })}
                 </div>
               </div>
             )}

@@ -3711,3 +3711,38 @@ a.kw-serp-title:hover {
    duplicate "Open results" inside the next-action strip is the one that gets
    the emphasis, so the header copy steps back to a quiet link. */
 .job-run-head .btn.tiny { font-weight: 500; }
+
+/* ── The draft run ───────────────────────────────────────────────────────
+   A priced, unbought run sitting above the ones already paid for. It needs
+   to read as provisional at a glance, or it is just another run card that
+   happens to have a Buy button. */
+.draft {
+  border: 1px solid var(--accent, #ea580c);
+  border-radius: 10px;
+  background: var(--surface, #fff);
+  padding: 12px 14px 14px;
+  margin-bottom: 20px;
+}
+.draft-head {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 10px;
+}
+.draft-tag {
+  font-size: 10px;
+  font-weight: 750;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #fff;
+  background: var(--accent, #ea580c);
+  padding: 2px 7px;
+  border-radius: 4px;
+}
+.draft-title { font-size: 13.5px; font-weight: 680; }
+.draft .kwrev-warn {
+  border: 1px solid var(--warn-border, #fde68a);
+  border-radius: 8px;
+  margin-bottom: 12px;
+}
