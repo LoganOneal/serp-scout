@@ -3376,50 +3376,91 @@ a.kw-serp-title:hover {
 .run-next-signals-total { font-size: 13px; }
 .run-next-signals-list { display: inline-flex; gap: 5px; flex-wrap: wrap; }
 
-/* ── Keyword review: the step between choosing and paying ──────────────── */
-.kwrev-summary { margin-bottom: 14px; }
-.kwrev-summary-stats {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  flex-wrap: wrap;
-  font-size: 13px;
-  margin-bottom: 10px;
+/* ── Keyword review: the step between choosing and paying ───────────────
+   Shares the composer bar with step 1; below it, one scroll region so the
+   niche panels fill the page instead of floating above empty space. */
+.kwrev-warn {
+  flex: none;
+  padding: 9px 20px;
+  font-size: 12.5px;
+  line-height: 1.55;
+  background: var(--warn-soft, #fffbeb);
+  border-bottom: 1px solid var(--warn-border, #fde68a);
+}
+.kwrev-scroll {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 16px 20px 20px;
 }
 .kwrev-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 12px;
+  /* Wide enough that a real keyword phrase and its number fit on one line --
+     at 300px "kitchen remodel contractors" truncated mid-word, which is the
+     half of the row worth reading. */
+  grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+  gap: 14px;
   align-items: start;
 }
-.kwrev-niche { padding: 12px 14px; }
+.kwrev-niche {
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--surface, #fff);
+  padding: 12px 14px 8px;
+}
 .kwrev-niche-head {
   display: flex;
   align-items: center;
   gap: 8px;
   flex-wrap: wrap;
-  margin-bottom: 8px;
-  font-size: 13px;
 }
-.kwrev-note { font-size: 11.5px; margin-bottom: 8px; }
+.kwrev-niche-name { font-size: 14px; font-weight: 680; letter-spacing: -0.01em; }
+.kwrev-niche-meta {
+  font-size: 11.5px;
+  color: var(--text-dim);
+  margin: 2px 0 8px;
+}
+.kwrev-niche-meta strong { color: var(--text); }
+.kwrev-note {
+  font-size: 11.5px;
+  color: var(--text-dim);
+  background: var(--surface-2, #f8fafc);
+  border-radius: 6px;
+  padding: 5px 8px;
+  margin-bottom: 8px;
+}
 .kwrev-list { list-style: none; margin: 0; padding: 0; }
 .kwrev-row {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 12px;
-  padding: 3px 0;
-  font-size: 12.5px;
+  gap: 14px;
+  padding: 4px 0;
+  font-size: 13px;
   border-top: 1px solid var(--border);
 }
 .kwrev-row:first-child { border-top: 0; }
-.kwrev-kw { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.kwrev-kw {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.kwrev-novol {
+  flex: none;
+  font-size: 11px;
+  color: var(--text-dim);
+  background: var(--surface-2, #f8fafc);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 1px 6px;
+}
 /* Volume as a bar as well as a number: the shape of the list is the point --
    one keyword carrying the niche reads differently from an even spread. */
-.kwrev-vol { display: flex; align-items: center; gap: 7px; flex: none; }
+.kwrev-vol { display: flex; align-items: center; gap: 8px; flex: none; }
 .kwrev-track {
   display: block;
-  width: 62px;
+  width: 66px;
   height: 6px;
   border-radius: 3px;
   background: var(--surface-2, #f1f5f9);
@@ -3433,7 +3474,13 @@ a.kw-serp-title:hover {
   background: var(--accent, #ea580c);
   opacity: 0.7;
 }
-.kwrev-num { font-variant-numeric: tabular-nums; min-width: 38px; text-align: right; }
+.kwrev-num {
+  font-family: var(--mono);
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+  min-width: 34px;
+  text-align: right;
+}
 
 /* ── The composer: one bar above the lists ───────────────────────────────
    The scattered controls became a card, and the card floated in an empty

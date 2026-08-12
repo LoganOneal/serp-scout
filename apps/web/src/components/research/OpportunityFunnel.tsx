@@ -177,20 +177,6 @@ const KW_PER_NICHE = 8
 type FunnelStep = 'screen' | 'keywords' | 'sweep'
 
 /**
- * Run size as a single choice, named by what it is for.
- *
- * These are the same two combined presets that used to sit as loose buttons in
- * the bulk bar, plus the default in between. Their prices are computed from
- * the live settings rather than written down -- a label that says "$6" is a
- * claim about pricing, and pricing has already moved once this month.
- */
-const SCALES = [
-  { id: 'narrow', label: 'Narrow', niches: 5, geos: 20 },
-  { id: 'standard', label: 'Standard', niches: 10, geos: 20 },
-  { id: 'wide', label: 'Wide', niches: 10, geos: 50 },
-] as const
-
-/**
  * Provider errors arrive as raw JSON and were rendered verbatim -- a card in
  * the keyword review showed `503: { "error": { "code": 503, "message": ... }`
  * with a googleapis type URL, which tells an operator nothing except that
@@ -413,6 +399,30 @@ export function OpportunityFunnel(props: OpportunityFunnelProps) {
    * between sweeping what people search and sweeping what a rule invented,
    * and it is invisible once the SERPs are bought.
    */
+  /**
+   * Niches are keyed by slug in the discovery payload; the UI has always shown
+   * people "Kitchen Remodeling", not "kitchen-remodeling". Falls back to the
+   * slug so a niche the picker does not know about still renders.
+   */
+  const nicheLabel = useCallback(
+    (slug: string) => nicheList.find((n) => n.slug === slug)?.label ?? slug,
+    [nicheList],
+  )
+
+  /**
+   * Most demand first, and template fallbacks last -- the order you would read
+   * them in to decide whether the list is worth buying.
+   */
+  const orderedKeywordPreview = useMemo(
+    () =>
+      [...keywordPreview].sort((a, b) => {
+        const measured = (d: typeof a) => (d.source === 'google_ads' ? 1 : 0)
+        const vol = (d: typeof a) => d.keywords.reduce((n, k) => n + (k.volume ?? 0), 0)
+        return measured(b) - measured(a) || vol(b) - vol(a)
+      }),
+    [keywordPreview],
+  )
+
   const sharedKeywords = Math.max(
     0,
     previewKeywordCount - (preview?.keywordCount ?? previewKeywordCount),
@@ -442,24 +452,6 @@ export function OpportunityFunnel(props: OpportunityFunnelProps) {
     })
   }
 
-  /** What is actually selected, in ranked order, for the card to name. */
-  const selectedNiches = useMemo(
-    () => nicheList.filter((n) => nicheIds.has(n.id)),
-    [nicheList, nicheIds],
-  )
-  const selectedGeos = useMemo(
-    () => props.geos.filter((g) => geoIds.has(g.id)),
-    [props.geos, geoIds],
-  )
-
-  /** Which named size the current selection is, if it is one of them. */
-  const activeScale = useMemo(() => {
-    const hit = SCALES.find(
-      (s) => isTopN(nicheIds, nicheList, s.niches) && isTopN(geoIds, props.geos, s.geos),
-    )
-    return hit?.id ?? null
-  }, [nicheIds, geoIds, nicheList, props.geos])
-
   /**
    * The run in one sentence.
    *
@@ -470,8 +462,14 @@ export function OpportunityFunnel(props: OpportunityFunnelProps) {
    */
   const scopeSentence = useMemo(() => {
     if (nicheIds.size === 0 || geoIds.size === 0) return 'Pick niches and markets to sweep'
-    const nicheTop = SCALES.some((s) => s.niches === nicheIds.size) && isTopN(nicheIds, nicheList, nicheIds.size)
-    const geoTop = SCALES.some((s) => s.geos === geoIds.size) && isTopN(geoIds, props.geos, geoIds.size)
+    /**
+     * "The top N" is a property of the selection being a prefix of the ranking,
+     * not of N matching some preset -- so picking Top 5 in the list reads as
+     * "the top 5 niches", and unticking one from the middle stops claiming an
+     * order the selection no longer has.
+     */
+    const nicheTop = isTopN(nicheIds, nicheList, nicheIds.size)
+    const geoTop = isTopN(geoIds, props.geos, geoIds.size)
     const n = `${nicheTop ? 'the top ' : ''}${nicheIds.size} niche${nicheIds.size === 1 ? '' : 's'}`
     const g = `${geoTop ? 'the top ' : ''}${geoIds.size} market${geoIds.size === 1 ? '' : 's'}`
     return `Sweep ${n} across ${g}`
@@ -600,16 +598,16 @@ export function OpportunityFunnel(props: OpportunityFunnelProps) {
           )}
 
           {/**
-           * ==================== ONE QUESTION, NOT FIVE ====================
-           * This screen used to open on 344 controls: 58 niche rows, 200 market
-           * rows, three separate preset mechanisms, four paid/free toggles, two
-           * dropdowns, and the same primary button twice -- every one of which
-           * has a default the tool already knows, because it ranks niches by
-           * composite score and markets by rank.
+           * ==================== SAY IT, DO NOT ASK IT AGAIN ====================
+           * This screen used to carry 344 controls, including three separate
+           * mechanisms for expressing one selection: presets on each list, and
+           * combined presets on top of them.
            *
-           * So it now opens on the sentence those defaults add up to, and one
-           * button. Nothing was removed; the pickers are one disclosure away.
-           * ===============================================================
+           * The bar is not another one. It states what the lists below already
+           * say -- what is selected, what it will cost -- and offers the single
+           * action that follows from it. Selection happens in one place, in the
+           * lists, where you can see every row you are choosing between.
+           * ====================================================================
            */}
           <div className="composer">
             <div className="composer-scope">
@@ -623,43 +621,7 @@ export function OpportunityFunnel(props: OpportunityFunnelProps) {
               </div>
             </div>
 
-            {/**
-             * Scale as one choice. The same intent used to be expressible three
-             * ways -- niche presets, market presets, and combined presets -- so
-             * the page asked twice for an answer it could take once.
-             */}
             <div className="composer-controls">
-            <div className="composer-scales" role="group" aria-label="Run size">
-              {SCALES.map((s) => {
-                const on = activeScale === s.id
-                const est = estCost(
-                  s.niches * kwPerNiche * (includeGeoExplicit ? 2 : 1),
-                  s.geos,
-                  deviceN,
-                  s.niches,
-                  { volume: fetchVolume, maps: fetchMaps },
-                )
-                return (
-                  <button
-                    key={s.id}
-                    type="button"
-                    className={`composer-scale${on ? ' is-active' : ''}`}
-                    aria-pressed={on}
-                    onClick={() => {
-                      selectTopNiches(s.niches)
-                      selectTopGeo(s.geos)
-                    }}
-                  >
-                    <span className="composer-scale-name">{s.label}</span>
-                    <span className="composer-scale-meta">
-                      {s.niches} × {s.geos}
-                      {props.live ? ` · $${est.usd.toFixed(2)}` : ''}
-                    </span>
-                  </button>
-                )
-              })}
-            </div>
-
             {/**
              * Settings said out loud. A toggle that doubles the SERP count must
              * not be able to hide inside a closed disclosure, so anything moved
@@ -1085,32 +1047,41 @@ export function OpportunityFunnel(props: OpportunityFunnelProps) {
       {/* ── Step 2: what this run would actually buy ─────────────────────── */}
       {step === 'keywords' && (
         <section className="opp-step">
-          <header className="opp-step-head">
-            <div className="opp-step-head-row">
-              <div>
-                <h2 className="opp-step-title">Keywords this sweep will buy</h2>
-                <p className="opp-step-desc">
-                  Google Ads was asked what each niche is actually searched as in the markets you
-                  picked — free, and already done. Nothing has been bought yet.{' '}
-                  <strong>Volume is national monthly searches</strong> for the phrasing; the sweep
-                  measures each one again at every market&apos;s location code.
-                </p>
-              </div>
-              <div className="opp-step-actions" style={{ marginTop: 0 }}>
-                <button type="button" className="btn" onClick={() => setStep('screen')}>
-                  ← Change selection
-                </button>
+          {/**
+           * Same shape as step 1: a flush bar that states the run and offers the
+           * one action, then the content taking the rest of the page.
+           *
+           * This step was a header paragraph, a floating summary card, a warning
+           * box and a grid of cards adrift above empty space -- four visual
+           * languages for one question: is this the right list to pay for?
+           */}
+          <div className="composer">
+            <div className="composer-scope">
+              <h2 className="composer-title">
+                {preview?.keywordCount ?? previewKeywordCount} keyword
+                {(preview?.keywordCount ?? previewKeywordCount) === 1 ? '' : 's'} across{' '}
+                {keywordPreview.length} niche{keywordPreview.length === 1 ? '' : 's'}
+              </h2>
+              <div className="composer-cost">
+                <strong className="composer-jobs">
+                  {(preview?.jobCount ?? localEst.jobs).toLocaleString()}
+                </strong>{' '}
+                SERPs
+                <span className="composer-sep">·</span>
+                <span className={props.live ? '' : 'faint'}>
+                  {props.live
+                    ? `est. ${preview?.estimatedCost ?? `$${localEst.usd.toFixed(2)}`}`
+                    : '$0 · fixtures'}
+                </span>
               </div>
             </div>
-          </header>
 
-          <div className="kwrev-summary card">
-            <div className="kwrev-summary-stats">
-              <span>
-                <strong>{preview?.keywordCount ?? previewKeywordCount}</strong> keyword
-                {(preview?.keywordCount ?? previewKeywordCount) === 1 ? '' : 's'} across{' '}
-                <strong>{keywordPreview.length}</strong> niche
-                {keywordPreview.length === 1 ? '' : 's'}
+            <div className="composer-controls">
+              <span className="composer-settings">
+                <span className="composer-setting">
+                  {geoIds.size} market{geoIds.size === 1 ? '' : 's'}
+                  {deviceN > 1 ? ' × 2 devices' : ''}
+                </span>
                 {/**
                  * Niches overlap. Without this the lists below add up to more
                  * than the number being bought, and the SERP count stops
@@ -1118,47 +1089,31 @@ export function OpportunityFunnel(props: OpportunityFunnelProps) {
                  */}
                 {sharedKeywords > 0 && (
                   <span
-                    className="faint"
+                    className="composer-setting"
                     title="The per-niche lists below overlap; a keyword claimed by two niches is bought once."
                   >
-                    {' '}
-                    ({previewKeywordCount} picked, {sharedKeywords} shared)
+                    {previewKeywordCount} picked, {sharedKeywords} shared
                   </span>
                 )}
+                <span className="composer-setting">
+                  Volume is national; the sweep measures each one again per market
+                </span>
               </span>
-              <span className="sm-magic-meta-sep">·</span>
-              <span>
-                <strong>{geoIds.size}</strong> market{geoIds.size === 1 ? '' : 's'}
-                {deviceN > 1 ? ' × 2 devices' : ''}
-              </span>
-              <span className="sm-magic-meta-sep">·</span>
-              <span>
-                <strong>{(preview?.jobCount ?? localEst.jobs).toLocaleString()}</strong> SERPs
-              </span>
-              <span className="sm-magic-meta-sep">·</span>
-              <span>
-                est.{' '}
-                <strong className="mono">
-                  {props.live ? (preview?.estimatedCost ?? `$${localEst.usd.toFixed(2)}`) : '$0 fixtures'}
-                </strong>
-              </span>
-            </div>
 
-            {needsAck && (
-              <label className="screen-ack">
-                <input
-                  type="checkbox"
-                  checked={workerAck}
-                  onChange={(e) => setWorkerAck(e.target.checked)}
-                />
-                I understand this large run drains via cron over many minutes
-              </label>
-            )}
+              {needsAck && (
+                <label className="screen-ack" style={{ margin: 0 }}>
+                  <input
+                    type="checkbox"
+                    checked={workerAck}
+                    onChange={(e) => setWorkerAck(e.target.checked)}
+                  />
+                  I understand this large run drains via cron over many minutes
+                </label>
+              )}
 
-            <div className="screen-run-actions">
               <button
                 type="button"
-                className="primary"
+                className="primary composer-go"
                 disabled={pending || !canRun || (needsAck && !workerAck)}
                 onClick={runConfirm}
               >
@@ -1166,9 +1121,20 @@ export function OpportunityFunnel(props: OpportunityFunnelProps) {
                   ? 'Queuing…'
                   : `Buy ${(preview?.jobCount ?? localEst.jobs).toLocaleString()} SERPs`}
               </button>
-              <button type="button" className="btn" onClick={() => setStep('screen')}>
+            </div>
+
+            <div className="composer-more">
+              <button
+                type="button"
+                className="composer-disclosure"
+                onClick={() => setStep('screen')}
+              >
                 ← Change selection
               </button>
+              <span className="composer-reassure faint">
+                Nothing has been bought yet. Google Ads was asked what each niche is actually
+                searched as in these markets — free, and already done.
+              </span>
             </div>
           </div>
 
@@ -1179,89 +1145,105 @@ export function OpportunityFunnel(props: OpportunityFunnelProps) {
            * market in the run.
            */}
           {unmeasuredNiches.length > 0 && (
-            <div className="warnbox">
+            <div className="kwrev-warn">
               <strong>
                 {unmeasuredNiches.length} niche{unmeasuredNiches.length === 1 ? '' : 's'} fell back
                 to template keywords.
               </strong>{' '}
               Google Ads returned nothing usable for{' '}
-              {unmeasuredNiches.map((d) => d.nicheSlug).join(', ')}, so those keywords are generated
-              from a pattern and no one has confirmed anybody searches them. They cost the same as
-              the measured ones — deselect those niches if you would rather not pay for guesses.
+              {unmeasuredNiches.map((d) => nicheLabel(d.nicheSlug)).join(', ')}, so those keywords
+              are generated from a pattern and nobody has confirmed anyone searches them. They cost
+              the same as the measured ones — go back and deselect those niches if you would rather
+              not pay for guesses.
             </div>
           )}
 
           {keywordPreview.length === 0 ? (
-            <div className="card empty" style={{ padding: 20 }}>
+            <div className="card empty" style={{ margin: 20, padding: 20 }}>
               No keyword list came back. Go back and select at least one niche.
             </div>
           ) : (
-            <div className="kwrev-grid">
-              {keywordPreview.map((d) => {
-                const measured = d.keywords.filter((k) => k.volume != null)
-                const topVol = measured.reduce((m, k) => Math.max(m, k.volume ?? 0), 0)
-                return (
-                  <div key={d.nicheSlug} className="kwrev-niche card">
-                    <div className="kwrev-niche-head">
-                      <strong>{d.nicheSlug}</strong>
-                      <span
-                        className={`badge ${d.source === 'google_ads' ? 'go' : 'warn'}`}
-                        title={
-                          d.source === 'google_ads'
-                            ? 'Keywords come from Google Ads search data for these markets.'
-                            : d.note ?? 'Google Ads returned nothing; these are template-generated.'
-                        }
-                      >
-                        {d.source === 'google_ads' ? 'measured' : 'template'}
-                      </span>
-                      <span className="faint" style={{ fontSize: 11.5 }}>
-                        {d.keywords.length} kw
-                        {d.rejected > 0 ? ` · ${d.rejected} rejected` : ''}
-                      </span>
-                    </div>
-                    {d.note && d.source === 'template' && (
-                      <div className="faint kwrev-note" title={d.note}>
-                        {tidyProviderNote(d.note)}
-                      </div>
-                    )}
-                    <ul className="kwrev-list">
-                      {d.keywords.map((k) => (
-                        <li key={k.keyword} className="kwrev-row">
-                          <span className="kwrev-kw mono" title={k.keyword}>
-                            {k.keyword}
+            <div className="kwrev-scroll">
+              <div className="kwrev-grid">
+                {orderedKeywordPreview.map((d) => {
+                  const measured = d.keywords.filter((k) => k.volume != null)
+                  const topVol = measured.reduce((m, k) => Math.max(m, k.volume ?? 0), 0)
+                  const totalVol = measured.reduce((m, k) => m + (k.volume ?? 0), 0)
+                  return (
+                    <section key={d.nicheSlug} className="kwrev-niche">
+                      <header className="kwrev-niche-head">
+                        <span className="kwrev-niche-name">{nicheLabel(d.nicheSlug)}</span>
+                        <span
+                          className={`badge ${d.source === 'google_ads' ? 'go' : 'warn'}`}
+                          title={
+                            d.source === 'google_ads'
+                              ? 'Keywords come from Google Ads search data for these markets.'
+                              : d.note ?? 'Google Ads returned nothing; these are template-generated.'
+                          }
+                        >
+                          {d.source === 'google_ads' ? 'measured' : 'template'}
+                        </span>
+                      </header>
+                      <div className="kwrev-niche-meta">
+                        {d.keywords.length} keyword{d.keywords.length === 1 ? '' : 's'}
+                        {totalVol > 0 && (
+                          <>
+                            {' · '}
+                            <strong>{formatVol(totalVol)}</strong> searches/mo
+                          </>
+                        )}
+                        {d.rejected > 0 && (
+                          <span title="Ideas discovery threw away for intent or volume.">
+                            {' · '}
+                            {d.rejected} rejected
                           </span>
-                          {k.volume == null ? (
-                            <span className="null" title="Google Ads has no figure for this phrase.">
-                              no vol
-                            </span>
-                          ) : (
-                            <span className="kwrev-vol">
-                              {/* Bar in a fixed track: a percentage on a flex
-                                  item resolves against whatever width the text
-                                  left over, which made every bar the same tick. */}
-                              <span className="kwrev-track" aria-hidden>
-                                <span
-                                  className="kwrev-bar"
-                                  style={{
-                                    width: `${topVol > 0 ? Math.max(4, Math.round((k.volume / topVol) * 100)) : 4}%`,
-                                  }}
-                                />
+                        )}
+                      </div>
+                      {d.note && d.source === 'template' && (
+                        <div className="kwrev-note" title={d.note}>
+                          {tidyProviderNote(d.note)}
+                        </div>
+                      )}
+                      <ul className="kwrev-list">
+                        {d.keywords.map((k) => (
+                          <li key={k.keyword} className="kwrev-row">
+                            <span className="kwrev-kw">{k.keyword}</span>
+                            {k.volume == null ? (
+                              <span
+                                className="kwrev-novol"
+                                title="Google Ads has no figure for this phrase, so nobody has confirmed it is searched."
+                              >
+                                no vol
                               </span>
-                              <span className="kwrev-num mono">{formatVol(k.volume)}</span>
-                            </span>
-                          )}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                )
-              })}
-            </div>
-          )}
+                            ) : (
+                              <span className="kwrev-vol">
+                                {/* Bar in a fixed track: a percentage on a flex
+                                    item resolves against whatever width the text
+                                    left over, which made every bar the same tick. */}
+                                <span className="kwrev-track" aria-hidden>
+                                  <span
+                                    className="kwrev-bar"
+                                    style={{
+                                      width: `${topVol > 0 ? Math.max(4, Math.round((k.volume / topVol) * 100)) : 4}%`,
+                                    }}
+                                  />
+                                </span>
+                                <span className="kwrev-num">{formatVol(k.volume)}</span>
+                              </span>
+                            )}
+                          </li>
+                        ))}
+                      </ul>
+                    </section>
+                  )
+                })}
+              </div>
 
-          {msg && (
-            <div className={msg.ok ? 'okbox' : 'stopbox'} style={{ marginTop: 12 }}>
-              {msg.error ?? msg.detail}
+              {msg && (
+                <div className={msg.ok ? 'okbox' : 'stopbox'} style={{ margin: '0 20px 20px' }}>
+                  {msg.error ?? msg.detail}
+                </div>
+              )}
             </div>
           )}
         </section>
