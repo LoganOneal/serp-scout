@@ -3435,79 +3435,73 @@ a.kw-serp-title:hover {
 }
 .kwrev-num { font-variant-numeric: tabular-nums; min-width: 38px; text-align: right; }
 
-/* ── The run card: the whole first screen ────────────────────────────────
-   Replaces a 344-control page with a sentence, a size, and one button. The
-   pickers still exist -- `.sm-magic[hidden]` below -- they are just no longer
-   the opening move. */
-.runcard {
-  border: 1px solid var(--border);
-  border-radius: 12px;
+/* ── The composer: one bar above the lists ───────────────────────────────
+   The scattered controls became a card, and the card floated in an empty
+   viewport because it was 880px of prose in a workspace built full-bleed for
+   tables. So it is a bar: it spans the content, states the run in one line,
+   and hands the rest of the page back to the two lists that answer "which
+   ones am I locked into". */
+.composer {
+  flex: none;
+  border-bottom: 1px solid var(--border);
   background: var(--surface, #fff);
-  padding: 22px 24px;
-  margin-bottom: 16px;
-  /* The workspace is full-bleed so the grids can use it. Prose cannot -- a
-     sentence set across 1,300px is not read, it is scanned past. */
-  max-width: 880px;
-  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+  padding: 12px 20px 10px;
 }
-.runcard-title {
-  font-size: 22px;
+.composer-scope {
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+.composer-title {
+  font-size: 18px;
   font-weight: 700;
-  letter-spacing: -0.015em;
-  margin: 0 0 4px;
-  text-wrap: balance;
+  letter-spacing: -0.012em;
+  margin: 0;
 }
-.runcard-cost {
-  font-size: 14px;
+.composer-cost {
+  font-size: 13px;
   color: var(--text-dim);
   display: flex;
   align-items: baseline;
-  gap: 7px;
-  flex-wrap: wrap;
+  gap: 6px;
 }
-.runcard-jobs { font-size: 17px; color: var(--text); font-variant-numeric: tabular-nums; }
-.runcard-sep { color: var(--border); }
+.composer-jobs { font-size: 15px; color: var(--text); font-variant-numeric: tabular-nums; }
+.composer-sep { color: var(--border); }
 
-/* Size: three named options, priced from live settings. */
-.runcard-scales { display: flex; gap: 8px; flex-wrap: wrap; margin: 16px 0 14px; }
-.runcard-scale {
+/* Sizes, settings and the primary action share one row under the headline. */
+.composer-scales { display: flex; gap: 6px; flex-wrap: wrap; }
+.composer-scale {
   display: flex;
   flex-direction: column;
-  gap: 2px;
-  padding: 8px 14px;
+  gap: 1px;
+  padding: 5px 11px;
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: 7px;
   background: var(--surface, #fff);
   cursor: pointer;
   text-align: left;
   font: inherit;
-  transition: border-color 0.12s, background 0.12s;
 }
-.runcard-scale:hover { border-color: var(--text-dim); }
-.runcard-scale.is-active {
+.composer-scale:hover { border-color: var(--text-dim); }
+.composer-scale.is-active {
   border-color: var(--accent, #ea580c);
   background: var(--accent-soft, #fff7ed);
 }
-.runcard-scale-name { font-size: 13px; font-weight: 650; }
-.runcard-scale-meta { font-size: 11.5px; color: var(--text-dim); font-variant-numeric: tabular-nums; }
+.composer-scale-name { font-size: 12.5px; font-weight: 650; }
+.composer-scale-meta { font-size: 11px; color: var(--text-dim); font-variant-numeric: tabular-nums; }
 
-/* Settings, said out loud. A folded-away dial must still be visible as text. */
-.runcard-settings {
+.composer-settings {
   display: flex;
   align-items: center;
-  gap: 7px;
+  gap: 6px;
   flex-wrap: wrap;
   font-size: 12px;
   color: var(--text-dim);
-  padding-top: 12px;
-  border-top: 1px solid var(--border);
 }
-.runcard-setting:not(:last-of-type)::after { content: ' ·'; color: var(--border); }
-.runcard-setting.is-changed {
-  color: var(--accent, #ea580c);
-  font-weight: 650;
-}
-.runcard-link {
+.composer-setting:not(:last-of-type)::after { content: ' ·'; color: var(--border); }
+.composer-setting.is-changed { color: var(--accent, #ea580c); font-weight: 650; }
+.composer-link {
   border: 0;
   background: none;
   padding: 0;
@@ -3518,112 +3512,96 @@ a.kw-serp-title:hover {
   text-decoration: underline;
 }
 
-.runcard-actions {
+/* One row: sizes | settings | spacer | action. Wraps on narrow viewports. */
+.composer-controls {
   display: flex;
   align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-top: 9px;
+}
+.composer-go { font-size: 13.5px; padding: 7px 16px; margin-left: auto; }
+.composer-reassure { font-size: 11.5px; }
+.composer-more {
+  display: flex;
+  align-items: baseline;
   gap: 14px;
   flex-wrap: wrap;
-  margin-top: 16px;
-}
-.runcard-go { font-size: 14.5px; padding: 9px 18px; }
-.runcard-reassure { font-size: 12px; }
-
-.runcard-more {
-  display: flex;
-  gap: 22px;
-  flex-wrap: wrap;
-  margin-top: 16px;
-  padding-top: 14px;
+  margin-top: 8px;
+  padding-top: 8px;
   border-top: 1px solid var(--border);
 }
-.runcard-disclosure {
+.composer-disclosure {
   border: 0;
   background: none;
   padding: 0;
   font: inherit;
-  font-size: 12.5px;
+  font-size: 12px;
   font-weight: 600;
   color: var(--text);
   cursor: pointer;
-  text-align: left;
 }
-.runcard-disclosure:hover { color: var(--accent, #ea580c); }
-.runcard-disclosure .faint { font-weight: 400; }
+.composer-disclosure:hover { color: var(--accent, #ea580c); }
+.composer-disclosure .faint { font-weight: 400; }
 
 /* Advanced: the six dials, on request. */
-.advanced-panel { margin-bottom: 16px; padding: 16px 18px; }
-.advanced-grid { display: flex; gap: 18px; flex-wrap: wrap; margin-bottom: 12px; }
+.advanced-panel { padding: 12px 20px; border-bottom: 1px solid var(--border); }
+.advanced-grid { display: flex; gap: 18px; flex-wrap: wrap; margin-bottom: 10px; }
 .advanced-toggles { display: flex; gap: 16px; flex-wrap: wrap; }
-.advanced-note { font-size: 11.5px; margin: 12px 0 0; max-width: 78ch; line-height: 1.5; }
+.advanced-note { font-size: 11.5px; margin: 10px 0 0; max-width: 90ch; line-height: 1.5; }
 
-/* `hidden` loses to the pickers' own display rules without this. */
-.sm-magic[hidden] { display: none; }
+/**
+ * The lists own the rest of the viewport.
+ *
+ * They were capped at 620px each, which was right when they sat below a stack
+ * of controls and above a footer. With the composer as a single bar there is
+ * nothing else competing for the height, so they take it and scroll inside.
+ */
+.opp-workspace .sm-magic,
+.opp-fill .sm-magic {
+  flex: 1;
+  min-height: 0;
+  margin: 0;
+  border-radius: 0;
+  border-left: 0;
+  border-right: 0;
+  border-bottom: 0;
+}
+.opp-workspace .sm-magic-topics,
+.opp-fill .sm-magic-topics,
+.opp-workspace .sm-magic-main,
+.opp-fill .sm-magic-main {
+  max-height: none;
+  min-height: 0;
+}
 
-/* Panels the run card opens line up with it rather than going full-bleed. */
-.runcard-panel { max-width: 880px; margin-bottom: 16px; }
 
-/* ── What is actually selected, on the card ──────────────────────────────
-   The card named the rule ("the top 10 niches") and not the members, so you
-   could not tell whether you were about to sweep roofing or solar without
-   opening the pickers. Chips name every one and carry their own remove. */
-.selrow {
-  padding-top: 12px;
-  margin-top: 12px;
-  border-top: 1px solid var(--border);
+/* Both panel headers are the same object -- a title, a count and its controls --
+   so they get the same height. They differed because the markets toolbar let
+   its filter and presets wrap onto two rows while the niche head stayed on one,
+   which put the two lists' first rows ~30px apart. */
+.opp-fill .sm-magic-topics-head,
+.opp-workspace .sm-magic-topics-head,
+.opp-fill .sm-magic > .sm-magic-main > .sm-toolbar,
+.opp-workspace .sm-magic > .sm-magic-main > .sm-toolbar {
+  min-height: 44px;
+  padding-top: 6px;
+  padding-bottom: 6px;
+  flex-wrap: nowrap;
 }
-.selrow-head {
-  display: flex;
-  align-items: baseline;
-  gap: 10px;
-  margin-bottom: 7px;
+.opp-fill .sm-magic > .sm-magic-main > .sm-toolbar .sm-toolbar-actions,
+.opp-workspace .sm-magic > .sm-magic-main > .sm-toolbar .sm-toolbar-actions {
+  flex-wrap: nowrap;
 }
-.selrow-title {
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.07em;
-  text-transform: uppercase;
-  color: var(--text-dim);
+/* Keeping them on one row means something has to give when the row is tight.
+   The filter box shrinks; the preset buttons do not, because a clipped "None"
+   is a control you cannot press. */
+.opp-fill .sm-magic > .sm-magic-main > .sm-toolbar .sm-filter-input,
+.opp-workspace .sm-magic > .sm-magic-main > .sm-toolbar .sm-filter-input {
+  flex: 0 1 220px;
+  min-width: 90px;
 }
-.selrow-count {
-  font-family: var(--mono, ui-monospace, monospace);
-  font-size: 11px;
-  padding: 1px 6px;
-  border-radius: 999px;
-  background: var(--surface-2, #f1f5f9);
-  border: 1px solid var(--border);
-  letter-spacing: 0;
-}
-.selrow-empty { font-size: 12.5px; color: var(--danger, #dc2626); }
-.selrow-chips { display: flex; flex-wrap: wrap; gap: 5px; }
-.selchip {
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  padding: 3px 5px 3px 9px;
-  font-size: 12.5px;
-  border: 1px solid var(--border);
-  border-radius: 999px;
-  background: var(--surface, #fff);
-  white-space: nowrap;
-  max-width: 100%;
-}
-.selchip-sub { color: var(--text-dim); font-size: 11.5px; }
-.selchip-x {
-  border: 0;
-  background: none;
-  padding: 0 2px;
-  font-size: 14px;
-  line-height: 1;
-  color: var(--text-dim);
-  cursor: pointer;
-  border-radius: 999px;
-}
-.selchip-x:hover { color: var(--danger, #dc2626); background: var(--surface-2, #f1f5f9); }
-.selchip-more {
-  padding: 3px 10px;
-  cursor: pointer;
-  font: inherit;
-  font-size: 12px;
-  color: var(--link, #2563eb);
-  background: var(--surface-2, #f8fafc);
+.opp-fill .sm-magic > .sm-magic-main > .sm-toolbar .seg,
+.opp-workspace .sm-magic > .sm-magic-main > .sm-toolbar .seg {
+  flex: none;
 }

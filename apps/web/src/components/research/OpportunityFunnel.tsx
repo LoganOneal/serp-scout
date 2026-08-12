@@ -204,87 +204,6 @@ function tidyProviderNote(note: string): string {
   return note.length > 150 ? `${note.slice(0, 150)}…` : note
 }
 
-/**
- * The selection itself, named.
- *
- * ==================== A COUNT IS NOT A SELECTION ====================
- * The run card said "the top 10 niches across the top 20 markets" and stopped
- * there, which is a description of HOW the selection was made and not of WHAT
- * is in it. The screen it replaced showed two lists with ticks, so at a glance
- * you knew you were about to sweep roofing and not solar, Houston and not
- * Cleveland -- and that was the one thing worth keeping from it.
- *
- * Chips rather than lists: they name every member, wrap into a couple of rows
- * instead of a scrolling panel, and each carries its own remove, so dropping
- * one niche no longer means opening a 200-row table to find it.
- * ===================================================================
- */
-function SelectionChips({
-  title,
-  items,
-  onRemove,
-  onEdit,
-}: {
-  title: string
-  items: Array<{ id: number; label: string; sub?: string | null }>
-  onRemove: (id: number) => void
-  onEdit: () => void
-}) {
-  const [expanded, setExpanded] = useState(false)
-  /** Two rows at typical widths -- enough to recognise the set, not a wall. */
-  const LIMIT = 8
-  const shown = expanded ? items : items.slice(0, LIMIT)
-  const hidden = items.length - shown.length
-
-  return (
-    <div className="selrow">
-      <div className="selrow-head">
-        <span className="selrow-title">
-          {title} <span className="selrow-count">{items.length}</span>
-        </span>
-        <button type="button" className="runcard-link" onClick={onEdit}>
-          Edit
-        </button>
-      </div>
-      {items.length === 0 ? (
-        <span className="selrow-empty">None selected — nothing will be swept.</span>
-      ) : (
-        <div className="selrow-chips">
-          {shown.map((it) => (
-            <span key={it.id} className="selchip" title={it.sub ? `${it.label} · ${it.sub}` : it.label}>
-              {it.label}
-              {it.sub && <span className="selchip-sub">{it.sub}</span>}
-              <button
-                type="button"
-                className="selchip-x"
-                onClick={() => onRemove(it.id)}
-                aria-label={`Remove ${it.label}`}
-                title={`Remove ${it.label}`}
-              >
-                ×
-              </button>
-            </span>
-          ))}
-          {hidden > 0 && (
-            <button type="button" className="selchip selchip-more" onClick={() => setExpanded(true)}>
-              +{hidden} more
-            </button>
-          )}
-          {expanded && items.length > LIMIT && (
-            <button
-              type="button"
-              className="selchip selchip-more"
-              onClick={() => setExpanded(false)}
-            >
-              Show fewer
-            </button>
-          )}
-        </div>
-      )}
-    </div>
-  )
-}
-
 /** True when `picked` is exactly the first `n` of `ordered`. */
 function isTopN<T extends { id: number }>(picked: Set<number>, ordered: T[], n: number): boolean {
   if (picked.size !== n || ordered.length < n) return false
@@ -341,8 +260,6 @@ export function OpportunityFunnel(props: OpportunityFunnelProps) {
   const [nicheFilter, setNicheFilter] = useState('')
   const [geoFilter, setGeoFilter] = useState('')
   const [singleMarketOpen, setSingleMarketOpen] = useState(false)
-  /** The niche and market pickers -- the old first screen, now on request. */
-  const [pickersOpen, setPickersOpen] = useState(false)
   const [advancedOpen, setAdvancedOpen] = useState(false)
 
   const deviceN = devices === 'both' ? 2 : 1
@@ -694,12 +611,12 @@ export function OpportunityFunnel(props: OpportunityFunnelProps) {
            * button. Nothing was removed; the pickers are one disclosure away.
            * ===============================================================
            */}
-          <div className="runcard">
-            <div className="runcard-scope">
-              <h2 className="runcard-title">{scopeSentence}</h2>
-              <div className="runcard-cost">
-                <strong className="runcard-jobs">{localEst.jobs.toLocaleString()}</strong> SERPs
-                <span className="runcard-sep">·</span>
+          <div className="composer">
+            <div className="composer-scope">
+              <h2 className="composer-title">{scopeSentence}</h2>
+              <div className="composer-cost">
+                <strong className="composer-jobs">{localEst.jobs.toLocaleString()}</strong> SERPs
+                <span className="composer-sep">·</span>
                 <span className={props.live ? '' : 'faint'}>
                   {props.live ? `about $${localEst.usd.toFixed(2)}` : '$0 · fixtures'}
                 </span>
@@ -711,7 +628,8 @@ export function OpportunityFunnel(props: OpportunityFunnelProps) {
              * ways -- niche presets, market presets, and combined presets -- so
              * the page asked twice for an answer it could take once.
              */}
-            <div className="runcard-scales" role="group" aria-label="Run size">
+            <div className="composer-controls">
+            <div className="composer-scales" role="group" aria-label="Run size">
               {SCALES.map((s) => {
                 const on = activeScale === s.id
                 const est = estCost(
@@ -725,15 +643,15 @@ export function OpportunityFunnel(props: OpportunityFunnelProps) {
                   <button
                     key={s.id}
                     type="button"
-                    className={`runcard-scale${on ? ' is-active' : ''}`}
+                    className={`composer-scale${on ? ' is-active' : ''}`}
                     aria-pressed={on}
                     onClick={() => {
                       selectTopNiches(s.niches)
                       selectTopGeo(s.geos)
                     }}
                   >
-                    <span className="runcard-scale-name">{s.label}</span>
-                    <span className="runcard-scale-meta">
+                    <span className="composer-scale-name">{s.label}</span>
+                    <span className="composer-scale-meta">
                       {s.niches} × {s.geos}
                       {props.live ? ` · $${est.usd.toFixed(2)}` : ''}
                     </span>
@@ -742,33 +660,16 @@ export function OpportunityFunnel(props: OpportunityFunnelProps) {
               })}
             </div>
 
-            <SelectionChips
-              title="Niches"
-              items={selectedNiches.map((n) => ({ id: n.id, label: n.label }))}
-              onRemove={toggleNiche}
-              onEdit={() => setPickersOpen(true)}
-            />
-            <SelectionChips
-              title="Markets"
-              items={selectedGeos.map((g) => ({
-                id: g.id,
-                label: g.market,
-                sub: g.stateAbbr,
-              }))}
-              onRemove={toggleGeo}
-              onEdit={() => setPickersOpen(true)}
-            />
-
             {/**
              * Settings said out loud. A toggle that doubles the SERP count must
              * not be able to hide inside a closed disclosure, so anything moved
              * off its default is named here and marked.
              */}
-            <div className="runcard-settings">
+            <div className="composer-settings">
               {advancedSummary.map((s) => (
                 <span
                   key={s.label}
-                  className={s.isDefault ? 'runcard-setting' : 'runcard-setting is-changed'}
+                  className={s.isDefault ? 'composer-setting' : 'composer-setting is-changed'}
                   title={s.isDefault ? undefined : 'Changed from the default'}
                 >
                   {s.label}
@@ -776,7 +677,7 @@ export function OpportunityFunnel(props: OpportunityFunnelProps) {
               ))}
               <button
                 type="button"
-                className="runcard-link"
+                className="composer-link"
                 onClick={() => setAdvancedOpen((v) => !v)}
                 aria-expanded={advancedOpen}
               >
@@ -784,19 +685,15 @@ export function OpportunityFunnel(props: OpportunityFunnelProps) {
               </button>
             </div>
 
-            <div className="runcard-actions">
-              <button
-                type="button"
-                className="primary runcard-go"
-                disabled={pending || !canRun}
-                onClick={reviewKeywords}
-                title="Free: asks Google Ads what these niches are actually searched as in these markets, and prices the run. Nothing is bought until the next step."
-              >
-                {pending ? 'Checking…' : 'Review keywords →'}
-              </button>
-              <span className="runcard-reassure faint">
-                Nothing is bought yet — the next step shows the keywords first.
-              </span>
+            <button
+              type="button"
+              className="primary composer-go"
+              disabled={pending || !canRun}
+              onClick={reviewKeywords}
+              title="Free: asks Google Ads what these niches are actually searched as in these markets, and prices the run. Nothing is bought until the next step."
+            >
+              {pending ? 'Checking…' : 'Review keywords →'}
+            </button>
             </div>
 
             {!canRun && (
@@ -805,35 +702,19 @@ export function OpportunityFunnel(props: OpportunityFunnelProps) {
               </p>
             )}
 
-            <div className="runcard-more">
+            <div className="composer-more">
               <button
                 type="button"
-                className="runcard-disclosure"
-                onClick={() => setPickersOpen((v) => !v)}
-                aria-expanded={pickersOpen}
-              >
-                <span aria-hidden>{pickersOpen ? '▾' : '▸'}</span> Change what&apos;s included
-                <span className="faint">
-                  {' '}
-                  {nicheIds.size} of {nicheList.length} niches, {geoIds.size} of{' '}
-                  {props.geos.length} markets
-                </span>
-              </button>
-              {/**
-               * Promoted out of a collapsed disclosure at the bottom of a page
-               * nobody scrolled to the bottom of. It answers a different
-               * question -- one market thoroughly, rather than many shallowly --
-               * and that makes it a door, not a footnote.
-               */}
-              <button
-                type="button"
-                className="runcard-disclosure"
+                className="composer-disclosure"
                 onClick={() => setSingleMarketOpen((v) => !v)}
                 aria-expanded={singleMarketOpen}
               >
                 <span aria-hidden>{singleMarketOpen ? '▾' : '▸'}</span> Research one market deeply
                 <span className="faint"> one place × ~24 buy-intent keywords · ~$0.10</span>
               </button>
+              <span className="composer-reassure faint">
+                Nothing is bought yet — the next step shows the keywords first.
+              </span>
             </div>
 
             {preview && !preview.ok && (
@@ -856,7 +737,7 @@ export function OpportunityFunnel(props: OpportunityFunnelProps) {
           </div>
 
           {advancedOpen && (
-            <div className="advanced-panel card runcard-panel">
+            <div className="advanced-panel card composer-panel">
               <div className="advanced-grid">
                 <label
                   className="screen-device-label"
@@ -968,7 +849,7 @@ export function OpportunityFunnel(props: OpportunityFunnelProps) {
           )}
 
           {singleMarketOpen && (
-            <div className="card runcard-panel">
+            <div className="card composer-panel">
               <p className="sub" style={{ fontSize: 12.5, marginTop: 0 }}>
                 One locality, expanded into its full buy-intent keyword cluster — the follow-up
                 after the grid picks a winner. Or scan every seed niche in one place at once.
@@ -985,12 +866,15 @@ export function OpportunityFunnel(props: OpportunityFunnelProps) {
           )}
 
           {/**
-           * Not rendered until asked for, rather than rendered and hidden.
-           * Selection lives in `nicheIds` / `geoIds`, so unmounting the pickers
-           * cannot lose it -- and shipping 328 controls nobody can see is the
-           * same page weight as the screen this replaced.
+           * The lists ARE the selection, and they fill the page.
+           *
+           * Folding them behind a disclosure cut the opening screen to ten
+           * controls but took the answer to "which ones am I locked into" with
+           * it, and left a card floating in an empty viewport. Two scrolling
+           * panels answer that continuously and use the space the workspace was
+           * built to give them; the composer above is what actually replaced
+           * the scattered controls.
            */}
-          {pickersOpen && (
           <div className="sm-magic">
             <aside className="sm-magic-topics" aria-label="Niches">
               <div className="sm-magic-topics-head">
@@ -1194,7 +1078,6 @@ export function OpportunityFunnel(props: OpportunityFunnelProps) {
               </div>
             </div>
           </div>
-          )}
 
         </section>
       )}
