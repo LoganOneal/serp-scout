@@ -3561,3 +3561,69 @@ a.kw-serp-title:hover {
 
 /* Panels the run card opens line up with it rather than going full-bleed. */
 .runcard-panel { max-width: 880px; margin-bottom: 16px; }
+
+/* ── What is actually selected, on the card ──────────────────────────────
+   The card named the rule ("the top 10 niches") and not the members, so you
+   could not tell whether you were about to sweep roofing or solar without
+   opening the pickers. Chips name every one and carry their own remove. */
+.selrow {
+  padding-top: 12px;
+  margin-top: 12px;
+  border-top: 1px solid var(--border);
+}
+.selrow-head {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  margin-bottom: 7px;
+}
+.selrow-title {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+}
+.selrow-count {
+  font-family: var(--mono, ui-monospace, monospace);
+  font-size: 11px;
+  padding: 1px 6px;
+  border-radius: 999px;
+  background: var(--surface-2, #f1f5f9);
+  border: 1px solid var(--border);
+  letter-spacing: 0;
+}
+.selrow-empty { font-size: 12.5px; color: var(--danger, #dc2626); }
+.selrow-chips { display: flex; flex-wrap: wrap; gap: 5px; }
+.selchip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 5px 3px 9px;
+  font-size: 12.5px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--surface, #fff);
+  white-space: nowrap;
+  max-width: 100%;
+}
+.selchip-sub { color: var(--text-dim); font-size: 11.5px; }
+.selchip-x {
+  border: 0;
+  background: none;
+  padding: 0 2px;
+  font-size: 14px;
+  line-height: 1;
+  color: var(--text-dim);
+  cursor: pointer;
+  border-radius: 999px;
+}
+.selchip-x:hover { color: var(--danger, #dc2626); background: var(--surface-2, #f1f5f9); }
+.selchip-more {
+  padding: 3px 10px;
+  cursor: pointer;
+  font: inherit;
+  font-size: 12px;
+  color: var(--link, #2563eb);
+  background: var(--surface-2, #f8fafc);
+}

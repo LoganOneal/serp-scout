@@ -204,6 +204,87 @@ function tidyProviderNote(note: string): string {
   return note.length > 150 ? `${note.slice(0, 150)}…` : note
 }
 
+/**
+ * The selection itself, named.
+ *
+ * ==================== A COUNT IS NOT A SELECTION ====================
+ * The run card said "the top 10 niches across the top 20 markets" and stopped
+ * there, which is a description of HOW the selection was made and not of WHAT
+ * is in it. The screen it replaced showed two lists with ticks, so at a glance
+ * you knew you were about to sweep roofing and not solar, Houston and not
+ * Cleveland -- and that was the one thing worth keeping from it.
+ *
+ * Chips rather than lists: they name every member, wrap into a couple of rows
+ * instead of a scrolling panel, and each carries its own remove, so dropping
+ * one niche no longer means opening a 200-row table to find it.
+ * ===================================================================
+ */
+function SelectionChips({
+  title,
+  items,
+  onRemove,
+  onEdit,
+}: {
+  title: string
+  items: Array<{ id: number; label: string; sub?: string | null }>
+  onRemove: (id: number) => void
+  onEdit: () => void
+}) {
+  const [expanded, setExpanded] = useState(false)
+  /** Two rows at typical widths -- enough to recognise the set, not a wall. */
+  const LIMIT = 8
+  const shown = expanded ? items : items.slice(0, LIMIT)
+  const hidden = items.length - shown.length
+
+  return (
+    <div className="selrow">
+      <div className="selrow-head">
+        <span className="selrow-title">
+          {title} <span className="selrow-count">{items.length}</span>
+        </span>
+        <button type="button" className="runcard-link" onClick={onEdit}>
+          Edit
+        </button>
+      </div>
+      {items.length === 0 ? (
+        <span className="selrow-empty">None selected — nothing will be swept.</span>
+      ) : (
+        <div className="selrow-chips">
+          {shown.map((it) => (
+            <span key={it.id} className="selchip" title={it.sub ? `${it.label} · ${it.sub}` : it.label}>
+              {it.label}
+              {it.sub && <span className="selchip-sub">{it.sub}</span>}
+              <button
+                type="button"
+                className="selchip-x"
+                onClick={() => onRemove(it.id)}
+                aria-label={`Remove ${it.label}`}
+                title={`Remove ${it.label}`}
+              >
+                ×
+              </button>
+            </span>
+          ))}
+          {hidden > 0 && (
+            <button type="button" className="selchip selchip-more" onClick={() => setExpanded(true)}>
+              +{hidden} more
+            </button>
+          )}
+          {expanded && items.length > LIMIT && (
+            <button
+              type="button"
+              className="selchip selchip-more"
+              onClick={() => setExpanded(false)}
+            >
+              Show fewer
+            </button>
+          )}
+        </div>
+      )}
+    </div>
+  )
+}
+
 /** True when `picked` is exactly the first `n` of `ordered`. */
 function isTopN<T extends { id: number }>(picked: Set<number>, ordered: T[], n: number): boolean {
   if (picked.size !== n || ordered.length < n) return false
@@ -444,6 +525,16 @@ export function OpportunityFunnel(props: OpportunityFunnelProps) {
     })
   }
 
+  /** What is actually selected, in ranked order, for the card to name. */
+  const selectedNiches = useMemo(
+    () => nicheList.filter((n) => nicheIds.has(n.id)),
+    [nicheList, nicheIds],
+  )
+  const selectedGeos = useMemo(
+    () => props.geos.filter((g) => geoIds.has(g.id)),
+    [props.geos, geoIds],
+  )
+
   /** Which named size the current selection is, if it is one of them. */
   const activeScale = useMemo(() => {
     const hit = SCALES.find(
@@ -650,6 +741,23 @@ export function OpportunityFunnel(props: OpportunityFunnelProps) {
                 )
               })}
             </div>
+
+            <SelectionChips
+              title="Niches"
+              items={selectedNiches.map((n) => ({ id: n.id, label: n.label }))}
+              onRemove={toggleNiche}
+              onEdit={() => setPickersOpen(true)}
+            />
+            <SelectionChips
+              title="Markets"
+              items={selectedGeos.map((g) => ({
+                id: g.id,
+                label: g.market,
+                sub: g.stateAbbr,
+              }))}
+              onRemove={toggleGeo}
+              onEdit={() => setPickersOpen(true)}
+            />
 
             {/**
              * Settings said out loud. A toggle that doubles the SERP count must
