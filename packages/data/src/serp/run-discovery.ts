@@ -293,6 +293,8 @@ export async function previewDiscoveryEnqueue(
   const billExtras = !usedFixtures
   const cost = estimateDiscoveryCostMicros({
     jobCount,
+    serpUnitMicros:
+      args.useQueuedSerp === true ? PRICE.serpOrganicTask : PRICE.serpOrganicLive,
     /**
      * ZERO, not the market count. Keyword volume comes from Google Ads, which
      * is free -- fetchVolumeBatch returns costMicros 0n and billableRequests 0
@@ -448,10 +450,16 @@ export async function enqueueDiscoveryRun(
     throw new DiscoveryEnqueueError('At least one geography is required.')
   }
 
-  const devices = args.devices?.length ? args.devices : (['desktop'] as ResearchDevice[])
-  const includeNearMe = args.includeNearMe !== false
-  const includeGeoExplicit = args.includeGeoExplicit === true
   const source = args.source ?? 'legacy_csv'
+  const catalogCityScoped = source === 'catalog'
+  const devices = args.devices?.length ? args.devices : (['desktop'] as ResearchDevice[])
+  /**
+   * Catalog match sets search exactly one city-bearing query per niche and geo:
+   * "ac repair nashville". The imported "near me" rows only establish the
+   * canonical seed and must not create a second paid SERP.
+   */
+  const includeNearMe = catalogCityScoped ? false : args.includeNearMe !== false
+  const includeGeoExplicit = catalogCityScoped ? false : args.includeGeoExplicit === true
 
   const basePreview = await previewDiscoveryEnqueue(db, args)
   /**
@@ -463,6 +471,8 @@ export async function enqueueDiscoveryRun(
    * estimate that overshoots is the safe direction for a spend gate.
    */
   const variantsPerKeyword = 1 + (includeNearMe ? 1 : 0) + (includeGeoExplicit ? 1 : 0)
+  const serpUnitMicros =
+    args.useQueuedSerp === true ? PRICE.serpOrganicTask : PRICE.serpOrganicLive
   const jobCount = Math.floor(
     (basePreview.preview.jobCount * devices.length * variantsPerKeyword) / 2,
   )
@@ -471,12 +481,12 @@ export async function enqueueDiscoveryRun(
     jobCount,
     estimatedCostMicros: basePreview.preview.usedFixtures
       ? 0n
-      : BigInt(jobCount) * PRICE.serpOrganicLive,
+      : BigInt(jobCount) * serpUnitMicros,
     devices: [...devices],
     includeNearMe,
     selectionNote: args.selectionNote ?? null,
     requiresLongLivedWorker: jobCount > 50 && !basePreview.preview.usedFixtures,
-    maxLiveSpendUnderHardCapMicros: BigInt(basePreview.preview.hardCap) * PRICE.serpOrganicLive,
+    maxLiveSpendUnderHardCapMicros: BigInt(basePreview.preview.hardCap) * serpUnitMicros,
   }
   const resolvedGeos = basePreview.resolvedGeos
 
@@ -633,9 +643,11 @@ export async function enqueueDiscoveryRun(
         // Purchasable if resolved with a location code (locality optional).
         if (g.resolveStatus !== 'resolved' || g.providerLocationCode === null) continue
         const geoId = geoIdByIndex[gi]!
-        const variants: Array<[string, string]> = [[n.keywordPrimary, 'primary']]
-        if (includeNearMe) variants.push([n.keywordNearMe, 'near_me'])
-        if (includeGeoExplicit) {
+        const variants: Array<[string, string]> = catalogCityScoped
+          ? [[applyQueryModifier(n.keywordPrimary, g.rawName.toLowerCase()), 'primary']]
+          : [[n.keywordPrimary, 'primary']]
+        if (!catalogCityScoped && includeNearMe) variants.push([n.keywordNearMe, 'near_me'])
+        if (!catalogCityScoped && includeGeoExplicit) {
           /**
            * "plumber new york city" -- the string a searcher actually types,
            * which returns a different page than the city-free keyword at the
@@ -1153,7 +1165,14 @@ export async function runDiscoveryJob(
     }
   }
 
-  const reserveCost: Micros = providers.live ? PRICE.serpOrganicLive : 0n
+  /**
+   * A prefetched queued payload was paid for when task_post accepted it. The
+   * collector only downloads that already-owned result, so reserving again
+   * would add a fictitious live SERP charge and could exhaust the run budget
+   * before processing results that are already paid for.
+   */
+  const reserveCost: Micros =
+    providers.live && !preFetched ? PRICE.serpOrganicLive : 0n
   /**
    * Secondary API calls this job makes beyond the organic SERP (keyword volume,
    * maps). Reserved cost only covers the SERP; without this the per-job cost in
@@ -1166,14 +1185,16 @@ export async function runDiscoveryJob(
    * drops to zero when the payload came from cache. Hoisted out of the try
    * because the failure paths report cost too.
    */
-  let serpCost: Micros = reserveCost
-  const reserved = await reserveDiscoverySpend(db, {
-    runId: job.runId,
-    costMicros: reserveCost,
-    endpoint: 'serp/discovery',
-    note: `keyword=${job.keyword ?? ''}`,
-    jobId: job.id,
-  })
+  let serpCost: Micros = preFetched?.paidMicros ?? reserveCost
+  const reserved = preFetched
+    ? 'ok'
+    : await reserveDiscoverySpend(db, {
+        runId: job.runId,
+        costMicros: reserveCost,
+        endpoint: 'serp/discovery',
+        note: `keyword=${job.keyword ?? ''}`,
+        jobId: job.id,
+      })
 
   if (reserved === 'budget_exceeded') {
     await markJob(db, job.id, { status: 'skipped', error: 'budget_exceeded' })
@@ -1217,7 +1238,7 @@ export async function runDiscoveryJob(
     await markJob(db, job.id, {
       status: 'failed',
       error: 'No provider location code on geo.',
-      costMicros: reserveCost,
+      costMicros: serpCost,
       measuredVia: providers.live ? 'dataforseo' : 'fixture',
     })
     await rollupDiscoveryRun(db, job.runId)
@@ -1225,7 +1246,7 @@ export async function runDiscoveryJob(
       jobId: job.id,
       status: 'failed',
       hitCount: 0,
-      costMicros: reserveCost,
+      costMicros: serpCost,
       error: 'No provider location code',
     }
   }

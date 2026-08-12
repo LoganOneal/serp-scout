@@ -92,6 +92,15 @@ describe('money', () => {
 })
 
 describe('estimateDiscoveryCostMicros', () => {
+  it('uses the queued task rate when that delivery method is selected', () => {
+    const c = estimateDiscoveryCostMicros({
+      jobCount: 1_400,
+      serpUnitMicros: PRICE.serpOrganicTask,
+      volumeRequests: 0,
+    })
+    expect(formatMicrosUsd(c.serpMicros, { precision: 2 })).toBe('$0.84')
+  })
+
   /**
    * The bug this pins: a 3,200-job deep dive quoted $6.40 (SERP only) while
    * keyword volume alone was ~$144, because volume was fetched once per

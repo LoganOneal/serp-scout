@@ -163,13 +163,15 @@ export interface DiscoveryCostBreakdown {
 export function estimateDiscoveryCostMicros(args: {
   /** Organic SERP calls — one per job (keyword x location x device). */
   jobCount: number
+  /** Selected delivery method. Defaults to the synchronous live endpoint. */
+  serpUnitMicros?: Micros
   /** Keyword-volume requests. Batched: one per location, NOT one per keyword. */
   volumeRequests: number
   /** Maps-pack calls — one per (niche, location) that asks for one. */
   mapsRequests?: number
 }): DiscoveryCostBreakdown {
   const n = (x: number) => BigInt(Math.max(0, Math.trunc(x)))
-  const serpMicros = n(args.jobCount) * PRICE.serpOrganicLive
+  const serpMicros = n(args.jobCount) * (args.serpUnitMicros ?? PRICE.serpOrganicLive)
   const volumeMicros = n(args.volumeRequests) * PRICE.keywordsGoogleAdsSearchVolume
   const mapsMicros = n(args.mapsRequests ?? 0) * PRICE.serpMapsLive
   return {

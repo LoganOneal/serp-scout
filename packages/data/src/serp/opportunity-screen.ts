@@ -37,6 +37,52 @@ import type { DiscoveryRun } from '../schema.js'
  * Stage 1 screen (free) + Stage 2 deep-dive enqueue + opportunity grid.
  */
 
+/**
+ * The fixed high-volume local-service match set supplied by the operator.
+ *
+ * The source list has 50 Google Ads keywords. Fifteen are "<niche> near me"
+ * siblings, so stripping only that exact suffix leaves these 35 canonical
+ * niches. Keep service variants distinct: refrigerator repair is not folded
+ * into appliance repair, and mold removal is not folded into mold remediation.
+ */
+export const REDDIT_LOCAL_SERVICE_MATCH_SET = [
+  'ac repair',
+  'appliance repair',
+  'bathroom remodeling',
+  'bed bug treatment',
+  'carpet cleaning',
+  'closet organizer',
+  'cockroach control',
+  'dryer vent cleaning',
+  'dumpster rental',
+  'electrician',
+  'fire damage restoration',
+  'furnace repair',
+  'garage door opener repair',
+  'garage door repair',
+  'general contractor',
+  'handyman',
+  'house painters',
+  'interior painting',
+  'junk removal',
+  'landscaping',
+  'lawn aeration',
+  'lawn mowing',
+  'locksmith',
+  'maid service',
+  'mold remediation',
+  'mold removal',
+  'movers',
+  'pest control',
+  'plumber',
+  'pressure washing',
+  'refrigerator repair',
+  'roofers',
+  'storm damage restoration',
+  'tree service',
+  'water damage restoration',
+] as const
+
 export interface ScreenKeywordRow {
   id: number
   keyword: string
@@ -69,11 +115,11 @@ export async function getOpportunityScreenBoard(
   db: Database,
   opts?: { keywordLimit?: number; geoLimit?: number },
 ): Promise<ScreenBoard> {
-  // Full seeded catalog (hundreds of primary keywords + 200 markets).
-  const kwLimit = opts?.keywordLimit ?? 2000
+  // Fixed operator-approved match set + the available market catalog.
+  const kwLimit = opts?.keywordLimit ?? REDDIT_LOCAL_SERVICE_MATCH_SET.length
   const geoLimit = opts?.geoLimit ?? 250
 
-  // Catalog is names-only (avg_monthly_searches null). Sort A–Z; Google Ads fills volume on deep dive.
+  // Do not discover or infer more keywords here. This fixed list is the match set.
   const keywords = await db
     .select({
       id: researchKeywords.id,
@@ -84,7 +130,13 @@ export async function getOpportunityScreenBoard(
       nicheId: researchKeywords.nicheId,
     })
     .from(researchKeywords)
-    .where(and(eq(researchKeywords.active, true), eq(researchKeywords.variant, 'primary')))
+    .where(
+      and(
+        eq(researchKeywords.active, true),
+        eq(researchKeywords.variant, 'primary'),
+        inArray(researchKeywords.keywordNorm, [...REDDIT_LOCAL_SERVICE_MATCH_SET]),
+      ),
+    )
     .orderBy(asc(researchKeywords.keyword))
     .limit(kwLimit)
 
@@ -106,7 +158,13 @@ export async function getOpportunityScreenBoard(
   const [kwCount] = await db
     .select({ n: sql<number>`count(*)::int` })
     .from(researchKeywords)
-    .where(and(eq(researchKeywords.active, true), eq(researchKeywords.variant, 'primary')))
+    .where(
+      and(
+        eq(researchKeywords.active, true),
+        eq(researchKeywords.variant, 'primary'),
+        inArray(researchKeywords.keywordNorm, [...REDDIT_LOCAL_SERVICE_MATCH_SET]),
+      ),
+    )
 
   const [geoCount] = await db
     .select({ n: sql<number>`count(*)::int` })
@@ -145,6 +203,7 @@ export function estimateDeepDiveCost(args: {
   geoCount: number
   devices: number
   includeNearMe?: boolean
+  useQueuedSerp?: boolean
   usedFixtures?: boolean
   hardCap?: number
 }): DeepDiveCostPreview {
@@ -167,7 +226,9 @@ export function estimateDeepDiveCost(args: {
   }
 
   const usedFixtures = args.usedFixtures ?? false
-  const estimatedCostMicros = usedFixtures ? 0n : BigInt(jobCount) * PRICE.serpOrganicLive
+  const serpUnitMicros =
+    args.useQueuedSerp === true ? PRICE.serpOrganicTask : PRICE.serpOrganicLive
+  const estimatedCostMicros = usedFixtures ? 0n : BigInt(jobCount) * serpUnitMicros
   const estimatedCostUsd = Number(estimatedCostMicros) / 1_000_000
   const estimateCents = Math.ceil(estimatedCostUsd * 100)
   const defaultBudgetCapCents = usedFixtures ? 0 : Math.max(1000, estimateCents)
@@ -185,7 +246,7 @@ export function estimateDeepDiveCost(args: {
     selectionNote,
     defaultBudgetCapCents,
     requiresLongLivedWorker: jobCount > 50 && !usedFixtures,
-    maxLiveSpendUnderHardCapUsd: (hardCap * Number(PRICE.serpOrganicLive)) / 1_000_000,
+    maxLiveSpendUnderHardCapUsd: (hardCap * Number(serpUnitMicros)) / 1_000_000,
   }
 }
 
@@ -255,7 +316,7 @@ export async function resolveKeywordIdsForNiches(
   /** Per niche: what discovery chose, and what it threw away. */
   discovery: Array<{
     nicheSlug: string
-    source: 'google_ads' | 'template'
+    source: 'google_ads' | 'template' | 'fixed_match_set'
     selected: Array<{ keyword: string; volume: number | null }>
     rejected: number
     note: string | null
@@ -442,6 +503,8 @@ export async function previewOpportunityDeepDive(
     maxKeywordsPerNiche?: number
     /** Also measure "<keyword> <city>". See discoveryRuns.includeGeoExplicit. */
     includeGeoExplicit?: boolean
+    /** Queue SERPs at the lower asynchronous task rate. */
+    useQueuedSerp?: boolean
     /** Paid extras, off unless asked for. See discoveryRuns in schema.ts. */
     fetchVolume?: boolean
     fetchMaps?: boolean
@@ -482,6 +545,36 @@ export async function previewOpportunityDeepDive(
     nicheCount = resolved.nicheCount
     keywordsPerNiche = resolved.keywordsPerNiche
     discovery = resolved.discovery
+  } else if (keywordIds?.length) {
+    /**
+     * Fixed match-set selections already ARE the approved keywords. The old
+     * review path only populated `discovery` after expanding seeded niches, so
+     * direct research_keyword IDs produced a correctly priced but empty draft.
+     * The client interpreted that as "nothing to approve" and hid the Buy step.
+     */
+    const selectedRows = await db
+      .select()
+      .from(researchKeywords)
+      .where(
+        and(
+          eq(researchKeywords.active, true),
+          inArray(researchKeywords.id, keywordIds),
+        ),
+      )
+    const byId = new Map(selectedRows.map((row) => [row.id, row]))
+    discovery = keywordIds.flatMap((id) => {
+      const row = byId.get(id)
+      if (!row) return []
+      return [{
+        nicheSlug: row.seedKey.replace(/\s+/g, '-'),
+        source: 'fixed_match_set' as const,
+        selected: [{ keyword: row.keyword, volume: row.avgMonthlySearches }],
+        rejected: 0,
+        note: 'operator-approved fixed match set',
+      }]
+    })
+    nicheCount = discovery.length
+    keywordsPerNiche = 1
   }
 
   const { preview } = await enqueueCatalogBulkResearch(db, {
@@ -490,6 +583,7 @@ export async function previewOpportunityDeepDive(
     devices,
     includeNearMe: false, // already expanded
     includeGeoExplicit: args.includeGeoExplicit === true,
+    useQueuedSerp: args.useQueuedSerp === true,
     fetchVolume: args.fetchVolume === true,
     fetchMaps: args.fetchMaps === true,
     dryRun: true,
@@ -502,6 +596,7 @@ export async function previewOpportunityDeepDive(
    * ones cost the same and look identical on a cost line.
    */
   const discovered = discovery.filter((d) => d.source === 'google_ads')
+  const fixed = discovery.filter((d) => d.source === 'fixed_match_set')
   const topPicks = discovered
     .flatMap((d) => d.selected)
     .filter((k) => k.volume != null)
@@ -511,7 +606,9 @@ export async function previewOpportunityDeepDive(
 
   const noteParts = [
     nicheCount != null ? `${nicheCount} niches × ~${keywordsPerNiche} kw` : null,
-    discovery.length > 0
+    fixed.length > 0
+      ? `keywords: ${fixed.length} fixed match-set niche${fixed.length === 1 ? '' : 's'}`
+      : discovery.length > 0
       ? `keywords: ${discovered.length}/${discovery.length} niches from Google Ads` +
         (topPicks.length > 0 ? ` — top: ${topPicks.join(', ')}` : '')
       : null,

@@ -47,13 +47,20 @@ export type NicheEconomicsRow = {
   scoreReasons: string[]
 }
 
+export type MatchKeywordRow = {
+  id: number
+  keyword: string
+  volume: number | null
+  competition: string | null
+}
+
 export type OpportunityFunnelProps = {
   /** Purchasable research geos (markets). */
   geoTotal: number
   geos: ScreenGeo[]
   defaultGeoIds: number[]
-  /** Ranked niches with GAds + ticket priors — primary Screen selection. */
-  nicheEconomics: NicheEconomicsRow[]
+  /** Fixed operator-approved canonical keyword match set. */
+  matchKeywords: MatchKeywordRow[]
   deepDiveRuns: Array<{
     id: number
     status: string
@@ -82,6 +89,8 @@ export type OpportunityFunnelProps = {
 
 /** /serp/google/organic/live/advanced — $0.002 per call. */
 const UNIT = 0.002
+/** /serp/google/organic/task_post — $0.0006 per queued call. */
+const QUEUED_UNIT = 0.0006
 /**
  * /keywords_data/google_ads/search_volume/live — $0.09 PER REQUEST.
  *
@@ -103,10 +112,13 @@ function estCost(
   geo: number,
   devices: number,
   niches = 0,
-  extras: { volume: boolean; maps: boolean } = { volume: false, maps: false },
+  extras: { volume: boolean; maps: boolean; queued?: boolean } = {
+    volume: false,
+    maps: false,
+  },
 ): { jobs: number; usd: number; serpUsd: number; volumeUsd: number } {
   const jobs = kw * geo * devices
-  const serpUsd = jobs * UNIT
+  const serpUsd = jobs * (extras.queued ? QUEUED_UNIT : UNIT)
   // One batched volume request per market, not per keyword x market.
   const volumeUsd = extras.volume ? geo * VOLUME_UNIT : 0
   const mapsUsd = extras.maps ? niches * geo * MAPS_UNIT : 0
@@ -124,13 +136,6 @@ function formatPop(n: number | null): string {
   if (n == null) return '—'
   if (n >= 1_000_000) return `${(n / 1_000_000).toFixed(1)}M`
   return `${Math.round(n / 1000)}k`
-}
-
-function formatUsdMicros(n: number | null): string {
-  if (n == null) return '—'
-  const usd = n / 1_000_000
-  if (usd >= 1000) return `$${Math.round(usd / 100) / 10}k`
-  return `$${Math.round(usd)}`
 }
 
 /** Header checkbox: checked / unchecked / indeterminate from selection vs visible ids */
@@ -169,11 +174,8 @@ function SelectAllCheckbox({
 }
 
 /**
- * Research funnel: Screen (niches × markets) → Market sweep (SERPs + DataForSEO local volume).
- * A niche expands to ~KW_PER_NICHE buy-intent keywords at enqueue time — not keyword×market pick.
+ * Research funnel: fixed canonical niches × markets → city-specific SERPs.
  */
-const KW_PER_NICHE = 8
-
 type FunnelStep = 'screen' | 'runs'
 
 /**
@@ -208,9 +210,31 @@ export function OpportunityFunnel(props: OpportunityFunnelProps) {
    * to compute and the SERPs are not.
    */
   const [step, setStep] = useState<FunnelStep>('screen')
-  const nicheList = props.nicheEconomics
+  const nicheList = useMemo<NicheEconomicsRow[]>(
+    () =>
+      props.matchKeywords.map((k) => ({
+        id: k.id,
+        slug: k.keyword.replace(/\s+/g, '-'),
+        label: k.keyword,
+        keywordNoun: k.keyword,
+        category: 'local service',
+        avgTicketMicros: null,
+        leadCommissionRateBps: null,
+        leadValueMicros: null,
+        economicsSource: null,
+        gadsAvgMonthlySearches: k.volume,
+        gadsCompetitionIndex: null,
+        gadsCompetition: k.competition,
+        gadsTopOfPageBidHighMicros: null,
+        compositeScore: null,
+        adsFitScore: null,
+        redditPriorityScore: null,
+        scoreReasons: [],
+      })),
+    [props.matchKeywords],
+  )
   const defaultNicheIds = useMemo(
-    () => new Set(nicheList.slice(0, 10).map((n) => n.id)),
+    () => new Set(nicheList.map((n) => n.id)),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [nicheList.length],
   )
@@ -220,16 +244,6 @@ export function OpportunityFunnel(props: OpportunityFunnelProps) {
   )
   const [devices, setDevices] = useState<'desktop' | 'both'>('both')
   /**
-   * Keywords bought per niche. THE cost dial.
-   *
-   * A niche is not one query — it expands to service-intent variants ("roofing",
-   * "roofing cost", "emergency roofing", "roofing contractor"…), and each one is
-   * a SERP call per market per device. At the old hardcoded 8 a 50x50 screen was
-   * 20,000 calls ($40); at 1 it is 2,500 ($5). Wide screens want the head term
-   * only — you sweep the winners afterwards.
-   */
-  const [kwPerNiche, setKwPerNiche] = useState<number>(KW_PER_NICHE)
-  /**
    * Paid extras, OFF by default — see discoveryRuns in schema.ts. On a wide
    * screen they cost more than the SERPs they annotate, and neither earns that
    * while you are still filtering. Turn them on for the shortlist.
@@ -238,7 +252,6 @@ export function OpportunityFunnel(props: OpportunityFunnelProps) {
   const [fetchVolume, setFetchVolume] = useState(true)
   const [useQueuedSerp, setUseQueuedSerp] = useState(false)
   const [fetchMaps, setFetchMaps] = useState(false)
-  const [includeGeoExplicit, setIncludeGeoExplicit] = useState(false)
   const [workerAck, setWorkerAck] = useState(false)
   const [pending, startTransition] = useTransition()
   const [preview, setPreview] = useState<CatalogResearchResult | null>(null)
@@ -249,24 +262,17 @@ export function OpportunityFunnel(props: OpportunityFunnelProps) {
   const [advancedOpen, setAdvancedOpen] = useState(false)
 
   const deviceN = devices === 'both' ? 2 : 1
-  /**
-   * Estimated SERPs = niches × keywords/niche × markets × devices.
-   *
-   * The geo-explicit variant buys a second SERP per keyword, so it enters here
-   * as a keyword multiplier rather than a separate line — the estimate has to
-   * move when the toggle does, or the operator agrees to a number that is half
-   * the real one.
-   */
+  /** One city-appended keyword per canonical niche, market and device. */
   const localEst = useMemo(
     () =>
       estCost(
-        nicheIds.size * kwPerNiche * (includeGeoExplicit ? 2 : 1),
+        nicheIds.size,
         geoIds.size,
         deviceN,
         nicheIds.size,
-        { volume: fetchVolume, maps: fetchMaps },
+        { volume: fetchVolume, maps: fetchMaps, queued: useQueuedSerp },
       ),
-    [nicheIds.size, geoIds.size, deviceN, kwPerNiche, fetchVolume, fetchMaps, includeGeoExplicit],
+    [nicheIds.size, geoIds.size, deviceN, fetchVolume, fetchMaps, useQueuedSerp],
   )
 
   const filteredNiches = useMemo(() => {
@@ -352,14 +358,12 @@ export function OpportunityFunnel(props: OpportunityFunnelProps) {
   const buildDeepDiveFd = (dryRun: boolean) => {
     const fd = new FormData()
     fd.set('dryRun', dryRun ? 'true' : 'false')
-    fd.set('nicheIds', [...nicheIds].join(','))
+    fd.set('keywordIds', [...nicheIds].join(','))
     fd.set('geoIds', [...geoIds].join(','))
     fd.set('devices', devices === 'both' ? 'both' : 'desktop')
-    fd.set('maxKeywordsPerNiche', String(kwPerNiche))
     fd.set('fetchVolume', fetchVolume ? 'true' : 'false')
     fd.set('useQueuedSerp', useQueuedSerp ? 'true' : 'false')
     fd.set('fetchMaps', fetchMaps ? 'true' : 'false')
-    fd.set('includeGeoExplicit', includeGeoExplicit ? 'true' : 'false')
     return fd
   }
 
@@ -416,7 +420,8 @@ export function OpportunityFunnel(props: OpportunityFunnelProps) {
   const orderedKeywordPreview = useMemo(
     () =>
       [...keywordPreview].sort((a, b) => {
-        const measured = (d: typeof a) => (d.source === 'google_ads' ? 1 : 0)
+        const measured = (d: typeof a) =>
+          d.source === 'fixed_match_set' ? 2 : d.source === 'google_ads' ? 1 : 0
         const vol = (d: typeof a) => d.keywords.reduce((n, k) => n + (k.volume ?? 0), 0)
         return measured(b) - measured(a) || vol(b) - vol(a)
       }),
@@ -500,19 +505,17 @@ export function OpportunityFunnel(props: OpportunityFunnelProps) {
    *
    * The point of folding the dials away is that you stop reading six controls
    * on every visit. The point of this line is that folding them away must not
-   * let one hide -- "kw + city" doubles the SERP count, and a doubled bill
-   * should never be a surprise hidden behind a closed disclosure.
+   * City scoping is part of every match-set query, not an optional paid variant.
    */
   const advancedSummary = useMemo(
     () => [
       { label: devices === 'both' ? 'Desktop + mobile' : 'Desktop only', isDefault: devices === 'both' },
-      { label: `${kwPerNiche} kw/niche`, isDefault: kwPerNiche === KW_PER_NICHE },
+      { label: 'Niche + city', isDefault: true },
       { label: fetchVolume ? 'Local volume on' : 'No local volume', isDefault: fetchVolume },
       ...(fetchMaps ? [{ label: 'Maps on', isDefault: false }] : []),
       ...(useQueuedSerp ? [{ label: 'Queued SERPs', isDefault: false }] : []),
-      ...(includeGeoExplicit ? [{ label: '“kw + city” — 2× SERPs', isDefault: false }] : []),
     ],
-    [devices, kwPerNiche, fetchVolume, fetchMaps, useQueuedSerp, includeGeoExplicit],
+    [devices, fetchVolume, fetchMaps, useQueuedSerp],
   )
 
   const runsUnderTab = props.deepDiveRuns.length + props.scanRuns.length
@@ -715,23 +718,6 @@ export function OpportunityFunnel(props: OpportunityFunnelProps) {
           {advancedOpen && (
             <div className="advanced-panel card composer-panel">
               <div className="advanced-grid">
-                <label
-                  className="screen-device-label"
-                  title="Each niche expands to this many service-intent queries. Every query is a SERP call per market per device — this multiplies the whole run."
-                >
-                  Keywords / niche
-                  <select
-                    value={kwPerNiche}
-                    onChange={(e) => {
-                      setKwPerNiche(Number(e.target.value))
-                      setPreview(null)
-                    }}
-                  >
-                    <option value={1}>1 · head term (widest screen)</option>
-                    <option value={3}>3 · head + 2 variants</option>
-                    <option value={8}>8 · full intent cluster</option>
-                  </select>
-                </label>
                 <label className="screen-device-label">
                   Devices
                   <select
@@ -795,31 +781,10 @@ export function OpportunityFunnel(props: OpportunityFunnelProps) {
                   Queued SERPs
                   <span className="faint"> −70%</span>
                 </label>
-                <label
-                  className="screen-extra-toggle"
-                  title={
-                    'Also measure "<keyword> <city>" — e.g. "plumber new york city" — alongside the city-free keyword. ' +
-                    'The two return different pages: the city-free keyword at a location code shows who holds the local slots, ' +
-                    'while the typed-out string is where city-specific Reddit threads live. ' +
-                    'Doubles the SERP count for this run.'
-                  }
-                >
-                  <input
-                    type="checkbox"
-                    checked={includeGeoExplicit}
-                    onChange={(e) => {
-                      setIncludeGeoExplicit(e.target.checked)
-                      setPreview(null)
-                    }}
-                  />
-                  “kw + city”
-                  <span className="faint"> ×2 SERPs</span>
-                </label>
               </div>
               <p className="faint advanced-note">
-                Hard cap 5,000 jobs ($10). SERPs use each market&apos;s geo location code, so they
-                are the pages someone in that market would see. Volume is Google Ads at the market
-                location, not map-pack listings.
+                Every query appends the selected city (for example, “ac repair nashville”) and also
+                uses that market&apos;s geo location code. Hard cap 5,000 jobs ($10).
               </p>
             </div>
           )}
@@ -890,7 +855,7 @@ export function OpportunityFunnel(props: OpportunityFunnelProps) {
               </div>
               <div className="sm-topic-cols">
                 <span>Niche</span>
-                <span className="num">Score</span>
+                <span className="num">Query</span>
               </div>
               <button
                 type="button"
@@ -920,15 +885,10 @@ export function OpportunityFunnel(props: OpportunityFunnelProps) {
                       <span className="sm-topic-name">
                         {n.label}
                         <span className="sm-topic-meta">
-                          {formatVol(n.gadsAvgMonthlySearches)} vol
-                          {n.gadsCompetitionIndex != null
-                            ? ` · comp ${n.gadsCompetitionIndex}`
-                            : ''}
-                          {' · '}
-                          {formatUsdMicros(n.leadValueMicros)} lead
+                          {n.keywordNoun} + selected city
                         </span>
                       </span>
-                      <span className="sm-topic-count sm-score">{n.compositeScore ?? '—'}</span>
+                      <span className="sm-topic-count">1 SERP</span>
                     </button>
                   )
                 })}
@@ -1259,15 +1219,21 @@ export function OpportunityFunnel(props: OpportunityFunnelProps) {
                         <header className="kwrev-niche-head">
                           <span className="kwrev-niche-name">{nicheLabel(d.nicheSlug)}</span>
                           <span
-                            className={`badge ${d.source === 'google_ads' ? 'go' : 'warn'}`}
+                            className={`badge ${d.source !== 'template' ? 'go' : 'warn'}`}
                             title={
-                              d.source === 'google_ads'
+                              d.source === 'fixed_match_set'
+                                ? 'Operator-approved keyword from the fixed local-service match set.'
+                                : d.source === 'google_ads'
                                 ? 'Keywords come from Google Ads search data for these markets.'
                                 : d.note ??
                                   'Google Ads returned nothing; these are template-generated.'
                             }
                           >
-                            {d.source === 'google_ads' ? 'measured' : 'template'}
+                            {d.source === 'fixed_match_set'
+                              ? 'fixed set'
+                              : d.source === 'google_ads'
+                                ? 'measured'
+                                : 'template'}
                           </span>
                         </header>
                         <div className="kwrev-niche-meta">

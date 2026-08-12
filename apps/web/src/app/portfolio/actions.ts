@@ -502,8 +502,8 @@ export interface CatalogResearchResult {
 
 export interface KeywordPreviewNiche {
   nicheSlug: string
-  /** Where the list came from. `template` means Google Ads gave us nothing. */
-  source: 'google_ads' | 'template'
+  /** Where the reviewed list came from. */
+  source: 'google_ads' | 'template' | 'fixed_match_set'
   keywords: Array<{ keyword: string; volume: number | null }>
   /** Ideas discovery threw away for intent or volume. */
   rejected: number
@@ -593,6 +593,7 @@ export async function opportunityDeepDiveAction(fd: FormData): Promise<CatalogRe
         devices: [...devices],
         includeNearMe: false,
         includeGeoExplicit,
+        useQueuedSerp,
         maxKeywordsPerNiche,
         fetchVolume,
         fetchMaps,
