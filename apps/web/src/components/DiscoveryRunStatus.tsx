@@ -165,6 +165,13 @@ export function DiscoveryRunStatus({
           const tone = statusTone(r.status, r.jobsFailed, r.jobsDone, r.jobCount)
           const label = statusLabel(r.status, r.jobsFailed, r.jobsDone, r.jobCount)
           const remaining = Math.max(0, r.jobCount - finished)
+          /**
+           * The next-action strip below renders the emphasised "Open results",
+           * so the header one is a second copy of the same button 60px away.
+           * It stays only for the states where the strip offers something else
+           * -- otherwise opening the run would have no control at all.
+           */
+          const next = runNextAction(r)
 
           return (
             <div
@@ -185,7 +192,7 @@ export function DiscoveryRunStatus({
                 </div>
                 <div className="row-actions">
                   <span className={`badge ${tone}`}>{label}</span>
-                  {runHref && (
+                  {runHref && next.cta !== 'open-results' && (
                     <a className="btn tiny" href={runHref(r.id)}>
                       Open results →
                     </a>
@@ -243,72 +250,43 @@ export function DiscoveryRunStatus({
                   <strong>{r.hitCount}</strong>
                   <span className="faint"> Reddit hits</span>
                 </span>
+                {/**
+                 * Cost belongs on this line, not in a bordered pill under it
+                 * with a two-line footnote beneath that. Every card carried the
+                 * same explanation of what the ledger covers -- true, and worth
+                 * saying once on hover rather than four times down the page.
+                 */}
+                {(() => {
+                  const spend = parseMicros(r.spendMicros)
+                  const est = parseMicros(r.estimatedCostMicros)
+                  const fixtures = Boolean(r.usedFixtures)
+                  const label = fixtures ? '$0 fixtures' : formatMicrosUsd(spend, { precision: 4 })
+                  const estLabel =
+                    !fixtures && est > 0n ? formatMicrosUsd(est, { precision: 4 }) : null
+                  return (
+                    <>
+                      <span className="job-run-sep">·</span>
+                      <span
+                        title={
+                          `Organic SERP jobs only — Volume and Maps API calls are not in this ledger.` +
+                          (estLabel ? ` Estimated ${estLabel} before the run.` : '') +
+                          (r.jobsDone > 0 && !fixtures
+                            ? ` About $${(Number(spend) / 1_000_000 / Math.max(1, r.jobsDone)).toFixed(4)} per completed job.`
+                            : '')
+                        }
+                      >
+                        <strong className="mono">{label}</strong>
+                        <span className="faint"> spent</span>
+                      </span>
+                    </>
+                  )
+                })()}
                 <span className="job-run-sep">·</span>
                 <span className="faint mono" style={{ fontSize: 11 }}>
                   {formatWhen(r.createdAt)}
                 </span>
               </div>
 
-              {(() => {
-                const spend = parseMicros(r.spendMicros)
-                const est = parseMicros(r.estimatedCostMicros)
-                const fixtures = Boolean(r.usedFixtures)
-                const spendLabel = fixtures
-                  ? '$0 fixtures'
-                  : formatMicrosUsd(spend, { precision: 4 })
-                const estLabel =
-                  !fixtures && est > 0n ? formatMicrosUsd(est, { precision: 4 }) : null
-
-                if (active) {
-                  return (
-                    <div className="job-run-cost faint" style={{ fontSize: 12.5, marginTop: 6 }}>
-                      Spent so far: <strong className="mono">{spendLabel}</strong>
-                      {estLabel ? (
-                        <span className="faint"> · est. {estLabel}</span>
-                      ) : null}
-                      <span className="faint"> · organic SERP jobs</span>
-                    </div>
-                  )
-                }
-
-                // Finished: show total cost prominently
-                return (
-                  <div className="job-run-cost" style={{ marginTop: 8 }}>
-                    <span
-                      className="job-run-cost-total"
-                      style={{
-                        display: 'inline-flex',
-                        alignItems: 'baseline',
-                        gap: 6,
-                        padding: '5px 10px',
-                        borderRadius: 6,
-                        background: 'var(--surface-2, #f8fafc)',
-                        border: '1px solid var(--border)',
-                        fontSize: 13,
-                      }}
-                    >
-                      <span className="faint" style={{ fontWeight: 600 }}>
-                        Total cost
-                      </span>
-                      <strong className="mono" style={{ fontSize: 15 }}>
-                        {spendLabel}
-                      </strong>
-                      {estLabel && spend !== est ? (
-                        <span className="faint mono" style={{ fontSize: 11 }}>
-                          (est. {estLabel})
-                        </span>
-                      ) : null}
-                    </span>
-                    <div className="faint" style={{ fontSize: 11, marginTop: 4 }}>
-                      Organic SERP jobs only
-                      {r.jobsDone > 0 && !fixtures
-                        ? ` · ~$${(Number(spend) / 1_000_000 / Math.max(1, r.jobsDone)).toFixed(4)}/done job`
-                        : ''}
-                      . Volume + Maps API calls are extra (not in this ledger).
-                    </div>
-                  </div>
-                )
-              })()}
 
               {/**
                * What to do about this run, rather than what happened to it.
@@ -318,7 +296,6 @@ export function DiscoveryRunStatus({
                * with the same two sentences of generic failure advice.
                */}
               {(() => {
-                const next = runNextAction(r)
                 return (
                   <div className={`job-next job-next-${next.tone}`}>
                     <div className="job-next-head">

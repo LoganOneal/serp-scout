@@ -590,7 +590,7 @@ export async function startOpportunityDeepDive(
 
   const label =
     nicheCount > 0
-      ? `Niche×market deep dive · ${nicheCount} niches × ${devices.join('+')}`
+      ? `Niche×market deep dive · ${nicheCount} niche${nicheCount === 1 ? '' : 's'} × ${devices.join('+')}`
       : `Opportunity deep dive · top selection × ${devices.join('+')}`
 
   const { preview, run } = await enqueueCatalogBulkResearch(db, {

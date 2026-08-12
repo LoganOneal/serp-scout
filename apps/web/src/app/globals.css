@@ -371,7 +371,7 @@ a:hover {
   margin-top: 0;
 }
 .run-page-head {
-  padding: 14px 20px 10px;
+  padding: 10px 20px 8px;
   border-bottom: 1px solid var(--border);
   background: var(--surface);
   flex: none;
@@ -1646,9 +1646,15 @@ input[type='checkbox'] {
 }
 
 /* Tab bar: Import | Screen | Deep dive */
-.opp-tabs-wrap {
-  margin-bottom: 18px;
-}
+/**
+ * No gap under the tabs.
+ *
+ * This margin dates from when the tabs floated above card content; with the
+ * step below them being a flush panel it rendered as an 18px band of workspace
+ * background between the tab underline and the content it belongs to -- the
+ * tabs looked detached from the thing they switch. A tab bar sits ON its
+ * panel. The rule at the top of this file already gives it its own border.
+ */
 .opp-tabs-label {
   font-size: 10.5px;
   font-weight: 700;
@@ -3652,3 +3658,36 @@ a.kw-serp-title:hover {
 .opp-workspace .sm-magic > .sm-magic-main > .sm-toolbar .seg {
   flex: none;
 }
+
+/* ── Data columns group at the right, name takes the slack ───────────────
+   With four columns in a 1,060px panel the browser shared the width evenly,
+   so a market sat at x=460 and its rank at x=975 with 500px of nothing
+   between them -- the row read as two unrelated things. Semrush-style: the
+   identity column absorbs the space, the data columns stay compact and
+   adjacent so a row scans as one object. */
+.sm-magic-main .sm-table th:first-child,
+.sm-magic-main .sm-table td:first-child {
+  width: 1%;
+}
+.sm-magic-main .sm-table th:nth-child(2),
+.sm-magic-main .sm-table td:nth-child(2) {
+  width: 100%;
+}
+.sm-magic-main .sm-table th.num,
+.sm-magic-main .sm-table td.num {
+  width: 1%;
+  min-width: 92px;
+  white-space: nowrap;
+}
+
+/* Every step scrolls its own content under a fixed bar. */
+.step-scroll {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 16px 20px 20px;
+}
+/* The run card's own actions row already sits at the top of the card; the
+   duplicate "Open results" inside the next-action strip is the one that gets
+   the emphasis, so the header copy steps back to a quiet link. */
+.job-run-head .btn.tiny { font-weight: 500; }

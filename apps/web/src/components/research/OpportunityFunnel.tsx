@@ -1249,74 +1249,80 @@ export function OpportunityFunnel(props: OpportunityFunnelProps) {
         </section>
       )}
 
-      {/* ── Step 3: Market sweep results ────────────────────────────────── */}
+      {/* ── Step 3: everything this workspace has run ───────────────────── */}
       {step === 'sweep' && (
         <section className="opp-step">
-          <header className="opp-step-head">
-            <div className="opp-step-head-row">
-              <div>
-                <h2 className="opp-step-title">Market sweep</h2>
-                <p className="opp-step-desc">
-                  Job progress is live while work is queued. The grid below fills as SERPs finish
-                  (auto-refresh). <strong>Live SERP</strong> opens Google with a local{' '}
-                  <code>uule</code> so you can verify what a person in that market would see
-                  (desktop / mobile). Prefer a private window. Volume is DataForSEO local search
-                  volume for the exact query @ market location_code.
-                </p>
-              </div>
-              <div className="opp-step-actions" style={{ marginTop: 0 }}>
-                <button
-                  type="button"
-                  className="btn"
-                  onClick={() => router.refresh()}
-                  disabled={pending}
-                >
-                  {jobsActive ? 'Refreshing…' : 'Refresh now'}
-                </button>
-                <button type="button" className="btn" onClick={() => setStep('screen')}>
-                  ← Screen tab
-                </button>
+          {/**
+           * The same bar as steps 1 and 2. This step's title and description are
+           * hidden by the workspace CSS as restatements of the page header,
+           * which left the header as an empty band with two buttons adrift in
+           * the right of it -- chrome that said nothing and used 47px saying it.
+           */}
+          <div className="composer">
+            <div className="composer-scope">
+              <h2 className="composer-title">Runs</h2>
+              <div className="composer-cost">
+                <strong className="composer-jobs">{props.deepDiveRuns.length}</strong> sweep
+                {props.deepDiveRuns.length === 1 ? '' : 's'}
+                {props.scanRuns.length > 0 && (
+                  <>
+                    <span className="composer-sep">·</span>
+                    <strong className="composer-jobs">{props.scanRuns.length}</strong> locality scan
+                    {props.scanRuns.length === 1 ? '' : 's'}
+                  </>
+                )}
+                {jobsActive && (
+                  <>
+                    <span className="composer-sep">·</span>
+                    <span className="badge warn">live</span>
+                  </>
+                )}
               </div>
             </div>
-          </header>
 
-          <DiscoveryRunStatus
-            runs={props.deepDiveRuns}
-            title="Sweep runs"
-            emptyHint="No sweep runs yet. Use the Screen tab to pick niches × markets and start one."
-            autoRefresh={false}
-            onDeleteRun={deleteDiscoveryRunAction}
-            runHref={(id) => `/scout/runs/${id}`}
-          />
+            <div className="composer-controls">
+              <span className="composer-settings">
+                <span className="composer-setting">
+                  Deleting a run clears its results so the same selection can be swept again
+                </span>
+              </span>
+              <button
+                type="button"
+                className="btn composer-go"
+                onClick={() => router.refresh()}
+                disabled={pending}
+              >
+                {jobsActive ? 'Refreshing…' : 'Refresh'}
+              </button>
+              <a href="/portfolio" className="btn primary">
+                Open Portfolio →
+              </a>
+            </div>
+          </div>
 
-          <ScanRunList runs={props.scanRuns} />
-
-          {pending && (
-            <div className="job-live-banner" role="status" style={{ marginBottom: 16 }}>
-              <span className="job-spinner" aria-hidden />
-              <div>
-                <strong>Queuing sweep…</strong>
-                <div className="faint" style={{ fontSize: 12, marginTop: 2 }}>
-                  Creating SERP jobs. Status cards update when the run appears.
+          <div className="step-scroll">
+            {pending && (
+              <div className="job-live-banner" role="status" style={{ marginBottom: 16 }}>
+                <span className="job-spinner" aria-hidden />
+                <div>
+                  <strong>Queuing sweep…</strong>
+                  <div className="faint" style={{ fontSize: 12, marginTop: 2 }}>
+                    Creating SERP jobs. Status cards update when the run appears.
+                  </div>
                 </div>
               </div>
-            </div>
-          )}
+            )}
 
-          {/* Per-run drill-down: the flat all-runs grid moved to /research/runs/[id]. */}
+            <DiscoveryRunStatus
+              runs={props.deepDiveRuns}
+              title="Sweep runs"
+              emptyHint="No sweep runs yet. Pick niches × markets on Select and start one."
+              autoRefresh={false}
+              onDeleteRun={deleteDiscoveryRunAction}
+              runHref={(id) => `/scout/runs/${id}`}
+            />
 
-          <div className="opp-step-actions">
-            <button type="button" className="btn" onClick={() => setStep('screen')}>
-              ← Screen tab
-            </button>
-            <button type="button" className="btn" onClick={() => router.refresh()}>
-              Refresh results
-            </button>
-            {/* Pipeline stopped being a page when the nav was consolidated;
-                the destination after research is the portfolio. */}
-            <a href="/portfolio" className="btn primary">
-              Open Portfolio →
-            </a>
+            <ScanRunList runs={props.scanRuns} />
           </div>
         </section>
       )}
