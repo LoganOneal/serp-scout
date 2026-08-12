@@ -485,6 +485,29 @@ export interface CatalogResearchResult {
   requiresWorker?: boolean
   defaultBudgetCapCents?: number
   previewOnly?: boolean
+  /**
+   * Per-niche keyword list a dry run would buy, so it can be reviewed before
+   * the sweep rather than inferred from the cost afterwards. Only set on a
+   * dry run -- there is nothing left to approve once the jobs are queued.
+   */
+  keywordPreview?: KeywordPreviewNiche[]
+  /**
+   * Unique keywords actually enqueued, AFTER dedupe. Niches overlap -- "mold
+   * removal" belongs to both mold-remediation and water-damage-restoration --
+   * so the sum of the per-niche lists is larger than what gets bought, and
+   * showing only the sum makes the job count look like it does not multiply.
+   */
+  keywordCount?: number
+}
+
+export interface KeywordPreviewNiche {
+  nicheSlug: string
+  /** Where the list came from. `template` means Google Ads gave us nothing. */
+  source: 'google_ads' | 'template'
+  keywords: Array<{ keyword: string; volume: number | null }>
+  /** Ideas discovery threw away for intent or volume. */
+  rejected: number
+  note: string | null
 }
 
 /**
@@ -582,6 +605,14 @@ export async function opportunityDeepDiveAction(fd: FormData): Promise<CatalogRe
         selectionNote: p.selectionNote,
         requiresWorker: p.requiresLongLivedWorker,
         defaultBudgetCapCents: p.defaultBudgetCapCents,
+        keywordCount: p.keywordCount,
+        keywordPreview: p.discovery.map((d) => ({
+          nicheSlug: d.nicheSlug,
+          source: d.source,
+          keywords: d.selected,
+          rejected: d.rejected,
+          note: d.note,
+        })),
         detail:
           `Sweep preview: ${p.jobCount} geo-targeted SERPs · ${p.keywordCount} keywords × ` +
           `${p.geoCount} markets × ${p.devices.join('+')} · est. ${formatMicros(p.estimatedCostMicros)}` +

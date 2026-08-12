@@ -370,6 +370,17 @@ export async function resolveKeywordIdsForNiches(
       }
     }
 
+    /**
+     * The template branch never filled `selected`, so a niche that fell back
+     * reported an empty keyword list -- blank in the review, precisely for the
+     * niches whose keywords nobody measured and most need looking at. Report
+     * whatever is actually about to be bought; a null volume means unmeasured,
+     * which is itself the thing worth seeing.
+     */
+    if (selectedForNiche.length === 0) {
+      selectedForNiche = heads.map((k) => ({ keyword: k, volume: null }))
+    }
+
     discovery.push({ nicheSlug: n.slug, source, selected: selectedForNiche, rejected: rejectedCount, note })
 
     for (const raw of heads) {
@@ -440,6 +451,16 @@ export async function previewOpportunityDeepDive(
     preview: ResearchEnqueuePreview
     nicheCount?: number
     keywordsPerNiche?: number
+    /**
+     * The exact keywords this run would buy, per niche, before it buys them.
+     *
+     * Already computed -- discovery runs during the dry-run and costs nothing --
+     * but it was collapsed into three examples inside a sentence. A sweep of
+     * eight invented phrases and a sweep of the eight most-searched ones cost
+     * the same and look identical on a cost line, and the only moment the
+     * difference is cheap to notice is before the money goes out.
+     */
+    discovery: Awaited<ReturnType<typeof resolveKeywordIdsForNiches>>['discovery']
   }
 > {
   const devices = args.devices?.length ? args.devices : (['desktop'] as ResearchDevice[])
@@ -517,6 +538,7 @@ export async function previewOpportunityDeepDive(
     preview,
     nicheCount,
     keywordsPerNiche,
+    discovery,
   }
 }
 

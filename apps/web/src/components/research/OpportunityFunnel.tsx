@@ -167,9 +167,20 @@ function SelectAllCheckbox({
  */
 const KW_PER_NICHE = 8
 
+type FunnelStep = 'screen' | 'keywords' | 'sweep'
+
 export function OpportunityFunnel(props: OpportunityFunnelProps) {
   const router = useRouter()
-  const [step, setStep] = useState<2 | 3>(2)
+  /**
+   * Linear, and named rather than numbered.
+   *
+   * The flow used to be two tabs, "Screen" and "Market sweep", with the buy
+   * button on the first one -- so the only description of what a run would
+   * actually query arrived after it had been paid for. `keywords` sits
+   * between them because that is where the decision belongs: the list is free
+   * to compute and the SERPs are not.
+   */
+  const [step, setStep] = useState<FunnelStep>('screen')
   const nicheList = props.nicheEconomics
   const defaultNicheIds = useMemo(
     () => new Set(nicheList.slice(0, 10).map((n) => n.id)),
@@ -332,6 +343,46 @@ export function OpportunityFunnel(props: OpportunityFunnelProps) {
     })
   }
 
+  /**
+   * Price the run AND show its keyword list, then move to the review step.
+   *
+   * This is the same dry run the old "Dry-run" button fired -- Google Ads
+   * discovery is free and already ran inside it. The only thing that changed
+   * is that its answer is no longer thrown away.
+   */
+  const reviewKeywords = () => {
+    const fd = buildDeepDiveFd(true)
+    startTransition(async () => {
+      setMsg(null)
+      const res = await opportunityDeepDiveAction(fd)
+      setPreview(res)
+      if (res.ok) setStep('keywords')
+    })
+  }
+
+  const keywordPreview = preview?.keywordPreview ?? []
+  const previewKeywordCount = useMemo(
+    () => keywordPreview.reduce((n, d) => n + d.keywords.length, 0),
+    [keywordPreview],
+  )
+  /**
+   * Niches whose list is a template guess with no measured demand behind any
+   * of it. Not an error -- the run still works -- but it is the difference
+   * between sweeping what people search and sweeping what a rule invented,
+   * and it is invisible once the SERPs are bought.
+   */
+  const sharedKeywords = Math.max(
+    0,
+    previewKeywordCount - (preview?.keywordCount ?? previewKeywordCount),
+  )
+  const unmeasuredNiches = useMemo(
+    () =>
+      keywordPreview.filter(
+        (d) => d.source === 'template' && d.keywords.every((k) => k.volume == null),
+      ),
+    [keywordPreview],
+  )
+
   const runConfirm = () => {
     const fd = buildDeepDiveFd(false)
     if (workerAck) fd.set('workerAck', 'true')
@@ -342,7 +393,7 @@ export function OpportunityFunnel(props: OpportunityFunnelProps) {
       const res = await opportunityDeepDiveAction(fd)
       setMsg(res)
       if (res.ok) {
-        setStep(3)
+        setStep('sweep')
         router.refresh()
         window.setTimeout(() => router.refresh(), 1200)
       }
@@ -358,10 +409,10 @@ export function OpportunityFunnel(props: OpportunityFunnelProps) {
   useAutoRefresh(jobsActive, 4000)
 
 
-  const tabs = [
+  const tabs: Array<{ id: FunnelStep; label: string; ready: boolean; badge: string | null }> = [
     {
-      id: 2 as const,
-      label: 'Screen',
+      id: 'screen',
+      label: '1 · Select',
       ready: nicheList.length > 0 && props.geoTotal > 0,
       badge: canRun
         ? `${nicheIds.size} × ${geoIds.size}`
@@ -370,8 +421,15 @@ export function OpportunityFunnel(props: OpportunityFunnelProps) {
           : null,
     },
     {
-      id: 3 as const,
-      label: 'Market sweep',
+      id: 'keywords',
+      label: '2 · Keywords',
+      ready: keywordPreview.length > 0,
+      // Deduped, so the badge matches the number the summary and cost use.
+      badge: keywordPreview.length > 0 ? `${preview?.keywordCount ?? previewKeywordCount}` : null,
+    },
+    {
+      id: 'sweep',
+      label: '3 · Sweep',
       ready: props.deepDiveRuns.length > 0,
       badge: jobsActive
         ? 'live'
@@ -414,12 +472,12 @@ export function OpportunityFunnel(props: OpportunityFunnelProps) {
         aria-labelledby={`opp-tab-${step}`}
       >
 
-      {jobsActive && step !== 3 && (
+      {jobsActive && step !== 'sweep' && (
         <div
           className="job-live-banner"
           role="status"
           style={{ marginBottom: 14, cursor: 'pointer' }}
-          onClick={() => setStep(3)}
+          onClick={() => setStep('sweep')}
         >
           <span className="job-spinner" aria-hidden />
           <div>
@@ -432,7 +490,7 @@ export function OpportunityFunnel(props: OpportunityFunnelProps) {
       )}
 
       {/* ── Screen: niches × markets (SEMrush Keyword Magic layout) ── */}
-      {step === 2 && (
+      {step === 'screen' && (
         <section className="opp-step">
           <header className="opp-step-head sm-magic-page-head">
             <div>
@@ -685,19 +743,12 @@ export function OpportunityFunnel(props: OpportunityFunnelProps) {
                   </label>
                   <button
                     type="button"
-                    className="btn tiny"
-                    disabled={pending || !canRun}
-                    onClick={runPreview}
-                  >
-                    {pending ? '…' : 'Dry-run'}
-                  </button>
-                  <button
-                    type="button"
                     className="primary sm-send-btn"
-                    disabled={pending || !canRun || (needsAck && !workerAck)}
-                    onClick={runConfirm}
+                    disabled={pending || !canRun}
+                    onClick={reviewKeywords}
+                    title="Free: asks Google Ads what this niche is actually searched as in these markets, and prices the run, before anything is bought."
                   >
-                    {pending ? 'Queuing…' : 'Start sweep'}
+                    {pending ? 'Checking…' : 'Review keywords →'}
                   </button>
                 </div>
               </div>
@@ -860,36 +911,17 @@ export function OpportunityFunnel(props: OpportunityFunnelProps) {
               </span>
             </div>
 
-            {needsAck && (
-              <label className="screen-ack">
-                <input
-                  type="checkbox"
-                  checked={workerAck}
-                  onChange={(e) => setWorkerAck(e.target.checked)}
-                />
-                I understand this large run drains via cron over many minutes
-              </label>
-            )}
-
             <div className="screen-run-actions">
               <button
                 type="button"
-                className="btn"
-                disabled={pending || !canRun}
-                onClick={runPreview}
-              >
-                {pending ? '…' : 'Dry-run preview'}
-              </button>
-              <button
-                type="button"
                 className="primary"
-                disabled={pending || !canRun || (needsAck && !workerAck)}
-                onClick={runConfirm}
+                disabled={pending || !canRun}
+                onClick={reviewKeywords}
               >
-                {pending ? 'Queuing…' : 'Start sweep'}
+                {pending ? 'Checking…' : 'Review keywords →'}
               </button>
-              <button type="button" className="btn" onClick={() => setStep(3)}>
-                Market sweep tab →
+              <button type="button" className="btn" onClick={() => setStep('sweep')}>
+                Past runs →
               </button>
             </div>
 
@@ -899,8 +931,8 @@ export function OpportunityFunnel(props: OpportunityFunnelProps) {
               </p>
             )}
 
-            {preview && (
-              <div className={preview.ok ? 'okbox' : 'stopbox'} style={{ marginTop: 12 }}>
+            {preview && !preview.ok && (
+              <div className="stopbox" style={{ marginTop: 12 }}>
                 {preview.error ?? preview.detail}
               </div>
             )}
@@ -909,7 +941,7 @@ export function OpportunityFunnel(props: OpportunityFunnelProps) {
                 {msg.error ?? msg.detail}
                 {msg.ok && (
                   <div style={{ marginTop: 8 }}>
-                    <button type="button" className="btn tiny" onClick={() => setStep(3)}>
+                    <button type="button" className="btn tiny" onClick={() => setStep('sweep')}>
                       Watch progress on Market sweep tab →
                     </button>
                   </div>
@@ -945,8 +977,191 @@ export function OpportunityFunnel(props: OpportunityFunnelProps) {
         </section>
       )}
 
+      {/* ── Step 2: what this run would actually buy ─────────────────────── */}
+      {step === 'keywords' && (
+        <section className="opp-step">
+          <header className="opp-step-head">
+            <div className="opp-step-head-row">
+              <div>
+                <h2 className="opp-step-title">Keywords this sweep will buy</h2>
+                <p className="opp-step-desc">
+                  Google Ads was asked what each niche is actually searched as in the markets you
+                  picked — free, and already done. Nothing has been bought yet.{' '}
+                  <strong>Volume is national monthly searches</strong> for the phrasing; the sweep
+                  measures each one again at every market&apos;s location code.
+                </p>
+              </div>
+              <div className="opp-step-actions" style={{ marginTop: 0 }}>
+                <button type="button" className="btn" onClick={() => setStep('screen')}>
+                  ← Change selection
+                </button>
+              </div>
+            </div>
+          </header>
+
+          <div className="kwrev-summary card">
+            <div className="kwrev-summary-stats">
+              <span>
+                <strong>{preview?.keywordCount ?? previewKeywordCount}</strong> keyword
+                {(preview?.keywordCount ?? previewKeywordCount) === 1 ? '' : 's'} across{' '}
+                <strong>{keywordPreview.length}</strong> niche
+                {keywordPreview.length === 1 ? '' : 's'}
+                {/**
+                 * Niches overlap. Without this the lists below add up to more
+                 * than the number being bought, and the SERP count stops
+                 * multiplying out.
+                 */}
+                {sharedKeywords > 0 && (
+                  <span
+                    className="faint"
+                    title="The per-niche lists below overlap; a keyword claimed by two niches is bought once."
+                  >
+                    {' '}
+                    ({previewKeywordCount} picked, {sharedKeywords} shared)
+                  </span>
+                )}
+              </span>
+              <span className="sm-magic-meta-sep">·</span>
+              <span>
+                <strong>{geoIds.size}</strong> market{geoIds.size === 1 ? '' : 's'}
+                {deviceN > 1 ? ' × 2 devices' : ''}
+              </span>
+              <span className="sm-magic-meta-sep">·</span>
+              <span>
+                <strong>{(preview?.jobCount ?? localEst.jobs).toLocaleString()}</strong> SERPs
+              </span>
+              <span className="sm-magic-meta-sep">·</span>
+              <span>
+                est.{' '}
+                <strong className="mono">
+                  {props.live ? (preview?.estimatedCost ?? `$${localEst.usd.toFixed(2)}`) : '$0 fixtures'}
+                </strong>
+              </span>
+            </div>
+
+            {needsAck && (
+              <label className="screen-ack">
+                <input
+                  type="checkbox"
+                  checked={workerAck}
+                  onChange={(e) => setWorkerAck(e.target.checked)}
+                />
+                I understand this large run drains via cron over many minutes
+              </label>
+            )}
+
+            <div className="screen-run-actions">
+              <button
+                type="button"
+                className="primary"
+                disabled={pending || !canRun || (needsAck && !workerAck)}
+                onClick={runConfirm}
+              >
+                {pending
+                  ? 'Queuing…'
+                  : `Buy ${(preview?.jobCount ?? localEst.jobs).toLocaleString()} SERPs`}
+              </button>
+              <button type="button" className="btn" onClick={() => setStep('screen')}>
+                ← Change selection
+              </button>
+            </div>
+          </div>
+
+          {/**
+           * Named, not buried. A niche whose whole list is a template guess is
+           * the case that produced "bathroom remodeling installation" -- a
+           * phrase with no demand anywhere, swept at full price across every
+           * market in the run.
+           */}
+          {unmeasuredNiches.length > 0 && (
+            <div className="warnbox">
+              <strong>
+                {unmeasuredNiches.length} niche{unmeasuredNiches.length === 1 ? '' : 's'} fell back
+                to template keywords.
+              </strong>{' '}
+              Google Ads returned nothing usable for{' '}
+              {unmeasuredNiches.map((d) => d.nicheSlug).join(', ')}, so those keywords are generated
+              from a pattern and no one has confirmed anybody searches them. They cost the same as
+              the measured ones — deselect those niches if you would rather not pay for guesses.
+            </div>
+          )}
+
+          {keywordPreview.length === 0 ? (
+            <div className="card empty" style={{ padding: 20 }}>
+              No keyword list came back. Go back and select at least one niche.
+            </div>
+          ) : (
+            <div className="kwrev-grid">
+              {keywordPreview.map((d) => {
+                const measured = d.keywords.filter((k) => k.volume != null)
+                const topVol = measured.reduce((m, k) => Math.max(m, k.volume ?? 0), 0)
+                return (
+                  <div key={d.nicheSlug} className="kwrev-niche card">
+                    <div className="kwrev-niche-head">
+                      <strong>{d.nicheSlug}</strong>
+                      <span
+                        className={`badge ${d.source === 'google_ads' ? 'go' : 'warn'}`}
+                        title={
+                          d.source === 'google_ads'
+                            ? 'Keywords come from Google Ads search data for these markets.'
+                            : d.note ?? 'Google Ads returned nothing; these are template-generated.'
+                        }
+                      >
+                        {d.source === 'google_ads' ? 'measured' : 'template'}
+                      </span>
+                      <span className="faint" style={{ fontSize: 11.5 }}>
+                        {d.keywords.length} kw
+                        {d.rejected > 0 ? ` · ${d.rejected} rejected` : ''}
+                      </span>
+                    </div>
+                    {d.note && d.source === 'template' && (
+                      <div className="faint kwrev-note">{d.note}</div>
+                    )}
+                    <ul className="kwrev-list">
+                      {d.keywords.map((k) => (
+                        <li key={k.keyword} className="kwrev-row">
+                          <span className="kwrev-kw mono" title={k.keyword}>
+                            {k.keyword}
+                          </span>
+                          {k.volume == null ? (
+                            <span className="null" title="Google Ads has no figure for this phrase.">
+                              no vol
+                            </span>
+                          ) : (
+                            <span className="kwrev-vol">
+                              {/* Bar in a fixed track: a percentage on a flex
+                                  item resolves against whatever width the text
+                                  left over, which made every bar the same tick. */}
+                              <span className="kwrev-track" aria-hidden>
+                                <span
+                                  className="kwrev-bar"
+                                  style={{
+                                    width: `${topVol > 0 ? Math.max(4, Math.round((k.volume / topVol) * 100)) : 4}%`,
+                                  }}
+                                />
+                              </span>
+                              <span className="kwrev-num mono">{formatVol(k.volume)}</span>
+                            </span>
+                          )}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )
+              })}
+            </div>
+          )}
+
+          {msg && (
+            <div className={msg.ok ? 'okbox' : 'stopbox'} style={{ marginTop: 12 }}>
+              {msg.error ?? msg.detail}
+            </div>
+          )}
+        </section>
+      )}
+
       {/* ── Step 3: Market sweep results ────────────────────────────────── */}
-      {step === 3 && (
+      {step === 'sweep' && (
         <section className="opp-step">
           <header className="opp-step-head">
             <div className="opp-step-head-row">
@@ -969,7 +1184,7 @@ export function OpportunityFunnel(props: OpportunityFunnelProps) {
                 >
                   {jobsActive ? 'Refreshing…' : 'Refresh now'}
                 </button>
-                <button type="button" className="btn" onClick={() => setStep(2)}>
+                <button type="button" className="btn" onClick={() => setStep('screen')}>
                   ← Screen tab
                 </button>
               </div>
@@ -1000,7 +1215,7 @@ export function OpportunityFunnel(props: OpportunityFunnelProps) {
           {/* Per-run drill-down: the flat all-runs grid moved to /research/runs/[id]. */}
 
           <div className="opp-step-actions">
-            <button type="button" className="btn" onClick={() => setStep(2)}>
+            <button type="button" className="btn" onClick={() => setStep('screen')}>
               ← Screen tab
             </button>
             <button type="button" className="btn" onClick={() => router.refresh()}>

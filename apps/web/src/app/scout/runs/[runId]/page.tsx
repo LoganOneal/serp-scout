@@ -1,7 +1,13 @@
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { db, getDeepDiveRun, listOpportunityGrid, listRunKeywords, queryOr } from '@rnr/data'
-import { keywordPathFor } from '@rnr/core'
+import {
+  keywordPathFor,
+  opportunitySignals,
+  runNextAction,
+  SIGNAL_LABEL,
+  type OpportunitySignal,
+} from '@rnr/core'
 import { OpportunityGridPanel } from '@/components/research/OpportunityGridPanel'
 
 export const dynamic = 'force-dynamic'
@@ -55,6 +61,39 @@ export default async function DeepDiveRunPage({
   const active = run.status === 'running' || run.status === 'pending'
   const spend = run.spendMicros == null ? null : Number(run.spendMicros) / 1_000_000
 
+  /**
+   * What this run is telling you to do, and how much of it is actionable.
+   *
+   * Counted from the rows already loaded rather than from the run's hitCount:
+   * hitCount is Reddit threads, which is one of four plays. A run with no
+   * Reddit at all can still be carrying a page of build and domain
+   * opportunities, and the header should not call that empty.
+   */
+  const next = runNextAction({
+    status: run.status,
+    jobCount: run.jobCount,
+    jobsDone: run.jobsDone,
+    jobsFailed: run.jobsFailed,
+    jobsSkipped: run.jobsSkipped,
+    hitCount: run.hitCount,
+    error: run.error,
+  })
+
+  const signalCounts = new Map<OpportunitySignal, number>()
+  for (const r of rows) {
+    for (const sig of opportunitySignals({
+      redditVisits: r.redditVisits,
+      redditHitCount: r.redditHitCount,
+      volume: r.volume,
+      verdictAcquired: r.verdictAcquired,
+      slotsOpen: r.slotsOpen,
+      emdAvailable: r.emdAvailable ?? null,
+    })) {
+      signalCounts.set(sig, (signalCounts.get(sig) ?? 0) + 1)
+    }
+  }
+  const signalTotal = [...signalCounts.values()].reduce((a, b) => a + b, 0)
+
   return (
     <div className="opp-workspace">
       <div className="run-page-head">
@@ -102,6 +141,35 @@ export default async function DeepDiveRunPage({
               <span className="sm-magic-meta-sep">·</span>
               <span className="badge warn">fixtures</span>
             </>
+          )}
+        </div>
+
+        <div className={`run-next run-next-${next.tone}`}>
+          <div className="run-next-main">
+            <strong className="run-next-headline">{next.headline}</strong>
+            <p className="run-next-detail">{next.detail}</p>
+          </div>
+          {/**
+           * Counted over measured rows, with the denominator shown. The grid
+           * renders more chips than this number, because a niche's group header
+           * repeats the strongest signal of the rows beneath it -- without
+           * "of N rows" the two look like they disagree.
+           */}
+          {signalTotal > 0 && (
+            <div className="run-next-signals" title="Measured rows carrying at least one play">
+              <span className="run-next-signals-total">
+                <strong>{signalTotal}</strong> of {rows.length} rows
+              </span>
+              <span className="run-next-signals-list">
+                {[...signalCounts.entries()]
+                  .sort((a, b) => b[1] - a[1])
+                  .map(([sig, n]) => (
+                    <span key={sig} className={`opp-sig opp-sig-${sig}`}>
+                      {SIGNAL_LABEL[sig]} {n}
+                    </span>
+                  ))}
+              </span>
+            </div>
           )}
         </div>
       </div>

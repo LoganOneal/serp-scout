@@ -2,7 +2,7 @@
 
 import { useRouter } from 'next/navigation'
 import { useState, useTransition } from 'react'
-import { formatMicrosUsd } from '@rnr/core'
+import { formatMicrosUsd, runNextAction } from '@rnr/core'
 import { useAutoRefresh } from '@/hooks/useAutoRefresh'
 
 export interface DiscoveryRunView {
@@ -310,20 +310,43 @@ export function DiscoveryRunStatus({
                 )
               })()}
 
+              {/**
+               * What to do about this run, rather than what happened to it.
+               * The counts above are the evidence; this is the conclusion, and
+               * it is the only line that changes between "open the grid" and
+               * "this will never finish" -- states the card used to render
+               * with the same two sentences of generic failure advice.
+               */}
+              {(() => {
+                const next = runNextAction(r)
+                return (
+                  <div className={`job-next job-next-${next.tone}`}>
+                    <div className="job-next-head">
+                      <strong>{next.headline}</strong>
+                      {next.cta === 'open-results' && runHref && (
+                        <a className="btn tiny primary" href={runHref(r.id)}>
+                          Open results →
+                        </a>
+                      )}
+                      {next.cta === 'delete-and-retry' && onDeleteRun && (
+                        <button
+                          type="button"
+                          className="btn tiny danger"
+                          disabled={pending}
+                          onClick={() => deleteRun(r)}
+                        >
+                          Delete &amp; re-run
+                        </button>
+                      )}
+                    </div>
+                    <p className="job-next-detail">{next.detail}</p>
+                  </div>
+                )
+              })()}
+
               {r.error && (
                 <div className="job-run-error" title={r.error}>
                   {r.error.length > 180 ? r.error.slice(0, 180) + '…' : r.error}
-                </div>
-              )}
-
-              {!active && r.jobsFailed > 0 && !r.error && (
-                <div className="job-run-error">
-                  {r.jobsFailed} of {r.jobCount} SERP job{r.jobsFailed === 1 ? '' : 's'} failed
-                  {r.jobsDone > 0
-                    ? ` (${r.jobsDone} succeeded — grid still has partial results).`
-                    : '.'}{' '}
-                  Common causes: Vercel timeout (aborted), DataForSEO SE blip (40101), or auth.
-                  Re-run missing pairs from Screen, or delete this run to clear and start clean.
                 </div>
               )}
             </div>

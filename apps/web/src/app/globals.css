@@ -3312,3 +3312,125 @@ a.kw-serp-title:hover {
   color: var(--text-dim);
   border: 1px solid var(--border);
 }
+
+/* ── Next action: run cards and the run page header ──────────────────────
+   The counts say what happened; this says what to do. Toned by whether it
+   needs a human at all -- `wait` recedes because acting on it is impossible,
+   `stop` is the only one that interrupts. */
+.job-next {
+  margin-top: 10px;
+  padding: 9px 11px;
+  border-radius: 7px;
+  border: 1px solid var(--border);
+  background: var(--surface-2, #f8fafc);
+  border-left-width: 3px;
+}
+.job-next-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  font-size: 13px;
+}
+.job-next-detail {
+  margin: 4px 0 0;
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--text-dim);
+}
+.job-next-wait { border-left-color: var(--border); }
+.job-next-act { border-left-color: #16a34a; background: #f0fdf4; }
+.job-next-stop { border-left-color: #dc2626; background: #fef2f2; }
+
+.run-next {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  flex-wrap: wrap;
+  margin-top: 12px;
+  padding: 10px 14px;
+  border: 1px solid var(--border);
+  border-left-width: 3px;
+  border-radius: 8px;
+  background: var(--surface-2, #f8fafc);
+}
+.run-next-main { min-width: 260px; flex: 1; }
+.run-next-headline { font-size: 13.5px; }
+.run-next-detail {
+  margin: 3px 0 0;
+  font-size: 12.5px;
+  line-height: 1.5;
+  color: var(--text-dim);
+  max-width: 78ch;
+}
+.run-next-wait { border-left-color: var(--border); }
+.run-next-act { border-left-color: #16a34a; background: #f0fdf4; }
+.run-next-stop { border-left-color: #dc2626; background: #fef2f2; }
+.run-next-signals {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  white-space: nowrap;
+}
+.run-next-signals-total { font-size: 13px; }
+.run-next-signals-list { display: inline-flex; gap: 5px; flex-wrap: wrap; }
+
+/* ── Keyword review: the step between choosing and paying ──────────────── */
+.kwrev-summary { margin-bottom: 14px; }
+.kwrev-summary-stats {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  font-size: 13px;
+  margin-bottom: 10px;
+}
+.kwrev-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 12px;
+  align-items: start;
+}
+.kwrev-niche { padding: 12px 14px; }
+.kwrev-niche-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 8px;
+  font-size: 13px;
+}
+.kwrev-note { font-size: 11.5px; margin-bottom: 8px; }
+.kwrev-list { list-style: none; margin: 0; padding: 0; }
+.kwrev-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 3px 0;
+  font-size: 12.5px;
+  border-top: 1px solid var(--border);
+}
+.kwrev-row:first-child { border-top: 0; }
+.kwrev-kw { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+/* Volume as a bar as well as a number: the shape of the list is the point --
+   one keyword carrying the niche reads differently from an even spread. */
+.kwrev-vol { display: flex; align-items: center; gap: 7px; flex: none; }
+.kwrev-track {
+  display: block;
+  width: 62px;
+  height: 6px;
+  border-radius: 3px;
+  background: var(--surface-2, #f1f5f9);
+  border: 1px solid var(--border);
+  overflow: hidden;
+}
+.kwrev-bar {
+  display: block;
+  height: 100%;
+  border-radius: 3px;
+  background: var(--accent, #ea580c);
+  opacity: 0.7;
+}
+.kwrev-num { font-variant-numeric: tabular-nums; min-width: 38px; text-align: right; }
