@@ -1,5 +1,6 @@
 import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 import postgres from 'postgres'
+import { PRICE } from '@rnr/core'
 import { createDb, type Database } from '../db.js'
 import {
   discoveryHits,
@@ -7,9 +8,13 @@ import {
   discoveryRuns,
   localities,
   niches,
+  researchGeoImports,
+  researchGeos,
+  researchKeywordImports,
+  researchKeywords,
 } from '../schema.js'
 import { NICHE_SEEDS } from '../seed/niches.js'
-import { createProviders } from '../providers/index.js'
+import { createProviders, type Providers } from '../providers/index.js'
 import { resetSchema } from '../test-support/schema-sql.js'
 import { eq } from 'drizzle-orm'
 import {
@@ -18,6 +23,11 @@ import {
   reconcileDiscoverySpend,
   runDiscoveryJob,
 } from './run-discovery.js'
+import {
+  previewOpportunityDeepDive,
+  REDDIT_LOCAL_SERVICE_MATCH_SET,
+} from './opportunity-screen.js'
+import { reserveDiscoverySpend } from './discovery-budget.js'
 import { normaliseStateCode } from './resolve-discovery-geos.js'
 
 /**
@@ -114,6 +124,157 @@ describe.skipIf(!DB_URL)('discovery e2e ($0, fixtures)', () => {
     expect(normaliseStateCode('wi')).toBe('WI')
     expect(normaliseStateCode('Wisconsin')).toBe('WI')
     expect(normaliseStateCode('???')).toBeNull()
+  })
+
+  it('defines 35 unique canonical niches for the local-service match set', () => {
+    expect(REDDIT_LOCAL_SERVICE_MATCH_SET).toHaveLength(35)
+    expect(new Set(REDDIT_LOCAL_SERVICE_MATCH_SET).size).toBe(35)
+  })
+
+  it('returns fixed keyword IDs in the review draft without provider discovery', async () => {
+    const [keywordImport] = await db
+      .insert(researchKeywordImports)
+      .values({ sourceFilename: 'e2e-fixed-set', sourceKind: 'test' })
+      .returning()
+    const [geoImport] = await db
+      .insert(researchGeoImports)
+      .values({ sourceFilename: 'e2e-geos', sourceKind: 'test' })
+      .returning()
+    const [keyword] = await db
+      .insert(researchKeywords)
+      .values({
+        importId: keywordImport!.id,
+        keyword: 'plumber',
+        keywordNorm: 'plumber',
+        seedKey: 'plumber',
+        variant: 'primary',
+      })
+      .returning()
+    const [geo] = await db
+      .insert(researchGeos)
+      .values({
+        importId: geoImport!.id,
+        market: 'Kenosha',
+        state: 'Wisconsin',
+        stateAbbr: 'WI',
+        selectedRank: 1,
+        dataforseoLocationCode: 1028029,
+        dataforseoLocationName: 'Kenosha,Wisconsin,United States',
+        locationSource: 'csv_preresolved',
+        resolveStatus: 'resolved',
+      })
+      .returning()
+
+    const preview = await previewOpportunityDeepDive(db, {
+      keywordIds: [keyword!.id],
+      geoIds: [geo!.id],
+      devices: ['desktop'],
+      useQueuedSerp: true,
+    })
+
+    expect(preview.discovery).toEqual([
+      {
+        nicheSlug: 'plumber',
+        source: 'fixed_match_set',
+        selected: [{ keyword: 'plumber', volume: null }],
+        rejected: 0,
+        note: 'operator-approved fixed match set',
+      },
+    ])
+    expect(preview.jobCount).toBe(1)
+
+    await db.delete(researchKeywordImports).where(eq(researchKeywordImports.id, keywordImport!.id))
+    await db.delete(researchGeoImports).where(eq(researchGeoImports.id, geoImport!.id))
+  })
+
+  it('enqueues catalog jobs as one canonical niche plus city per geo', async () => {
+    const { run, preview } = await enqueueDiscoveryRun(db, {
+      niches: [
+        {
+          label: 'AC repair',
+          keywordPrimary: 'ac repair',
+          keywordNearMe: 'ac repair near me',
+        },
+      ],
+      geos: [
+        { name: 'Kenosha', state: 'WI', population: 99_500 },
+        { name: 'Tucson', state: 'AZ', population: 542_629 },
+      ],
+      budgetCapCents: 500,
+      source: 'catalog',
+      // Catalog source must ignore both legacy expansion flags.
+      includeNearMe: true,
+      includeGeoExplicit: true,
+      devices: ['desktop'],
+      usedFixtures: true,
+    })
+
+    expect(preview.jobCount).toBe(2)
+    expect(preview.includeNearMe).toBe(false)
+    const jobs = await db
+      .select()
+      .from(discoveryJobs)
+      .where(eq(discoveryJobs.runId, run.id))
+    expect(jobs.map((j) => j.keyword).sort()).toEqual([
+      'ac repair kenosha',
+      'ac repair tucson',
+    ])
+    expect(jobs.every((j) => j.keywordVariant === 'primary')).toBe(true)
+
+    await db.delete(discoveryRuns).where(eq(discoveryRuns.id, run.id))
+  })
+
+  it('does not reserve a queued SERP again when collecting its paid result', async () => {
+    const seed = NICHE_SEEDS[0]!
+    const { run } = await enqueueDiscoveryRun(db, {
+      niches: [
+        {
+          label: seed.label,
+          slug: seed.slug,
+          keywordPrimary: seed.keywordNoun,
+          keywordNearMe: `${seed.keywordNoun} near me`,
+        },
+      ],
+      geos: [{ name: 'Kenosha', state: 'WI', population: 99_500 }],
+      budgetCapCents: 500,
+      source: 'catalog',
+      devices: ['desktop'],
+      usedFixtures: false,
+    })
+    const [job] = await db
+      .select()
+      .from(discoveryJobs)
+      .where(eq(discoveryJobs.runId, run.id))
+    expect(job).toBeDefined()
+
+    // task_post already charged and recorded the queued price.
+    expect(
+      await reserveDiscoverySpend(db, {
+        runId: run.id,
+        costMicros: PRICE.serpOrganicTask,
+        endpoint: 'serp/discovery',
+        note: 'queued task posted',
+        jobId: job!.id,
+      }),
+    ).toBe('ok')
+
+    const fixtures = createProviders()
+    const liveProviders = Object.create(fixtures) as Providers
+    Object.defineProperty(liveProviders, 'live', { value: true })
+
+    const outcome = await runDiscoveryJob(db, {
+      job: { ...job!, status: 'claimed', costMicros: PRICE.serpOrganicTask },
+      providers: liveProviders,
+      preFetched: { rawItems: [], paidMicros: PRICE.serpOrganicTask },
+    })
+    expect(outcome.status).toBe('done')
+
+    const recon = await reconcileDiscoverySpend(db, run.id)
+    expect(recon.runTotal).toBe(PRICE.serpOrganicTask)
+    expect(recon.ledgerTotal).toBe(PRICE.serpOrganicTask)
+    expect(recon.matches).toBe(true)
+
+    await db.delete(discoveryRuns).where(eq(discoveryRuns.id, run.id))
   })
 
   it('enqueues jobs only for resolved geos and drains at $0', async () => {

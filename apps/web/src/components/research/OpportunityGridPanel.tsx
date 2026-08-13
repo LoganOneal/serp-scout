@@ -213,13 +213,212 @@ export const COLUMN_PRESETS: Record<string, { label: string; columns: ColumnId[]
 
 /** Label shown in the picker. Kept beside the presets so the two cannot drift. */
 const COLUMN_LABELS: Record<ColumnId, string> = {
-  select: 'Select', signal: 'Signal', keyword: 'Niche / keyword', market: 'Market', redditVol: 'Reddit vol',
-  redditRank: 'Reddit #', volume: 'Vol', leadValue: 'Lead $', score: 'Score',
-  liveSerp: 'Live SERP', difficulty: 'Diff', slotsOpen: 'Open', winnable: 'Winnable?',
-  cpc: 'CPC', comp: 'Comp', device: 'Device', firstOrganic: '1st org', ads: 'Ads↑',
-  lsa: 'LSA↑', gbp: 'GBP↑', map: 'Map', maps: 'Maps', forums: 'Forums',
-  topOrganic: 'Top organic', gbpLeaders: 'GBP leaders', openQ: 'Open?', why: 'Why',
+  select: 'Select', signal: 'Opportunity', keyword: 'Niche / exact query', market: 'Market',
+  redditVol: 'Est. Reddit visits', redditRank: 'Reddit rank', volume: 'Searches / mo',
+  leadValue: 'Lead value', score: 'Opportunity score', liveSerp: 'Check Google',
+  difficulty: 'SEO difficulty', slotsOpen: 'Open slots', winnable: 'Est. rank time',
+  cpc: 'Est. CPC', comp: 'Ads competition', device: 'Measured on',
+  firstOrganic: 'First organic', ads: 'Search ads above', lsa: 'LSAs above',
+  gbp: 'Local results above', map: 'Map result', maps: 'Maps competitors',
+  forums: 'Forum results', topOrganic: 'Top organic sites', gbpLeaders: 'Local leaders',
+  openQ: 'Thread open?', why: 'Why it matters',
   actions: 'Actions',
+}
+
+type MetricDetail = {
+  source: string
+  sourceKind: 'API' | 'Observed' | 'Estimate' | 'Heuristic' | 'Configured'
+  meaning: string
+  method: string
+}
+
+/**
+ * The table stays dense; provenance and formulas live behind one consistent
+ * info affordance instead of becoming another row of abbreviations.
+ */
+const COLUMN_DETAILS: Partial<Record<ColumnId, MetricDetail>> = {
+  signal: {
+    source: 'Serp Scout rules',
+    sourceKind: 'Heuristic',
+    meaning: 'The practical play this row currently supports: comment on Reddit, build a site, acquire a domain, or inspect incomplete evidence.',
+    method: 'REDDIT requires a page-one thread plus either 25 estimated visits/month or 100 searches/month. BUILD requires a 30- or 90-day rank estimate and at least 3 open slots.',
+  },
+  score: {
+    source: 'Serp Scout scoring model',
+    sourceKind: 'Heuristic',
+    meaning: 'A 0–100 sorting score for Reddit lead-generation potential. It is not an API metric.',
+    method: 'Combines local demand, Reddit position, commentability, SERP clutter, SEO difficulty, lead value, and paid competition. It is calculated after the SERP and optional enrichment data are available.',
+  },
+  redditVol: {
+    source: 'Google Ads volume + DataForSEO SERP',
+    sourceKind: 'Estimate',
+    meaning: 'Estimated monthly Google searchers who reach the best-ranking Reddit thread for this query.',
+    method: 'Local monthly searches × an organic click-through-rate curve at the thread’s organic position. For grouped niches, distinct queries are summed once; devices are not double-counted.',
+  },
+  difficulty: {
+    source: 'Serp Scout winnability model',
+    sourceKind: 'Heuristic',
+    meaning: 'Estimated SEO difficulty from 0–100; lower is easier. A dash means it was not computed, not that the SERP is easy.',
+    method: 'Calculated during the optional winnability pass from result types, search intent, local competitors, and measured backlink strength where available.',
+  },
+  slotsOpen: {
+    source: 'DataForSEO SERP + Serp Scout classification',
+    sourceKind: 'Heuristic',
+    meaning: 'Page-one positions, out of 10, that are not held by a committed local operator or dominant platform.',
+    method: 'Calculated during the optional winnability pass by classifying each organic result. Platform-held slots are shown separately in parentheses.',
+  },
+  winnable: {
+    source: 'Serp Scout winnability model',
+    sourceKind: 'Heuristic',
+    meaning: 'Estimated time for a local site to reach page one. Left is a new exact-match domain; right is an acquired domain.',
+    method: 'Uses difficulty, demand, local-pack presence, open slots, domain availability, and hard blockers. Values are 30d, 90d, 6m, no, or unknown.',
+  },
+  keyword: {
+    source: 'Run configuration',
+    sourceKind: 'Configured',
+    meaning: 'The normalized niche appears first; the monospace line is the exact city-specific query sent to the providers.',
+    method: 'Catalog runs append the selected market’s natural city modifier before the SERP is purchased.',
+  },
+  volume: {
+    source: 'Google Ads API or DataForSEO Keywords Data',
+    sourceKind: 'API',
+    meaning: 'Average monthly searches for this exact query in the selected local market.',
+    method: 'Fetched when local volume is enabled. The row’s source is retained with the measurement; “12mo” indicates monthly history is available.',
+  },
+  cpc: {
+    source: 'Keyword metrics provider',
+    sourceKind: 'API',
+    meaning: 'Estimated advertiser cost per click for this exact query and market.',
+    method: 'Returned with the local keyword metrics request. It is advertising cost, not the cost of running this scan.',
+  },
+  comp: {
+    source: 'Keyword metrics provider',
+    sourceKind: 'API',
+    meaning: 'Paid-advertiser competition from 0–100 for the exact query and market.',
+    method: 'Returned with local keyword metrics. This measures ad-auction competition, not organic SEO difficulty.',
+  },
+  leadValue: {
+    source: 'Niche economics catalog',
+    sourceKind: 'Configured',
+    meaning: 'Configured estimated sale value of one qualified lead in this niche.',
+    method: 'Derived from the niche’s assumed job value and lead commission. It is an editable business assumption, not provider-reported revenue.',
+  },
+  market: {
+    source: 'DataForSEO location catalog',
+    sourceKind: 'API',
+    meaning: 'The city and state used to localize the keyword metrics and SERP request.',
+    method: 'The stored provider location code—not your browser location—determines the measured market.',
+  },
+  liveSerp: {
+    source: 'Live Google search',
+    sourceKind: 'Observed',
+    meaning: 'Verification links for seeing the query on Google in the selected market.',
+    method: 'Uses Google’s UULE location parameter. Opening these links does not purchase another DataForSEO result; mobile layout still requires a phone user agent or device mode.',
+  },
+  device: {
+    source: 'Run configuration',
+    sourceKind: 'Configured',
+    meaning: 'The device type DataForSEO emulated for the stored SERP measurement.',
+    method: 'Selected before the run. Desktop and mobile can have different rankings and layouts.',
+  },
+  firstOrganic: {
+    source: 'DataForSEO SERP API',
+    sourceKind: 'API',
+    meaning: 'Absolute position of the first traditional organic result.',
+    method: 'Counts every element above it—including ads and local results—so absolute #4 can still be organic #1.',
+  },
+  redditRank: {
+    source: 'DataForSEO SERP API',
+    sourceKind: 'API',
+    meaning: 'Best absolute page position held by a Reddit result.',
+    method: 'Uses DataForSEO rank_absolute across organic results and Discussions & Forums elements. Lower is better.',
+  },
+  ads: {
+    source: 'DataForSEO SERP API',
+    sourceKind: 'API',
+    meaning: 'Traditional paid-search ads above the first organic result.',
+    method: 'Counted from the stored SERP. Local Services Ads are reported separately.',
+  },
+  lsa: {
+    source: 'DataForSEO SERP API',
+    sourceKind: 'API',
+    meaning: 'Google Local Services Ads above the first organic result.',
+    method: 'Counted separately from traditional paid-search ads in the stored SERP.',
+  },
+  gbp: {
+    source: 'DataForSEO SERP API',
+    sourceKind: 'API',
+    meaning: 'Google Business Profile/local-pack listings above the first organic result.',
+    method: 'The main number is above organic; when available, the faint second number is the total local listings on the SERP.',
+  },
+  map: {
+    source: 'DataForSEO SERP API',
+    sourceKind: 'API',
+    meaning: 'Whether a map/local-pack element appears and its absolute position.',
+    method: 'Read directly from the stored SERP layout.',
+  },
+  maps: {
+    source: 'DataForSEO Maps SERP API',
+    sourceKind: 'API',
+    meaning: 'Number of local competitors returned by the optional Maps query.',
+    method: 'Only populated when Maps enrichment was enabled for the run.',
+  },
+  forums: {
+    source: 'DataForSEO SERP API',
+    sourceKind: 'API',
+    meaning: 'Forum or discussion results found on the page.',
+    method: 'Counts individual forum results; “pack” means Google showed a Discussions & Forums feature.',
+  },
+  topOrganic: {
+    source: 'DataForSEO SERP API',
+    sourceKind: 'API',
+    meaning: 'Domains holding the leading traditional organic positions.',
+    method: 'Extracted from the stored page-one SERP. AIO and PAA indicate AI Overview and People Also Ask features.',
+  },
+  gbpLeaders: {
+    source: 'DataForSEO SERP API',
+    sourceKind: 'API',
+    meaning: 'Leading businesses shown in the Google local pack.',
+    method: 'Names, ratings, and review counts are extracted from the stored SERP when present.',
+  },
+  openQ: {
+    source: 'DataForSEO Instant Pages API',
+    sourceKind: 'API',
+    meaning: 'Whether the best Reddit thread appears open for a new comment.',
+    method: 'Checked during promotion by fetching the thread HTML and detecting archived, locked, or deleted-OP states. A dash means it has not been checked.',
+  },
+  why: {
+    source: 'Serp Scout scoring model',
+    sourceKind: 'Heuristic',
+    meaning: 'The strongest facts that influenced this row’s opportunity score.',
+    method: 'Generated alongside the score so the ranking can be audited without opening the full detail page.',
+  },
+}
+
+function MetricHeader(props: {
+  id: ColumnId
+  onExplain: (id: ColumnId) => void
+  className?: string
+}) {
+  const detail = COLUMN_DETAILS[props.id]
+  return (
+    <th className={props.className}>
+      <span className="metric-heading">
+        <span>{COLUMN_LABELS[props.id]}</span>
+        {detail ? (
+          <button
+            type="button"
+            className="metric-info"
+            aria-label={`Explain ${COLUMN_LABELS[props.id]}`}
+            title={`${detail.sourceKind} · ${detail.source}`}
+            onClick={() => props.onExplain(props.id)}
+          >
+            i
+          </button>
+        ) : null}
+      </span>
+    </th>
+  )
 }
 
 const STORAGE_KEY = 'rnr.grid.columns.v1'
@@ -343,6 +542,7 @@ export function OpportunityGridPanel(props: OpportunityGridPanelProps) {
   const [preset, setPreset] = useState<string>('opportunities')
   const [overrides, setOverrides] = useState<Partial<Record<ColumnId, boolean>>>({})
   const [pickerOpen, setPickerOpen] = useState(false)
+  const [explainedMetric, setExplainedMetric] = useState<ColumnId | null>(null)
 
   useEffect(() => {
     try {
@@ -569,6 +769,16 @@ export function OpportunityGridPanel(props: OpportunityGridPanelProps) {
             </button>
           )}
         </div>
+        <div className="sm-preset-actions">
+          <button
+            type="button"
+            className="btn tiny metric-guide-trigger"
+            aria-expanded={explainedMetric != null}
+            aria-controls="opportunity-metric-explainer"
+            onClick={() => setExplainedMetric((current) => (current == null ? 'signal' : null))}
+          >
+            How metrics work
+          </button>
         <div className="sm-colpicker">
           <button
             type="button"
@@ -604,8 +814,37 @@ export function OpportunityGridPanel(props: OpportunityGridPanelProps) {
             </>
           )}
         </div>
+        </div>
       </div>
     )}
+
+    {explainedMetric && COLUMN_DETAILS[explainedMetric] ? (
+      <aside
+        id="opportunity-metric-explainer"
+        className="metric-explainer"
+        aria-label={`${COLUMN_LABELS[explainedMetric]} metric explanation`}
+      >
+        <div className="metric-explainer-title">
+          <span className={`metric-source metric-source-${COLUMN_DETAILS[explainedMetric].sourceKind.toLowerCase()}`}>
+            {COLUMN_DETAILS[explainedMetric].sourceKind}
+          </span>
+          <strong>{COLUMN_LABELS[explainedMetric]}</strong>
+          <span className="metric-provider">{COLUMN_DETAILS[explainedMetric].source}</span>
+        </div>
+        <p>{COLUMN_DETAILS[explainedMetric].meaning}</p>
+        <p className="metric-method">
+          <strong>How & when:</strong> {COLUMN_DETAILS[explainedMetric].method}
+        </p>
+        <button
+          type="button"
+          className="metric-explainer-close"
+          aria-label="Close metric explanation"
+          onClick={() => setExplainedMetric(null)}
+        >
+          ×
+        </button>
+      </aside>
+    ) : null}
 
     {/* Bulk action bar (SEMrush-style) */}
     {props.rows.length > 0 && (
@@ -690,144 +929,108 @@ export function OpportunityGridPanel(props: OpportunityGridPanelProps) {
               )}
 
               {show('signal') && (
-              <th
-                title="What this row is offering. REDDIT: a thread on page 1 with demand behind it, commentable without a site. BUILD: winnable on an acquired domain with slots open. DOMAIN: the exact-match domain is registrable. PARTIAL: a thread exists but its reach cannot be estimated."
-              >
-                Signal
-              </th>
+              <MetricHeader id="signal" onExplain={setExplainedMetric} />
               )}
 
               {show('score') && (
-              <th className="num">Score</th>
+              <MetricHeader id="score" className="num" onExplain={setExplainedMetric} />
               )}
 
               {show('redditVol') && (
-              <th
-                className="num"
-                title="Estimated monthly searches that actually reach a Reddit thread here — keyword volume x the click-through of the position the best thread holds, summed across the niche's keywords. Blank means volume was never bought, not that there is no audience."
-              >
-                Reddit vol
-              </th>
+              <MetricHeader id="redditVol" className="num" onExplain={setExplainedMetric} />
               )}
 
               {show('difficulty') && (
-              <th
-                className="num"
-                title="SERP difficulty 0-100 from the defenders' link strength, slot types and intent lock. Blank = not computed, which is not the same as easy."
-              >
-                Diff
-              </th>
+              <MetricHeader id="difficulty" className="num" onExplain={setExplainedMetric} />
               )}
 
               {show('slotsOpen') && (
-              <th className="num" title="Slots not held by a committed local operator, of 10">
-                Open
-              </th>
+              <MetricHeader id="slotsOpen" className="num" onExplain={setExplainedMetric} />
               )}
 
               {show('winnable') && (
-              <th title="How fast a site could rank here. Left = registering a fresh exact-match domain; right = acquiring one.">
-                Winnable?
-              </th>
+              <MetricHeader id="winnable" onExplain={setExplainedMetric} />
               )}
 
 
               {show('keyword') && (
-              <th className="opp-col-keyword">Niche / keyword</th>
+              <MetricHeader id="keyword" className="opp-col-keyword" onExplain={setExplainedMetric} />
               )}
 
               {show('volume') && (
-              <th className="num">Vol</th>
+              <MetricHeader id="volume" className="num" onExplain={setExplainedMetric} />
               )}
 
               {show('cpc') && (
-              <th className="num" title="City CPC from Keywords Data">
-                CPC
-              </th>
+              <MetricHeader id="cpc" className="num" onExplain={setExplainedMetric} />
               )}
 
               {show('comp') && (
-              <th className="num" title="Paid competition 0–100 @ city">
-                Comp
-              </th>
+              <MetricHeader id="comp" className="num" onExplain={setExplainedMetric} />
               )}
 
               {show('leadValue') && (
-              <th className="num">Lead $</th>
+              <MetricHeader id="leadValue" className="num" onExplain={setExplainedMetric} />
               )}
 
               {show('market') && (
-              <th>Market</th>
+              <MetricHeader id="market" onExplain={setExplainedMetric} />
               )}
 
               {show('liveSerp') && (
-              <th>Live SERP</th>
+              <MetricHeader id="liveSerp" onExplain={setExplainedMetric} />
               )}
 
               {show('device') && (
-              <th className="num">Device</th>
+              <MetricHeader id="device" className="num" onExplain={setExplainedMetric} />
               )}
 
               {show('firstOrganic') && (
-              <th className="num" title="First organic rank_absolute">
-                1st org
-              </th>
+              <MetricHeader id="firstOrganic" className="num" onExplain={setExplainedMetric} />
               )}
 
               {show('redditRank') && (
-              <th className="num" title="Best Reddit rank_absolute">
-                Reddit #
-              </th>
+              <MetricHeader id="redditRank" className="num" onExplain={setExplainedMetric} />
               )}
 
               {show('ads') && (
-              <th className="num" title="Paid search ads above organic (not LSA)">
-                Ads↑
-              </th>
+              <MetricHeader id="ads" className="num" onExplain={setExplainedMetric} />
               )}
 
               {show('lsa') && (
-              <th className="num" title="Local Services Ads (≠ paid search)">
-                LSA↑
-              </th>
+              <MetricHeader id="lsa" className="num" onExplain={setExplainedMetric} />
               )}
 
               {show('gbp') && (
-              <th className="num" title="Google Business / local pack listings above organic">
-                GBP↑
-              </th>
+              <MetricHeader id="gbp" className="num" onExplain={setExplainedMetric} />
               )}
 
               {show('map') && (
-              <th title="Map present + rank">Map</th>
+              <MetricHeader id="map" onExplain={setExplainedMetric} />
               )}
 
               {show('maps') && (
-              <th className="num" title="Maps SERP competitor count (1× niche×city)">
-                Maps
-              </th>
+              <MetricHeader id="maps" className="num" onExplain={setExplainedMetric} />
               )}
 
               {show('forums') && (
-              <th className="num" title="Forum / discussions threads">
-                Forums
-              </th>
+              <MetricHeader id="forums" className="num" onExplain={setExplainedMetric} />
               )}
 
               {show('topOrganic') && (
-              <th title="Top organic domains">Top organic</th>
+              <MetricHeader id="topOrganic" onExplain={setExplainedMetric} />
               )}
 
               {show('gbpLeaders') && (
-              <th title="Local pack business names">GBP leaders</th>
+              <MetricHeader id="gbpLeaders" onExplain={setExplainedMetric} />
               )}
 
               {show('openQ') && (
-              <th>Open?</th>
+              <MetricHeader id="openQ" onExplain={setExplainedMetric} />
               )}
 
               {show('why') && (
-              <th>Why</th>
+              <MetricHeader id="why" onExplain={setExplainedMetric} />
               )}
 
               {show('actions') && (

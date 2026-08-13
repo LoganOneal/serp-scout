@@ -2,7 +2,6 @@ import {
   db,
   getOpportunityScreenBoard,
   listActiveNichesForPicker,
-  listNicheEconomicsRanked,
   listRecentDeepDiveRuns,
   listScanRuns,
   liveCallsEnabled,
@@ -47,10 +46,6 @@ export default async function ResearchPage() {
 
   const deepDiveRuns = catalogOn
     ? await queryOr('listRecentDeepDiveRuns', () => listRecentDeepDiveRuns(database, 12), [])
-    : []
-
-  const nicheEconomics = catalogOn
-    ? await queryOr('listNicheEconomicsRanked', () => listNicheEconomicsRanked(database), [])
     : []
 
   const nicheList = await queryOr(
@@ -105,7 +100,12 @@ export default async function ResearchPage() {
             dataforseoLocationCode: g.dataforseoLocationCode,
           }))}
           defaultGeoIds={board.defaultTopGeoIds}
-          nicheEconomics={nicheEconomics}
+          matchKeywords={board.keywords.map((k) => ({
+            id: k.id,
+            keyword: k.keyword,
+            volume: k.volume,
+            competition: k.competition,
+          }))}
           deepDiveRuns={deepDiveRuns.map((r) => ({
             id: r.id,
             status: r.status,
@@ -115,6 +115,8 @@ export default async function ResearchPage() {
             jobsSkipped: r.jobsSkipped,
             hitCount: r.hitCount,
             label: r.label,
+            devices: r.devices,
+            scope: r.scope,
             error: r.error,
             createdAt: r.createdAt.toISOString(),
             usedFixtures: r.usedFixtures,

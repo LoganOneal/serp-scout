@@ -519,6 +519,8 @@ export async function enqueueCatalogBulkResearch(
   const billExtras = !usedFixtures
   const costBreakdown = estimateDiscoveryCostMicros({
     jobCount,
+    serpUnitMicros:
+      args.useQueuedSerp === true ? PRICE.serpOrganicTask : PRICE.serpOrganicLive,
     /**
      * ZERO, not the market count. Keyword volume comes from Google Ads, which
      * is free -- fetchVolumeBatch returns costMicros 0n and billableRequests 0
@@ -562,7 +564,9 @@ export async function enqueueCatalogBulkResearch(
       geoTier: args.geoTier ?? (args.geoIds ? 'custom' : 'top_50'),
     }),
     requiresLongLivedWorker: jobCount > 50 && !usedFixtures,
-    maxLiveSpendUnderHardCapMicros: BigInt(maxJobs) * PRICE.serpOrganicLive,
+    maxLiveSpendUnderHardCapMicros:
+      BigInt(maxJobs) *
+      (args.useQueuedSerp === true ? PRICE.serpOrganicTask : PRICE.serpOrganicLive),
     defaultBudgetCapCents: defaultBudgetCapCents(estimatedCostMicros, usedFixtures),
   }
 
