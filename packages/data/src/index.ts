@@ -50,6 +50,7 @@ export * from './serp/catalog-research.js'
 export * from './serp/keyword-volume-cache.js'
 export * from './serp/research-history.js'
 export * from './serp/opportunity-screen.js'
+export * from './serp/reddit-opportunity-export.js'
 export {
   fetchKeywordVolumes,
   googleAdsConfigured,

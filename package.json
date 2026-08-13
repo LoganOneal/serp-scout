@@ -39,6 +39,7 @@
     "ship:worker": "pnpm trigger:deploy",
     "trigger:smoke": "pnpm --filter @rnr/web trigger:smoke",
     "seed:research-catalog": "tsx packages/data/src/scripts/seed-research-catalog.mts",
+    "export:reddit-opportunities": "tsx --conditions=react-server packages/data/src/scripts/export-reddit-opportunities.mts",
     "enrich:niche-gads": "tsx --conditions=react-server packages/data/src/scripts/enrich-niche-gads.mts",
     "voice:retarget-tools": "tsx --conditions=react-server packages/data/src/scripts/retarget-tools.ts"
   },

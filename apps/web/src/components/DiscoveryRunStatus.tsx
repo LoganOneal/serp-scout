@@ -255,6 +255,15 @@ export function DiscoveryRunStatus({
                       Open results →
                     </a>
                   )}
+                  {runHref && (
+                    <a
+                      className="btn tiny"
+                      href={`/api/scout/runs/${r.id}/reddit-opportunities`}
+                      download
+                    >
+                      Export CSV
+                    </a>
+                  )}
                   {onDeleteRun && (
                     <button
                       type="button"
