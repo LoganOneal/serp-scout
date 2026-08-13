@@ -8,6 +8,7 @@ dist/
 .env
 .env.local
 *.log
+exports/
 
 # Downloaded Census bulk files and the 267k-row provider location dump.
 # Large, immutable, and re-fetchable -- but never re-fetched on every run.

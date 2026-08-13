@@ -106,6 +106,13 @@ export default async function DeepDiveRunPage({
             {run.label ?? `Sweep #${run.id}`}
           </h1>
           <div className="page-header-actions">
+            <a
+              href={`/api/scout/runs/${run.id}/reddit-opportunities`}
+              className="btn"
+              download
+            >
+              Export Reddit CSV
+            </a>
             <Link href="/scout" className="btn">
               ← All runs
             </Link>
