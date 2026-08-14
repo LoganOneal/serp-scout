@@ -91,6 +91,38 @@ describe('money', () => {
   })
 })
 
+/**
+ * Pinned against the three balance-delta points that produced them, so a future
+ * edit to the constants fails against real evidence rather than against a
+ * made-up fixture. Same convention as acquisition-value.test.ts.
+ *
+ * Measured 2026-08-13 on `booking.com` via probe-labs-pricing.mts.
+ */
+describe('labs ranked_keywords is billed per request AND per row', () => {
+  it('limit 1 → 1 row cost $0.012120', () => {
+    expect(costMicros('labsRankedKeywords', 1)).toBe(usdToMicros(0.01212))
+  })
+
+  it('limit 10 → 10 rows cost $0.013200', () => {
+    expect(costMicros('labsRankedKeywords', 10)).toBe(usdToMicros(0.0132))
+  })
+
+  it('limit 100 → 100 rows cost $0.024000', () => {
+    expect(costMicros('labsRankedKeywords', 100)).toBe(usdToMicros(0.024))
+  })
+
+  it('a 5,000-row pull is $0.612, not the $0.012 a flat constant would report', () => {
+    expect(costMicros('labsRankedKeywords', 5_000)).toBe(usdToMicros(0.612))
+    // 51x. This is the size of the bug the flat assumption was hiding.
+    expect(costMicros('labsRankedKeywords', 5_000) / PRICE.labsRankedKeywords).toBe(51n)
+  })
+
+  it('omitting the row count under-reports — callers must pass it', () => {
+    expect(costMicros('labsRankedKeywords')).toBe(PRICE.labsRankedKeywords)
+    expect(costMicros('labsRankedKeywords')).toBeLessThan(costMicros('labsRankedKeywords', 100))
+  })
+})
+
 describe('estimateDiscoveryCostMicros', () => {
   it('uses the queued task rate when that delivery method is selected', () => {
     const c = estimateDiscoveryCostMicros({

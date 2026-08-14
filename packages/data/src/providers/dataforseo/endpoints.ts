@@ -86,6 +86,43 @@ export const ENDPOINTS = {
    */
   LABS_LOCATIONS_AND_LANGUAGES: '/dataforseo_labs/locations_and_languages',
 
+  /**
+   * Every keyword a domain ranks for — position, volume, CPC, ranking URL.
+   *
+   * ==================== IT WAS ALREADY BEING CALLED, WRONG ====================
+   * `quality-gates.ts` has hit this path as a bare string literal since the
+   * expired-domain work, with `limit: 1`, reading `total_count` and throwing the
+   * rows away. That is a fine gate ("does this domain still rank for anything?")
+   * and it is not keyword research.
+   *
+   * It is registered here now for the reason TRAP 2 exists: a path that lives as
+   * a literal at a call site is a path nobody diffs, and a wrong one returns
+   * `"Invalid Path."` inside an HTTP 200 that reads as "this domain ranks for
+   * nothing".
+   *
+   * ⚠️ PRICING IS UNVERIFIED ABOVE limit: 1 — see PRICE.labsRankedKeywords.
+   * ==========================================================================
+   */
+  LABS_RANKED_KEYWORDS: '/dataforseo_labs/google/ranked_keywords/live',
+
+  /**
+   * Domains that rank for the same keywords as a target.
+   *
+   * The pre-registered expectation for `hotelhottubs.com` is that this returns
+   * Booking, Expedia and TripAdvisor — a competitor set we cannot gap against,
+   * because a keyword they rank for and we do not is not an opportunity. Hence
+   * `site_competitors.peer`, which is NULL until somebody decides.
+   */
+  LABS_COMPETITORS_DOMAIN: '/dataforseo_labs/google/competitors_domain/live',
+
+  /**
+   * Keywords two domains BOTH rank for, or that one has and the other lacks.
+   *
+   * The keyword-gap engine. Same per-row pricing uncertainty as
+   * LABS_RANKED_KEYWORDS.
+   */
+  LABS_DOMAIN_INTERSECTION: '/dataforseo_labs/google/domain_intersection/live',
+
   /** Balance and account status. Free. Called before any scan spends money. */
   USER_DATA: '/appendix/user_data',
 } as const

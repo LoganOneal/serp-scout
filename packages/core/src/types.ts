@@ -334,6 +334,63 @@ export const SITE_STATUSES: readonly SiteStatus[] = [
   'dropped',
 ]
 
+/**
+ * What kind of property this is, and therefore which models may run on it.
+ *
+ * ==================== A GATE, NOT A LABEL ====================
+ * `local_lead_gen` is a (locality, niche) cell earning from phone calls.
+ * `affiliate` is a directory site earning per referred purchase, spanning many
+ * localities or none.
+ *
+ * The distinction is load-bearing because three models are correct for the first
+ * and return confident, OPTIMISTIC nonsense for the second:
+ *
+ *   assessEmd / assessAcquiredDomain -- `not_a_local_query` fires on every
+ *       affiliate keyword by construction, and reads as a hard negative verdict
+ *       rather than "this model does not apply here".
+ *   demand.ts -- models a number that is free to measure at national scope.
+ *   PLATFORM_DOMAINS -- knows Yelp, not Booking.com, so the giants holding an
+ *       affiliate SERP classify as beatable independent businesses.
+ *
+ * See `localModelsApply`, which is keyed on the keyword space's geoMode rather
+ * than on this enum: the monetisation model and the geography model are separate
+ * axes and a future site may cross them.
+ * =============================================================
+ */
+export type SiteKind = 'local_lead_gen' | 'affiliate'
+
+export const SITE_KINDS: readonly SiteKind[] = ['local_lead_gen', 'affiliate']
+
+// --- Paid search -------------------------------------------------------------
+
+/**
+ * A paid-search plan's lifecycle.
+ *
+ * `validated` means Google's own validate-only mutate accepted it and applied
+ * nothing — a real checkpoint, not a self-assessment. `launched` is the only
+ * state that implies money can be spent, and nothing in this repo currently
+ * produces it.
+ */
+export type AdsPlanStatus = 'draft' | 'validated' | 'launched' | 'abandoned'
+
+export const ADS_PLAN_STATUSES: readonly AdsPlanStatus[] = [
+  'draft',
+  'validated',
+  'launched',
+  'abandoned',
+]
+
+/**
+ * Google Ads keyword match type.
+ *
+ * EXACT is the default here and it is a deliberate choice, not an inherited
+ * one: the break-even model is computed for a SPECIFIC query, with a specific
+ * organic rank and therefore a specific incrementality band. BROAD match spends
+ * that keyword's budget on queries whose rank we never measured, which silently
+ * breaks the one coefficient the whole model is keyed on.
+ */
+export type AdsMatchType = 'EXACT' | 'PHRASE' | 'BROAD'
+
 /** How far the Retell webhook sequence got. Not a call outcome. */
 export type CallIngestState = 'started' | 'ended' | 'analyzed'
 

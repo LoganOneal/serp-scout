@@ -37,11 +37,16 @@ const EXTRAS: Extra[] = [
   },
   {
     name: 'sites_active_cell_uq',
-    why: 'One website per locality+niche, while keeping history for dropped cells.',
+    why:
+      'One website per locality+niche, while keeping history for dropped cells. ' +
+      'Scoped to local_lead_gen since 0022: affiliate sites carry (NULL, NULL) and ' +
+      'Postgres treats NULLs as distinct, so they would not collide today — but a ' +
+      'partial index that says what it means survives someone giving an affiliate ' +
+      'site a nominal locality for display.',
     ddl: `
       CREATE UNIQUE INDEX IF NOT EXISTS sites_active_cell_uq
         ON sites (locality_id, niche_id)
-        WHERE status <> 'dropped'
+        WHERE status <> 'dropped' AND kind = 'local_lead_gen'
     `,
   },
   {

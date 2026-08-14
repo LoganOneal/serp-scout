@@ -35,7 +35,20 @@ export interface BusinessInput {
 
 export interface DomainCandidate {
   domain: string
-  businesses: Array<{ name: string; website: string | null }>
+  /**
+   * Widened from `{name, website}` so the Google Business Profile fields
+   * survive to persistence. They were being collected and dropped -- see the
+   * comment on DomainOwner in @rnr/core normalize.ts.
+   */
+  businesses: Array<{
+    name: string
+    website: string | null
+    placeId?: string | null
+    cid?: string | null
+    isClaimed?: boolean | null
+    rating?: number | null
+    reviewCount?: number | null
+  }>
   businessCount: number
   dns: DnsTriageResult | null
   http: HttpTriageResult | null
@@ -115,7 +128,16 @@ export function topicalRelevance(
 /** Run one domain through stages 3-5. Exported so a single row can be re-run. */
 export async function triageDomain(
   domain: string,
-  businesses: Array<{ name: string; website: string | null; serpRank?: number | null }>,
+  businesses: Array<{
+    name: string
+    website: string | null
+    serpRank?: number | null
+    placeId?: string | null
+    cid?: string | null
+    isClaimed?: boolean | null
+    rating?: number | null
+    reviewCount?: number | null
+  }>,
   opts: EnrichPipelineOptions = {},
 ): Promise<DomainCandidate> {
   // Best rank any listing reported for this domain.

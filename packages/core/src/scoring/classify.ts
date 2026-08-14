@@ -33,12 +33,23 @@ export interface MatchContext {
   nicheToken: string
   /** Curated substrings from Niche.domainStems: `['tree']`, `['plumb']`. */
   nicheStems: string[]
+  /**
+   * Slot holders specific to this keyword space, consulted before the global
+   * list. Undefined on every local-services call, which is why their behaviour
+   * is byte-identical to before this existed.
+   *
+   * Without it, an affiliate SERP held by `booking.com` and `expedia.com`
+   * classifies both as `local_business` — the most optimistic error available,
+   * on the heaviest-weighted component of the difficulty model.
+   */
+  extraPlatforms?: Readonly<Record<string, DomainClass>> | undefined
 }
 
 export function buildMatchContext(args: {
   localityName: string
   nicheEmdToken: string
   nicheDomainStems: string[]
+  extraPlatforms?: Readonly<Record<string, DomainClass>> | undefined
 }): MatchContext {
   const token = tokenise(args.localityName)
   const words = args.localityName
@@ -54,6 +65,7 @@ export function buildMatchContext(args: {
     localityAliases: [...aliases].filter(Boolean),
     nicheToken: tokenise(args.nicheEmdToken),
     nicheStems: args.nicheDomainStems.map(tokenise).filter(Boolean),
+    extraPlatforms: args.extraPlatforms,
   }
 }
 
@@ -131,7 +143,7 @@ function pathOf(url: string): string {
 }
 
 function classifyDomain(domain: string, item: SerpItem, ctx: MatchContext): DomainClass {
-  const platform = lookupPlatform(domain)
+  const platform = lookupPlatform(domain, ctx.extraPlatforms)
   if (platform) return platform
   if (isGovernment(domain)) return 'government'
   if (isFranchise(domain)) {

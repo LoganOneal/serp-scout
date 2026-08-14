@@ -1,6 +1,12 @@
 import type {
+  AdsMatchType,
+  AdsPlanStatus,
   BuildState,
   CallIngestState,
+  KeywordSpace,
+  KeywordVerdict,
+  PaidVerdict,
+  SiteKind,
   DeliveryChannel,
   DeliveryStatus,
   LeadCapturedVia,
@@ -524,16 +530,67 @@ export const sites = pgTable(
     domain: text('domain'),
 
     /**
-     * NOT NULL, both of them. These are what make the list sortable and what let
-     * call volume roll up by locality and niche into calibration. Making them
-     * optional would cost one field on a form and close the research loop.
+     * What kind of property this is, and therefore which models apply to it.
+     *
+     * ==================== WHY THIS COLUMN EXISTS ====================
+     * `local_lead_gen` is the original product: one locality x one niche, money
+     * from phone calls. `affiliate` is a directory site that spans hundreds of
+     * localities (hotelhottubs.com) or none at all (borenhealth.com), and earns
+     * per referred purchase.
+     *
+     * It is a GATE, not a label. Three models -- assessEmd, assessAcquiredDomain
+     * and the population demand estimate -- are correct for local services and
+     * return confident, OPTIMISTIC nonsense on an affiliate keyword. See
+     * @rnr/core localModelsApply.
+     * ===============================================================
      */
-    localityId: integer('locality_id')
-      .notNull()
-      .references(() => localities.id, { onDelete: 'restrict' }),
-    nicheId: integer('niche_id')
-      .notNull()
-      .references(() => niches.id, { onDelete: 'restrict' }),
+    kind: text('kind').$type<SiteKind>().notNull().default('local_lead_gen'),
+
+    /**
+     * ==================== NULLABLE SINCE AFFILIATE SITES ====================
+     * These were NOT NULL, and for `local_lead_gen` they still are in practice --
+     * they are what make the list sortable and what let call volume roll up into
+     * calibration.
+     *
+     * They cannot be NOT NULL any more because `borenhealth.com` has no locality
+     * and no niche: peptides are not geographic and the niche corpus is 41 home
+     * services. `hotelhottubs.com` has the opposite problem -- ~300 localities
+     * and one domain, which `sites_domain_uq` correctly refuses to express as
+     * 300 rows.
+     *
+     * The cell uniqueness that used to be implied by NOT NULL is now enforced by
+     * a partial index scoped to kind='local_lead_gen' in scripts/db-extras.ts.
+     * =====================================================================
+     */
+    localityId: integer('locality_id').references(() => localities.id, { onDelete: 'restrict' }),
+    nicheId: integer('niche_id').references(() => niches.id, { onDelete: 'restrict' }),
+
+    /**
+     * How this site's target keywords are generated. NULL for local cells, which
+     * derive theirs from the niche.
+     *
+     * Shape is @rnr/core KeywordSpace: geoMode, audienceScope, serpLocationCode,
+     * dimensions, patterns, volumeFloor. `audienceScope` has NO DEFAULT on
+     * purpose -- both current affiliate sites happen to be country:US for
+     * entirely different reasons, and two sites agreeing is not evidence that
+     * agreement is automatic.
+     */
+    keywordSpace: jsonb('keyword_space').$type<KeywordSpace>(),
+
+    /**
+     * Affiliate economics. Operator inputs and a network measurement -- NOT
+     * derivable from anything this tool can buy, which is why they live here as
+     * plain nullable columns rather than as priors on a niche row.
+     *
+     * `affiliateConversionRateBps` in particular must stay null until affiliate
+     * network data is imported. A plausible 2% here would make every keyword
+     * look valued when none of them are measured.
+     */
+    affiliateOrderValueMicros: bigint('affiliate_order_value_micros', { mode: 'bigint' }),
+    affiliateCommissionRateBps: integer('affiliate_commission_rate_bps'),
+    affiliateConversionRateBps: integer('affiliate_conversion_rate_bps'),
+    /** Named sets from @rnr/core VERTICAL_PLATFORM_DOMAINS, e.g. ['travel']. */
+    platformVerticals: jsonb('platform_verticals').$type<string[]>(),
 
     /** NULL when the domain did not come from a scan. Set on the common path. */
     shortlistItemId: integer('shortlist_item_id').references(() => shortlistItems.id, {
@@ -1624,10 +1681,329 @@ export const researchGeos = pgTable(
   }),
 )
 
+// --- Keyword spaces: entities, and per-site keyword targets ------------------
+
+/**
+ * A named set of things a keyword pattern can be built over.
+ *
+ * ==================== WHY LOCALITIES ARE NOT IN HERE ====================
+ * `kind: 'locality'` is RESERVED and reads `research_geos` instead of
+ * `research_entities`. The geo corpus already carries FIPS, population, lat/lon
+ * and resolved provider location codes, all of it ingested from Census bulk
+ * files. Copying 300 city names into a second table to make the model look
+ * uniform would create two sources of truth for the same place, and the one
+ * without the location code would eventually be the one somebody joined on.
+ * =====================================================================
+ */
+export const researchEntitySets = pgTable('research_entity_sets', {
+  id: serial('id').primaryKey(),
+  slug: text('slug').notNull(),
+  /** 'product' | 'brand' | 'venue_type' | 'topic' | ... Free text on purpose. */
+  kind: text('kind').notNull(),
+  label: text('label').notNull(),
+  notes: text('notes'),
+  createdAt: now(),
+  updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
+})
+
+export const researchEntities = pgTable(
+  'research_entities',
+  {
+    id: serial('id').primaryKey(),
+    setId: integer('set_id')
+      .notNull()
+      .references(() => researchEntitySets.id, { onDelete: 'cascade' }),
+    slug: text('slug').notNull(),
+    /** The string substituted into a pattern. "BPC-157", not "bpc-157". */
+    label: text('label').notNull(),
+    /**
+     * Alternate surface forms: `BPC 157`, `BPC157`.
+     *
+     * Load-bearing for matching what already ranks BACK onto an entity. Without
+     * them the join under-reports our own coverage, and under-reported coverage
+     * reads as an opportunity -- so we would build a page that already exists.
+     */
+    aliases: jsonb('aliases').$type<string[]>().notNull().default(sql`'[]'::jsonb`),
+    /**
+     * Per-entity extras the value model needs and no column could hold across
+     * verticals: a $600 peptide and a $40 one are not worth the same click.
+     */
+    attributes: jsonb('attributes').$type<Record<string, unknown>>(),
+    /** Lower sorts first. What `DimensionSpec.limit` truncates against. */
+    priority: integer('priority').notNull().default(0),
+    active: boolean('active').notNull().default(true),
+    createdAt: now(),
+    updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => ({
+    setSlugUq: uniqueIndex('research_entities_set_slug_uq').on(t.setId, t.slug),
+    activeIdx: index('research_entities_active_idx').on(t.setId, t.active, t.priority),
+  }),
+)
+
+/**
+ * One keyword this site targets, with everything measured about it.
+ *
+ * ==================== WHY NOT serp_keywords ====================
+ * `serp_keywords` is explicitly an IMPORT-TIME SNAPSHOT -- "Semrush's numbers at
+ * import time, never refreshed here, context for choosing what to watch, not
+ * measurements this system makes". This table is the opposite: it is refreshed,
+ * it is the measurement, and it carries a verdict.
+ * ==============================================================
+ *
+ * Every measured column is nullable and pairs with a `*MeasuredAt`, because the
+ * difference between "we looked and there is nothing" and "we never looked" is
+ * the whole decision on this screen. `assessKeyword` reads
+ * `positionMeasuredAt !== null` rather than `position !== null` for exactly that
+ * reason: Search Console silence and never having asked Search Console are the
+ * same null and completely different facts.
+ */
+export const siteKeywordTargets = pgTable(
+  'site_keyword_targets',
+  {
+    id: serial('id').primaryKey(),
+    siteId: integer('site_id')
+      .notNull()
+      .references(() => sites.id, { onDelete: 'cascade' }),
+    /** The shared catalog row, when this keyword is also in it. */
+    keywordId: integer('keyword_id').references(() => researchKeywords.id, {
+      onDelete: 'set null',
+    }),
+    keyword: text('keyword').notNull(),
+    keywordNorm: text('keyword_norm').notNull(),
+    /** The pattern that generated it, or the source that discovered it. */
+    seedKey: text('seed_key'),
+    patternLabel: text('pattern_label'),
+    /** dimension -> entity slug. Traces a grid row back to what produced it. */
+    entities: jsonb('entities').$type<Record<string, string>>(),
+
+    // --- Demand (free, at the space's audienceScope) -------------------------
+    /** NULL = never measured. A measured 0 is a 0 and is NOT this. */
+    volume: integer('volume'),
+    /** `us/en`, `worldwide/en`. Says what was actually asked for. */
+    volumeScope: text('volume_scope'),
+    volumeMeasuredAt: timestamp('volume_measured_at', { withTimezone: true }),
+    competitionIndex: doublePrecision('competition_index'),
+    cpcMicros: bigint('cpc_micros', { mode: 'bigint' }),
+    /**
+     * Google's top-of-page bid RANGE. Two columns, never collapsed to one.
+     *
+     * `cpcMicros` above is deliberately NULL on the Google Ads path, because
+     * Google publishes a range and the two do not map — cpc/high ran 0.07x-1.16x
+     * and cpc/low 0.79x-2.59x against cached DataForSEO rows. Carrying the range
+     * as a range is what gives paid search a cost term without inventing one.
+     * Break-even is computed at BOTH ends; only the high end may qualify a
+     * keyword, because the low end is roughly what it costs to lose the auction.
+     */
+    bidLowMicros: bigint('bid_low_micros', { mode: 'bigint' }),
+    bidHighMicros: bigint('bid_high_micros', { mode: 'bigint' }),
+    /** 12-month series. Free, already returned, and load-bearing for travel. */
+    monthlySeries: jsonb('monthly_series').$type<Array<{ year: number; month: number; searchVolume: number }>>(),
+
+    // --- Our ranking ---------------------------------------------------------
+    position: integer('position'),
+    /** 'search_console' = our traffic. 'labs_ranked' = a vendor's index. */
+    positionSource: text('position_source'),
+    /** NOT NULL whenever we asked, even if the answer was "nothing". */
+    positionMeasuredAt: timestamp('position_measured_at', { withTimezone: true }),
+    rankingUrl: text('ranking_url'),
+    /** Search Console only. No vendor can supply these. */
+    impressions: integer('impressions'),
+    clicks: integer('clicks'),
+
+    // --- Competition ---------------------------------------------------------
+    difficulty: integer('difficulty'),
+    difficultyMeasuredAt: timestamp('difficulty_measured_at', { withTimezone: true }),
+    hasAiOverview: boolean('has_ai_overview'),
+
+    // --- Decision ------------------------------------------------------------
+    verdict: text('verdict').$type<KeywordVerdict>(),
+    verdictReason: text('verdict_reason'),
+    /** Which signals were null and needed. Non-empty implies verdict UNKNOWN. */
+    verdictMissing: jsonb('verdict_missing').$type<string[]>(),
+    /** NULL whenever any economics input was unset. Never a fallback number. */
+    monthlyValueMicros: bigint('monthly_value_micros', { mode: 'bigint' }),
+
+    /**
+     * How this keyword was found. Extend the vocabulary, not the schema:
+     * `grid`, `search_console`, `labs_ranked`, `competitor_gap`, `related_search`.
+     */
+    sources: jsonb('sources').$type<string[]>().notNull().default(sql`'[]'::jsonb`),
+    active: boolean('active').notNull().default(true),
+    createdAt: now(),
+    updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => ({
+    siteKeywordUq: uniqueIndex('site_keyword_targets_site_norm_uq').on(t.siteId, t.keywordNorm),
+    verdictIdx: index('site_keyword_targets_verdict_idx').on(t.siteId, t.verdict, t.volume),
+    volumeIdx: index('site_keyword_targets_volume_idx').on(t.siteId, t.active, t.volume),
+  }),
+)
+
+/**
+ * A domain that competes with one of our sites, and how it was found.
+ *
+ * Kept separate from `domain_authority` because that table is a 90-day cache of
+ * link metrics keyed by domain, with no notion of who it competes with.
+ */
+export const siteCompetitors = pgTable(
+  'site_competitors',
+  {
+    id: serial('id').primaryKey(),
+    siteId: integer('site_id')
+      .notNull()
+      .references(() => sites.id, { onDelete: 'cascade' }),
+    domain: text('domain').notNull(),
+    /** 'labs_competitors' = the vendor named it. 'serp' = we saw it hold slots. */
+    source: text('source').notNull(),
+    /** How many keywords we and they both rank for. NULL = not measured. */
+    intersections: integer('intersections'),
+    /** Their organic keyword count, as the vendor reports it. */
+    rankedKeywords: integer('ranked_keywords'),
+    referringDomains: integer('referring_domains'),
+    /**
+     * Is this a PEER, or a giant?
+     *
+     * The pre-registered expectation in the plan is that hotelhottubs.com's
+     * competitor set is Booking, Expedia and TripAdvisor, and that a keyword gap
+     * against those is a list of things we cannot rank for dressed as
+     * opportunity. NULL = we have not decided; false = explicitly excluded.
+     */
+    peer: boolean('peer'),
+    peerReason: text('peer_reason'),
+    active: boolean('active').notNull().default(true),
+    createdAt: now(),
+    updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => ({
+    siteDomainUq: uniqueIndex('site_competitors_site_domain_uq').on(t.siteId, t.domain),
+  }),
+)
+
+// --- Paid search -------------------------------------------------------------
+
+/**
+ * A Google Ads campaign we have designed and NOT launched.
+ *
+ * ==================== PERSISTED BEFORE IT CAN BE LAUNCHED ====================
+ * A plan is a row before it is an API call, so what was launched — and against
+ * which economics — is reconstructable from the database rather than from
+ * whoever ran the command. `orderValueMicros`, `commissionRateBps` and
+ * `achievedConversionBps` are FROZEN copies of the site's values at plan time:
+ * the site's numbers will change, and a plan must still be able to explain the
+ * break-even figures it reported.
+ *
+ * `launchedAt` NULL is the normal state, and currently the only state anything
+ * in this repo produces. See @rnr/data launchPlan for the gates.
+ */
+export const adsPlans = pgTable(
+  'ads_plans',
+  {
+    id: serial('id').primaryKey(),
+    siteId: integer('site_id')
+      .notNull()
+      .references(() => sites.id, { onDelete: 'cascade' }),
+    name: text('name').notNull(),
+    status: text('status').$type<AdsPlanStatus>().notNull().default('draft'),
+
+    orderValueMicros: bigint('order_value_micros', { mode: 'bigint' }),
+    commissionRateBps: integer('commission_rate_bps'),
+    /** MEASURED from the affiliate network. Null = every verdict is UNKNOWN. */
+    achievedConversionBps: integer('achieved_conversion_bps'),
+
+    /** Required, never defaulted. An uncapped campaign is an uncapped bill. */
+    dailyBudgetMicros: bigint('daily_budget_micros', { mode: 'bigint' }).notNull(),
+    locationCode: integer('location_code').notNull(),
+    languageCode: text('language_code').notNull().default('en'),
+
+    /** Google's own forecast. NULL = never asked, not "forecast zero". */
+    forecastClicks: doublePrecision('forecast_clicks'),
+    forecastImpressions: doublePrecision('forecast_impressions'),
+    forecastCostMicros: bigint('forecast_cost_micros', { mode: 'bigint' }),
+    forecastAvgCpcMicros: bigint('forecast_avg_cpc_micros', { mode: 'bigint' }),
+    forecastFetchedAt: timestamp('forecast_fetched_at', { withTimezone: true }),
+
+    /** The measurement design, decided before launch. See @rnr/core experiment.ts. */
+    experimentArms: jsonb('experiment_arms').$type<Array<{ cluster: string; arm: string }>>(),
+    experimentFeasible: boolean('experiment_feasible'),
+    experimentVerdict: text('experiment_verdict'),
+
+    googleCampaignResource: text('google_campaign_resource'),
+    launchedAt: timestamp('launched_at', { withTimezone: true }),
+    launchedBy: text('launched_by'),
+
+    notes: text('notes'),
+    createdAt: now(),
+    updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => ({
+    siteIdx: index('ads_plans_site_idx').on(t.siteId, t.status),
+  }),
+)
+
+export const adsPlanKeywords = pgTable(
+  'ads_plan_keywords',
+  {
+    id: serial('id').primaryKey(),
+    planId: integer('plan_id')
+      .notNull()
+      .references(() => adsPlans.id, { onDelete: 'cascade' }),
+    keywordTargetId: integer('keyword_target_id').references(() => siteKeywordTargets.id, {
+      onDelete: 'set null',
+    }),
+    keyword: text('keyword').notNull(),
+    matchType: text('match_type').$type<AdsMatchType>().notNull().default('EXACT'),
+    /** Themed grouping — the grid's pattern_label gives this for free. */
+    adGroup: text('ad_group').notNull(),
+
+    volume: integer('volume'),
+    organicPosition: integer('organic_position'),
+    /** Which published band applied. Recorded so a verdict can be argued with. */
+    incrementalityBand: text('incrementality_band'),
+    incrementalityBps: integer('incrementality_bps'),
+
+    bidLowMicros: bigint('bid_low_micros', { mode: 'bigint' }),
+    bidHighMicros: bigint('bid_high_micros', { mode: 'bigint' }),
+    maxCpcMicros: bigint('max_cpc_micros', { mode: 'bigint' }),
+
+    /** The product: what this keyword must convert at to break even. */
+    requiredConversionBpsLow: integer('required_conversion_bps_low'),
+    requiredConversionBpsHigh: integer('required_conversion_bps_high'),
+    marginRatio: doublePrecision('margin_ratio'),
+
+    verdict: text('verdict').$type<PaidVerdict>(),
+    verdictReason: text('verdict_reason'),
+    warnings: jsonb('warnings').$type<string[]>(),
+
+    allocatedClicks: doublePrecision('allocated_clicks'),
+    allocatedBudgetMicros: bigint('allocated_budget_micros', { mode: 'bigint' }),
+    allocationPot: text('allocation_pot'),
+
+    experimentArm: text('experiment_arm'),
+    experimentCluster: text('experiment_cluster'),
+
+    createdAt: now(),
+  },
+  (t) => ({
+    planKeywordUq: uniqueIndex('ads_plan_keywords_plan_keyword_uq').on(
+      t.planId,
+      t.keyword,
+      t.matchType,
+    ),
+    verdictIdx: index('ads_plan_keywords_verdict_idx').on(t.planId, t.verdict),
+  }),
+)
+
 // ---------------------------------------------------------------------------
 
 export type Locality = typeof localities.$inferSelect
 export type NicheRow = typeof niches.$inferSelect
+export type AdsPlan = typeof adsPlans.$inferSelect
+export type AdsPlanKeyword = typeof adsPlanKeywords.$inferSelect
+export type ResearchEntitySet = typeof researchEntitySets.$inferSelect
+export type ResearchEntity = typeof researchEntities.$inferSelect
+export type SiteKeywordTarget = typeof siteKeywordTargets.$inferSelect
+export type SiteCompetitor = typeof siteCompetitors.$inferSelect
 export type ScanRun = typeof scanRuns.$inferSelect
 export type ScanTarget = typeof scanTargets.$inferSelect
 export type ShortlistItem = typeof shortlistItems.$inferSelect
@@ -1758,7 +2134,26 @@ export const domainCandidates = pgTable(
      */
     scoreMissing: jsonb('score_missing').$type<string[]>(),
     /** Every listing that pointed here; >1 means a roll-up or shared template. */
-    businesses: jsonb('businesses').$type<Array<{ name: string; website: string | null }>>(),
+    /**
+     * Every listing that pointed here, WITH its Google Business Profile fields.
+     *
+     * `is_claimed`, `rating` and `review_count` are the GBP takeover signals --
+     * an unclaimed profile carrying real review history ranks in the map pack
+     * with no domain authority at all. They were read from every map listing
+     * and discarded before this column was written; jsonb means widening the
+     * shape needs no migration.
+     */
+    businesses: jsonb('businesses').$type<
+      Array<{
+        name: string
+        website: string | null
+        placeId?: string | null
+        cid?: string | null
+        isClaimed?: boolean | null
+        rating?: number | null
+        reviewCount?: number | null
+      }>
+    >(),
     businessCount: integer('business_count').notNull().default(1),
 
     // ---- Stage 3d, RDAP. All nullable: the registry may not have answered. ----

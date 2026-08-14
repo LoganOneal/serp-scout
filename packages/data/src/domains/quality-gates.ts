@@ -1,6 +1,7 @@
 import 'server-only'
-import { PRICE, type Micros } from '@rnr/core'
+import { PRICE, costMicros, type Micros } from '@rnr/core'
 import type { DataForSeoClient } from '../providers/dataforseo/client.js'
+import { ENDPOINTS } from '../providers/dataforseo/endpoints.js'
 import { fetchBulkBacklinks } from '../providers/dataforseo/backlinks.js'
 import { createDfsClientFromEnv } from '../providers/dataforseo/keyword-volume.js'
 
@@ -24,7 +25,13 @@ import { createDfsClientFromEnv } from '../providers/dataforseo/keyword-volume.j
  * ========================================================================
  */
 
-const RANKED_KEYWORDS_ENDPOINT = '/dataforseo_labs/google/ranked_keywords/live'
+/**
+ * Was a bare literal here. Registered in `endpoints.ts` since the affiliate
+ * work, for the reason TRAP 2 exists: a path nobody diffs is a path that can
+ * quietly become `"Invalid Path."` inside an HTTP 200, which reads exactly like
+ * "this domain ranks for nothing" — the answer this gate is looking for.
+ */
+const RANKED_KEYWORDS_ENDPOINT = ENDPOINTS.LABS_RANKED_KEYWORDS
 
 export interface QualityGateOptions {
   /** Bulk backlinks: spam score, domain rank, referring domains. One request per 1000. */
@@ -67,7 +74,16 @@ export async function fetchRankedKeywordCount(
   ])
   return {
     count: body?.[0]?.total_count ?? 0,
-    costMicros: PRICE.labsRankedKeywords,
+    /**
+     * Request fee PLUS the one row this asks for.
+     *
+     * Measured 2026-08-13: the endpoint bills $0.012 + $0.00012/row, so the flat
+     * `PRICE.labsRankedKeywords` that used to be returned here under-ledgered
+     * every call by exactly one row's worth. Tiny at `limit: 1` — and the reason
+     * the constant was wrong for a year, because the only caller never asked for
+     * more. `costMicros` applies both terms.
+     */
+    costMicros: costMicros('labsRankedKeywords', 1),
   }
 }
 

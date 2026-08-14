@@ -94,3 +94,58 @@ export * from './domains/quality-gates.js'
 export * from './domains/js-render.js'
 export * from './serp/serp-winnability.js'
 export * from './serp/raw-serp-cache.js'
+
+// --- Keyword spaces: affiliate directory sites -------------------------------
+export * from './spaces/sites.js'
+export * from './spaces/entities.js'
+export * from './spaces/research.js'
+export * from './spaces/rankings.js'
+export * from './spaces/difficulty.js'
+
+// --- Paid search -------------------------------------------------------------
+export * from './ads/plan.js'
+export * from './ads/launch.js'
+export {
+  fetchCampaignForecast,
+  type ForecastKeyword,
+  type ForecastResult,
+} from './providers/google-ads/forecast.js'
+export {
+  submitCampaign,
+  buildCampaignOperations,
+  validateCampaignPlan,
+  type CampaignPlan,
+  type AdGroupPlan,
+  type ResponsiveSearchAd,
+  type MutationResult,
+} from './providers/google-ads/campaigns.js'
+export {
+  googleAdsMutationsEnabled,
+  assertMutationsAllowed,
+  GoogleAdsMutationBlocked,
+} from './providers/google-ads/client.js'
+export {
+  AFFILIATE_SITE_SEEDS,
+  ENTITY_SET_SEEDS,
+  type AffiliateSiteSeed,
+} from './seed/affiliate-sites.js'
+export {
+  fetchRankedKeywords,
+  fetchCompetitorDomains,
+  classifyCompetitorPeers,
+  LABS_LOCATION_US,
+  DEFAULT_LABS_LIMIT,
+  PEER_MAX_SIZE_RATIO,
+  type RankedKeyword,
+  type RankedKeywordsResult,
+  type CompetitorDomain,
+  type CompetitorsResult,
+} from './providers/dataforseo/labs.js'
+export {
+  fetchSearchConsoleQueries,
+  searchConsoleConfigured,
+  siteUrlCandidates,
+  GSC_ROW_LIMIT,
+  type GscQueryRow,
+  type GscResult,
+} from './providers/google/search-console.js'

@@ -104,8 +104,39 @@ export const PRICE = {
    * Measured by balance delta 2026-08-07: $0.012 per domain. Billed per target,
    * which is why the gate that uses it is capped rather than run over a whole
    * market.
+   *
+   * ==================== IT IS ALSO BILLED PER ROW ====================
+   * The $0.012 above was measured at `limit: 1` and only there, because the one
+   * caller (quality-gates.ts) asks for a single row and reads `total_count`. It
+   * is the REQUEST fee, and it was modelled as the whole price for a year.
+   *
+   * Measured by balance delta on 2026-08-13 against `booking.com`
+   * (`probe-labs-pricing.mts`), three points, a perfect linear fit:
+   *
+   *     limit   1 →   1 row   $0.012120
+   *     limit  10 →  10 rows  $0.013200
+   *     limit 100 → 100 rows  $0.024000
+   *
+   *     request fee $0.012  +  $0.00012 per row
+   *
+   * So a 5,000-row keyword pull costs $0.612, not $0.012 — **51x** what a flat
+   * constant would have ledgered. The same shape as `backlinksBulkRequest` +
+   * `backlinksBulkRow` two entries up, and the same failure that made
+   * estimateDiscoveryCostMicros quote $0.16 for a $3.76 run.
+   *
+   * `costMicros('labsRankedKeywords', rows)` applies both. Anything calling this
+   * without passing the row count is under-reporting.
+   * ==================================================================
    */
   labsRankedKeywords: 12_000n,
+  /**
+   * Per returned row. Measured 2026-08-13 by balance delta — see above.
+   *
+   * This is why every Labs helper takes an explicit `limit` and reports
+   * `rowsReturned`: the row count is half the price, so a default that quietly
+   * returns thousands is a default that quietly spends dollars.
+   */
+  labsRankedKeywordsRow: 120n,
   /** /serp/google/locations -- free. */
   locations: 0n,
   /** /appendix/user_data -- free. */
@@ -125,6 +156,12 @@ export function costMicros(endpoint: PricedEndpoint, rows = 0): Micros {
   const base = PRICE[endpoint]
   if (endpoint === 'backlinksBulkRequest') {
     return base + PRICE.backlinksBulkRow * BigInt(Math.max(0, rows))
+  }
+  if (endpoint === 'labsRankedKeywords') {
+    // Adds nothing until a probe sets labsRankedKeywordsRow. The multiplication
+    // is here so that setting the constant is the ONLY change needed, rather
+    // than a constant plus finding every call site.
+    return base + PRICE.labsRankedKeywordsRow * BigInt(Math.max(0, rows))
   }
   return base
 }

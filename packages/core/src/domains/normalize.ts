@@ -189,6 +189,22 @@ export interface DomainOwner {
   cid?: string | null
   address?: string | null
   phone?: string | null
+  /**
+   * ============ THE GBP FIELDS THAT WERE FETCHED AND THROWN AWAY ============
+   * `collectBusinesses` reads `is_claimed`, `rating` and `votes_count` off every
+   * map-pack listing, and every one was dropped here -- this function built its
+   * owner record from six fields and silently discarded the rest.
+   *
+   * They are the whole of the Google Business Profile opportunity. Measured on
+   * 979 Houston listings: 12.4% are UNCLAIMED and 41 of those carry 10+
+   * reviews. An unclaimed profile with review history is an asset that ranks in
+   * the map pack today, and the field identifying one was being deleted on
+   * every run this project had ever done.
+   * ========================================================================
+   */
+  isClaimed?: boolean | null
+  rating?: number | null
+  reviewCount?: number | null
 }
 
 export interface DedupedDomain {
@@ -235,6 +251,9 @@ export function dedupeDomains(
       cid: b.cid ?? null,
       address: b.address ?? null,
       phone: b.phone ?? null,
+      isClaimed: b.isClaimed ?? null,
+      rating: b.rating ?? null,
+      reviewCount: b.reviewCount ?? null,
     }
     const owners = byDomain.get(n.domain)
     if (owners) owners.push(owner)

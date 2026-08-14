@@ -249,11 +249,129 @@ export function domainLabel(domain: string): string {
   return withoutTld.join('').replace(/[^a-z0-9]/g, '')
 }
 
-export function lookupPlatform(domain: string): DomainClass | null {
+/**
+ * Slot holders that only appear outside local-service SERPs.
+ *
+ * ==================== WHY THIS IS NOT APPENDED TO PLATFORM_DOMAINS ==========
+ * `PLATFORM_DOMAINS` carries a deliberate asymmetry: a MISSING platform reads as
+ * a local business, which makes a SERP look HARDER than it is, and that is the
+ * safe direction to be wrong in. Adding entries can only make markets look
+ * easier, which is why the comment above it says additions deserve more scrutiny
+ * than omissions.
+ *
+ * Adding `booking.com` globally would apply that easing to every local SERP for
+ * no reason. These sets are opt-in per keyword space instead, so a travel space
+ * gets the travel giants and a local plumbing scan is untouched.
+ *
+ * The failure this prevents is the loudest one in the affiliate plan: on a
+ * hot-tub-hotel SERP the slot holders are Booking, Expedia and TripAdvisor, and
+ * an unrecognised big brand is classified `local_business` — a beatable
+ * independent site. That is the most optimistic error available, on the
+ * heaviest-weighted component.
+ * ===========================================================================
+ */
+export const VERTICAL_PLATFORM_DOMAINS: Readonly<Record<string, Record<string, DomainClass>>> = {
+  /** Hotels, flights, destinations. */
+  travel: {
+    'booking.com': 'platform_marketplace',
+    'expedia.com': 'platform_marketplace',
+    'hotels.com': 'platform_marketplace',
+    'agoda.com': 'platform_marketplace',
+    'priceline.com': 'platform_marketplace',
+    'kayak.com': 'platform_marketplace',
+    'orbitz.com': 'platform_marketplace',
+    'travelocity.com': 'platform_marketplace',
+    'trivago.com': 'platform_marketplace',
+    'hotwire.com': 'platform_marketplace',
+    'vrbo.com': 'platform_marketplace',
+    'airbnb.com': 'platform_marketplace',
+    'marriott.com': 'national_brand',
+    'hilton.com': 'national_brand',
+    'hyatt.com': 'national_brand',
+    'ihg.com': 'national_brand',
+    'wyndhamhotels.com': 'national_brand',
+    'choicehotels.com': 'national_brand',
+    'bestwestern.com': 'national_brand',
+    'radissonhotels.com': 'national_brand',
+    'travelandleisure.com': 'media',
+    'cntraveler.com': 'media',
+    'thrillist.com': 'media',
+    'timeout.com': 'media',
+    'lonelyplanet.com': 'media',
+    'fodors.com': 'media',
+    'oyster.com': 'media',
+    'tripsavvy.com': 'media',
+    'visitacity.com': 'media',
+  },
+  /** Supplements, peptides, and the health-content estate that outranks them. */
+  health_supplement: {
+    'examine.com': 'media',
+    'healthline.com': 'media',
+    'webmd.com': 'media',
+    'medicalnewstoday.com': 'media',
+    'verywellhealth.com': 'media',
+    'drugs.com': 'media',
+    'mayoclinic.org': 'media',
+    'clevelandclinic.org': 'media',
+    'ncbi.nlm.nih.gov': 'media',
+    'pubmed.ncbi.nlm.nih.gov': 'media',
+    'nih.gov': 'government',
+    'fda.gov': 'government',
+    'iherb.com': 'platform_marketplace',
+    'bodybuilding.com': 'platform_marketplace',
+    'labdoor.com': 'platform_directory',
+    'consumerlab.com': 'platform_directory',
+  },
+  /** Software comparison and alternatives directories. */
+  software: {
+    'g2.com': 'platform_directory',
+    'capterra.com': 'platform_directory',
+    'getapp.com': 'platform_directory',
+    'softwareadvice.com': 'platform_directory',
+    'trustradius.com': 'platform_directory',
+    'producthunt.com': 'platform_directory',
+    'alternativeto.net': 'platform_directory',
+    'slant.co': 'platform_directory',
+    'techradar.com': 'media',
+    'pcmag.com': 'media',
+    'zapier.com': 'media',
+  },
+}
+
+/**
+ * `extra` is merged ahead of the global list and is scoped to one keyword space.
+ * Omitting it reproduces the previous behaviour exactly, which is why every
+ * existing caller is untouched.
+ */
+export function lookupPlatform(
+  domain: string,
+  extra?: Readonly<Record<string, DomainClass>> | null,
+): DomainClass | null {
+  if (extra) {
+    for (const [platform, cls] of Object.entries(extra)) {
+      if (domainMatches(domain, platform)) return cls
+    }
+  }
   for (const [platform, cls] of Object.entries(PLATFORM_DOMAINS)) {
     if (domainMatches(domain, platform)) return cls
   }
   return null
+}
+
+/** Merge one or more named vertical sets. Unknown names throw rather than no-op. */
+export function verticalPlatforms(...names: string[]): Record<string, DomainClass> {
+  const out: Record<string, DomainClass> = {}
+  for (const name of names) {
+    const set = VERTICAL_PLATFORM_DOMAINS[name]
+    if (!set) {
+      throw new Error(
+        `Unknown vertical platform set "${name}". Known: ${Object.keys(VERTICAL_PLATFORM_DOMAINS).join(', ')}. ` +
+          `A typo here silently classifies Booking.com as a beatable local business.`,
+      )
+    }
+    Object.assign(out, set)
+  }
+  return out
 }
 
 export function isFranchise(domain: string): boolean {
