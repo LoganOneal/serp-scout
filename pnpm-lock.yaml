@@ -113,6 +113,15 @@ importers:
         specifier: ^2.10.3
         version: 2.10.3
 
+  packages/mcp:
+    dependencies:
+      '@rnr/core':
+        specifier: workspace:*
+        version: link:../core
+      '@rnr/data':
+        specifier: workspace:*
+        version: link:../data
+
   packages/supply-feed:
     devDependencies:
       typescript:
