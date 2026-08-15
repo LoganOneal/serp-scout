@@ -8,6 +8,7 @@ export default defineConfig({
     alias: {
       '@rnr/core': r('./packages/core/src/index.ts'),
       '@rnr/data': r('./packages/data/src/index.ts'),
+      '@rnr/supply-feed': r('./packages/supply-feed/src/index.ts'),
     },
     // See the note in vitest.e2e.config.ts: 'server-only' throws under plain
     // Node, so the react-server condition resolves it to an empty module. The

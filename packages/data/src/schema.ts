@@ -1,12 +1,19 @@
 import type {
   AdsMatchType,
   AdsPlanStatus,
+  AffiliateScopeKind,
   BuildState,
+  ContactConfidence,
   CallIngestState,
   KeywordSpace,
   KeywordVerdict,
+  OutreachMessageStatus,
   PaidVerdict,
+  ProspectVerdict,
   SiteKind,
+  SupplyIngestMode,
+  SupplyIngestStatus,
+  SupplyResolveStatus,
   DeliveryChannel,
   DeliveryStatus,
   LeadCapturedVia,
@@ -50,6 +57,25 @@ import {
  */
 
 const now = () => timestamp('created_at', { withTimezone: true }).notNull().defaultNow()
+
+/**
+ * A defaulted NOT NULL timestamp with a column name you choose.
+ *
+ * ==================== WHY THIS EXISTS ====================
+ * `now()` above hardcodes the column name `created_at`, which is right for the
+ * ~30 tables that want exactly that and a silent trap for any table that does
+ * not. Writing `startedAt: now()` declares a column called `created_at` — the
+ * TypeScript field name is the lie, the SQL name is the truth, and nothing
+ * surfaces until an INSERT fails at runtime with "column created_at does not
+ * exist".
+ *
+ * That cost three separate debugging rounds while building link outreach
+ * (`started_at`, `first_seen_at`, `added_at`). Use this whenever the column is
+ * not literally `created_at`.
+ * =========================================================
+ */
+const timestampCol = (name: string) =>
+  timestamp(name, { withTimezone: true }).notNull().defaultNow()
 
 /**
  * Zero default for a micros column.
@@ -1880,6 +1906,274 @@ export const siteCompetitors = pgTable(
   }),
 )
 
+// --- Link prospecting and outreach -------------------------------------------
+
+/**
+ * One mining run over a set of competitors.
+ *
+ * `competitors` is plural because the §0.2 marketplace signal needs it: with one
+ * competitor every prospect has a count of 1 and the signal carries no
+ * information. Three or more is where "links to 4 of our competitors" starts
+ * meaning something.
+ */
+export const linkProspectRuns = pgTable(
+  'link_prospect_runs',
+  {
+    id: serial('id').primaryKey(),
+    siteId: integer('site_id').references(() => sites.id, { onDelete: 'set null' }),
+    competitors: jsonb('competitors').$type<string[]>().notNull(),
+    status: text('status').notNull().default('running'),
+
+    referringDomainsFound: integer('referring_domains_found').notNull().default(0),
+    excludedCount: integer('excluded_count').notNull().default(0),
+    qualifiedCount: integer('qualified_count').notNull().default(0),
+    /** Non-zero means this run is a SAMPLE of the prospect set, not the set. */
+    droppedToCap: integer('dropped_to_cap').notNull().default(0),
+    costMicros: bigint('cost_micros', { mode: 'bigint' }).notNull().default(0n),
+    notes: jsonb('notes').$type<string[]>(),
+
+    // NOT the now() helper — that hardcodes the column name `created_at`, and
+    // this table's timestamp is `started_at`.
+    startedAt: timestampCol('started_at'),
+    finishedAt: timestamp('finished_at', { withTimezone: true }),
+    error: text('error'),
+  },
+  (t) => ({
+    siteIdx: index('link_prospect_runs_site_idx').on(t.siteId, t.status),
+  }),
+)
+
+export const linkProspects = pgTable(
+  'link_prospects',
+  {
+    id: serial('id').primaryKey(),
+    runId: integer('run_id')
+      .notNull()
+      .references(() => linkProspectRuns.id, { onDelete: 'cascade' }),
+    domain: text('domain').notNull(),
+
+    /**
+     * DataForSEO `rank`, 0-1000. **NOT Moz DA and NOT Semrush AS** — this
+     * project holds neither, they correlate only loosely, and a column named
+     * `da` would be a number we cannot compute wearing a name operators
+     * recognise.
+     */
+    dfsRank: integer('dfs_rank'),
+    referringDomains: integer('referring_domains'),
+    spamScore: integer('spam_score'),
+    /**
+     * THE FIRST GATE. Authority metrics are manufacturable — a PBN buys expired
+     * domains and its rank looks fine. Ranking for queries humans actually type
+     * is not cheaply fakeable. Null = never measured, which is not zero.
+     */
+    rankedKeywords: integer('ranked_keywords'),
+    organicEtv: doublePrecision('organic_etv'),
+
+    /** The §0.2 signal, denormalised from linkProspectSources so it can sort. */
+    competitorLinkCount: integer('competitor_link_count').notNull().default(0),
+    alreadyLinked: boolean('already_linked').notNull().default(false),
+
+    verdict: text('verdict').$type<ProspectVerdict>(),
+    verdictReason: text('verdict_reason'),
+    warnings: jsonb('warnings').$type<string[]>(),
+
+    qualityMultiplier: doublePrecision('quality_multiplier'),
+    maxBidMicros: bigint('max_bid_micros', { mode: 'bigint' }),
+    linksNeeded: integer('links_needed'),
+
+    createdAt: now(),
+    updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => ({
+    runDomainUq: uniqueIndex('link_prospects_run_domain_uq').on(t.runId, t.domain),
+    verdictIdx: index('link_prospects_verdict_idx').on(t.runId, t.verdict, t.maxBidMicros),
+  }),
+)
+
+/** One row per (prospect, competitor). The GROUP BY that produces §0.2. */
+export const linkProspectSources = pgTable(
+  'link_prospect_sources',
+  {
+    id: serial('id').primaryKey(),
+    prospectId: integer('prospect_id')
+      .notNull()
+      .references(() => linkProspects.id, { onDelete: 'cascade' }),
+    competitor: text('competitor').notNull(),
+    /** The page the link sits on — provenance for a surprising prospect. */
+    urlFrom: text('url_from'),
+    firstSeenAt: timestampCol('first_seen_at'),
+  },
+  (t) => ({
+    uq: uniqueIndex('link_prospect_sources_uq').on(t.prospectId, t.competitor),
+  }),
+)
+
+/**
+ * Who to email, and how confident we are that they exist.
+ *
+ * `evidence` holds a VERBATIM quote from the page. It is what makes "the agent
+ * never invents a contact" checkable after the fact rather than a promise in a
+ * comment.
+ */
+export const linkContacts = pgTable(
+  'link_contacts',
+  {
+    id: serial('id').primaryKey(),
+    prospectId: integer('prospect_id')
+      .notNull()
+      .references(() => linkProspects.id, { onDelete: 'cascade' }),
+    email: text('email'),
+    name: text('name'),
+    role: text('role'),
+    confidence: text('confidence').$type<ContactConfidence>().notNull(),
+    evidence: text('evidence'),
+    sourceUrl: text('source_url'),
+    guestPostTerms: text('guest_post_terms'),
+    statedPriceMicros: bigint('stated_price_micros', { mode: 'bigint' }),
+
+    verifiedAt: timestamp('verified_at', { withTimezone: true }),
+    bounceState: text('bounce_state'),
+    createdAt: now(),
+  },
+  (t) => ({
+    prospectIdx: index('link_contacts_prospect_idx').on(t.prospectId, t.confidence),
+  }),
+)
+
+export const outreachCampaigns = pgTable('outreach_campaigns', {
+  id: serial('id').primaryKey(),
+  siteId: integer('site_id')
+    .notNull()
+    .references(() => sites.id, { onDelete: 'cascade' }),
+  runId: integer('run_id').references(() => linkProspectRuns.id, { onDelete: 'set null' }),
+  name: text('name').notNull(),
+  status: text('status').notNull().default('draft'),
+
+  /**
+   * Sender identity and postal address are CAN-SPAM requirements, not optional
+   * metadata: accurate sender information and a valid physical address are
+   * mandatory on commercial email, as is a working opt-out.
+   */
+  fromName: text('from_name'),
+  fromEmail: text('from_email'),
+  postalAddress: text('postal_address'),
+
+  dailySendCap: integer('daily_send_cap').notNull().default(25),
+  notes: text('notes'),
+  createdAt: now(),
+  updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
+})
+
+export const outreachMessages = pgTable(
+  'outreach_messages',
+  {
+    id: serial('id').primaryKey(),
+    campaignId: integer('campaign_id')
+      .notNull()
+      .references(() => outreachCampaigns.id, { onDelete: 'cascade' }),
+    contactId: integer('contact_id')
+      .notNull()
+      .references(() => linkContacts.id, { onDelete: 'cascade' }),
+    subject: text('subject').notNull(),
+    body: text('body').notNull(),
+    status: text('status').$type<OutreachMessageStatus>().notNull().default('draft'),
+    blockedReason: text('blocked_reason'),
+    /** Each personalisation fact with where it came from. No unsourced claims. */
+    personalisation: jsonb('personalisation').$type<Record<string, string>>(),
+    externalId: text('external_id'),
+    sentAt: timestamp('sent_at', { withTimezone: true }),
+    repliedAt: timestamp('replied_at', { withTimezone: true }),
+    outcome: text('outcome'),
+    createdAt: now(),
+  },
+  (t) => ({
+    campaignContactUq: uniqueIndex('outreach_messages_campaign_contact_uq').on(
+      t.campaignId,
+      t.contactId,
+    ),
+    statusIdx: index('outreach_messages_status_idx').on(t.campaignId, t.status),
+  }),
+)
+
+/**
+ * Do-not-contact, checked before EVERY send on email and on domain.
+ *
+ * Built before drafting rather than after. Retrofitting a suppression check is
+ * how a "please stop" gets emailed a second time, and CAN-SPAM gives 10
+ * business days to honour an opt-out — a window that assumes the list exists.
+ */
+export const outreachSuppressions = pgTable('outreach_suppressions', {
+  id: serial('id').primaryKey(),
+  email: text('email'),
+  domain: text('domain'),
+  reason: text('reason').notNull(),
+  addedAt: timestampCol('added_at'),
+})
+
+// --- Affiliate economics -----------------------------------------------------
+
+/**
+ * Commission as a contract: exact, known, and effective-dated.
+ *
+ * `entitySlug === null` is the site default. A renegotiated rate must not
+ * retroactively rewrite last month's plan, so resolution picks the row in force
+ * at plan time and `ads_plans` freezes what it used.
+ */
+export const affiliateCommissionRates = pgTable('affiliate_commission_rates', {
+  id: serial('id').primaryKey(),
+  siteId: integer('site_id')
+    .notNull()
+    .references(() => sites.id, { onDelete: 'cascade' }),
+  /** NULL = the site default row. */
+  entitySlug: text('entity_slug'),
+  commissionRateBps: integer('commission_rate_bps').notNull(),
+  effectiveFrom: text('effective_from').notNull(),
+  note: text('note'),
+  createdAt: now(),
+})
+
+/**
+ * The only place conversion data enters.
+ *
+ * ==================== NO COLUMN FOR A BARE RATE ====================
+ * `clicks` and `orders` are NOT NULL, and there is deliberately nowhere to put
+ * a percentage on its own. A conversion rate typed in as a number loses the one
+ * thing that makes it usable — "3% from 40 clicks" and "3% from 40,000" are
+ * different facts, and everything downstream treats them differently.
+ *
+ * Rates are DERIVED by summing across rows, never stored: averaging rates would
+ * weight a 40-click week equally with a 40,000-click one.
+ * ==================================================================
+ */
+export const affiliateObservations = pgTable(
+  'affiliate_observations',
+  {
+    id: serial('id').primaryKey(),
+    siteId: integer('site_id')
+      .notNull()
+      .references(() => sites.id, { onDelete: 'cascade' }),
+    scopeKind: text('scope_kind').$type<AffiliateScopeKind>().notNull(),
+    /** Entity slug / pattern label / keyword_norm. NULL only for scope 'site'. */
+    scopeRef: text('scope_ref'),
+    periodStart: text('period_start').notNull(),
+    /** Shown wherever a rate is shown. Stale data is identical to fresh otherwise. */
+    periodEnd: text('period_end').notNull(),
+    clicks: integer('clicks').notNull(),
+    orders: integer('orders').notNull(),
+    /** Gross sale value. NULL when the report omits it — then AOV is underivable. */
+    saleValueMicros: bigint('sale_value_micros', { mode: 'bigint' }),
+    /** What landed. Over sale value this is the EFFECTIVE commission. */
+    commissionMicros: bigint('commission_micros', { mode: 'bigint' }),
+    source: text('source').notNull().default('manual'),
+    enteredBy: text('entered_by'),
+    note: text('note'),
+    createdAt: now(),
+  },
+  (t) => ({
+    scopeIdx: index('affiliate_observations_scope_idx').on(t.siteId, t.scopeKind, t.scopeRef),
+  }),
+)
+
 // --- Paid search -------------------------------------------------------------
 
 /**
@@ -2000,6 +2294,13 @@ export type Locality = typeof localities.$inferSelect
 export type NicheRow = typeof niches.$inferSelect
 export type AdsPlan = typeof adsPlans.$inferSelect
 export type AdsPlanKeyword = typeof adsPlanKeywords.$inferSelect
+export type AffiliateObservation = typeof affiliateObservations.$inferSelect
+export type LinkProspectRun = typeof linkProspectRuns.$inferSelect
+export type LinkProspect = typeof linkProspects.$inferSelect
+export type LinkContact = typeof linkContacts.$inferSelect
+export type OutreachCampaign = typeof outreachCampaigns.$inferSelect
+export type OutreachMessage = typeof outreachMessages.$inferSelect
+export type AffiliateCommissionRate = typeof affiliateCommissionRates.$inferSelect
 export type ResearchEntitySet = typeof researchEntitySets.$inferSelect
 export type ResearchEntity = typeof researchEntities.$inferSelect
 export type SiteKeywordTarget = typeof siteKeywordTargets.$inferSelect
@@ -2243,8 +2544,237 @@ export const domainCandidates = pgTable(
   }),
 )
 
+// --- Supply: the read model of what a directory site has to sell -------------
+
+/**
+ * A connected supply feed. See @rnr/supply-feed and docs/plan-supply.md.
+ *
+ * ==================== PULL, NEVER PUSH ====================
+ * The site owns supply. Nothing in this package writes back to it, and adding a
+ * write path would create two catalogues that disagree — precisely the failure
+ * already documented on `SiteStatus`: two state machines describing one asset
+ * diverge silently. Here the divergence is a page that 404s.
+ * ==========================================================
+ */
+export const supplySources = pgTable(
+  'supply_sources',
+  {
+    id: serial('id').primaryKey(),
+    siteId: integer('site_id')
+      .notNull()
+      .references(() => sites.id, { onDelete: 'cascade' }),
+    /** Where @rnr/supply-feed is mounted. No trailing slash. */
+    baseUrl: text('base_url').notNull(),
+    /**
+     * The NAME of the env var holding the bearer token — never the token.
+     *
+     * A secret in a database row is a secret in every backup, every pg_dump and
+     * every screenshot of a debugging session.
+     */
+    tokenEnvVar: text('token_env_var').notNull().default('SUPPLY_FEED_TOKEN'),
+    /** Which dimension a listing's location resolves against. Null = no geography. */
+    entityKind: text('entity_kind').default('locality'),
+    schemaVersion: integer('schema_version'),
+    /** The last manifest, verbatim. The baseline a partial sync is detected against. */
+    lastManifest: jsonb('last_manifest').$type<Record<string, unknown>>(),
+    lastPulledAt: timestamp('last_pulled_at', { withTimezone: true }),
+    active: boolean('active').notNull().default(true),
+    notes: text('notes'),
+    createdAt: now(),
+    updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => ({
+    siteUrlUq: uniqueIndex('supply_sources_site_url_uq').on(t.siteId, t.baseUrl),
+  }),
+)
+
+export const supplySuppliers = pgTable(
+  'supply_suppliers',
+  {
+    id: serial('id').primaryKey(),
+    sourceId: integer('source_id')
+      .notNull()
+      .references(() => supplySources.id, { onDelete: 'cascade' }),
+    siteId: integer('site_id')
+      .notNull()
+      .references(() => sites.id, { onDelete: 'cascade' }),
+    /** Theirs. We never mint one — a synthesised key duplicates on re-order. */
+    externalId: text('external_id').notNull(),
+    name: text('name').notNull(),
+
+    /** Verbatim as published, so a wrong resolution can be audited. Cf. localities.rawName. */
+    rawCity: text('raw_city'),
+    rawRegion: text('raw_region'),
+    rawCountry: text('raw_country'),
+
+    /**
+     * ==================== NULL IS 'UNKNOWN', NOT 'NOWHERE' ====================
+     * An unresolved supplier contributes to NO locality's coverage and must
+     * never be read as a zero for one. `resolveStatus` says which happened, so
+     * "we have no listings in Boise" and "we could not work out where these
+     * listings are" never render the same — the first is a reason not to build a
+     * page, the second is a reason to fix an importer.
+     * =========================================================================
+     */
+    entityKind: text('entity_kind'),
+    entitySlug: text('entity_slug'),
+    localityId: integer('locality_id').references(() => localities.id, { onDelete: 'set null' }),
+    resolveStatus: text('resolve_status')
+      .$type<SupplyResolveStatus>()
+      .notNull()
+      .default('unresolved'),
+    resolveMethod: text('resolve_method'),
+    unresolvedReason: text('unresolved_reason'),
+
+    createdAt: now(),
+    lastSeenAt: timestampCol('last_seen_at'),
+  },
+  (t) => ({
+    sourceExternalUq: uniqueIndex('supply_suppliers_source_external_uq').on(t.sourceId, t.externalId),
+    entityIdx: index('supply_suppliers_entity_idx').on(t.siteId, t.entityKind, t.entitySlug),
+    resolveIdx: index('supply_suppliers_resolve_idx').on(t.sourceId, t.resolveStatus),
+  }),
+)
+
+export const supplyItems = pgTable(
+  'supply_items',
+  {
+    id: serial('id').primaryKey(),
+    sourceId: integer('source_id')
+      .notNull()
+      .references(() => supplySources.id, { onDelete: 'cascade' }),
+    siteId: integer('site_id')
+      .notNull()
+      .references(() => sites.id, { onDelete: 'cascade' }),
+    supplierId: integer('supplier_id')
+      .notNull()
+      .references(() => supplySuppliers.id, { onDelete: 'cascade' }),
+    externalId: text('external_id').notNull(),
+
+    title: text('title').notNull(),
+    url: text('url').notNull(),
+    affiliateUrl: text('affiliate_url'),
+    attributes: jsonb('attributes').$type<Record<string, string | number | boolean>>(),
+    /** Integer micros, always. A float price becomes a median that authorises ad spend. */
+    priceMicros: bigint('price_micros', { mode: 'bigint' }),
+    currency: text('currency'),
+    /**
+     * NULLABLE ON PURPOSE.
+     *
+     * The publisher omitting `available` means UNKNOWN. Counting unknown as
+     * bookable is how a sold-out city keeps its BUILD verdict, so `available =
+     * true` is the only thing the coverage gate counts.
+     */
+    available: boolean('available'),
+    images: jsonb('images').$type<string[]>(),
+
+    /**
+     * ==================== TWO CLOCKS, DELIBERATELY APART ====================
+     * `sourceUpdatedAt` is THEIRS: when the row last changed on their site.
+     * `lastSeenAt` is OURS: when we last confirmed it exists.
+     * Collapsing them loses the ability to tell *stale* from *unchanged*.
+     * =======================================================================
+     */
+    sourceUpdatedAt: timestamp('source_updated_at', { withTimezone: true }),
+    firstSeenAt: timestampCol('first_seen_at'),
+    lastSeenAt: timestampCol('last_seen_at'),
+    /**
+     * SOFT delete, never a DELETE.
+     *
+     * A feed outage that returned an empty page would otherwise erase the
+     * catalogue, and `supply_coverage` would report a portfolio-wide supply gap
+     * that never existed — turning an ops blip into a decision to stop building.
+     */
+    goneAt: timestamp('gone_at', { withTimezone: true }),
+  },
+  (t) => ({
+    sourceExternalUq: uniqueIndex('supply_items_source_external_uq').on(t.sourceId, t.externalId),
+    supplierIdx: index('supply_items_supplier_idx').on(t.supplierId, t.goneAt),
+    siteIdx: index('supply_items_site_idx').on(t.siteId, t.goneAt, t.available),
+  }),
+)
+
+/**
+ * The materialised join everything else reads.
+ *
+ * Recomputed per ingest rather than per query: the keyword board, the ads
+ * planner and every agent call read it, and recomputing a 195-locality aggregate
+ * on each of those is waste.
+ */
+export const supplyCoverage = pgTable(
+  'supply_coverage',
+  {
+    id: serial('id').primaryKey(),
+    siteId: integer('site_id')
+      .notNull()
+      .references(() => sites.id, { onDelete: 'cascade' }),
+    entityKind: text('entity_kind').notNull(),
+    entitySlug: text('entity_slug').notNull(),
+
+    supplierCount: integer('supplier_count').notNull().default(0),
+    itemCount: integer('item_count').notNull().default(0),
+    /** What the gate reads. NOT itemCount — see supplyItems.available. */
+    availableItemCount: integer('available_item_count').notNull().default(0),
+    minPriceMicros: bigint('min_price_micros', { mode: 'bigint' }),
+    medianPriceMicros: bigint('median_price_micros', { mode: 'bigint' }),
+
+    /** Ours. A locality unseen for 30 days reads as stale, never as absent. */
+    lastSeenAt: timestampCol('last_seen_at'),
+    updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => ({
+    uq: uniqueIndex('supply_coverage_uq').on(t.siteId, t.entityKind, t.entitySlug),
+    availableIdx: index('supply_coverage_available_idx').on(t.siteId, t.availableItemCount),
+  }),
+)
+
+export const supplyIngestRuns = pgTable(
+  'supply_ingest_runs',
+  {
+    id: serial('id').primaryKey(),
+    sourceId: integer('source_id')
+      .notNull()
+      .references(() => supplySources.id, { onDelete: 'cascade' }),
+    siteId: integer('site_id')
+      .notNull()
+      .references(() => sites.id, { onDelete: 'cascade' }),
+    status: text('status').$type<SupplyIngestStatus>().notNull().default('running'),
+    /**
+     * A soft-delete sweep is only valid on a FULL walk. An incremental pull
+     * legitimately omits everything unchanged, so sweeping after one would mark
+     * the entire unchanged catalogue as gone.
+     */
+    mode: text('mode').$type<SupplyIngestMode>().notNull().default('full'),
+
+    pagesFetched: integer('pages_fetched').notNull().default(0),
+    itemsPulled: integer('items_pulled').notNull().default(0),
+    itemsUpserted: integer('items_upserted').notNull().default(0),
+    itemsMarkedGone: integer('items_marked_gone').notNull().default(0),
+    suppliersUpserted: integer('suppliers_upserted').notNull().default(0),
+    /** The number that makes a coverage map's optimism measurable. */
+    unresolvedSuppliers: integer('unresolved_suppliers').notNull().default(0),
+    /** From the publisher's manifest. Compared against itemsPulled. */
+    manifestTotalItems: integer('manifest_total_items'),
+    manifestInvalidItems: integer('manifest_invalid_items'),
+    entitiesCovered: integer('entities_covered').notNull().default(0),
+
+    notes: jsonb('notes').$type<string[]>(),
+    startedAt: timestampCol('started_at'),
+    finishedAt: timestamp('finished_at', { withTimezone: true }),
+    error: text('error'),
+  },
+  (t) => ({
+    sourceIdx: index('supply_ingest_runs_source_idx').on(t.sourceId, t.startedAt),
+  }),
+)
+
 export type Site = typeof sites.$inferSelect
 export type NewSite = typeof sites.$inferInsert
+export type SupplySource = typeof supplySources.$inferSelect
+export type SupplySupplier = typeof supplySuppliers.$inferSelect
+export type SupplyItemRow = typeof supplyItems.$inferSelect
+export type SupplyCoverageRow = typeof supplyCoverage.$inferSelect
+export type SupplyIngestRun = typeof supplyIngestRuns.$inferSelect
 export type Call = typeof calls.$inferSelect
 export type Lead = typeof leads.$inferSelect
 export type WebhookEvent = typeof webhookEvents.$inferSelect

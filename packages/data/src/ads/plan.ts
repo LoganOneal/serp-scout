@@ -5,6 +5,9 @@ import {
   assessFeasibility,
   assessPaidKeyword,
   assignClusters,
+  gatePaidVerdict,
+  orderValueFromSupply,
+  supplyStatusFor,
   type AdsMatchType,
   type AllocationCandidate,
   type ClusterAssignment,
@@ -14,7 +17,9 @@ import {
 import type { Database } from '../db.js'
 import { adsPlanKeywords, adsPlans, siteKeywordTargets, sites } from '../schema.js'
 import { fetchCampaignForecast } from '../providers/google-ads/forecast.js'
+import { loadEconomicsCatalog, resolveKeywordEconomics } from '../economics/store.js'
 import { loadSiteSpace } from '../spaces/research.js'
+import { coverageForKeyword, loadCoverageMap } from '../supply/coverage.js'
 
 /**
  * Turn measured keywords into a paid-search plan that has not been launched.
@@ -130,19 +135,13 @@ export async function buildAdsPlan(
     )
   }
 
-  if (economics.orderValueMicros === null || economics.commissionRateBps === null) {
-    notes.push(
-      'Order value or commission rate is unset on this site. Break-even cannot be computed, so ' +
-        'every keyword will be UNKNOWN — that is the honest output, not a bug.',
-    )
-  }
-  if (args.achievedConversionBps === null) {
-    notes.push(
-      'No achieved conversion rate supplied. Every verdict will be UNKNOWN: the model compares the ' +
-        'REQUIRED rate against one you actually achieve, and inventing the second half would make ' +
-        'the first half meaningless.',
-    )
-  }
+  /**
+   * These used to be checked HERE, against the site scalars, and both fired on
+   * a plan whose economics resolved perfectly well per keyword — telling the
+   * operator to set numbers that were already set. Commission comes from the
+   * bound vendor and conversion from observations, so neither is knowable until
+   * resolution has actually run. Moved below, and driven by what happened.
+   */
 
   const maxKeywords = args.maxKeywords ?? 500
   const bidFraction = args.bidFraction ?? DEFAULT_BID_FRACTION
@@ -176,10 +175,106 @@ export async function buildAdsPlan(
     )
   }
 
+  /**
+   * ==================== PER-KEYWORD ECONOMICS, NOT SITE SCALARS ====================
+   * Commission varies by vendor and order value varies by destination, so the
+   * terms are resolved PER KEYWORD from whatever entities it binds. The
+   * site-level values become one input to that resolution rather than the whole
+   * answer — see @rnr/core resolveEconomics.
+   *
+   * The catalog is loaded once. A 975-keyword plan resolving per row would issue
+   * thousands of queries for a handful of distinct facts.
+   */
+  const catalog = await loadEconomicsCatalog(db, args.siteId)
+  if (args.economicsOverride) {
+    // A what-if replaces the site default only. Per-vendor rates and per-entity
+    // order values still apply, because overriding them silently would answer a
+    // different question than the one asked.
+    if (args.economicsOverride.orderValueMicros !== undefined) {
+      catalog.siteDefaultOrderValueMicros = args.economicsOverride.orderValueMicros
+    }
+    if (args.economicsOverride.commissionRateBps !== undefined) {
+      catalog.commissionRates = [
+        ...catalog.commissionRates.filter((r) => r.entitySlug !== null),
+        {
+          entitySlug: null,
+          commissionRateBps: args.economicsOverride.commissionRateBps,
+          effectiveFrom: '1970-01-01',
+        },
+      ]
+    }
+  }
+
+  /**
+   * Supply, loaded once. Empty for a site with no feed, which leaves every
+   * keyword 'unknown' and every verdict untouched.
+   */
+  const coverage = await loadCoverageMap(db, args.siteId)
+  const nowIso = new Date().toISOString()
+
   // --- 1. Verdict per keyword ------------------------------------------------
   const byVerdict = EMPTY_TALLY()
+  const provenance = new Map<string, number>()
+  let inheritedOrderValue = 0
+  let boundDecided = 0
+  let supplyBlocked = 0
+  let supplyPricedOrderValue = 0
+
+  let noCommission = 0
+  let noOrderValue = 0
+  let noConversion = 0
+
   const assessed = considered.map((row) => {
-    const result = assessPaidKeyword({
+    const resolved = resolveKeywordEconomics(catalog, {
+      keywordNorm: row.keywordNorm,
+      patternLabel: row.patternLabel,
+      entities: row.entities,
+    })
+
+    const cov = coverageForKeyword(coverage, row.entities)
+    const supply = supplyStatusFor(cov, { now: nowIso })
+
+    /**
+     * ==================== A MEASURED ORDER VALUE BEATS AN INHERITED ONE ======
+     * `resolveKeywordEconomics` falls back to ONE site-wide order value when the
+     * bound entity has none, and plan-affiliate-economics.md already flags that
+     * order value varies more across destinations than commission varies across
+     * vendors. The median listed price in that destination, from our own
+     * inventory, is a measured number where that was a guess.
+     *
+     * It only ever REPLACES an inherited value — an entity with an explicitly
+     * set order value keeps it. Somebody typed that on purpose, and a median
+     * silently overruling it would answer a question nobody asked.
+     * ========================================================================
+     */
+    let orderValueMicros = resolved.orderValueMicros.value
+    if (resolved.orderValueMicros.inherited) {
+      const fromSupply = orderValueFromSupply(cov)
+      if (fromSupply) {
+        orderValueMicros = fromSupply.orderValueMicros
+        supplyPricedOrderValue += 1
+      }
+    }
+
+    const key = resolved.commissionRateBps.resolvedFrom
+    provenance.set(key, (provenance.get(key) ?? 0) + 1)
+    if (resolved.orderValueMicros.inherited && orderValueMicros === resolved.orderValueMicros.value) {
+      inheritedOrderValue += 1
+    }
+    if (resolved.commissionRateBps.value === null) noCommission += 1
+    if (orderValueMicros === null) noOrderValue += 1
+    if (resolved.conversion === null && args.achievedConversionBps === null) noConversion += 1
+
+    /**
+     * The stated rate is a manual override; observations supersede it. A number
+     * derived from measured clicks beats one somebody typed, and when both
+     * exist the typed one is the older belief.
+     */
+    const achievedPoint = resolved.conversion?.meanBps ?? args.achievedConversionBps
+    const achievedLower = resolved.conversion?.lowerBps ?? null
+    if (achievedLower !== null) boundDecided += 1
+
+    const demandResult = assessPaidKeyword({
       keywordNorm: row.keywordNorm,
       volume: row.volume,
       organicPosition: row.position,
@@ -188,13 +283,91 @@ export async function buildAdsPlan(
       bidLowMicros: row.bidLowMicros,
       bidHighMicros: row.bidHighMicros,
       hasAiOverview: row.hasAiOverview,
-      economics,
-      achievedConversionBps: args.achievedConversionBps,
+      economics: {
+        orderValueMicros,
+        commissionRateBps: resolved.commissionRateBps.value,
+      },
+      achievedConversionBps: achievedPoint,
+      achievedConversionLowerBps: achievedLower,
       ...(args.brandTerms === undefined ? {} : { brandTerms: args.brandTerms }),
     })
+
+    /**
+     * Paid is gated harder than organic. An organic page built into a supply gap
+     * costs a writer's afternoon and is reusable when inventory arrives; a paid
+     * click into one costs money per click, immediately, and buys nothing that
+     * survives. Zero supply BLOCKS — the same treatment as an AI Overview.
+     */
+    const result = gatePaidVerdict(demandResult, supply)
+    if (result.gated) supplyBlocked += 1
+
     byVerdict[result.verdict] += 1
-    return { row, result }
+    return { row, result, resolved }
   })
+
+  /**
+   * Reported from what resolution ACTUALLY produced, and only when it is true.
+   * Each line names the command that fixes it, because "every keyword is
+   * UNKNOWN" without a cause reads as a broken feature rather than a missing
+   * input.
+   */
+  if (noCommission > 0) {
+    notes.push(
+      `${noCommission} keyword(s) have NO commission rate. Break-even is uncomputable for them. ` +
+        `Fix with \`economics set <domain> --commission-bps=…\` or \`economics set-vendor\`.`,
+    )
+  }
+  if (noOrderValue > 0) {
+    notes.push(
+      `${noOrderValue} keyword(s) have NO order value. Fix with ` +
+        `\`economics set <domain> --order-value=…\` or \`economics set-value <domain> <slug>\`.`,
+    )
+  }
+  if (noConversion > 0) {
+    notes.push(
+      `${noConversion} keyword(s) have no conversion measurement and none was supplied. The model ` +
+        `compares the REQUIRED rate against one you actually achieve — record what a dashboard ` +
+        `says with \`economics observe <domain> --clicks=… --orders=…\`.`,
+    )
+  }
+
+  for (const [source, n] of [...provenance].sort((a, b) => b[1] - a[1])) {
+    notes.push(`commission: ${n} keyword(s) resolved from ${source}`)
+  }
+  if (inheritedOrderValue > 0) {
+    notes.push(
+      `${inheritedOrderValue} keyword(s) used the SITE order value because their entity has none. ` +
+        `Break-even is linear in order value, so a site average standing in for a destination is a ` +
+        `real approximation, not a formality.`,
+    )
+  }
+  if (boundDecided > 0) {
+    notes.push(
+      `${boundDecided} keyword(s) were decided on a posterior LOWER BOUND from measured clicks, ` +
+        `not on a stated rate. The buy margin drops to 1.0 for those — the uncertainty is in the ` +
+        `number rather than in a constant beside it.`,
+    )
+  }
+  if (supplyPricedOrderValue > 0) {
+    notes.push(
+      `${supplyPricedOrderValue} keyword(s) priced their order value from the MEDIAN LISTED PRICE ` +
+        `in that entity, replacing an inherited site average. Still an estimate — nobody books the ` +
+        `median room and it ignores length of stay — but a measured one.`,
+    )
+  }
+  if (supplyBlocked > 0) {
+    notes.push(
+      `${supplyBlocked} keyword(s) were BLOCKED for having no available supply. Each was a query ` +
+        `this plan would otherwise have paid per click for and been unable to fulfil.`,
+    )
+  }
+  if (coverage.size === 0 && considered.length > 0) {
+    notes.push(
+      'No supply coverage for this site, so no keyword is gated on it. That is the safe state, ' +
+        'not a clean bill of health — this plan cannot tell whether it is bidding into empty ' +
+        'inventory. Connect a feed with `supply connect`.',
+    )
+  }
 
   // --- 2. Allocate, across survivors only ------------------------------------
   const buyable = assessed.filter((a) => a.result.verdict === 'BUY' || a.result.verdict === 'MARGINAL')
@@ -319,7 +492,7 @@ export async function buildAdsPlan(
 
   if (!plan) throw new Error('failed to create plan')
 
-  for (const { row, result } of assessed) {
+  for (const { row, result, resolved } of assessed) {
     const alloc = allocByKeyword.get(row.keywordNorm)
     const cluster = (row.entities as Record<string, string> | null)?.['locality'] ?? null
     await db
@@ -344,7 +517,11 @@ export async function buildAdsPlan(
         requiredConversionBpsHigh: result.breakEven.requiredConversionBpsHigh,
         marginRatio: Number.isFinite(result.marginRatio) ? result.marginRatio : null,
         verdict: result.verdict,
-        verdictReason: result.reason,
+        // Provenance appended to the reason, so a row explains its own inputs.
+        verdictReason:
+          `${result.reason} [commission ${resolved.commissionRateBps.resolvedFrom}` +
+          `${resolved.orderValueMicros.inherited ? ', order value inherited' : ''}` +
+          `${resolved.conversion ? `, conversion ${resolved.conversion.resolvedFrom} n=${resolved.conversion.clicks}` : ''}]`,
         warnings: result.warnings.length > 0 ? result.warnings : null,
         allocatedClicks: alloc?.clicks ?? null,
         allocatedBudgetMicros: alloc?.budgetMicros ?? null,

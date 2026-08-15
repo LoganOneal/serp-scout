@@ -29,17 +29,36 @@ export type PaidVerdict =
   | 'UNKNOWN'
 
 /**
- * How much cheaper than break-even a keyword must be to count as BUY.
+ * How much cheaper than break-even a keyword must be to count as BUY, when the
+ * achieved rate arrives as a BARE POINT ESTIMATE.
  *
- * POLICY, not a measurement. 2x is a starting position chosen because Lewis &
- * Rao's median ROI confidence interval was over 100 percentage points wide --
- * a margin thinner than 2x cannot be distinguished from zero by any test we can
- * afford to run, so calling it BUY would be claiming precision nobody has.
+ * POLICY, not a measurement. 2x is chosen because Lewis & Rao's median ROI
+ * confidence interval was over 100 percentage points wide -- a margin thinner
+ * than 2x cannot be distinguished from zero by any test we can afford to run,
+ * so calling it BUY would claim precision nobody has.
  *
- * Required as an option rather than buried as a constant, so it never reads as
- * evidence.
+ * ==================== IT IS A BLUNT STAND-IN, AND THERE IS A BETTER ONE ====
+ * This constant demands the same 2x headroom from a keyword measured on 40,000
+ * clicks as from one measured on 40. That is obviously wrong and it is the best
+ * available rule when all you are handed is a number.
+ *
+ * When the caller supplies `achievedConversionLowerBps` -- a posterior lower
+ * credible bound from @rnr/core resolveConversion -- the uncertainty is already
+ * priced INTO the input, in proportion to how much data there actually is. The
+ * flat multiplier then double-counts it, so the default drops to
+ * BUY_MARGIN_WITH_BOUND.
+ * =========================================================================
  */
 export const DEFAULT_BUY_MARGIN = 2
+
+/**
+ * The margin once uncertainty is carried by the input rather than by a constant.
+ *
+ * 1.0 means "the 10th-percentile of what we believe the rate is must still clear
+ * break-even" -- a stricter test than a 2x margin on a well-measured keyword's
+ * mean, and a much stricter one on a barely-measured keyword.
+ */
+export const BUY_MARGIN_WITH_BOUND = 1
 
 export interface PaidVerdictInput {
   keywordNorm: string
@@ -64,6 +83,17 @@ export interface PaidVerdictInput {
    * every verdict UNKNOWN rather than letting a plausible 2% decide spending.
    */
   achievedConversionBps: number | null
+  /**
+   * Posterior LOWER CREDIBLE BOUND on the achieved rate, from
+   * @rnr/core resolveConversion.
+   *
+   * When present this is what the decision uses, and the flat buy margin drops
+   * to 1.0 — the uncertainty is in the number rather than in a constant beside
+   * it. A keyword measured on 40,000 clicks has a bound near its mean and needs
+   * almost no headroom; one measured on 40 has a bound far below and must clear
+   * break-even by a lot, automatically.
+   */
+  achievedConversionLowerBps?: number | null
   /** Brand terms to flag. See incrementality.isBrandQuery. */
   brandTerms?: string[]
 }
@@ -75,6 +105,9 @@ export interface PaidVerdictResult {
   incrementality: IncrementalityEstimate | null
   /** How many times cheaper than break-even we are. Null when not computable. */
   marginRatio: number | null
+  /** Which rate the verdict actually used, and which margin applied. */
+  decidedOn: 'lower_bound' | 'point_estimate' | null
+  appliedMargin: number | null
   missing: string[]
   warnings: string[]
 }
@@ -99,7 +132,14 @@ export function assessPaidKeyword(
   input: PaidVerdictInput,
   opts: PaidVerdictOptions = {},
 ): PaidVerdictResult {
-  const buyMargin = opts.buyMargin ?? DEFAULT_BUY_MARGIN
+  /**
+   * The bound, when we have one, IS the decision input — and it changes the
+   * margin, because a flat multiplier on top of an already-conservative bound
+   * double-counts the same uncertainty.
+   */
+  const hasBound = input.achievedConversionLowerBps != null
+  const buyMargin = opts.buyMargin ?? (hasBound ? BUY_MARGIN_WITH_BOUND : DEFAULT_BUY_MARGIN)
+  const decidedOn: 'lower_bound' | 'point_estimate' = hasBound ? 'lower_bound' : 'point_estimate'
   const minVolume = opts.minMonthlyVolume ?? DEFAULT_MIN_MONTHLY_VOLUME
   const warnings: string[] = []
 
@@ -131,6 +171,8 @@ export function assessPaidKeyword(
       breakEven,
       incrementality,
       marginRatio: null,
+      decidedOn: null,
+      appliedMargin: null,
       missing: [],
       warnings,
     }
@@ -160,6 +202,8 @@ export function assessPaidKeyword(
       breakEven,
       incrementality,
       marginRatio: null,
+      decidedOn: null,
+      appliedMargin: null,
       missing,
       warnings,
     }
@@ -175,6 +219,8 @@ export function assessPaidKeyword(
       breakEven,
       incrementality,
       marginRatio: null,
+      decidedOn: null,
+      appliedMargin: null,
       missing: [],
       warnings,
     }
@@ -188,7 +234,6 @@ export function assessPaidKeyword(
    * turn a bid range into a CPC.
    */
   const required = breakEven.requiredConversionBpsHigh
-  const achieved = input.achievedConversionBps as number
 
   if (required === null || !Number.isFinite(required)) {
     return {
@@ -197,23 +242,36 @@ export function assessPaidKeyword(
       breakEven,
       incrementality,
       marginRatio: null,
+      decidedOn: null,
+      appliedMargin: null,
       missing: ['requiredConversionBpsHigh'],
       warnings,
     }
   }
 
+  /**
+   * The bound decides when we have one. `achievedConversionBps` stays in the
+   * message so both numbers are visible — an operator comparing a verdict
+   * against their dashboard will look for the rate they recognise.
+   */
+  const point = input.achievedConversionBps as number
+  const achieved = hasBound ? (input.achievedConversionLowerBps as number) : point
+
   const marginRatio = required === 0 ? Number.POSITIVE_INFINITY : achieved / required
   const pct = (bps: number): string => `${(bps / 100).toFixed(2)}%`
+  const rate = hasBound
+    ? `we convert at ${pct(point)} (10th-pct ${pct(achieved)})`
+    : `we convert at ${pct(point)}`
+
+  const base = { breakEven, incrementality, marginRatio, decidedOn, appliedMargin: buyMargin }
 
   if (marginRatio >= buyMargin) {
     return {
+      ...base,
       verdict: 'BUY',
       reason:
-        `Needs ${pct(required)} to break even; we convert at ${pct(achieved)} — ` +
-        `${marginRatio.toFixed(1)}× the bar. ${incrementality!.reason}.`,
-      breakEven,
-      incrementality,
-      marginRatio,
+        `Needs ${pct(required)} to break even; ${rate} — ${marginRatio.toFixed(1)}× the bar. ` +
+        `${incrementality!.reason}.`,
       missing: [],
       warnings,
     }
@@ -221,27 +279,25 @@ export function assessPaidKeyword(
 
   if (marginRatio >= 1) {
     return {
+      ...base,
       verdict: 'MARGINAL',
-      reason:
-        `Needs ${pct(required)}; we convert at ${pct(achieved)} — only ${marginRatio.toFixed(1)}× the bar. ` +
-        `A margin this thin cannot be distinguished from zero by any test we can afford ` +
-        `(Lewis & Rao 2015). Run it only inside a holdout.`,
-      breakEven,
-      incrementality,
-      marginRatio,
+      reason: hasBound
+        ? `Needs ${pct(required)}; ${rate} — the lower bound clears break-even by only ` +
+          `${marginRatio.toFixed(1)}×. More data would move this either way.`
+        : `Needs ${pct(required)}; ${rate} — only ${marginRatio.toFixed(1)}× the bar. ` +
+          `A margin this thin cannot be distinguished from zero by any test we can afford ` +
+          `(Lewis & Rao 2015). Run it only inside a holdout.`,
       missing: [],
       warnings,
     }
   }
 
   return {
+    ...base,
     verdict: 'SKIP',
     reason:
-      `Needs ${pct(required)} to break even; we convert at ${pct(achieved)}. ` +
-      `${incrementality!.reason}.`,
-    breakEven,
-    incrementality,
-    marginRatio,
+      `Needs ${pct(required)} to break even; ${rate}. ` +
+      `${hasBound ? 'The lower bound does not clear it. ' : ''}${incrementality!.reason}.`,
     missing: [],
     warnings,
   }

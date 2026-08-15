@@ -6,8 +6,10 @@ import {
   assessKeyword,
   estimateAffiliateValue,
   expandKeywordSpace,
+  gateKeywordVerdict,
   localModelsApply,
   normaliseKeyword,
+  supplyStatusFor,
   validateKeywordSpace,
   volumeLocationFor,
   volumeScopeLabel,
@@ -19,6 +21,7 @@ import {
 import type { Database } from '../db.js'
 import { siteKeywordTargets, sites } from '../schema.js'
 import { ensureKeywordVolumes } from '../serp/keyword-volume-cache.js'
+import { coverageForKeyword, loadCoverageMap } from '../supply/coverage.js'
 import { loadDimensionEntities } from './entities.js'
 
 /**
@@ -266,6 +269,10 @@ export interface VerdictPassResult {
   byVerdict: Record<KeywordVerdict, number>
   /** Non-null only when every economics input is set on the site. */
   valuedRows: number
+  /** Rows where supply overrode the demand model's answer. See gateKeywordVerdict. */
+  supplyGated: number
+  /** Rows whose bound entities have measured supply, either way. */
+  supplyMeasured: number
   notes: string[]
 }
 
@@ -319,6 +326,16 @@ export async function runVerdictPass(
     .from(siteKeywordTargets)
     .where(and(eq(siteKeywordTargets.siteId, siteId), eq(siteKeywordTargets.active, true)))
 
+  /**
+   * ==================== SUPPLY, LOADED ONCE ====================
+   * A per-row lookup over 975 keywords would be a thousand queries for a couple
+   * of hundred distinct facts. An empty map is the correct state for a site with
+   * no feed connected: every keyword then resolves to 'unknown' supply, and
+   * `gateKeywordVerdict` returns the demand verdict unchanged.
+   * =============================================================
+   */
+  const coverage = await loadCoverageMap(db, siteId)
+
   const byVerdict = EMPTY_TALLY()
   /**
    * Tallied from the FRESH assessments, not from `rows`.
@@ -331,10 +348,13 @@ export async function runVerdictPass(
    */
   const missingTally = new Map<string, number>()
   let valuedRows = 0
+  let supplyGated = 0
+  let supplyMeasured = 0
   const now = new Date()
+  const nowIso = now.toISOString()
 
   for (const row of rows) {
-    const assessment = assessKeyword(
+    const demandAssessment = assessKeyword(
       {
         position: row.position,
         // The whole reason the column exists: Search Console silence and never
@@ -346,6 +366,20 @@ export async function runVerdictPass(
       },
       opts,
     )
+
+    /**
+     * ==================== THEN SUPPLY, WHICH ONLY EVER SUBTRACTS ==============
+     * `coverageForKeyword` returns null unless EVERY entity this keyword binds
+     * has a coverage row, so a partially-ingested grid stays 'unknown' rather
+     * than being judged on the half we happen to have. And 'unknown' returns the
+     * demand verdict byte-for-byte — see gateKeywordVerdict.
+     * =========================================================================
+     */
+    const supply = supplyStatusFor(coverageForKeyword(coverage, row.entities), { now: nowIso })
+    if (supply.status !== 'unknown') supplyMeasured += 1
+
+    const assessment = gateKeywordVerdict(demandAssessment, supply)
+    if (assessment.gated) supplyGated += 1
 
     const value = estimateAffiliateValue({
       volume: row.volume,
@@ -367,6 +401,19 @@ export async function runVerdictPass(
         updatedAt: now,
       })
       .where(eq(siteKeywordTargets.id, row.id))
+  }
+
+  if (supplyGated > 0) {
+    notes.push(
+      `${supplyGated} keyword(s) were downgraded to IGNORE because the entity they bind has NO ` +
+        `available supply. Each was a page we would have written for inventory we do not have.`,
+    )
+  }
+  if (supplyMeasured === 0 && rows.length > 0) {
+    notes.push(
+      'Supply is unmeasured for every keyword, so nothing is gated on it — which is the correct ' +
+        'and safe state, not a passing grade. Connect a feed with `supply connect` and pull it.',
+    )
   }
 
   if (valuedRows === 0 && rows.length > 0) {
@@ -397,7 +444,7 @@ export async function runVerdictPass(
     }
   }
 
-  return { scored: rows.length, byVerdict, valuedRows, notes }
+  return { scored: rows.length, byVerdict, valuedRows, supplyGated, supplyMeasured, notes }
 }
 
 export interface KeywordBoardRow {

@@ -41,7 +41,11 @@
     "seed:research-catalog": "tsx packages/data/src/scripts/seed-research-catalog.mts",
     "export:reddit-opportunities": "tsx --conditions=react-server packages/data/src/scripts/export-reddit-opportunities.mts",
     "enrich:niche-gads": "tsx --conditions=react-server packages/data/src/scripts/enrich-niche-gads.mts",
-    "voice:retarget-tools": "tsx --conditions=react-server packages/data/src/scripts/retarget-tools.ts"
+    "voice:retarget-tools": "tsx --conditions=react-server packages/data/src/scripts/retarget-tools.ts",
+    "supply": "tsx --conditions=react-server packages/data/src/scripts/supply.mts",
+    "mcp": "tsx --conditions=react-server packages/mcp/src/server.ts",
+    "//mcp": "Registered with: claude mcp add rank-and-rent -- pnpm --dir <abs repo path> mcp. Read-only: it can answer questions about supply, keyword verdicts, economics and link prospects, and cannot spend, send, or write. The commands that act stay in the CLIs on purpose.",
+    "build:supply-feed": "node packages/supply-feed/scripts/build.mjs"
   },
   "devDependencies": {
     "@types/node": "^22.10.5",

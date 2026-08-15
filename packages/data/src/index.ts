@@ -102,6 +102,9 @@ export * from './spaces/research.js'
 export * from './spaces/rankings.js'
 export * from './spaces/difficulty.js'
 
+// --- Affiliate economics -----------------------------------------------------
+export * from './economics/store.js'
+
 // --- Paid search -------------------------------------------------------------
 export * from './ads/plan.js'
 export * from './ads/launch.js'
@@ -149,3 +152,22 @@ export {
   type GscQueryRow,
   type GscResult,
 } from './providers/google/search-console.js'
+
+// --- Link prospecting and outreach -------------------------------------------
+export * from './links/mine.js'
+export * from './links/contacts.js'
+export * from './links/outreach.js'
+export {
+  fetchTrafficEstimates,
+  TRAFFIC_BATCH_MAX,
+  type TrafficEstimate,
+  type TrafficEstimationResult,
+} from './providers/dataforseo/traffic.js'
+
+// --- Supply: the read model of what a directory site has to sell -------------
+export * from './supply/sources.js'
+export * from './supply/client.js'
+export * from './supply/resolve.js'
+export * from './supply/ingest.js'
+export * from './supply/coverage.js'
+export * from './supply/query.js'

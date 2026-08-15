@@ -3,7 +3,7 @@
 | Field | Value |
 |---|---|
 | **Date** | 2026-08-13 |
-| **Status** | 📋 **Draft for review.** Nothing built |
+| **Status** | ✅ **Built and run 2026-08-14.** §8 records what it does on real data. `hotelhottubs` set to 7.5%; ten `borenhealth` vendor rates set |
 | **Goal** | Get real commission and conversion numbers into the model, so the paid-search verdicts stop reading `UNKNOWN` |
 | **Depends on** | [`plan-paid-search.md`](./plan-paid-search.md) §2 (break-even), [`plan-affiliate-directory-sites.md`](./plan-affiliate-directory-sites.md) §4.1 (the value model that refuses to guess) |
 | **Decided** | Hotel commission is **7.5% on booking, no clawback**. Conversion arrives by **manual entry** first. Peptide commission varies **per vendor only** |
@@ -363,3 +363,117 @@ wrong on small samples.
 - **Manual entry is a snapshot an operator remembered to take.** Stale
   observations look identical to fresh ones apart from `period_end`, so the
   resolution output must show the period and does.
+
+---
+
+## 8. Results — 2026-08-14
+
+Built and run. **820 tests pass**, 35 of them on the statistics here. All free —
+nothing in this feature talks to a paid API.
+
+### 8.1 Set on the real sites
+
+```
+hotelhottubs.com   site commission 7.50%   site order value $300.00
+borenhealth.com    ten vendor rates, 10.00% – 20.00%
+```
+
+A plan for `borenhealth` now resolves commission **per keyword**:
+
+```
+100 keyword(s) resolved from min-across-10-vendors      (product-only keywords)
+  4 keyword(s) resolved from vendor:peptide-sciences    (20%)
+  4 keyword(s) resolved from vendor:swiss-chems         (15%)
+  … 31 keywords across 9 more vendors
+```
+
+### 8.2 The refusal that had to be given a voice
+
+The first run of the min-across-vendors rule returned a bare `unset`, because
+five of ten vendors had no rate and there was no site default to stand in for
+them.
+
+**The refusal was correct** — the minimum across the *known* vendors would be an
+upper bound wearing a lower bound's name, since an unrated vendor could pay less
+than any of them. Returning it would make the fallback more optimistic the less
+we know, which is backwards.
+
+**The message was not.** `unset` gave no way to see that the fix was a
+five-minute one. It now reads:
+
+> `blocked: 5 of 10 vendors have no rate and there is no site default
+> (biotech-peptides, polypeptide-labs, sports-technology-labs, …)`
+
+### 8.3 Shrinkage, measured
+
+A deliberately thin keyword observation against a 412-click site baseline:
+
+| | Value |
+|---|---:|
+| Raw keyword rate | 3 orders / 12 clicks = **25.00%** |
+| Shrunk mean | **3.93%** |
+| **Lower bound (10th pct)** | **2.34%** |
+| Site rate | 2.67% |
+| Own-data weight | **6%** |
+
+**A 25% fluke becomes 3.93%, and 94% of that number is the site rate wearing the
+keyword's name.** The chain is printed in full, so the estimate is inspectable
+rather than merely produced.
+
+### 8.4 One dashboard reading gives all three terms
+
+```
+--clicks=412 --orders=11 --sale=3300 --commission=247.50
+
+  conversion            2.67%   (n = 412 clicks)
+  average order       $300.00
+  effective commission  7.50%
+```
+
+The effective rate matching the contracted 7.5% is the *check*, not the output —
+where they diverge, the contract is the wrong number to plan with.
+
+### 8.5 The lower bound replaced the buy margin
+
+Every keyword in a plan with observations now reports:
+
+> `131 keyword(s) were decided on a posterior LOWER BOUND from measured clicks,
+> not on a stated rate. The buy margin drops to 1.0 for those.`
+
+And each row explains its own inputs:
+
+> `Needs 62.98% to break even; we convert at 2.83% (10th-pct 2.42%). The lower
+> bound does not clear it. No organic result on page one — nearly every paid
+> click is a click we do not already have. [commission min-across-10-vendors,
+> order value inherited, conversion site n=2400]`
+
+`DEFAULT_BUY_MARGIN = 2` is **kept**, not deleted — it is still the right rule
+for a caller holding nothing but a typed-in number. It applies only on that
+path now.
+
+### 8.6 A stale warning, found by running it
+
+Two notes fired on every plan telling the operator to set an order value and a
+commission rate **that were already set** — they checked the site scalars, which
+per-keyword resolution had superseded. Neither is knowable until resolution has
+run, so both moved after it and are now driven by what actually happened, each
+naming the command that fixes it.
+
+### 8.7 Placeholder data was entered and removed
+
+Three observations were recorded to exercise the path end to end and then
+**deleted** (`economics forget`). Invented conversion data must not sit in a
+database that feeds a spending model — the reason `estimateAffiliateValue`
+refuses to default a conversion rate in the first place.
+
+**Both sites currently have zero observations**, so every conversion rate is
+`UNKNOWN` and every paid verdict that needs one says so. That is the correct
+state until real dashboard numbers are entered.
+
+### 8.8 Still blocked
+
+| Blocker | Effect |
+|---|---|
+| **No real observations** | Conversion is `UNKNOWN` everywhere. One `economics observe` per site fixes it |
+| **Google Ads volume quota** | `hotelhottubs` still has 0 measured keywords, so it has no plan to price |
+| **No per-destination order values** | All 131 `borenhealth` keywords and every `hotelhottubs` keyword inherit the site average. Item 8 |

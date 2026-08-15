@@ -391,6 +391,100 @@ export const ADS_PLAN_STATUSES: readonly AdsPlanStatus[] = [
  */
 export type AdsMatchType = 'EXACT' | 'PHRASE' | 'BROAD'
 
+/**
+ * The level an affiliate observation describes.
+ *
+ * Ordered specific → general, which is also the shrinkage chain: a keyword's
+ * estimate is shrunk toward its pattern's, and a pattern's toward the site's.
+ * `entity` sits outside that chain — it is a cross-cutting dimension (a vendor
+ * sells many products across many patterns) and is consulted for keywords that
+ * bind it.
+ */
+export type AffiliateScopeKind = 'keyword' | 'pattern' | 'entity' | 'site'
+
+// --- Supply ------------------------------------------------------------------
+
+/**
+ * Whether a supplier's published location was matched to one of our entity slugs.
+ *
+ * ==================== THE THREE-STATE THAT KEEPS UNKNOWN OUT OF ZERO ========
+ * The site publishes `{ city: "Las Vegas", region: "NV" }`. The keyword grid
+ * says `las-vegas-nv`. Resolution happens on OUR side — their codebase should
+ * not have to learn our slug vocabulary, and a slug we renamed would otherwise
+ * silently break their feed.
+ *
+ * `unresolved` is what stops that resolution's failures from becoming supply
+ * facts. An unresolved supplier contributes to no locality's coverage AND is
+ * never counted as a zero for one, because "we have no listings in Boise" and
+ * "we could not work out where these listings are" are a reason not to build a
+ * page and a reason to fix an importer respectively.
+ *
+ * `not_applicable` is the honest answer for a catalogue with no geography at all
+ * — borenhealth's peptides are not anywhere — and is deliberately not folded
+ * into `unresolved`, which would make a correct feed look broken.
+ * ===========================================================================
+ */
+export type SupplyResolveStatus = 'resolved' | 'unresolved' | 'not_applicable'
+
+export const SUPPLY_RESOLVE_STATUSES: readonly SupplyResolveStatus[] = [
+  'resolved',
+  'unresolved',
+  'not_applicable',
+]
+
+/**
+ * How a supply pull ended.
+ *
+ * `partial` is its own state rather than a flavour of `ok`, because a pull whose
+ * item count does not match the publisher's manifest produced a coverage map
+ * that is wrong in the OPTIMISTIC direction for everything it missed — and a
+ * green run is exactly how nobody notices.
+ */
+export type SupplyIngestStatus = 'running' | 'ok' | 'partial' | 'failed'
+
+/**
+ * A full walk, or a `?since=` incremental one.
+ *
+ * Load-bearing for exactly one decision: the soft-delete sweep. An incremental
+ * pull legitimately omits every unchanged item, so sweeping after one would mark
+ * the whole unchanged catalogue as gone.
+ */
+export type SupplyIngestMode = 'full' | 'incremental'
+
+// --- Link outreach -----------------------------------------------------------
+
+/**
+ * How we know a contact address.
+ *
+ * ==================== THE COLUMN THAT PROTECTS THE SENDING DOMAIN ==========
+ * `stated` means the page said who handles editorial requests. `pattern` means
+ * we guessed `editor@` from a convention and nothing confirmed it.
+ *
+ * They are stored the same way and treated completely differently: a pattern
+ * address is excluded from a first send by default, because a bounce costs more
+ * than the placement is worth and enough bounces destroy the sending domain.
+ * `form_only` and `none` are honest outcomes, not failures to paper over —
+ * neither ever becomes a guessed address.
+ * =========================================================================
+ */
+export type ContactConfidence = 'stated' | 'pattern' | 'form_only' | 'none'
+
+export type OutreachMessageStatus =
+  | 'draft'
+  | 'approved'
+  | 'sent'
+  | 'replied'
+  | 'bounced'
+  /** Refused pre-send: suppressed, unresolved merge field, or unsourced claim. */
+  | 'blocked'
+
+export const AFFILIATE_SCOPE_KINDS: readonly AffiliateScopeKind[] = [
+  'keyword',
+  'pattern',
+  'entity',
+  'site',
+]
+
 /** How far the Retell webhook sequence got. Not a call outcome. */
 export type CallIngestState = 'started' | 'ended' | 'analyzed'
 

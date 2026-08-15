@@ -1,4 +1,5 @@
 {
+  "//@rnr/supply-feed": "Mapped to SOURCE below, even though it is the one package here that ships a real build. Typechecking the repo against its dist/ would check @rnr/data against whatever was last compiled, so a contract change would typecheck clean until somebody happened to rebuild. The published artifact is still dist/ — see packages/supply-feed/package.json exports.",
   "compilerOptions": {
     "target": "ES2022",
     "lib": ["ES2023", "DOM", "DOM.Iterable"],
@@ -21,6 +22,7 @@
       "@rnr/core/*": ["packages/core/src/*"],
       "@rnr/data": ["packages/data/src/index.ts"],
       "@rnr/data/*": ["packages/data/src/*"],
+      "@rnr/supply-feed": ["packages/supply-feed/src/index.ts"],
       "@/*": ["apps/web/src/*"]
     }
   },

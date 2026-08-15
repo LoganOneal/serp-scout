@@ -1,0 +1,14 @@
+{
+  "name": "@rnr/mcp",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "//": "A read-only MCP server exposing the portfolio's read models to Claude on the operator's machine. No build step and no MCP SDK — stdio MCP is newline-delimited JSON-RPC 2.0 and the four methods a tool server needs are in src/rpc.ts. Nothing here writes, spends, or sends.",
+  "exports": {
+    ".": "./src/server.ts"
+  },
+  "dependencies": {
+    "@rnr/core": "workspace:*",
+    "@rnr/data": "workspace:*"
+  }
+}

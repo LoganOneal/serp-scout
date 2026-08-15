@@ -1,0 +1,39 @@
+{
+  "name": "@rnr/supply-feed",
+  "version": "0.1.0",
+  "description": "Publish a directory site's supply (listings, inventory) as a read-only, cursor-paginated HTTP feed.",
+  "license": "UNLICENSED",
+  "type": "module",
+  "//private": "The ONLY non-private package in this workspace. @rnr/core and @rnr/data are private:true and export raw TypeScript, consumed exclusively under `tsx --conditions=react-server`. This one is installed into a SEPARATE codebase (hotelhottubs.com) that has no such loader, so it must be a real built artifact with real type declarations.",
+  "private": false,
+  "//deps": "ZERO runtime dependencies, and unlike @rnr/core this is not a stylistic preference. This package is installed into someone else's dependency tree; anything it pulls in is a version conflict waiting to happen in a codebase we do not control. Everything it needs (fetch, URL, crypto.timingSafeEqual) is in Node >= 18.",
+  "dependencies": {},
+  "engines": {
+    "node": ">=18"
+  },
+  "main": "./dist/cjs/index.js",
+  "module": "./dist/esm/index.js",
+  "types": "./dist/types/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/types/index.d.ts",
+      "import": "./dist/esm/index.js",
+      "require": "./dist/cjs/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "scripts": {
+    "//build": "tsc, not tsup or rollup. A bundler would be one more dependency in this repo for a package whose whole point is having none, and tsc already emits both module formats plus declarations. The two `package.json` marker files are what tell Node which format each dist directory is, since the root manifest says `type: module`.",
+    "//prepare": "dist/ is gitignored repo-wide, so a `git+https://...` install would land with no build output at all. npm and pnpm run `prepare` after installing from a git URL, which is the hook that fixes it — and it is why typescript below is a devDependency of THIS package rather than only of the repo root: on that path the root's node_modules does not exist. devDependencies are not installed transitively, so this adds nothing to the consuming site's tree.",
+    "build": "node ./scripts/build.mjs",
+    "prepare": "node ./scripts/build.mjs",
+    "prepublishOnly": "node ./scripts/build.mjs"
+  },
+  "devDependencies": {
+    "typescript": "^5.7.3"
+  }
+}
