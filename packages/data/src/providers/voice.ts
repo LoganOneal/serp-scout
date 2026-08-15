@@ -45,7 +45,12 @@ export interface VoiceProviders {
   /** Raw agent JSON. Parsed by @rnr/core, not here. */
   getAgent(agentId: string): Promise<unknown>
   getConversationFlow(flowId: string): Promise<unknown>
+  /** The prompt and tools behind a single-prompt agent. */
+  getRetellLlm(llmId: string): Promise<unknown>
   listAgents(): Promise<unknown[]>
+  /** Create a single-prompt response engine from this repo's script. */
+  createRetellLlm(payload: Record<string, unknown>): Promise<{ llmId: string; raw: unknown }>
+  createAgent(payload: Record<string, unknown>): Promise<{ agentId: string; raw: unknown }>
   /** Integration fields only -- the client enforces the allowlist. */
   updateAgent(agentId: string, patch: Record<string, unknown>): Promise<unknown>
 }
@@ -144,8 +149,40 @@ class FixtureVoiceProviders implements VoiceProviders {
     return CAPTURED_FLOW
   }
 
+  async getRetellLlm(): Promise<unknown> {
+    // The captured agent is a conversation-flow, so there is no LLM behind it. Null
+    // rather than an invented prompt: a fabricated one would let the audit pass
+    // offline against tools that do not exist anywhere.
+    return null
+  }
+
   async listAgents(): Promise<unknown[]> {
     return [CAPTURED_AGENT]
+  }
+
+  /**
+   * ==================== CREATION HAS NO HONEST FIXTURE ====================
+   * Every other fixture returns something true offline: a captured agent, a silent
+   * WAV, a number config. There is no offline equivalent of an agent id, and a
+   * synthetic one would be WRITTEN TO `sites.retell_agent_id` and outlive the
+   * session -- leaving a row that claims a Retell agent which has never existed,
+   * and a provisioning run that would point a real phone number at it.
+   *
+   * So this throws, in the same spirit as requireTwilio below.
+   * ======================================================================
+   */
+  async createRetellLlm(): Promise<{ llmId: string; raw: unknown }> {
+    throw new Error(
+      'Creating a Retell agent needs LIVE_CALLS_ENABLED=true. Refusing to invent an ' +
+        'llm_id, which would be stored on the site as though an agent existed.',
+    )
+  }
+
+  async createAgent(): Promise<{ agentId: string; raw: unknown }> {
+    throw new Error(
+      'Creating a Retell agent needs LIVE_CALLS_ENABLED=true. Refusing to invent an ' +
+        'agent_id, which would be stored on the site as though an agent existed.',
+    )
   }
 
   async updateAgent(): Promise<unknown> {
@@ -225,8 +262,17 @@ class LiveVoiceProviders implements VoiceProviders {
   getConversationFlow(flowId: string) {
     return this.retell.getConversationFlow(flowId)
   }
+  getRetellLlm(llmId: string) {
+    return this.retell.getRetellLlm(llmId)
+  }
   listAgents() {
     return this.retell.listAgents()
+  }
+  createRetellLlm(payload: Record<string, unknown>) {
+    return this.retell.createRetellLlm(payload)
+  }
+  createAgent(payload: Record<string, unknown>) {
+    return this.retell.createAgent(payload)
   }
   updateAgent(agentId: string, patch: Record<string, unknown>) {
     return this.retell.updateAgent(agentId, patch)

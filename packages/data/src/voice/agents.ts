@@ -4,9 +4,11 @@ import {
   auditAgent,
   parseAgent,
   parseFlow,
+  parseRetellLlm,
   type AgentCheck,
   type ParsedAgent,
   type ParsedFlow,
+  type ParsedLlm,
 } from '@rnr/core'
 import type { Database } from '../db.js'
 import { retellAgents, type RetellAgent } from '../schema.js'
@@ -22,6 +24,8 @@ import type { VoiceProviders } from '../providers/voice.js'
 export interface AgentSnapshot {
   agent: ParsedAgent
   flow: ParsedFlow | null
+  /** Set instead of `flow` when the agent is a single-prompt `retell-llm`. */
+  llm: ParsedLlm | null
   checks: AgentCheck[]
   /** 'api' = read from Retell. 'upload' = a JSON someone handed us. */
   source: 'api' | 'upload'
@@ -52,19 +56,31 @@ export async function pullAgent(
     )
   }
 
-  // Only conversation-flow agents have a flow to fetch. A failure here is recorded
-  // as "flow unknown" rather than failing the whole pull: the agent-level checks
-  // (webhook URL, analysis fields) are still worth having.
-  let rawFlow: unknown = null
+  /**
+   * Fetch whichever response engine this agent actually has.
+   *
+   * A conversation-flow agent has a graph; a single-prompt agent has an LLM holding
+   * `general_tools`. Both carry the `save_lead` tool the audit looks for, so reading
+   * only the flow would report "no custom functions at all" for every agent this
+   * repo creates -- a red row describing a tool that is present and working.
+   *
+   * A failure here is recorded as "engine unknown" rather than failing the whole
+   * pull: the agent-level checks (webhook URL, analysis fields) are still worth having.
+   */
+  let rawEngine: unknown = null
   let flow: ParsedFlow | null = null
+  let llm: ParsedLlm | null = null
   if (agent.conversationFlowId !== null) {
-    rawFlow = await args.providers.getConversationFlow(agent.conversationFlowId).catch(() => null)
-    flow = parseFlow(rawFlow)
+    rawEngine = await args.providers.getConversationFlow(agent.conversationFlowId).catch(() => null)
+    flow = parseFlow(rawEngine)
+  } else if (agent.llmId !== null) {
+    rawEngine = await args.providers.getRetellLlm(agent.llmId).catch(() => null)
+    llm = parseRetellLlm(rawEngine)
   }
 
-  const checks = auditAgent({ agent, flow, baseUrl: publicBaseUrl(args.env) })
-  await storeSnapshot(db, { agent, flow, rawAgent, rawFlow, source: 'api' })
-  return { agent, flow, checks, source: 'api' }
+  const checks = auditAgent({ agent, flow, llm, baseUrl: publicBaseUrl(args.env) })
+  await storeSnapshot(db, { agent, flow, llm, rawAgent, rawFlow: rawEngine, source: 'api' })
+  return { agent, flow, llm, checks, source: 'api' }
 }
 
 /**
@@ -98,11 +114,12 @@ export async function ingestAgentJson(
   await storeSnapshot(db, {
     agent,
     flow,
+    llm: null,
     rawAgent: parsed.agent,
     rawFlow: parsed.flow,
     source: 'upload',
   })
-  return { agent, flow, checks, source: 'upload' }
+  return { agent, flow, llm: null, checks, source: 'upload' }
 }
 
 /**
@@ -134,7 +151,9 @@ async function storeSnapshot(
   args: {
     agent: ParsedAgent
     flow: ParsedFlow | null
+    llm: ParsedLlm | null
     rawAgent: unknown
+    /** The response engine payload -- a conversation flow OR a retell-llm. */
     rawFlow: unknown
     source: 'api' | 'upload'
   },
@@ -151,8 +170,11 @@ async function storeSnapshot(
     webhookUrl: args.agent.webhookUrl,
     postCallAnalysisFields: args.agent.postCallAnalysisFields,
     dataStorageSetting: args.agent.dataStorageSetting,
+    // A single-prompt agent has no nodes, which is NULL rather than 0 -- zero nodes
+    // would read as an empty flow. Its tools are on the LLM, so they land in the
+    // same column and the /agent page needs no special case.
     nodeCount: args.flow?.nodeCount ?? null,
-    toolNames: args.flow?.toolNames ?? null,
+    toolNames: args.flow?.toolNames ?? args.llm?.toolNames ?? null,
     remoteAgent: args.rawAgent as never,
     remoteFlow: args.rawFlow as never,
     source: args.source,
@@ -181,8 +203,11 @@ export function auditStored(
 ): AgentCheck[] | null {
   const agent = parseAgent(row.remoteAgent)
   if (agent === null) return null
+  // `remote_flow` holds whichever engine the agent has, so which parser to use is
+  // decided by the agent rather than by trying one and hoping.
   const flow = row.remoteFlow === null ? null : parseFlow(row.remoteFlow)
-  return auditAgent({ agent, flow, baseUrl: publicBaseUrl(env) })
+  const llm = row.remoteFlow === null ? null : parseRetellLlm(row.remoteFlow)
+  return auditAgent({ agent, flow, llm, baseUrl: publicBaseUrl(env) })
 }
 
 /**

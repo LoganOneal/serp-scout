@@ -76,6 +76,61 @@ export class RetellClient {
     return this.request(`/get-conversation-flow/${encodeURIComponent(flowId)}`)
   }
 
+  /** The prompt and tools behind a `retell-llm` agent. */
+  async getRetellLlm(llmId: string): Promise<unknown> {
+    return this.request(`/get-retell-llm/${encodeURIComponent(llmId)}`)
+  }
+
+  /**
+   * Create the response engine for a single-prompt agent.
+   *
+   * ==================== WHY CREATION IS NOT GATED LIKE UPDATES ARE ====================
+   * `updateAgent` allows two fields and refuses the rest, because a PATCH lands on
+   * something that already exists and there is no undo. Creation has no such hazard:
+   * the object did not exist a moment ago, nothing hand-built is being replaced, and a
+   * wrong one is discarded by deleting it.
+   *
+   * The prohibition that reasoning protects -- never author a Conversation Flow -- is
+   * untouched. This posts a `retell-llm`, which has no nodes to overwrite.
+   * ==================================================================================
+   */
+  async createRetellLlm(payload: Record<string, unknown>): Promise<{ llmId: string; raw: unknown }> {
+    const body = (await this.request('/create-retell-llm', {
+      method: 'POST',
+      body: JSON.stringify(payload),
+    })) as Record<string, unknown> | null
+
+    const llmId = body?.['llm_id']
+    if (typeof llmId !== 'string' || llmId === '') {
+      // Refused rather than returned as a partial success. An agent created against a
+      // missing llm_id would answer with no prompt and no save_lead tool at all.
+      throw new RetellError(
+        'create-retell-llm returned no llm_id, so there is no response engine to attach.',
+        502,
+        JSON.stringify(body),
+      )
+    }
+    return { llmId, raw: body }
+  }
+
+  /** Create an agent. `payload` is built by @rnr/core's buildCreateAgentPayload. */
+  async createAgent(payload: Record<string, unknown>): Promise<{ agentId: string; raw: unknown }> {
+    const body = (await this.request('/create-agent', {
+      method: 'POST',
+      body: JSON.stringify(payload),
+    })) as Record<string, unknown> | null
+
+    const agentId = body?.['agent_id']
+    if (typeof agentId !== 'string' || agentId === '') {
+      throw new RetellError(
+        'create-agent returned no agent_id.',
+        502,
+        JSON.stringify(body),
+      )
+    }
+    return { agentId, raw: body }
+  }
+
   /**
    * Retarget the custom-function URLs on a flow. The URL, and nothing else.
    *

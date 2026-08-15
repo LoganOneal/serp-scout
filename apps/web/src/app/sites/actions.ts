@@ -177,6 +177,72 @@ export async function saveTelephonyAction(formData: FormData): Promise<SaveTelep
 }
 
 /**
+ * Create this site's Retell agent from the script in the form.
+ *
+ * ==================== THIS CREATES, IT DOES NOT DIAL ====================
+ * Nothing a caller can reach changes here: the agent exists in Retell and answers
+ * nothing until a number is imported against it, which is still `pnpm
+ * sites:provision --confirm`. That separation is deliberate -- attaching a DID to
+ * the trunk takes a live business line off Programmable Voice, and creating an
+ * agent is reversible by deleting it.
+ * ======================================================================
+ */
+export interface CreateAgentResult {
+  ok: boolean
+  detail: string
+  agentId?: string
+}
+
+export async function createRetellAgentAction(formData: FormData): Promise<CreateAgentResult> {
+  const s = (k: string): string | null => {
+    const v = formData.get(k)
+    return typeof v === 'string' && v.trim() !== '' ? v.trim() : null
+  }
+
+  const siteId = Number(s('siteId'))
+  if (!Number.isInteger(siteId) || siteId <= 0) return { ok: false, detail: 'Missing site id.' }
+
+  const { createAgentForSite, createVoiceProviders, liveCallsEnabled, AgentCreateError } =
+    await import('@rnr/data')
+
+  if (!liveCallsEnabled()) {
+    // Checked here so the message names the flag rather than surfacing the fixture
+    // provider's refusal, which reads like a bug to anyone who has not read it.
+    return {
+      ok: false,
+      detail:
+        'LIVE_CALLS_ENABLED is not "true", so nothing was sent to Retell. This creates a real ' +
+        'billable agent, so it refuses in fixture mode rather than inventing an agent id.',
+    }
+  }
+
+  try {
+    const result = await createAgentForSite(db(), {
+      siteId,
+      providers: createVoiceProviders(),
+      ...(s('prompt') ? { prompt: s('prompt')! } : {}),
+      ...(s('agentName') ? { agentName: s('agentName')! } : {}),
+    })
+
+    revalidatePath(`/sites/${siteId}`)
+    const failing = result.snapshot.checks.filter((c) => c.status === 'fail')
+    return {
+      ok: true,
+      agentId: result.agentId,
+      detail:
+        `Created "${result.agentName}" (${result.agentId}) and re-read it from Retell. ` +
+        (failing.length === 0
+          ? 'All integration checks pass. Edit the voice and script in the Retell dashboard, ' +
+            'then provision a number.'
+          : `${failing.length} check(s) still failing: ${failing.map((c) => c.label).join(', ')}.`),
+    }
+  } catch (e) {
+    if (e instanceof AgentCreateError) return { ok: false, detail: e.message }
+    return { ok: false, detail: (e as Error).message ?? String(e) }
+  }
+}
+
+/**
  * Send a signed fixture call at our own endpoints.
  *
  * This is the "Send test event" button, and it is the thing that stops a

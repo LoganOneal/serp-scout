@@ -34,7 +34,25 @@ export interface SaveLeadArgs {
   notes?: unknown
 }
 
-export const SYSTEM_TYPES = [
+/**
+ * What the job is about.
+ *
+ * ==================== ONE COLUMN, A VOCABULARY PER TRADE ====================
+ * `leads.system_type` is text, and the name is HVAC's. It stays that way -- renaming
+ * a column to `job_type` buys a migration and changes nothing a reader could not get
+ * from this comment.
+ *
+ * What DID have to change is the vocabulary. A plumbing line has no thermostats, and
+ * putting "toilet" and "sewer backup" through an HVAC enum sent every plumbing call
+ * to `other`: technically not wrong, and useless for deciding which lead to work
+ * first or what a market's calls are actually about.
+ *
+ * The parser accepts the union, so a value is never rejected for belonging to
+ * another trade. Only the tool schema handed to a given agent is narrowed, because
+ * the enum is what the model is choosing from mid-call.
+ * ==========================================================================
+ */
+export const HVAC_SYSTEM_TYPES = [
   'furnace',
   'air_conditioner',
   'heat_pump',
@@ -44,7 +62,36 @@ export const SYSTEM_TYPES = [
   'thermostat',
   'other',
 ] as const
+
+export const PLUMBING_JOB_TYPES = [
+  'leak_burst_pipe',
+  'drain_clog',
+  'toilet',
+  'sewer_backup',
+  'water_heater',
+  'faucet_fixture',
+  'garbage_disposal',
+  'water_pressure',
+  'no_water',
+  'install_replace',
+  'repipe',
+  'other',
+] as const
+
+export const SYSTEM_TYPES = [
+  ...HVAC_SYSTEM_TYPES,
+  ...PLUMBING_JOB_TYPES.filter(
+    (t): t is Exclude<(typeof PLUMBING_JOB_TYPES)[number], 'water_heater' | 'other'> =>
+      t !== 'water_heater' && t !== 'other',
+  ),
+] as const
 export type SystemType = (typeof SYSTEM_TYPES)[number]
+
+/** The enum a given trade's agent chooses from. Unknown niche -> HVAC. */
+export function jobTypesForNiche(nicheSlug: string | null | undefined): readonly string[] {
+  if (nicheSlug === 'plumber') return PLUMBING_JOB_TYPES
+  return HVAC_SYSTEM_TYPES
+}
 
 /** The parsed, normalised result. Every field is explicitly nullable. */
 export interface ParsedLead {
@@ -122,14 +169,39 @@ function systemType(v: unknown): SystemType | null {
   if (!s) return null
   const t = s.toLowerCase().replace(/[^a-z]+/g, '_')
   if ((SYSTEM_TYPES as readonly string[]).includes(t)) return t as SystemType
+
   // The model does not reliably use the enum, so map the words it does use.
-  if (/furnace|heater|heating/.test(s)) return 'furnace'
+
+  /**
+   * Water heater FIRST, and this order is load-bearing.
+   *
+   * The furnace pattern matches the substring "heater", so while it ran first every
+   * "water heater" a caller described was filed as a furnace. Invisible on an HVAC
+   * line (a water heater is a plausible furnace-adjacent job) and wrong on every
+   * plumbing call, where water heaters are a large share of the work.
+   */
+  if (/water.?heater|hot.?water.?(tank|heater)|tankless/.test(s)) return 'water_heater'
+
+  // --- Plumbing ---
+  if (/sewer|main.?line|septic|sewage/.test(s)) return 'sewer_backup'
+  if (/toilet|commode|w\.?c\b/.test(s)) return 'toilet'
+  if (/disposal|disposer|insinkerator/.test(s)) return 'garbage_disposal'
+  if (/clog|blocked|backed.?up|slow.?drain|\bdrain\b/.test(s)) return 'drain_clog'
+  if (/burst|leak|pipe|flood/.test(s)) return 'leak_burst_pipe'
+  if (/faucet|fixture|spigot|hose.?bib|shower.?valve|tap\b/.test(s)) return 'faucet_fixture'
+  if (/repipe|re.?pipe|galvanized|polybutylene/.test(s)) return 'repipe'
+  if (/pressure/.test(s)) return 'water_pressure'
+  if (/no.?water/.test(s)) return 'no_water'
+  if (/install|replace|replacement|new\s/.test(s)) return 'install_replace'
+
+  // --- HVAC ---
   if (/mini.?split|ductless/.test(s)) return 'mini_split'
   if (/heat.?pump/.test(s)) return 'heat_pump'
+  if (/furnace|heating/.test(s)) return 'furnace'
   if (/\bac\b|a\/c|air.?condition/.test(s)) return 'air_conditioner'
   if (/boiler|radiator/.test(s)) return 'boiler'
-  if (/water.?heater/.test(s)) return 'water_heater'
   if (/thermostat|nest|ecobee/.test(s)) return 'thermostat'
+  if (/heater/.test(s)) return 'furnace'
   return 'other'
 }
 
@@ -304,6 +376,36 @@ export function qualifyLead(input: QualificationInput): boolean | null {
  * Emitted by `pnpm voice:agent-config` so the Retell side is generated from this
  * file rather than typed into a dashboard twice.
  */
+export function buildSaveLeadSchema(nicheSlug?: string | null): Record<string, unknown> {
+  const plumbing = nicheSlug === 'plumber'
+  return {
+    ...SAVE_LEAD_SCHEMA,
+    properties: {
+      ...SAVE_LEAD_SCHEMA.properties,
+      system_type: {
+        type: 'string',
+        enum: [...jobTypesForNiche(nicheSlug)],
+        description: 'What the job is about. Omit if never established.',
+      },
+      is_emergency: {
+        type: 'boolean',
+        description: plumbing
+          ? 'True only if you established urgency: active flooding, a burst pipe, a major ' +
+            'uncontrolled leak, sewage backing up, no working toilet, or a safety hazard. ' +
+            'OMIT this field entirely if you did not ask -- do not guess false.'
+          : SAVE_LEAD_SCHEMA.properties.is_emergency.description,
+      },
+      hazard: {
+        type: 'string',
+        description: plumbing
+          ? 'If a safety hazard was reported, name it: gas, water_electrical, sewage.'
+          : SAVE_LEAD_SCHEMA.properties.hazard.description,
+      },
+    },
+  }
+}
+
+/** The HVAC schema, and the shape every niche's schema is derived from. */
 export const SAVE_LEAD_SCHEMA = {
   type: 'object',
   properties: {
@@ -314,7 +416,7 @@ export const SAVE_LEAD_SCHEMA = {
     city: { type: 'string' },
     zip: { type: 'string', description: '5-digit ZIP of the service location.' },
     problem: { type: 'string', description: "The problem in the caller's own words." },
-    system_type: { type: 'string', enum: [...SYSTEM_TYPES] },
+    system_type: { type: 'string', enum: [...HVAC_SYSTEM_TYPES] },
     system_age_years: { type: 'number', description: 'Approximate age. Omit if unknown.' },
     is_emergency: {
       type: 'boolean',

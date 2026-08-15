@@ -64,6 +64,23 @@ export interface ParsedAgent {
   lastModifiedAt: Date | null
 }
 
+/**
+ * The response engine of a single-prompt agent.
+ *
+ * Parallel to ParsedFlow rather than folded into it: an `llm_id` is not a
+ * `conversation_flow_id`, and storing one in the other's field would put a value in
+ * a column whose name is a lie. The audit reads tools from whichever one is present.
+ */
+export interface ParsedLlm {
+  llmId: string
+  version: number | null
+  generalPrompt: string | null
+  toolNames: string[]
+  toolUrls: string[]
+  model: string | null
+  isPublished: boolean | null
+}
+
 export interface ParsedFlow {
   conversationFlowId: string
   version: number | null
@@ -148,12 +165,40 @@ export function parseFlow(raw: unknown): ParsedFlow | null {
   }
 }
 
+export function parseRetellLlm(raw: unknown): ParsedLlm | null {
+  const l = obj(raw)
+  if (!l) return null
+  const id = str(l['llm_id'])
+  if (!id) return null
+
+  const tools = Array.isArray(l['general_tools']) ? l['general_tools'] : []
+
+  return {
+    llmId: id,
+    version: int(l['version']),
+    generalPrompt: str(l['general_prompt']),
+    toolNames: tools.map((t) => str(obj(t)?.['name']) ?? '(unnamed)'),
+    toolUrls: tools.map((t) => str(obj(t)?.['url']) ?? '').filter((u) => u !== ''),
+    model: str(l['model']),
+    isPublished: bool(l['is_published']),
+  }
+}
+
 // --- The audit ---------------------------------------------------------------
 
 export interface AuditInput {
   agent: ParsedAgent
   /** Null for a retell-llm agent, or when the flow could not be fetched. */
   flow: ParsedFlow | null
+  /**
+   * The single-prompt engine, when the agent is a `retell-llm`.
+   *
+   * Optional so every existing caller keeps compiling. Without it a created
+   * single-prompt agent fails the save_lead check while holding a perfectly good
+   * tool -- the tool is simply on `general_tools` rather than on a flow, and an
+   * audit that cannot see it reports a problem that does not exist.
+   */
+  llm?: ParsedLlm | null
   /** PUBLIC_BASE_URL, no trailing slash. Null when unconfigured. */
   baseUrl: string | null
 }
@@ -171,6 +216,7 @@ export const EXPECTED_ANALYSIS_FIELDS = [
 
 export function auditAgent(input: AuditInput): AgentCheck[] {
   const { agent, flow, baseUrl } = input
+  const llm = input.llm ?? null
   const checks: AgentCheck[] = []
 
   const expectedEvents = baseUrl === null ? null : `${baseUrl}/api/retell/events`
@@ -221,9 +267,10 @@ export function auditAgent(input: AuditInput): AgentCheck[] {
   }
 
   // --- 2. The save_lead tool. Without it, no lead survives a hang-up. -------
-  const toolNames = flow?.toolNames ?? []
+  const toolNames = flow?.toolNames ?? llm?.toolNames ?? []
+  const allToolUrls = flow?.toolUrls ?? llm?.toolUrls ?? []
   const hasTool = toolNames.includes(SAVE_LEAD_TOOL_NAME)
-  const toolUrl = flow?.toolUrls.find((u) => u.includes('/api/retell/tool/save-lead')) ?? null
+  const toolUrl = allToolUrls.find((u) => u.includes('/api/retell/tool/save-lead')) ?? null
 
   if (!hasTool) {
     checks.push({
@@ -252,7 +299,7 @@ export function auditAgent(input: AuditInput): AgentCheck[] {
       id: 'save_lead_tool',
       label: `${SAVE_LEAD_TOOL_NAME} custom function`,
       status: 'fail',
-      detail: `Exists, but no function URL points at this app. URLs found: ${flow?.toolUrls.join(', ') || 'none'}.`,
+      detail: `Exists, but no function URL points at this app. URLs found: ${allToolUrls.join(', ') || 'none'}.`,
       remedy: `Point it at ${expectedTool}`,
       autoFixable: false,
     })

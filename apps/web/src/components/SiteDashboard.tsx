@@ -17,6 +17,7 @@ import { CallRow, type CallRowData } from '@/components/CallRow'
 import { ConnectionPanel } from '@/components/ConnectionPanel'
 import { OutcomeCell } from '@/components/OutcomeCell'
 import {
+  createRetellAgentAction,
   recordLeadOutcomeAction,
   refetchRecordingAction,
   saveTelephonyAction,
@@ -554,9 +555,12 @@ export async function SiteDashboard({ siteId }: { siteId: number }) {
           apiKeyConfigured: Boolean(process.env['RETELL_API_KEY']),
           invalidSignatureCount: invalidSigs,
           promptCurrent: promptIsCurrent(site),
+          nicheSlug: detail.nicheSlug,
+          nicheLabel: detail.nicheLabel,
         }}
         onTest={sendTestEventAction}
         onSaveTelephony={saveTelephonyAction}
+        onCreateAgent={createRetellAgentAction}
       />
 
       {/* --- Queue health ------------------------------------------------- */}

@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useTransition } from 'react'
+import { HVAC_INBOUND_DEFAULTS, hasNicheScript, scriptForNiche } from '@rnr/core'
 
 /**
  * The connection panel.
@@ -29,22 +30,38 @@ export interface ConnectionInfo {
   apiKeyConfigured: boolean
   invalidSignatureCount: number
   promptCurrent: boolean | null
+  /** `niches.slug`. Picks the script and the mid-call job-type vocabulary. */
+  nicheSlug: string
+  nicheLabel: string
 }
 
 export function ConnectionPanel({
   info,
   onTest,
   onSaveTelephony,
+  onCreateAgent,
 }: {
   info: ConnectionInfo
   onTest: (siteId: number, scenario: string) => Promise<{ ok: boolean; detail: string }>
   onSaveTelephony: (fd: FormData) => Promise<{ ok: boolean; error?: string }>
+  onCreateAgent: (fd: FormData) => Promise<{ ok: boolean; detail: string; agentId?: string }>
 }) {
   const [result, setResult] = useState<{ ok: boolean; detail: string } | null>(null)
   const [scenario, setScenario] = useState('urgent_no_heat')
   const [pending, startTransition] = useTransition()
   const [saveError, setSaveError] = useState<string | null>(null)
   const [saved, setSaved] = useState(false)
+  const [createResult, setCreateResult] = useState<{ ok: boolean; detail: string } | null>(null)
+  const [showScript, setShowScript] = useState(false)
+
+  const script = scriptForNiche(info.nicheSlug)
+  const scriptIsForThisNiche = hasNicheScript(info.nicheSlug)
+
+  const create = (fd: FormData) => {
+    setCreateResult(null)
+    fd.set('siteId', String(info.siteId))
+    startTransition(async () => setCreateResult(await onCreateAgent(fd)))
+  }
 
   const run = () => {
     setResult(null)
@@ -133,6 +150,91 @@ export function ConnectionPanel({
       </form>
 
       {saveError && <div className="disabled-reason">{saveError}</div>}
+
+      {/* --- Create the agent -------------------------------------------- */}
+      {info.retellAgentId === null && (
+        <form action={create} style={{ marginBottom: 18 }}>
+          <h4 style={{ marginBottom: 4 }}>No Retell agent yet</h4>
+          <p className="faint" style={{ fontSize: 13 }}>
+            Creates a <strong>single-prompt</strong> agent from the script below, with{' '}
+            <code>save_lead</code>, the events webhook and the analysis fields already wired.
+            Voice defaults to <code>{HVAC_INBOUND_DEFAULTS.voiceId}</code> and the model to{' '}
+            <code>{HVAC_INBOUND_DEFAULTS.model}</code>, both copied from the HVAC intake agent
+            already answering calls. Tune the voice and wording in the Retell dashboard
+            afterwards — this creates it, it does not own it.
+          </p>
+          <p className="faint" style={{ fontSize: 13 }}>
+            <strong>No phone number is touched.</strong> The agent answers nothing until{' '}
+            <code>pnpm sites:provision</code> imports a number against it.
+          </p>
+
+          <label>
+            <span>Agent name</span>
+            <input
+              name="agentName"
+              placeholder="Blank uses the site's business name and cell"
+              autoComplete="off"
+            />
+          </label>
+
+          <label style={{ display: 'block', marginTop: 10 }}>
+            <span>
+              Script{' '}
+              <button type="button" className="btn" onClick={() => setShowScript((v) => !v)}>
+                {showScript ? 'hide' : 'edit'}
+              </button>
+            </span>
+            {showScript ? (
+              <textarea
+                name="prompt"
+                defaultValue={script}
+                rows={18}
+                className="mono"
+                style={{ width: '100%' }}
+              />
+            ) : (
+              <em>
+                {scriptIsForThisNiche ? (
+                  <>
+                    Using the {info.nicheLabel} script from this repo (
+                    {script.length.toLocaleString()} characters).
+                  </>
+                ) : (
+                  /* Stated, not hidden. Creating a roofing agent from an HVAC script is a
+                     mistake that has to be visible BEFORE the button is clicked. */
+                  <>
+                    <strong>No {info.nicheLabel} script exists yet</strong>, so this would use the
+                    HVAC one — it asks about furnaces and heat pumps. Edit it here first, or add a
+                    script for <code>{info.nicheSlug}</code> in <code>niche-scripts.ts</code>.
+                  </>
+                )}
+              </em>
+            )}
+          </label>
+
+          <div className="flex" style={{ alignItems: 'center', marginTop: 10 }}>
+            <button className="primary" type="submit" disabled={pending}>
+              {pending ? 'Creating…' : 'Create Retell agent'}
+            </button>
+            {!info.apiKeyConfigured && (
+              <span className="badge stop" title="RETELL_API_KEY is not set.">
+                no API key
+              </span>
+            )}
+            {!info.baseUrlConfigured && (
+              <span className="badge stop" title="PUBLIC_BASE_URL is not set.">
+                no base URL
+              </span>
+            )}
+          </div>
+
+          {createResult && (
+            <div className={createResult.ok ? 'okbox' : 'disabled-reason'} style={{ marginTop: 10 }}>
+              {createResult.detail}
+            </div>
+          )}
+        </form>
+      )}
 
       {/* Tracking number and agent id are edited above, so they are not repeated
           here. What follows is EVIDENCE rather than configuration: things only Retell

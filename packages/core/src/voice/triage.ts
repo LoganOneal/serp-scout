@@ -17,7 +17,17 @@
  */
 
 /** Ordered by severity. The highest-severity hit wins. */
-export type HazardKind = 'gas' | 'carbon_monoxide' | 'fire_electrical' | 'water' | 'no_heat' | 'no_cool'
+export type HazardKind =
+  | 'gas'
+  | 'carbon_monoxide'
+  | 'fire_electrical'
+  /** Water reaching a panel, outlets or wiring. Electrocution, then fire. */
+  | 'water_electrical'
+  | 'water'
+  /** Sewage entering the property. A biohazard, not merely a mess. */
+  | 'sewage'
+  | 'no_heat'
+  | 'no_cool'
 
 export type TriageAction =
   /** Do NOT book. Say the safety script, get them out, hand to a human. */
@@ -77,6 +87,9 @@ interface Pattern {
 /** Up to ~3 filler words between two required tokens, same clause. */
 const GAP = '[a-z0-9 ]{0,18}'
 
+/** Same idea, longer clause. Used where the natural phrasing is simply wordier. */
+const WIDE_GAP = '[a-z0-9 ]{0,30}'
+
 const PATTERNS: readonly Pattern[] = [
   {
     kind: 'gas',
@@ -123,6 +136,60 @@ const PATTERNS: readonly Pattern[] = [
       /\bspark|\bsparks\b|\bsparking\b|\barcing\b/,
       /\b(caught|on) fire\b|\bfire\b[a-z ]{0,8}\bfurnace\b/,
       /\bmelted\b|\bmelting\b|\bscorched\b|\bcharred\b/,
+    ],
+  },
+  {
+    /**
+     * Water and electricity in the same sentence.
+     *
+     * Ranked above plain water and below carbon monoxide: it is the plumbing hazard
+     * that kills, and it arrives disguised as an ordinary leak call -- "there's water
+     * coming down into the breaker box" is a sentence a caller says calmly.
+     *
+     * Both halves are required and the gap is bounded, so "water heater is by the
+     * electrical panel" does not escalate a routine call while "water is pouring onto
+     * the electrical panel" does.
+     */
+    kind: 'water_electrical',
+    action: 'escalate_now',
+    severity: 92,
+    lifeSafety: true,
+    patterns: [
+      /**
+       * A wider gap than GAP, because the natural sentence is long: "water is dripping
+       * onto the electrical panel" puts 22 characters between the two halves.
+       *
+       * `water` is guarded against `water heater`, which would otherwise make "the
+       * water heater is next to the breaker box" -- a location, not a hazard -- read
+       * as an electrocution risk and escalate a routine call.
+       */
+      new RegExp(
+        `\\b(water(?! heater)|flooding|flooded|leak|leaking|dripping|pouring|soaked|wet)\\b${WIDE_GAP}\\b(electrical panel|breaker box|breaker panel|breakers?|fuse box|outlets?|wiring|wires|electrical equipment|electrical)\\b`,
+      ),
+      new RegExp(
+        `\\b(electrical panel|breaker box|breaker panel|breakers?|fuse box|outlets?|wiring|electrical)\\b${WIDE_GAP}\\b(water|flooded|flooding|soaked|wet|dripping|pouring)\\b`,
+      ),
+    ],
+  },
+  {
+    /**
+     * Sewage inside the building. Urgent, and not the same as a leak.
+     *
+     * Deliberately narrow: "sewer line" on its own is frequently a routine estimate
+     * call, and treating every mention of the word as an emergency would page the
+     * on-call plumber for a quote request. The word "sewage", or a sewer/septic line
+     * plus backup wording, is what fires.
+     */
+    kind: 'sewage',
+    action: 'escalate_now',
+    severity: 75,
+    lifeSafety: false,
+    patterns: [
+      /\bsewage\b/,
+      /\braw sewage\b|\bwaste water\b|\bwastewater\b/,
+      new RegExp(`\\b(sewer|septic|main line|drain)\\b${GAP}\\b(back|backed|backing|backup|overflow|overflowing)\\b`),
+      new RegExp(`\\b(back|backed|backing|backup|overflow|overflowing)\\b${GAP}\\b(sewer|septic|sewage)\\b`),
+      /\b(toilet|toilets|shower|tub|floor drain)\b[a-z ]{0,12}\b(overflowing|backing up|backed up)\b/,
     ],
   },
   {
@@ -246,7 +313,18 @@ export function isEmergencyFrom(text: string | null | undefined): boolean | null
  * Kept here rather than in the prompt so it is (a) testable and (b) identical
  * whichever path fires. Both the prompt and the post-hoc branch read from this.
  */
-export const SAFETY_SCRIPT: Record<'gas' | 'carbon_monoxide' | 'fire_electrical', string> = {
+export const SAFETY_SCRIPT: Record<
+  'gas' | 'carbon_monoxide' | 'fire_electrical' | 'water_electrical' | 'sewage',
+  string
+> = {
+  water_electrical:
+    'If water is reaching electrical equipment, please stay away from that area and do not ' +
+    'touch any electrical switches or equipment there. If you believe there is an immediate ' +
+    'electrical or fire hazard, contact emergency services. I am having someone call you back ' +
+    'right away.',
+  sewage:
+    'Okay, I am marking this as urgent. Please avoid contact with the wastewater while we get ' +
+    'this over to the plumber.',
   gas:
     'Please stop what you are doing and leave the building now. Do not turn any lights or ' +
     'switches on or off, and do not use anything electrical. Once you are outside, call 911 or ' +
@@ -264,5 +342,7 @@ export function safetyScriptFor(hazard: HazardKind | null): string | null {
   if (hazard === 'gas') return SAFETY_SCRIPT.gas
   if (hazard === 'carbon_monoxide') return SAFETY_SCRIPT.carbon_monoxide
   if (hazard === 'fire_electrical') return SAFETY_SCRIPT.fire_electrical
+  if (hazard === 'water_electrical') return SAFETY_SCRIPT.water_electrical
+  if (hazard === 'sewage') return SAFETY_SCRIPT.sewage
   return null
 }
