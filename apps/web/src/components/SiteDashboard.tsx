@@ -7,6 +7,7 @@ import {
   getVoiceQueueHealth,
   listCallsForSite,
   listLeadsForSite,
+  loadWizardState,
   getSiteRealisedValue,
   listOutcomesForSite,
   promptIsCurrent,
@@ -17,10 +18,16 @@ import { CallRow, type CallRowData } from '@/components/CallRow'
 import { ConnectionPanel } from '@/components/ConnectionPanel'
 import { OutcomeCell } from '@/components/OutcomeCell'
 import { SwitchAgentPanel } from '@/components/SwitchAgentPanel'
+import { SetupWizard } from '@/components/SetupWizard'
 import {
+  adoptAgentAction,
+  applyProvisioningAction,
+  applySiteIntegrationAction,
   createRetellAgentAction,
+  inspectProvisioningAction,
   listLiveAgentsAction,
   preflightSwitchAction,
+  recheckAgentAction,
   recordLeadOutcomeAction,
   refetchRecordingAction,
   saveTelephonyAction,
@@ -69,6 +76,9 @@ export async function SiteDashboard({ siteId }: { siteId: number }) {
     () => getSiteRealisedValue(database, siteId),
     null,
   )
+  // Derived from stored state on every render, so it cannot claim a step is done that
+  // has since been undone. Null only if the site vanished between queries.
+  const wizard = await queryOr('loadWizardState', () => loadWizardState(database, siteId), null)
 
   const { site } = detail
   const base = (process.env['PUBLIC_BASE_URL'] ?? 'https://YOUR-TUNNEL-HERE').replace(/\/$/, '')
@@ -540,6 +550,29 @@ export async function SiteDashboard({ siteId }: { siteId: number }) {
         why that column exists now. Deliberately <strong>not</strong> shown as a zeroed chart: a
         zero would claim there were no submissions.
       </div>
+
+      {/* --- Setup ------------------------------------------------------- */}
+      {wizard !== null && !wizard.complete && (
+        <SetupWizard
+          view={{
+            siteId: wizard.siteId,
+            agentId: wizard.agentId,
+            agentName: wizard.agentName,
+            responseEngineType: wizard.responseEngineType,
+            steps: wizard.steps,
+            currentStepId: wizard.currentStepId,
+            complete: wizard.complete,
+          }}
+          trackingNumber={site.trackingNumber}
+          toolUrl={`${base}/api/retell/tool/save-lead`}
+          onList={listLiveAgentsAction}
+          onAdopt={adoptAgentAction}
+          onApplyIntegration={applySiteIntegrationAction}
+          onRecheck={recheckAgentAction}
+          onInspectProvisioning={inspectProvisioningAction}
+          onApplyProvisioning={applyProvisioningAction}
+        />
+      )}
 
       {/* --- Connection --------------------------------------------------- */}
       <ConnectionPanel

@@ -220,13 +220,27 @@ export async function resolveSiteByNumber(
   }
 }
 
-/** Mark that Retell has actually contacted us. Clears the "not connected" banner. */
-export async function touchSiteWebhook(db: Database, siteId: number): Promise<void> {
+/**
+ * Mark that Retell has actually contacted us. Clears the "not connected" banner.
+ *
+ * `simulated` separates a fixture from a phone call. Both are real webhooks and both
+ * prove the ingest path works, so both move `first_webhook_at` -- but only a call this
+ * system did not generate is evidence that the TELEPHONY works, and that is a
+ * different claim. See the schema comment on `first_real_call_at`.
+ */
+export async function touchSiteWebhook(
+  db: Database,
+  siteId: number,
+  opts: { simulated?: boolean } = {},
+): Promise<void> {
   await db
     .update(sites)
     .set({
       firstWebhookAt: sql`COALESCE(${sites.firstWebhookAt}, now())`,
       lastWebhookAt: new Date(),
+      ...(opts.simulated === true
+        ? {}
+        : { firstRealCallAt: sql`COALESCE(${sites.firstRealCallAt}, now())` }),
     })
     .where(eq(sites.id, siteId))
 }

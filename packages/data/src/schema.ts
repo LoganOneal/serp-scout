@@ -643,6 +643,21 @@ export const sites = pgTable(
      * which agent to go back to.
      */
     previousRetellAgentId: text('previous_retell_agent_id'),
+    /**
+     * First webhook from a call this system did NOT generate.
+     *
+     * ==================== A FIXTURE IS NOT A CONNECTION ====================
+     * `first_webhook_at` is set by the "Send test event" button as well as by a real
+     * caller, because both arrive through the same verified route. That made a site
+     * look connected while its number had never been attached to the trunk -- which
+     * is exactly what San Jose looked like for an afternoon before anyone dialled it.
+     *
+     * The fixture still proves something real (signature, routing, ingest, lead write)
+     * and is still worth recording. It just is not evidence that a phone works, so it
+     * gets a different column and the setup wizard reads THIS one.
+     * =====================================================================
+     */
+    firstRealCallAt: timestamp('first_real_call_at', { withTimezone: true }),
     retellAgentVersion: integer('retell_agent_version'),
     /**
      * Fingerprint of the prompt in @rnr/core when it was last pushed to Retell.
