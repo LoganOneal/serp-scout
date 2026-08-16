@@ -16,12 +16,17 @@ import {
 import { CallRow, type CallRowData } from '@/components/CallRow'
 import { ConnectionPanel } from '@/components/ConnectionPanel'
 import { OutcomeCell } from '@/components/OutcomeCell'
+import { SwitchAgentPanel } from '@/components/SwitchAgentPanel'
 import {
   createRetellAgentAction,
+  listLiveAgentsAction,
+  preflightSwitchAction,
   recordLeadOutcomeAction,
   refetchRecordingAction,
   saveTelephonyAction,
   sendTestEventAction,
+  switchAgentAction,
+  switchBackAction,
 } from '@/app/sites/actions'
 import { NULL_DISPLAY, money, num, percent, verdictStyle } from '@/lib/format'
 
@@ -562,6 +567,20 @@ export async function SiteDashboard({ siteId }: { siteId: number }) {
         onSaveTelephony={saveTelephonyAction}
         onCreateAgent={createRetellAgentAction}
       />
+
+      {/* Only once an agent is bound — switching from nothing is just binding, and the
+          create/adopt path above already covers that. */}
+      {site.retellAgentId !== null && (
+        <SwitchAgentPanel
+          siteId={siteId}
+          currentAgentId={site.retellAgentId}
+          previousAgentId={site.previousRetellAgentId}
+          onList={listLiveAgentsAction}
+          onPreflight={preflightSwitchAction}
+          onSwitch={switchAgentAction}
+          onSwitchBack={switchBackAction}
+        />
+      )}
 
       {/* --- Queue health ------------------------------------------------- */}
       {queue !== null && (queue.pending > 0 || queue.failed > 0) && (

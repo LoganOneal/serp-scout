@@ -134,6 +134,7 @@ export async function updateSite(
     trackingNumber: string | null
     twilioNumberSid: string | null
     retellAgentId: string | null
+    previousRetellAgentId: string | null
     retellAgentVersion: number | null
     retellNumberImportedAt: Date | null
     promptFingerprint: string | null

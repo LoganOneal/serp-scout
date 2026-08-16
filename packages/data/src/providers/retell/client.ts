@@ -71,6 +71,19 @@ export class RetellClient {
     return Array.isArray(body) ? body : []
   }
 
+  /**
+   * Every DID this Retell account holds, and which agent each one answers with.
+   *
+   * The other half of the fleet view. `sites.retell_agent_id` says which agent a site
+   * BELIEVES it uses; this says which agent a caller actually reaches. Nothing compares
+   * the two today, so both failure directions -- a number pointing at an agent no site
+   * claims, and a site claiming an agent no number reaches -- are currently silent.
+   */
+  async listPhoneNumbers(): Promise<unknown[]> {
+    const body = await this.request('/list-phone-numbers')
+    return Array.isArray(body) ? body : []
+  }
+
   /** The conversation graph for a `conversation-flow` agent. */
   async getConversationFlow(flowId: string): Promise<unknown> {
     return this.request(`/get-conversation-flow/${encodeURIComponent(flowId)}`)

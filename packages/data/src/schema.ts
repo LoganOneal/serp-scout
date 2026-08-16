@@ -634,6 +634,15 @@ export const sites = pgTable(
     /** NULL = never imported into Retell. Distinct from "imported, none arrived". */
     retellNumberImportedAt: timestamp('retell_number_imported_at', { withTimezone: true }),
     retellAgentId: text('retell_agent_id'),
+    /**
+     * The agent this site used before the last switch. NULL = never switched.
+     *
+     * Kept so "switch back" is one click while the mistake is still on the phone. A
+     * switch does not delete the old agent -- it stays live and billable in Retell --
+     * so rollback is a PATCH, and the only thing that could make it hard is forgetting
+     * which agent to go back to.
+     */
+    previousRetellAgentId: text('previous_retell_agent_id'),
     retellAgentVersion: integer('retell_agent_version'),
     /**
      * Fingerprint of the prompt in @rnr/core when it was last pushed to Retell.

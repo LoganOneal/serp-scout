@@ -1,5 +1,15 @@
-import { auditStored, db, getStoredAgent, listStoredAgents, liveCallsEnabled, publicBaseUrl } from '@rnr/data'
+import {
+  auditStored,
+  createVoiceProviders,
+  db,
+  getStoredAgent,
+  listStoredAgents,
+  liveCallsEnabled,
+  loadFleet,
+  publicBaseUrl,
+} from '@rnr/data'
 import { AgentPanel, type AgentSummary } from '@/components/AgentPanel'
+import { AgentFleet } from '@/components/AgentFleet'
 import { applyIntegrationAction, pullAgentAction, uploadAgentJsonAction } from '@/app/agent/actions'
 
 export const dynamic = 'force-dynamic'
@@ -42,14 +52,27 @@ export default async function AgentPage() {
   const storedChecks = row === null ? null : auditStored(row)
   const base = publicBaseUrl()
 
+  /**
+   * Never fatal to the page.
+   *
+   * The fleet needs two live Retell reads. A bad key or an outage must not take down the
+   * pull/upload panel, which is how you diagnose a bad key.
+   */
+  const fleet = await loadFleet(database, createVoiceProviders()).catch(() => null)
+
   return (
     <div className="wrap">
-      <h2>Voice agent</h2>
+      <h2>Voice agents</h2>
       <p className="sub">
-        One agent answers every site. Per-site context — business name, hours, service area,
-        dispatch fee — is injected at ring time by the inbound webhook resolving the dialled
-        number, so there is no second agent to keep in sync.
+        Per-site context — business name, hours, service area, dispatch fee — is injected at
+        ring time by the inbound webhook resolving the dialled number, so agents never hold a
+        market&rsquo;s details. What they do hold is the <strong>script</strong>, and that is
+        per trade: a plumbing call cannot be served by a furnace script no matter how good the
+        variables are. So there is one agent per trade, and this page is where you see all of
+        them at once.
       </p>
+
+      {fleet && <AgentFleet fleet={fleet} />}
 
       <div className="warnbox">
         <strong>Retell owns the conversation. This repo owns the wiring.</strong> Your agent is a
