@@ -66,9 +66,9 @@ export function validateHhtBlConfig(value: unknown): HhtBlConfig {
   positiveInteger(active.research_sites?.target_count, 'research_sites.target_count')
   positiveInteger(active.backlinks?.page_size, 'backlinks.page_size')
   positiveInteger(active.crawl?.max_attempts, 'crawl.max_attempts')
-  if (active.backlinks.follow_only && active.backlinks.provider_follow_filter) {
+  if (active.backlinks.follow_only && !active.backlinks.provider_follow_filter) {
     throw new Error(
-      'provider_follow_filter cannot be true: the verified Semrush backlinks schema has no follow filter',
+      'provider_follow_filter must be true when follow_only is enabled',
     )
   }
 

@@ -1,7 +1,9 @@
 import { readFileSync } from 'node:fs'
 import { describe, expect, it } from 'vitest'
 import {
+  applyHhtSemrushRequestFilters,
   classifySemrushError,
+  HHT_SEMRUSH_FOLLOW_FILTER,
   nextSemrushPage,
   parseHhtSemrushEnvelope,
   parseSemrushRows,
@@ -46,6 +48,30 @@ describe('Semrush MCP response contracts', () => {
     expect(semrushRequestKey('backlinks', { target: 'x.com', display_limit: 10 })).toBe(
       semrushRequestKey('backlinks', { display_limit: 10, target: 'x.com' }),
     )
+  })
+
+  it('adds the provider follow filter to detailed backlink requests', () => {
+    expect(
+      applyHhtSemrushRequestFilters('backlinks', {
+        target: 'x.com',
+        display_filter: [
+          { field: 'type', operation: '', sign: '+', value: 'nofollow' },
+          { field: 'anchor', operation: 'contains', sign: '+', value: 'hotel' },
+        ],
+      }),
+    ).toEqual({
+      target: 'x.com',
+      display_filter: [
+        { field: 'anchor', operation: 'contains', sign: '+', value: 'hotel' },
+        HHT_SEMRUSH_FOLLOW_FILTER,
+      ],
+    })
+  })
+
+  it('does not add backlink-only filters to other Semrush reports', () => {
+    expect(applyHhtSemrushRequestFilters('backlinks_refdomains', { target: 'x.com' })).toEqual({
+      target: 'x.com',
+    })
   })
 
   it('rejects unsupported reports before durable import', () => {

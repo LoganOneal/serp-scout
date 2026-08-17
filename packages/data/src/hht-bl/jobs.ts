@@ -4,7 +4,12 @@ import type { HhtBlJobStatus, HhtBlStage } from '@rnr/core'
 import type { Database } from '../db.js'
 import { hhtBlJobs, hhtBlKeywords, hhtBlRunEvents, hhtBlRuns, sites } from '../schema.js'
 import { activeHhtBlProfile, buildHhtBlKeywordUniverse, loadHhtBlConfig, sampleHhtBlKeywords } from './config.js'
-import { classifySemrushError, resumeSemrushInstruction, semrushRequestKey } from './semrush.js'
+import {
+  applyHhtSemrushRequestFilters,
+  classifySemrushError,
+  resumeSemrushInstruction,
+  semrushRequestKey,
+} from './semrush.js'
 
 export async function createHhtBlRun(
   db: Database,
@@ -67,9 +72,10 @@ export async function createHhtBlJob(
   db: Database,
   input: CreateHhtBlJobInput,
 ): Promise<{ id: number; created: boolean }> {
-  const offset = input.offset ?? Number(input.parameters['display_offset'] ?? 0)
-  const limit = input.limit ?? Number(input.parameters['display_limit'] ?? 50)
-  const stableParameters = { ...input.parameters }
+  const safeParameters = applyHhtSemrushRequestFilters(input.reportType, input.parameters)
+  const offset = input.offset ?? Number(safeParameters['display_offset'] ?? 0)
+  const limit = input.limit ?? Number(safeParameters['display_limit'] ?? 50)
+  const stableParameters = { ...safeParameters }
   delete stableParameters['display_offset']
   const requestKey = semrushRequestKey(input.reportType, {
     ...stableParameters,

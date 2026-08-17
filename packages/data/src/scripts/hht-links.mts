@@ -16,6 +16,7 @@ import {
   createHhtBlRun,
   crawlHhtBlBacklinks,
   db,
+  applyHhtSemrushRequestFilters,
   exportHhtBlRun,
   getHhtBlDashboard,
   hhtBlJobs,
@@ -107,11 +108,11 @@ async function requestPayload(): Promise<void> {
     JSON.stringify(
       {
         report: job.reportType,
-        params: {
-          ...job.parameters,
+        params: applyHhtSemrushRequestFilters(job.reportType, {
+          ...(job.parameters as Record<string, unknown>),
           display_offset: job.offset,
           display_limit: Math.min(job.limit, remaining || job.limit),
-        },
+        }),
         checkpoint: { runId: job.runId, jobId: job.id, recordsCompleted: job.recordsCompleted },
       },
       null,

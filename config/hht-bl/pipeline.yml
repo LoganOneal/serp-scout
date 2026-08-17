@@ -10,7 +10,7 @@ profiles:
       target_count: 8
     backlinks:
       follow_only: true
-      provider_follow_filter: false
+      provider_follow_filter: true
       min_authority_score: 20
       detailed_links_per_site: 50
       page_size: 10
@@ -37,7 +37,7 @@ profiles:
       target_count: 50
     backlinks:
       follow_only: true
-      provider_follow_filter: false
+      provider_follow_filter: true
       min_authority_score: 20
       detailed_links_per_site: 500
       page_size: 50

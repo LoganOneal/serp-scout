@@ -9,7 +9,7 @@ const config = {
       research_sites: { target_count: 2 },
       backlinks: {
         follow_only: true,
-        provider_follow_filter: false,
+        provider_follow_filter: true,
         min_authority_score: 20,
         detailed_links_per_site: 10,
         page_size: 5,
@@ -48,9 +48,9 @@ describe('HHT backlink configuration', () => {
     expect(new Set(sample.map((row) => row.destination)).size).toBeGreaterThanOrEqual(6)
   })
 
-  it('refuses to claim provider-side follow filtering that Semrush does not expose', () => {
+  it('requires provider-side filtering for a follow-only pipeline', () => {
     const bad = structuredClone(config)
-    bad.profiles.pilot.backlinks.provider_follow_filter = true
-    expect(() => validateHhtBlConfig(bad)).toThrow(/verified Semrush backlinks schema/)
+    bad.profiles.pilot.backlinks.provider_follow_filter = false
+    expect(() => validateHhtBlConfig(bad)).toThrow(/must be true when follow_only is enabled/)
   })
 })

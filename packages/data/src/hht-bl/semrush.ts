@@ -16,6 +16,39 @@ export const HHT_SEMRUSH_REPORTS = [
 
 export type HhtSemrushReport = (typeof HHT_SEMRUSH_REPORTS)[number]
 
+export const HHT_SEMRUSH_FOLLOW_FILTER = {
+  field: 'type',
+  operation: '',
+  sign: '+',
+  value: 'follow',
+} as const
+
+/**
+ * Detailed backlink rows are only useful to this pipeline when they are follow links.
+ * Apply this again at request emission so persisted jobs created by older code are safe.
+ */
+export function applyHhtSemrushRequestFilters(
+  report: string,
+  params: Record<string, unknown>,
+): Record<string, unknown> {
+  if (report !== 'backlinks') return { ...params }
+
+  const existing = Array.isArray(params['display_filter'])
+    ? params['display_filter'].filter(
+        (filter) =>
+          !filter ||
+          typeof filter !== 'object' ||
+          Array.isArray(filter) ||
+          (filter as Record<string, unknown>)['field'] !== 'type',
+      )
+    : []
+
+  return {
+    ...params,
+    display_filter: [...existing, HHT_SEMRUSH_FOLLOW_FILTER],
+  }
+}
+
 export interface HhtSemrushEnvelope {
   report: HhtSemrushReport
   params: Record<string, unknown>
