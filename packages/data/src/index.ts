@@ -158,6 +158,18 @@ export {
 export * from './links/mine.js'
 export * from './links/contacts.js'
 export * from './links/outreach.js'
+
+// --- HotelHotTubs backlink research -----------------------------------------
+export * from './hht-bl/config.js'
+export * from './hht-bl/semrush.js'
+export * from './hht-bl/jobs.js'
+export * from './hht-bl/import.js'
+export * from './hht-bl/crawl.js'
+export * from './hht-bl/analysis.js'
+export * from './hht-bl/processing.js'
+export * from './hht-bl/scoring.js'
+export * from './hht-bl/dashboard.js'
+export * from './hht-bl/export.js'
 export {
   fetchTrafficEstimates,
   TRAFFIC_BATCH_MAX,

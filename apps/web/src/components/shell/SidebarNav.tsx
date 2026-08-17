@@ -50,6 +50,16 @@ const GROUPS: NavGroup[] = [
     ],
   },
   {
+    title: 'Hotel Hot Tubs',
+    items: [
+      {
+        href: '/hht-bl',
+        label: 'HHT BL analysis',
+        hint: 'Backlink research, opportunities, and acquired links',
+      },
+    ],
+  },
+  {
     title: 'System',
     items: [
       { href: '/settings', label: 'Settings' },

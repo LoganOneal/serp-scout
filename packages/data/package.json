@@ -12,10 +12,14 @@
     "@rnr/core": "workspace:*",
     "@rnr/supply-feed": "workspace:*",
     "@vercel/blob": "^2.6.1",
+    "cheerio": "^1.1.2",
+    "csv-parse": "^6.1.0",
+    "csv-stringify": "^6.6.0",
     "drizzle-orm": "^0.38.3",
     "p-limit": "^6.2.0",
     "postgres": "^3.4.5",
     "server-only": "^0.0.1",
+    "yaml": "^2.8.1",
     "yauzl": "^3.2.0"
   },
   "devDependencies": {

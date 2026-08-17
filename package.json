@@ -44,6 +44,7 @@
     "voice:retarget-tools": "tsx --conditions=react-server packages/data/src/scripts/retarget-tools.ts",
     "supply": "tsx --conditions=react-server packages/data/src/scripts/supply.mts",
     "mcp": "tsx --conditions=react-server packages/mcp/src/server.ts",
+    "hht:bl": "tsx --conditions=react-server packages/data/src/scripts/hht-links.mts",
     "//mcp": "Registered with: claude mcp add rank-and-rent -- pnpm --dir <abs repo path> mcp. Read-only: it can answer questions about supply, keyword verdicts, economics and link prospects, and cannot spend, send, or write. The commands that act stay in the CLIs on purpose.",
     "build:supply-feed": "node packages/supply-feed/scripts/build.mjs"
   },

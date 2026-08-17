@@ -1,0 +1,109 @@
+active_profile: pilot
+
+profiles:
+  pilot:
+    discovery:
+      serp_sample_size: 25
+      organic_competitor_depth: 1
+      serp_result_limit: 10
+    research_sites:
+      target_count: 8
+    backlinks:
+      follow_only: true
+      provider_follow_filter: false
+      min_authority_score: 20
+      detailed_links_per_site: 50
+      page_size: 10
+    crawl:
+      concurrency: 5
+      timeout_seconds: 20
+      max_attempts: 3
+      deep_analysis_limit: 75
+    analysis:
+      provider: export
+      model: configurable
+    scoring:
+      link_value_weight: 0.40
+      gettability_weight: 0.30
+      transferability_weight: 0.20
+      effort_weight: 0.10
+
+  scale:
+    discovery:
+      serp_sample_size: 400
+      organic_competitor_depth: 1
+      serp_result_limit: 20
+    research_sites:
+      target_count: 50
+    backlinks:
+      follow_only: true
+      provider_follow_filter: false
+      min_authority_score: 20
+      detailed_links_per_site: 500
+      page_size: 50
+    crawl:
+      concurrency: 20
+      timeout_seconds: 20
+      max_attempts: 3
+      deep_analysis_limit: 3000
+    analysis:
+      provider: export
+      model: configurable
+    scoring:
+      link_value_weight: 0.40
+      gettability_weight: 0.30
+      transferability_weight: 0.20
+      effort_weight: 0.10
+
+taxonomy:
+  general_hotels:
+    - best hotels in {destination}
+    - where to stay in {destination}
+    - hotels in {destination}
+  hotel_attributes:
+    - boutique hotels in {destination}
+    - luxury hotels in {destination}
+    - romantic hotels in {destination}
+    - pet friendly hotels in {destination}
+    - spa hotels in {destination}
+    - beachfront hotels in {destination}
+    - hotels with pools in {destination}
+    - adults only hotels in {destination}
+    - hotels with hot tubs in {destination}
+  trip_intent:
+    - romantic getaways in {destination}
+    - weekend getaways in {destination}
+    - honeymoon resorts in {destination}
+    - couples resorts in {destination}
+  alternative_stays:
+    - cabins in {destination}
+    - glamping in {destination}
+    - unique stays in {destination}
+    - resorts in {destination}
+
+destinations:
+  - New York City
+  - Los Angeles
+  - Chicago
+  - Miami
+  - Las Vegas
+  - Orlando
+  - San Francisco
+  - San Diego
+  - Seattle
+  - Boston
+  - Nashville
+  - New Orleans
+  - Denver
+  - Austin
+  - Savannah
+  - Charleston
+  - Aspen
+  - Lake Tahoe
+  - Maui
+  - Florida Keys
+  - Smoky Mountains
+  - Poconos
+  - Napa Valley
+  - Palm Springs
+  - Outer Banks

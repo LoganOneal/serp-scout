@@ -3,6 +3,13 @@ import type {
   AdsPlanStatus,
   AffiliateScopeKind,
   BuildState,
+  HhtBlBacklinkState,
+  HhtBlCandidateState,
+  HhtBlJobStatus,
+  HhtBlMechanism,
+  HhtBlRunStatus,
+  HhtBlSiteType,
+  HhtBlStage,
   ContactConfidence,
   CallIngestState,
   KeywordSpace,
@@ -2768,6 +2775,557 @@ export const supplyIngestRuns = pgTable(
   }),
 )
 
+// --- HotelHotTubs backlink research -----------------------------------------
+
+export const hhtBlRuns = pgTable(
+  'hht_bl_runs',
+  {
+    id: serial('id').primaryKey(),
+    siteId: integer('site_id')
+      .notNull()
+      .references(() => sites.id, { onDelete: 'cascade' }),
+    name: text('name').notNull(),
+    profile: text('profile').notNull().default('pilot'),
+    status: text('status').$type<HhtBlRunStatus>().notNull().default('DRAFT'),
+    currentStage: text('current_stage').$type<HhtBlStage>().notNull().default('keywords'),
+    configuration: jsonb('configuration').$type<Record<string, unknown>>().notNull(),
+    progress: jsonb('progress').$type<Record<string, number>>().notNull().default({}),
+    waitingReason: text('waiting_reason'),
+    error: text('error'),
+    createdAt: now(),
+    startedAt: timestamp('started_at', { withTimezone: true }),
+    updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
+    finishedAt: timestamp('finished_at', { withTimezone: true }),
+  },
+  (t) => ({
+    siteStatusIdx: index('hht_bl_runs_site_status_idx').on(t.siteId, t.status, t.createdAt),
+  }),
+)
+
+export const hhtBlJobs = pgTable(
+  'hht_bl_jobs',
+  {
+    id: serial('id').primaryKey(),
+    runId: integer('run_id')
+      .notNull()
+      .references(() => hhtBlRuns.id, { onDelete: 'cascade' }),
+    stage: text('stage').$type<HhtBlStage>().notNull(),
+    provider: text('provider').notNull().default('semrush_mcp'),
+    reportType: text('report_type').notNull(),
+    target: text('target'),
+    parameters: jsonb('parameters').$type<Record<string, unknown>>().notNull(),
+    requestKey: text('request_key').notNull(),
+    offset: integer('offset').notNull().default(0),
+    limit: integer('limit').notNull().default(50),
+    recordsCompleted: integer('records_completed').notNull().default(0),
+    rowsRequested: integer('rows_requested').notNull().default(0),
+    rowsReceived: integer('rows_received').notNull().default(0),
+    estimatedUnitsConsumed: doublePrecision('estimated_units_consumed'),
+    accountIdentifier: text('account_identifier'),
+    status: text('status').$type<HhtBlJobStatus>().notNull().default('PENDING'),
+    attempts: integer('attempts').notNull().default(0),
+    lastSuccessAt: timestamp('last_success_at', { withTimezone: true }),
+    error: text('error'),
+    createdAt: now(),
+    updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
+    finishedAt: timestamp('finished_at', { withTimezone: true }),
+  },
+  (t) => ({
+    requestUq: uniqueIndex('hht_bl_jobs_request_uq').on(t.runId, t.requestKey),
+    statusIdx: index('hht_bl_jobs_status_idx').on(t.runId, t.status, t.stage),
+  }),
+)
+
+export const hhtBlRawResponses = pgTable(
+  'hht_bl_raw_responses',
+  {
+    id: serial('id').primaryKey(),
+    jobId: integer('job_id').references(() => hhtBlJobs.id, { onDelete: 'set null' }),
+    runId: integer('run_id')
+      .notNull()
+      .references(() => hhtBlRuns.id, { onDelete: 'cascade' }),
+    provider: text('provider').notNull(),
+    reportType: text('report_type').notNull(),
+    requestKey: text('request_key').notNull(),
+    parameters: jsonb('parameters').$type<Record<string, unknown>>().notNull(),
+    rawText: text('raw_text').notNull(),
+    payloadHash: text('payload_hash').notNull(),
+    rowsReceived: integer('rows_received').notNull(),
+    estimatedUnitsConsumed: doublePrecision('estimated_units_consumed'),
+    accountIdentifier: text('account_identifier'),
+    fetchedAt: timestampCol('fetched_at'),
+  },
+  (t) => ({
+    payloadUq: uniqueIndex('hht_bl_raw_responses_payload_uq').on(t.runId, t.requestKey, t.payloadHash),
+    reportIdx: index('hht_bl_raw_responses_report_idx').on(t.runId, t.reportType, t.fetchedAt),
+  }),
+)
+
+export const hhtBlKeywords = pgTable(
+  'hht_bl_keywords',
+  {
+    id: serial('id').primaryKey(),
+    runId: integer('run_id')
+      .notNull()
+      .references(() => hhtBlRuns.id, { onDelete: 'cascade' }),
+    category: text('category').notNull(),
+    destination: text('destination').notNull(),
+    keyword: text('keyword').notNull(),
+    searchVolume: integer('search_volume'),
+    selected: boolean('selected').notNull().default(true),
+    createdAt: now(),
+  },
+  (t) => ({
+    keywordUq: uniqueIndex('hht_bl_keywords_run_keyword_uq').on(t.runId, t.keyword),
+    categoryIdx: index('hht_bl_keywords_category_idx').on(t.runId, t.category, t.destination),
+  }),
+)
+
+export const hhtBlSerpResults = pgTable(
+  'hht_bl_serp_results',
+  {
+    id: serial('id').primaryKey(),
+    keywordId: integer('keyword_id')
+      .notNull()
+      .references(() => hhtBlKeywords.id, { onDelete: 'cascade' }),
+    rawResponseId: integer('raw_response_id').references(() => hhtBlRawResponses.id, {
+      onDelete: 'set null',
+    }),
+    position: integer('position').notNull(),
+    domain: text('domain').notNull(),
+    url: text('url').notNull(),
+    title: text('title'),
+    createdAt: now(),
+  },
+  (t) => ({
+    resultUq: uniqueIndex('hht_bl_serp_results_uq').on(t.keywordId, t.position, t.url),
+    domainIdx: index('hht_bl_serp_results_domain_idx').on(t.domain, t.position),
+  }),
+)
+
+export const hhtBlCandidateSites = pgTable(
+  'hht_bl_candidate_sites',
+  {
+    id: serial('id').primaryKey(),
+    runId: integer('run_id')
+      .notNull()
+      .references(() => hhtBlRuns.id, { onDelete: 'cascade' }),
+    domain: text('domain').notNull(),
+    state: text('state').$type<HhtBlCandidateState>().notNull().default('DISCOVERED'),
+    provenance: jsonb('provenance').$type<string[]>().notNull().default([]),
+    seedDomains: jsonb('seed_domains').$type<string[]>().notNull().default([]),
+    discoveryDepth: integer('discovery_depth').notNull().default(0),
+    serpAppearances: integer('serp_appearances').notNull().default(0),
+    top3Appearances: integer('top_3_appearances').notNull().default(0),
+    top5Appearances: integer('top_5_appearances').notNull().default(0),
+    top10Appearances: integer('top_10_appearances').notNull().default(0),
+    uniqueKeywordCategories: integer('unique_keyword_categories').notNull().default(0),
+    uniqueDestinations: integer('unique_destinations').notNull().default(0),
+    weightedVisibility: doublePrecision('weighted_visibility').notNull().default(0),
+    weightedSearchVolumeVisibility: doublePrecision('weighted_search_volume_visibility'),
+    researchValueScore: doublePrecision('research_value_score'),
+    researchValueComponents: jsonb('research_value_components').$type<Record<string, number>>(),
+    researchValuePenalties: jsonb('research_value_penalties').$type<Record<string, number>>(),
+    researchValueMissing: jsonb('research_value_missing').$type<string[]>(),
+    createdAt: now(),
+    updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => ({
+    domainUq: uniqueIndex('hht_bl_candidate_sites_run_domain_uq').on(t.runId, t.domain),
+    scoreIdx: index('hht_bl_candidate_sites_score_idx').on(t.runId, t.researchValueScore),
+  }),
+)
+
+export const hhtBlSiteClassifications = pgTable(
+  'hht_bl_site_classifications',
+  {
+    id: serial('id').primaryKey(),
+    candidateSiteId: integer('candidate_site_id')
+      .notNull()
+      .references(() => hhtBlCandidateSites.id, { onDelete: 'cascade' }),
+    siteType: text('site_type').$type<HhtBlSiteType>().notNull(),
+    businessModel: text('business_model'),
+    contentModel: text('content_model'),
+    affiliateLikely: boolean('affiliate_likely'),
+    directoryLikely: boolean('directory_likely'),
+    programmaticSeoLikely: boolean('programmatic_seo_likely'),
+    hotelInventory: boolean('hotel_inventory'),
+    editorialContent: boolean('editorial_content'),
+    geographicLandingPages: boolean('geographic_landing_pages'),
+    brandDependency: integer('brand_dependency'),
+    travelRelevance: integer('travel_relevance'),
+    hhtSimilarity: integer('hht_similarity'),
+    transferability: integer('transferability'),
+    reasoning: text('reasoning').notNull(),
+    evidence: jsonb('evidence').$type<string[]>().notNull(),
+    model: text('model'),
+    classifiedAt: timestampCol('classified_at'),
+  },
+  (t) => ({
+    candidateUq: uniqueIndex('hht_bl_site_classifications_candidate_uq').on(t.candidateSiteId),
+    typeIdx: index('hht_bl_site_classifications_type_idx').on(t.siteType),
+  }),
+)
+
+export const hhtBlSiteMetrics = pgTable(
+  'hht_bl_site_metrics',
+  {
+    id: serial('id').primaryKey(),
+    candidateSiteId: integer('candidate_site_id')
+      .notNull()
+      .references(() => hhtBlCandidateSites.id, { onDelete: 'cascade' }),
+    rawResponseId: integer('raw_response_id').references(() => hhtBlRawResponses.id, {
+      onDelete: 'set null',
+    }),
+    authorityScore: integer('authority_score'),
+    organicKeywords: integer('organic_keywords'),
+    estimatedOrganicTraffic: integer('estimated_organic_traffic'),
+    estimatedTrafficValue: doublePrecision('estimated_traffic_value'),
+    totalBacklinks: integer('total_backlinks'),
+    referringDomains: integer('referring_domains'),
+    followBacklinks: integer('follow_backlinks'),
+    nofollowBacklinks: integer('nofollow_backlinks'),
+    measuredAt: timestampCol('measured_at'),
+  },
+  (t) => ({
+    candidateUq: uniqueIndex('hht_bl_site_metrics_candidate_uq').on(t.candidateSiteId),
+  }),
+)
+
+export const hhtBlResearchSites = pgTable(
+  'hht_bl_research_sites',
+  {
+    id: serial('id').primaryKey(),
+    runId: integer('run_id')
+      .notNull()
+      .references(() => hhtBlRuns.id, { onDelete: 'cascade' }),
+    candidateSiteId: integer('candidate_site_id')
+      .notNull()
+      .references(() => hhtBlCandidateSites.id, { onDelete: 'cascade' }),
+    cohort: text('cohort').notNull(),
+    rank: integer('rank').notNull(),
+    selectedReason: text('selected_reason').notNull(),
+    active: boolean('active').notNull().default(true),
+    selectedAt: timestampCol('selected_at'),
+  },
+  (t) => ({
+    candidateUq: uniqueIndex('hht_bl_research_sites_candidate_uq').on(t.candidateSiteId),
+    rankIdx: index('hht_bl_research_sites_rank_idx').on(t.runId, t.rank),
+  }),
+)
+
+export const hhtBlReferringDomains = pgTable(
+  'hht_bl_referring_domains',
+  {
+    id: serial('id').primaryKey(),
+    runId: integer('run_id')
+      .notNull()
+      .references(() => hhtBlRuns.id, { onDelete: 'cascade' }),
+    domain: text('domain').notNull(),
+    authorityScore: integer('authority_score'),
+    domainScore: integer('domain_score'),
+    researchSitesLinked: integer('research_sites_linked').notNull().default(0),
+    totalBacklinks: integer('total_backlinks').notNull().default(0),
+    firstSeenAt: timestamp('first_seen_at', { withTimezone: true }),
+    lastSeenAt: timestamp('last_seen_at', { withTimezone: true }),
+    createdAt: now(),
+  },
+  (t) => ({
+    domainUq: uniqueIndex('hht_bl_referring_domains_run_domain_uq').on(t.runId, t.domain),
+    priorityIdx: index('hht_bl_referring_domains_priority_idx').on(
+      t.runId,
+      t.researchSitesLinked,
+      t.authorityScore,
+    ),
+  }),
+)
+
+export const hhtBlSiteReferringDomains = pgTable(
+  'hht_bl_site_referring_domains',
+  {
+    id: serial('id').primaryKey(),
+    researchSiteId: integer('research_site_id')
+      .notNull()
+      .references(() => hhtBlResearchSites.id, { onDelete: 'cascade' }),
+    referringDomainId: integer('referring_domain_id')
+      .notNull()
+      .references(() => hhtBlReferringDomains.id, { onDelete: 'cascade' }),
+    backlinkCount: integer('backlink_count').notNull().default(0),
+    rawResponseId: integer('raw_response_id').references(() => hhtBlRawResponses.id, {
+      onDelete: 'set null',
+    }),
+    createdAt: now(),
+  },
+  (t) => ({
+    relationshipUq: uniqueIndex('hht_bl_site_referring_domains_uq').on(
+      t.researchSiteId,
+      t.referringDomainId,
+    ),
+  }),
+)
+
+export const hhtBlBacklinks = pgTable(
+  'hht_bl_backlinks',
+  {
+    id: serial('id').primaryKey(),
+    runId: integer('run_id')
+      .notNull()
+      .references(() => hhtBlRuns.id, { onDelete: 'cascade' }),
+    researchSiteId: integer('research_site_id')
+      .notNull()
+      .references(() => hhtBlResearchSites.id, { onDelete: 'cascade' }),
+    referringDomainId: integer('referring_domain_id')
+      .notNull()
+      .references(() => hhtBlReferringDomains.id, { onDelete: 'cascade' }),
+    rawResponseId: integer('raw_response_id').references(() => hhtBlRawResponses.id, {
+      onDelete: 'set null',
+    }),
+    exactKey: text('exact_key').notNull(),
+    state: text('state').$type<HhtBlBacklinkState>().notNull().default('DISCOVERED'),
+    sourceUrlRaw: text('source_url_raw').notNull(),
+    sourceUrl: text('source_url').notNull(),
+    sourceTitle: text('source_title'),
+    targetUrlRaw: text('target_url_raw').notNull(),
+    targetUrl: text('target_url').notNull(),
+    targetTitle: text('target_title'),
+    anchor: text('anchor'),
+    follow: boolean('follow'),
+    firstSeenAt: timestamp('first_seen_at', { withTimezone: true }),
+    lastSeenAt: timestamp('last_seen_at', { withTimezone: true }),
+    authorityScore: integer('authority_score'),
+    sourcePageScore: integer('source_page_score'),
+    responseCode: integer('response_code'),
+    linkType: text('link_type'),
+    placement: text('placement'),
+    language: text('language'),
+    country: text('country'),
+    sitewide: boolean('sitewide'),
+    newLink: boolean('new_link'),
+    lostLink: boolean('lost_link'),
+    createdAt: now(),
+    updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => ({
+    exactUq: uniqueIndex('hht_bl_backlinks_exact_uq').on(t.runId, t.exactKey),
+    stateIdx: index('hht_bl_backlinks_state_idx').on(t.runId, t.state, t.follow),
+    sourceIdx: index('hht_bl_backlinks_source_idx').on(t.referringDomainId),
+  }),
+)
+
+export const hhtBlCrawlResults = pgTable(
+  'hht_bl_crawl_results',
+  {
+    id: serial('id').primaryKey(),
+    runId: integer('run_id')
+      .notNull()
+      .references(() => hhtBlRuns.id, { onDelete: 'cascade' }),
+    url: text('url').notNull(),
+    kind: text('kind').notNull(),
+    httpStatus: integer('http_status'),
+    canonicalUrl: text('canonical_url'),
+    title: text('title'),
+    pageText: text('page_text'),
+    rawHtml: text('raw_html'),
+    contentHash: text('content_hash'),
+    attempts: integer('attempts').notNull().default(1),
+    error: text('error'),
+    crawledAt: timestampCol('crawled_at'),
+  },
+  (t) => ({
+    urlUq: uniqueIndex('hht_bl_crawl_results_run_url_uq').on(t.runId, t.url, t.kind),
+    statusIdx: index('hht_bl_crawl_results_status_idx').on(t.runId, t.httpStatus),
+  }),
+)
+
+export const hhtBlLinkContexts = pgTable(
+  'hht_bl_link_contexts',
+  {
+    id: serial('id').primaryKey(),
+    backlinkId: integer('backlink_id')
+      .notNull()
+      .references(() => hhtBlBacklinks.id, { onDelete: 'cascade' }),
+    sourceCrawlId: integer('source_crawl_id').references(() => hhtBlCrawlResults.id, {
+      onDelete: 'set null',
+    }),
+    targetCrawlId: integer('target_crawl_id').references(() => hhtBlCrawlResults.id, {
+      onDelete: 'set null',
+    }),
+    located: boolean('located').notNull(),
+    anchor: text('anchor'),
+    surroundingParagraph: text('surrounding_paragraph'),
+    surroundingSection: text('surrounding_section'),
+    headingHierarchy: jsonb('heading_hierarchy').$type<string[]>(),
+    nearbyOutboundLinks: jsonb('nearby_outbound_links').$type<Array<{ href: string; text: string }>>(),
+    domContext: text('dom_context'),
+    targetSummary: text('target_summary'),
+    createdAt: now(),
+  },
+  (t) => ({
+    backlinkUq: uniqueIndex('hht_bl_link_contexts_backlink_uq').on(t.backlinkId),
+  }),
+)
+
+export const hhtBlLinkAnalyses = pgTable(
+  'hht_bl_link_analyses',
+  {
+    id: serial('id').primaryKey(),
+    backlinkId: integer('backlink_id')
+      .notNull()
+      .references(() => hhtBlBacklinks.id, { onDelete: 'cascade' }),
+    provider: text('provider').notNull(),
+    model: text('model').notNull(),
+    mechanism: text('mechanism').$type<HhtBlMechanism>().notNull(),
+    mechanismConfidence: doublePrecision('mechanism_confidence').notNull(),
+    editorial: boolean('editorial').notNull(),
+    likelyPaid: boolean('likely_paid').notNull(),
+    replicable: boolean('replicable').notNull(),
+    replicabilityScore: integer('replicability_score').notNull(),
+    hotelHotTubsRelevance: integer('hotel_hottubs_relevance').notNull(),
+    requiresNewAsset: boolean('requires_new_asset').notNull(),
+    requiredAssetType: text('required_asset_type'),
+    likelyContactRole: text('likely_contact_role'),
+    recommendedAction: text('recommended_action').notNull(),
+    facts: jsonb('facts').$type<string[]>().notNull(),
+    inferences: jsonb('inferences').$type<string[]>().notNull(),
+    evidence: jsonb('evidence').$type<string[]>().notNull(),
+    rawOutput: jsonb('raw_output').$type<Record<string, unknown>>().notNull(),
+    analyzedAt: timestampCol('analyzed_at'),
+  },
+  (t) => ({
+    backlinkUq: uniqueIndex('hht_bl_link_analyses_backlink_uq').on(t.backlinkId),
+    mechanismIdx: index('hht_bl_link_analyses_mechanism_idx').on(t.mechanism),
+  }),
+)
+
+export const hhtBlOpportunities = pgTable(
+  'hht_bl_opportunities',
+  {
+    id: serial('id').primaryKey(),
+    runId: integer('run_id')
+      .notNull()
+      .references(() => hhtBlRuns.id, { onDelete: 'cascade' }),
+    backlinkId: integer('backlink_id')
+      .notNull()
+      .references(() => hhtBlBacklinks.id, { onDelete: 'cascade' }),
+    status: text('status').notNull().default('IDENTIFIED'),
+    linkValue: integer('link_value').notNull(),
+    gettability: integer('gettability').notNull(),
+    transferability: integer('transferability').notNull(),
+    effort: integer('effort').notNull(),
+    overallScore: doublePrecision('overall_score').notNull(),
+    expectedValue: doublePrecision('expected_value').notNull(),
+    scoreInputs: jsonb('score_inputs').$type<Record<string, unknown>>().notNull(),
+    rank: integer('rank'),
+    createdAt: now(),
+    updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => ({
+    backlinkUq: uniqueIndex('hht_bl_opportunities_backlink_uq').on(t.backlinkId),
+    rankIdx: index('hht_bl_opportunities_rank_idx').on(t.runId, t.rank, t.overallScore),
+  }),
+)
+
+export const hhtBlStrategyClusters = pgTable(
+  'hht_bl_strategy_clusters',
+  {
+    id: serial('id').primaryKey(),
+    runId: integer('run_id')
+      .notNull()
+      .references(() => hhtBlRuns.id, { onDelete: 'cascade' }),
+    mechanism: text('mechanism').$type<HhtBlMechanism>().notNull(),
+    prospectCount: integer('prospect_count').notNull(),
+    researchSitesObserved: integer('research_sites_observed').notNull(),
+    medianAuthority: doublePrecision('median_authority'),
+    averageLinkValue: doublePrecision('average_link_value').notNull(),
+    averageGettability: doublePrecision('average_gettability').notNull(),
+    averageEffort: doublePrecision('average_effort').notNull(),
+    estimatedCampaignValue: doublePrecision('estimated_campaign_value').notNull(),
+    examples: jsonb('examples').$type<Array<Record<string, unknown>>>().notNull(),
+    recommendedCampaign: text('recommended_campaign').notNull(),
+    createdAt: now(),
+    updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => ({
+    mechanismUq: uniqueIndex('hht_bl_strategy_clusters_mechanism_uq').on(t.runId, t.mechanism),
+    valueIdx: index('hht_bl_strategy_clusters_value_idx').on(t.runId, t.estimatedCampaignValue),
+  }),
+)
+
+export const hhtBlCampaignCandidates = pgTable(
+  'hht_bl_campaign_candidates',
+  {
+    id: serial('id').primaryKey(),
+    runId: integer('run_id')
+      .notNull()
+      .references(() => hhtBlRuns.id, { onDelete: 'cascade' }),
+    strategyClusterId: integer('strategy_cluster_id')
+      .notNull()
+      .references(() => hhtBlStrategyClusters.id, { onDelete: 'cascade' }),
+    name: text('name').notNull(),
+    status: text('status').notNull().default('IDENTIFIED'),
+    evidence: jsonb('evidence').$type<string[]>().notNull(),
+    potentialProspects: integer('potential_prospects').notNull(),
+    existingAssetSufficient: integer('existing_asset_sufficient').notNull().default(0),
+    newAssetRequired: integer('new_asset_required').notNull().default(0),
+    recommendation: text('recommendation').notNull(),
+    createdAt: now(),
+  },
+  (t) => ({
+    clusterUq: uniqueIndex('hht_bl_campaign_candidates_cluster_uq').on(t.strategyClusterId),
+  }),
+)
+
+/** Prepared for the future execution loop. V0 only reads records placed here manually. */
+export const hhtBlAcquiredLinks = pgTable(
+  'hht_bl_acquired_links',
+  {
+    id: serial('id').primaryKey(),
+    runId: integer('run_id')
+      .notNull()
+      .references(() => hhtBlRuns.id, { onDelete: 'cascade' }),
+    opportunityId: integer('opportunity_id').references(() => hhtBlOpportunities.id, {
+      onDelete: 'set null',
+    }),
+    sourceUrl: text('source_url').notNull(),
+    targetUrl: text('target_url').notNull(),
+    follow: boolean('follow'),
+    acquisitionMechanism: text('acquisition_mechanism').$type<HhtBlMechanism>(),
+    verificationEvidence: text('verification_evidence'),
+    recordedVia: text('recorded_via').notNull().default('manual'),
+    acquiredAt: timestamp('acquired_at', { withTimezone: true }),
+    verifiedAt: timestamp('verified_at', { withTimezone: true }),
+    createdAt: now(),
+  },
+  (t) => ({
+    sourceUq: uniqueIndex('hht_bl_acquired_links_source_uq').on(t.runId, t.sourceUrl, t.targetUrl),
+  }),
+)
+
+export const hhtBlRunEvents = pgTable(
+  'hht_bl_run_events',
+  {
+    id: serial('id').primaryKey(),
+    runId: integer('run_id')
+      .notNull()
+      .references(() => hhtBlRuns.id, { onDelete: 'cascade' }),
+    jobId: integer('job_id').references(() => hhtBlJobs.id, { onDelete: 'set null' }),
+    stage: text('stage').$type<HhtBlStage>().notNull(),
+    level: text('level').notNull().default('info'),
+    message: text('message').notNull(),
+    domain: text('domain'),
+    url: text('url'),
+    provider: text('provider'),
+    recordsProcessed: integer('records_processed'),
+    recordsRemaining: integer('records_remaining'),
+    retryCount: integer('retry_count'),
+    details: jsonb('details').$type<Record<string, unknown>>(),
+    createdAt: now(),
+  },
+  (t) => ({
+    runIdx: index('hht_bl_run_events_run_idx').on(t.runId, t.createdAt),
+  }),
+)
+
 export type Site = typeof sites.$inferSelect
 export type NewSite = typeof sites.$inferInsert
 export type SupplySource = typeof supplySources.$inferSelect
@@ -2797,3 +3355,9 @@ export type KeywordVolumeCacheRow = typeof keywordVolumeCache.$inferSelect
 export type DomainEnrichRun = typeof domainEnrichRuns.$inferSelect
 export type DomainCandidateRow = typeof domainCandidates.$inferSelect
 export type NewDomainCandidate = typeof domainCandidates.$inferInsert
+export type HhtBlRun = typeof hhtBlRuns.$inferSelect
+export type HhtBlJob = typeof hhtBlJobs.$inferSelect
+export type HhtBlCandidateSite = typeof hhtBlCandidateSites.$inferSelect
+export type HhtBlResearchSite = typeof hhtBlResearchSites.$inferSelect
+export type HhtBlBacklink = typeof hhtBlBacklinks.$inferSelect
+export type HhtBlOpportunity = typeof hhtBlOpportunities.$inferSelect

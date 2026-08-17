@@ -1,0 +1,91 @@
+[
+  {
+    "key": "organic_competitor",
+    "report": "domain_organic_organic",
+    "params": {
+      "database": "us",
+      "domain": "hotelhottubs.com",
+      "display_limit": 1,
+      "export_columns": [
+        "domain",
+        "competition_level",
+        "common_keywords",
+        "organic_keywords",
+        "organic_traffic",
+        "organic_traffic_cost"
+      ]
+    },
+    "body": "Domain;Competitor Relevance;Common Keywords;Organic Keywords;Organic Traffic;Organic Cost\ntubandspahotels.com;0.07;10;3402;405;319\n"
+  },
+  {
+    "key": "backlink_matrix",
+    "report": "backlinks_matrix",
+    "params": {
+      "targets": [
+        "hotelhottubs.com",
+        "tubhotels.com"
+      ],
+      "target_types": [
+        "root_domain",
+        "root_domain"
+      ],
+      "display_limit": 1,
+      "display_sort": "matchesnum_desc",
+      "export_columns": [
+        "domain",
+        "domain_authority_score",
+        "domain_score",
+        "matches_num",
+        "backlinks_num"
+      ]
+    },
+    "body": "domain;domain_ascore;domain_score;matches_num;hotelhottubs.com;tubhotels.com\nyahoo.com;100;100;2;1;93\n"
+  },
+  {
+    "key": "referring_domain",
+    "report": "backlinks_refdomains",
+    "params": {
+      "target": "tubhotels.com",
+      "target_type": "root_domain",
+      "display_limit": 1,
+      "display_sort": "domain_authority_score_desc",
+      "export_columns": [
+        "domain_authority_score",
+        "domain_score",
+        "domain",
+        "backlinks_num",
+        "first_seen",
+        "last_seen"
+      ]
+    },
+    "body": "domain_ascore;domain_score;domain;backlinks_num;first_seen;last_seen\n100;100;pinterest.com;12;1737596092;1785785397\n"
+  },
+  {
+    "key": "detailed_backlink",
+    "report": "backlinks",
+    "params": {
+      "target": "tubhotels.com",
+      "target_type": "root_domain",
+      "display_limit": 1,
+      "display_sort": "page_authority_score_desc",
+      "export_columns": [
+        "page_authority_score",
+        "page_score",
+        "response_code",
+        "source_url",
+        "source_title",
+        "target_url",
+        "target_title",
+        "anchor",
+        "first_seen",
+        "last_seen",
+        "nofollow",
+        "sitewide",
+        "newlink",
+        "lostlink"
+      ]
+    },
+    "body": "page_ascore;page_score;response_code;source_url;source_title;target_url;target_title;anchor;first_seen;last_seen;nofollow;sitewide;newlink;lostlink\n42;42;200;https://www.breakingtravelnews.com/news/article/discover-the-best-chicago-hotels-with-jacuzzi-rooms-for-a-luxurious-stay/;Discover the Best Chicago Hotels with Jacuzzi Rooms for a Luxurious Stay | News | Breaking Travel News;https://www.tubhotels.com/hotel-with-jacuzzi-in-room-in-chicago/;;Chicago hotels with Jacuzzi;1772638179;1783458355;false;false;false;false\n"
+  }
+]
+
