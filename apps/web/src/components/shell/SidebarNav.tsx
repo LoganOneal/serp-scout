@@ -47,6 +47,19 @@ const GROUPS: NavGroup[] = [
     title: 'Portfolio',
     items: [
       { href: '/portfolio', label: 'Markets', hint: 'Markets you have committed to' },
+      /**
+       * Directories sit beside Markets rather than in Scout because the nav's
+       * boundary is whether you are still deciding, and a directory you own is
+       * decided. They cannot live on /portfolio itself: that page lists
+       * (locality, niche) cells and a directory has both set to NULL by
+       * construction, which is why these sites were invisible in the product
+       * until this page existed.
+       */
+      {
+        href: '/directories',
+        label: 'Directories',
+        hint: 'Affiliate sites that earn per referred purchase',
+      },
     ],
   },
   {

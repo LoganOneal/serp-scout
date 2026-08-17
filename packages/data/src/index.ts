@@ -106,6 +106,7 @@ export * from './spaces/entities.js'
 export * from './spaces/research.js'
 export * from './spaces/rankings.js'
 export * from './spaces/difficulty.js'
+export * from './spaces/directories.js'
 
 // --- Affiliate economics -----------------------------------------------------
 export * from './economics/store.js'

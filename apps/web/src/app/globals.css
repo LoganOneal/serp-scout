@@ -3957,3 +3957,62 @@ a.kw-serp-title:hover {
   border-radius: 8px;
   margin-bottom: 12px;
 }
+
+/* ---------------------------------------------------------------------------
+   Directories: pipeline stage tiles.
+
+   The state colour is a hint, never the message. `stage-blocker` carries the
+   reason in words, because a red tile alone says "something is wrong" and the
+   operator still has to guess which credential, quota or upstream stage it is.
+   --------------------------------------------------------------------------- */
+.stage-tile {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  border-left: 3px solid var(--border);
+}
+.stage-ok { border-left-color: var(--ok, #16a34a); }
+.stage-warn { border-left-color: var(--warn, #d97706); }
+.stage-stop { border-left-color: var(--bad, #dc2626); }
+.stage-idle { border-left-color: var(--border); }
+
+.stage-denom {
+  color: var(--text-dim, #6b7280);
+  font-weight: 400;
+  font-size: 0.85em;
+}
+.stage-detail {
+  font-size: 11px;
+  line-height: 1.35;
+  color: var(--text-dim, #6b7280);
+}
+.stage-blocker {
+  font-size: 11px;
+  line-height: 1.35;
+  color: var(--bad, #dc2626);
+  margin-top: 2px;
+}
+.stage-cost {
+  margin-left: 4px;
+  color: var(--warn, #d97706);
+  font-weight: 600;
+}
+
+.stage-next-head { font-weight: 600; margin-bottom: 4px; }
+.stage-next-blocker { margin-bottom: 8px; }
+.stage-next-cmd {
+  display: block;
+  margin-top: 6px;
+  padding: 6px 8px;
+  background: var(--surface-2, rgba(0, 0, 0, 0.04));
+  border-radius: 4px;
+  font-size: 12px;
+  overflow-x: auto;
+  white-space: pre;
+}
+.stage-next-note {
+  margin-top: 8px;
+  font-size: 12px;
+  line-height: 1.45;
+  color: var(--text-dim, #6b7280);
+}
