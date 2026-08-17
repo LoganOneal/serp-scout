@@ -180,3 +180,20 @@ export function sampleHhtBlKeywords(
   }
   return sampled
 }
+
+export function expandHhtBlKeywordSample(
+  rows: HhtBlKeywordSeed[],
+  existingKeywords: Iterable<string>,
+  target: number,
+): HhtBlKeywordSeed[] {
+  if (!Number.isInteger(target) || target <= 0) throw new Error('keyword target must be positive')
+  const existing = new Set(existingKeywords)
+  if (target > rows.length) {
+    throw new Error(`keyword target ${target} exceeds the ${rows.length}-keyword universe`)
+  }
+  if (existing.size >= target) return []
+
+  return sampleHhtBlKeywords(rows, rows.length)
+    .filter((row) => !existing.has(row.keyword))
+    .slice(0, target - existing.size)
+}

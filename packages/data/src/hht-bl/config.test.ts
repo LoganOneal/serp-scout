@@ -1,5 +1,10 @@
 import { describe, expect, it } from 'vitest'
-import { buildHhtBlKeywordUniverse, sampleHhtBlKeywords, validateHhtBlConfig } from './config.js'
+import {
+  buildHhtBlKeywordUniverse,
+  expandHhtBlKeywordSample,
+  sampleHhtBlKeywords,
+  validateHhtBlConfig,
+} from './config.js'
 
 const config = {
   active_profile: 'pilot',
@@ -46,6 +51,20 @@ describe('HHT backlink configuration', () => {
 
     expect(new Set(sample.map((row) => row.category))).toEqual(new Set(['hotels', 'trips']))
     expect(new Set(sample.map((row) => row.destination)).size).toBeGreaterThanOrEqual(6)
+  })
+
+  it('expands a sample without repeating completed keywords', () => {
+    const parsed = validateHhtBlConfig(config)
+    const universe = buildHhtBlKeywordUniverse(parsed)
+    const existing = sampleHhtBlKeywords(universe, 2)
+    const additions = expandHhtBlKeywordSample(
+      universe,
+      existing.map((row) => row.keyword),
+      4,
+    )
+
+    expect(additions).toHaveLength(2)
+    expect(new Set([...existing, ...additions].map((row) => row.keyword))).toHaveLength(4)
   })
 
   it('requires provider-side filtering for a follow-only pipeline', () => {

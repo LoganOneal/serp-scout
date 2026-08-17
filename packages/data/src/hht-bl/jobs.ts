@@ -3,7 +3,13 @@ import { and, desc, eq } from 'drizzle-orm'
 import type { HhtBlJobStatus, HhtBlStage } from '@rnr/core'
 import type { Database } from '../db.js'
 import { hhtBlJobs, hhtBlKeywords, hhtBlRunEvents, hhtBlRuns, sites } from '../schema.js'
-import { activeHhtBlProfile, buildHhtBlKeywordUniverse, loadHhtBlConfig, sampleHhtBlKeywords } from './config.js'
+import {
+  activeHhtBlProfile,
+  buildHhtBlKeywordUniverse,
+  expandHhtBlKeywordSample,
+  loadHhtBlConfig,
+  sampleHhtBlKeywords,
+} from './config.js'
 import {
   applyHhtSemrushRequestFilters,
   classifySemrushError,
@@ -56,6 +62,49 @@ export async function createHhtBlRun(
     recordsProcessed: keywords.length,
   })
   return { runId: run.id, keywords: keywords.length, profile: selected.name }
+}
+
+export async function expandHhtBlRunKeywords(
+  db: Database,
+  runId: number,
+  target: number,
+): Promise<{ added: number; total: number }> {
+  const [run] = await db.select({ id: hhtBlRuns.id }).from(hhtBlRuns).where(eq(hhtBlRuns.id, runId)).limit(1)
+  if (!run) throw new Error(`HHT backlink run ${runId} does not exist`)
+
+  const config = await loadHhtBlConfig()
+  const universe = buildHhtBlKeywordUniverse(config)
+  const existing = await db
+    .select({ keyword: hhtBlKeywords.keyword })
+    .from(hhtBlKeywords)
+    .where(eq(hhtBlKeywords.runId, runId))
+  const additions = expandHhtBlKeywordSample(
+    universe,
+    existing.map((row) => row.keyword),
+    target,
+  )
+
+  if (additions.length > 0) {
+    await db.insert(hhtBlKeywords).values(
+      additions.map((row) => ({
+        runId,
+        category: row.category,
+        destination: row.destination,
+        keyword: row.keyword,
+      })),
+    )
+  }
+  await db
+    .update(hhtBlRuns)
+    .set({ status: 'RUNNING', currentStage: 'keywords', finishedAt: null, updatedAt: new Date() })
+    .where(eq(hhtBlRuns.id, runId))
+  await recordHhtBlEvent(db, {
+    runId,
+    stage: 'keywords',
+    message: `Expanded keyword sample from ${existing.length} to ${existing.length + additions.length}`,
+    recordsProcessed: additions.length,
+  })
+  return { added: additions.length, total: existing.length + additions.length }
 }
 
 export interface CreateHhtBlJobInput {

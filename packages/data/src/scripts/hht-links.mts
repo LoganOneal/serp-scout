@@ -17,6 +17,7 @@ import {
   crawlHhtBlBacklinks,
   db,
   applyHhtSemrushRequestFilters,
+  expandHhtBlRunKeywords,
   exportHhtBlRun,
   getHhtBlDashboard,
   hhtBlJobs,
@@ -126,9 +127,24 @@ async function importResponse(): Promise<void> {
   const jobId = opt('job-id') === undefined ? null : requireJobId()
   const file = opt('file')
   if (!file) throw new Error('--file is required')
-  const envelope = parseHhtSemrushEnvelope(JSON.parse(await readFile(resolve(file), 'utf8')))
-  const result = await importHhtBlSemrushResponse(db(), runId, jobId, envelope)
-  console.log(JSON.stringify(result, null, 2))
+  const payload = JSON.parse(await readFile(resolve(file), 'utf8')) as unknown
+  if (!Array.isArray(payload)) {
+    const envelope = parseHhtSemrushEnvelope(payload)
+    const result = await importHhtBlSemrushResponse(db(), runId, jobId, envelope)
+    return void console.log(JSON.stringify(result, null, 2))
+  }
+
+  const results = []
+  for (const item of payload) {
+    if (!item || typeof item !== 'object' || Array.isArray(item)) {
+      throw new Error('batch import entries must be objects')
+    }
+    const row = item as Record<string, unknown>
+    if (!Number.isInteger(row['jobId'])) throw new Error('batch import entries need an integer jobId')
+    const envelope = parseHhtSemrushEnvelope(row['envelope'])
+    results.push(await importHhtBlSemrushResponse(db(), runId, Number(row['jobId']), envelope))
+  }
+  console.log(JSON.stringify(results, null, 2))
 }
 
 async function status(): Promise<void> {
@@ -156,6 +172,10 @@ async function cost(): Promise<void> {
 async function main(): Promise<void> {
   if (command === 'init') return init()
   if (command === 'queue-serps' || (command === 'discover' && positional[0] === 'serps')) return queueSerps()
+  if (command === 'expand-keywords') {
+    const result = await expandHhtBlRunKeywords(db(), requireRunId(), integerOpt('total'))
+    return void console.log(`Added ${result.added} keywords; run now has ${result.total}.`)
+  }
   if (command === 'request') return requestPayload()
   if (command === 'import') return importResponse()
   if (command === 'status') return status()
@@ -215,6 +235,7 @@ async function main(): Promise<void> {
   console.log(`Usage: pnpm hht:bl <command>
 
   init [--profile=pilot|scale]
+  expand-keywords --run-id=N --total=N
   discover serps --run-id=N       Queue one resumable MCP job per keyword
   request --job-id=N              Print the exact next MCP request
   import --run-id=N --job-id=N --file=envelope.json
