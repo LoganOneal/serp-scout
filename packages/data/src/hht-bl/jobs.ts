@@ -1,8 +1,18 @@
 import 'server-only'
-import { and, desc, eq } from 'drizzle-orm'
+import { and, desc, eq, inArray, isNotNull, isNull } from 'drizzle-orm'
 import type { HhtBlJobStatus, HhtBlStage } from '@rnr/core'
 import type { Database } from '../db.js'
-import { hhtBlJobs, hhtBlKeywords, hhtBlRunEvents, hhtBlRuns, sites } from '../schema.js'
+import {
+  hhtBlCandidateSites,
+  hhtBlJobs,
+  hhtBlKeywords,
+  hhtBlResearchSites,
+  hhtBlRunEvents,
+  hhtBlRuns,
+  hhtBlSiteClassifications,
+  hhtBlSiteMetrics,
+  sites,
+} from '../schema.js'
 import {
   activeHhtBlProfile,
   buildHhtBlKeywordUniverse,
@@ -115,6 +125,246 @@ export interface CreateHhtBlJobInput {
   parameters: Record<string, unknown>
   offset?: number
   limit?: number
+}
+
+export function hhtBlDomainValidationJob(
+  runId: number,
+  domain: string,
+): CreateHhtBlJobInput {
+  return {
+    runId,
+    stage: 'site_enrichment',
+    reportType: 'domain_rank',
+    target: domain,
+    parameters: {
+      target: domain,
+      database: 'us',
+      export_columns: ['domain', 'organic_keywords', 'organic_traffic', 'organic_traffic_cost'],
+    },
+    limit: 1,
+  }
+}
+
+export function hhtBlSiteExpansionJobs(
+  runId: number,
+  domain: string,
+  options: { organicLimit: number; backlinkLimit: number },
+): CreateHhtBlJobInput[] {
+  return [
+    {
+      runId,
+      stage: 'competitor_discovery',
+      reportType: 'domain_organic_organic',
+      target: domain,
+      parameters: {
+        domain,
+        database: 'us',
+        display_limit: options.organicLimit,
+        export_columns: [
+          'domain',
+          'competition_level',
+          'common_keywords',
+          'organic_keywords',
+          'organic_traffic',
+          'organic_traffic_cost',
+        ],
+      },
+      limit: options.organicLimit,
+    },
+    {
+      runId,
+      stage: 'competitor_discovery',
+      reportType: 'backlinks_competitors',
+      target: domain,
+      parameters: {
+        target: domain,
+        target_type: 'root_domain',
+        display_limit: options.backlinkLimit,
+        export_columns: [
+          'score',
+          'neighbour',
+          'similarity',
+          'common_refdomains',
+          'domains_num',
+          'backlinks_num',
+        ],
+      },
+      limit: options.backlinkLimit,
+    },
+  ]
+}
+
+export async function parkHhtBlSerpJobs(
+  db: Database,
+  runId: number,
+): Promise<number> {
+  const parked = await db
+    .update(hhtBlJobs)
+    .set({ status: 'CANCELLED', error: 'Parked after site-first discovery superseded keyword expansion', updatedAt: new Date() })
+    .where(
+      and(
+        eq(hhtBlJobs.runId, runId),
+        eq(hhtBlJobs.stage, 'serp_discovery'),
+        inArray(hhtBlJobs.status, ['PENDING', 'WAITING_FOR_CREDENTIALS']),
+      ),
+    )
+    .returning({ id: hhtBlJobs.id })
+  await db
+    .update(hhtBlRuns)
+    .set({
+      status: 'RUNNING',
+      currentStage: 'competitor_discovery',
+      waitingReason: null,
+      error: null,
+      updatedAt: new Date(),
+    })
+    .where(eq(hhtBlRuns.id, runId))
+  await recordHhtBlEvent(db, {
+    runId,
+    stage: 'serp_discovery',
+    message: `Parked ${parked.length} keyword jobs; completed SERPs remain available as domain evidence`,
+    recordsProcessed: parked.length,
+  })
+  return parked.length
+}
+
+export async function queueHhtBlDomainValidationJobs(
+  db: Database,
+  runId: number,
+  limit: number,
+): Promise<{ considered: number; created: number }> {
+  const candidates = await db
+    .select({ domain: hhtBlCandidateSites.domain })
+    .from(hhtBlCandidateSites)
+    .leftJoin(hhtBlSiteMetrics, eq(hhtBlSiteMetrics.candidateSiteId, hhtBlCandidateSites.id))
+    .where(and(eq(hhtBlCandidateSites.runId, runId), isNull(hhtBlSiteMetrics.estimatedOrganicTraffic)))
+    .orderBy(desc(hhtBlCandidateSites.weightedVisibility), hhtBlCandidateSites.discoveryDepth)
+    .limit(limit)
+  let created = 0
+  for (const candidate of candidates) {
+    if ((await createHhtBlJob(db, hhtBlDomainValidationJob(runId, candidate.domain))).created) {
+      created += 1
+    }
+  }
+  return { considered: candidates.length, created }
+}
+
+export async function queueHhtBlSiteExpansionJobs(
+  db: Database,
+  runId: number,
+  options: { seedLimit: number; organicLimit: number; backlinkLimit: number },
+): Promise<{ seeds: string[]; created: number }> {
+  const excludedTypes = ['OTA', 'major_travel_brand', 'hotel_brand', 'UGC_platform', 'general_publisher'] as const
+  const rows = await db
+    .select({
+      domain: hhtBlCandidateSites.domain,
+      siteType: hhtBlSiteClassifications.siteType,
+    })
+    .from(hhtBlCandidateSites)
+    .innerJoin(
+      hhtBlSiteClassifications,
+      eq(hhtBlSiteClassifications.candidateSiteId, hhtBlCandidateSites.id),
+    )
+    .leftJoin(hhtBlSiteMetrics, eq(hhtBlSiteMetrics.candidateSiteId, hhtBlCandidateSites.id))
+    .where(
+      and(
+        eq(hhtBlCandidateSites.runId, runId),
+        isNotNull(hhtBlCandidateSites.researchValueScore),
+        isNotNull(hhtBlSiteMetrics.estimatedOrganicTraffic),
+      ),
+    )
+    .orderBy(desc(hhtBlCandidateSites.researchValueScore), desc(hhtBlSiteMetrics.estimatedOrganicTraffic))
+  const seeds = rows
+    .filter((row) => !excludedTypes.includes(row.siteType as (typeof excludedTypes)[number]))
+    .slice(0, options.seedLimit)
+    .map((row) => row.domain)
+  let created = 0
+  for (const domain of seeds) {
+    for (const input of hhtBlSiteExpansionJobs(runId, domain, options)) {
+      if ((await createHhtBlJob(db, input)).created) created += 1
+    }
+  }
+  await db
+    .update(hhtBlRuns)
+    .set({ status: 'RUNNING', currentStage: 'competitor_discovery', updatedAt: new Date() })
+    .where(eq(hhtBlRuns.id, runId))
+  return { seeds, created }
+}
+
+export async function queueHhtBlBacklinkCollectionJobs(
+  db: Database,
+  runId: number,
+  options: { siteLimit: number; referringDomainLimit: number; backlinkLimit: number },
+): Promise<{ sites: string[]; created: number }> {
+  const rows = await db
+    .select({ domain: hhtBlCandidateSites.domain })
+    .from(hhtBlResearchSites)
+    .innerJoin(
+      hhtBlCandidateSites,
+      eq(hhtBlResearchSites.candidateSiteId, hhtBlCandidateSites.id),
+    )
+    .where(and(eq(hhtBlResearchSites.runId, runId), eq(hhtBlResearchSites.active, true)))
+    .orderBy(hhtBlResearchSites.rank)
+    .limit(options.siteLimit)
+  let created = 0
+  for (const row of rows) {
+    const inputs: CreateHhtBlJobInput[] = [
+      {
+        runId,
+        stage: 'backlink_collection',
+        reportType: 'backlinks_refdomains',
+        target: row.domain,
+        parameters: {
+          target: row.domain,
+          target_type: 'root_domain',
+          display_sort: 'domain_authority_score_desc',
+          display_limit: options.referringDomainLimit,
+          export_columns: [
+            'domain_authority_score',
+            'domain_score',
+            'domain',
+            'backlinks_num',
+            'first_seen',
+            'last_seen',
+          ],
+        },
+        limit: options.referringDomainLimit,
+      },
+      {
+        runId,
+        stage: 'backlink_collection',
+        reportType: 'backlinks',
+        target: row.domain,
+        parameters: {
+          target: row.domain,
+          target_type: 'root_domain',
+          display_sort: 'page_authority_score_desc',
+          display_limit: options.backlinkLimit,
+          export_columns: [
+            'page_authority_score',
+            'page_score',
+            'response_code',
+            'source_url',
+            'source_title',
+            'target_url',
+            'target_title',
+            'anchor',
+            'first_seen',
+            'last_seen',
+            'nofollow',
+            'sitewide',
+            'newlink',
+            'lostlink',
+          ],
+        },
+        limit: options.backlinkLimit,
+      },
+    ]
+    for (const input of inputs) {
+      if ((await createHhtBlJob(db, input)).created) created += 1
+    }
+  }
+  return { sites: rows.map((row) => row.domain), created }
 }
 
 export async function createHhtBlJob(

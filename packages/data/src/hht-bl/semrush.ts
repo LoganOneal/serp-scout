@@ -173,6 +173,9 @@ export function semrushTimestamp(value: string | undefined): Date | null {
 const CREDENTIAL_PATTERNS = [
   /insufficient (credits?|units?|balance)/i,
   /not enough (credits?|units?|balance)/i,
+  /not have enough api units/i,
+  /api units.*(?:exhausted|zero)/i,
+  /error\s*132/i,
   /credits? (have|has) run out/i,
   /payment required/i,
   /subscription.*(expired|inactive|limit)/i,

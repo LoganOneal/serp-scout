@@ -123,6 +123,16 @@ export async function getHhtBlDashboard(
           .orderBy(desc(hhtBlJobs.updatedAt))
           .limit(100)
       : []
+  const stageJobRows = await db
+    .select({
+      stage: hhtBlJobs.stage,
+      status: hhtBlJobs.status,
+      jobs: sql<number>`count(*)::int`,
+      records: sql<number>`coalesce(sum(${hhtBlJobs.recordsCompleted}), 0)::int`,
+    })
+    .from(hhtBlJobs)
+    .where(eq(hhtBlJobs.runId, run.id))
+    .groupBy(hhtBlJobs.stage, hhtBlJobs.status)
   const candidateSites =
     view === 'sites'
       ? await db
@@ -338,7 +348,7 @@ export async function getHhtBlDashboard(
       : []
 
   const stages: HhtBlStageProgress[] = HHT_BL_STAGES.map((stage) => {
-    const stageJobs = jobRows.filter((job) => job.stage === stage)
+    const stageJobs = stageJobRows.filter((job) => job.stage === stage)
     const stageIndex = HHT_BL_STAGES.indexOf(stage)
     const currentStageIndex = HHT_BL_STAGES.indexOf(run.currentStage)
     let status: HhtBlStageStatus = 'not_started'
@@ -346,7 +356,10 @@ export async function getHhtBlDashboard(
     else if (stageJobs.some((job) => job.status === 'WAITING_FOR_CREDENTIALS')) status = 'waiting'
     else if (stageJobs.some((job) => job.status === 'FAILED')) status = 'failed'
     else if (stageJobs.some((job) => job.status === 'RUNNING')) status = 'running'
-    else if (stageJobs.length > 0 && stageJobs.every((job) => job.status === 'COMPLETE')) {
+    else if (
+      stageJobs.length > 0 &&
+      stageJobs.every((job) => job.status === 'COMPLETE' || job.status === 'CANCELLED')
+    ) {
       status = 'complete'
     } else if (stageJobs.length > 0) status = 'pending'
     else if (stageIndex < currentStageIndex) status = 'complete'
@@ -354,8 +367,8 @@ export async function getHhtBlDashboard(
     return {
       stage,
       status,
-      jobs: stageJobs.length,
-      records: stageJobs.reduce((sum, job) => sum + job.recordsCompleted, 0),
+      jobs: stageJobs.reduce((sum, job) => sum + job.jobs, 0),
+      records: stageJobs.reduce((sum, job) => sum + job.records, 0),
     }
   })
 

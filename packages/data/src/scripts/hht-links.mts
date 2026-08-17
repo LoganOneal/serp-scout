@@ -27,12 +27,17 @@ import {
   importHhtBlSemrushResponse,
   importHhtBlSiteClassifications,
   markHhtBlJobError,
+  parkHhtBlSerpJobs,
   parseHhtSemrushEnvelope,
+  queueHhtBlBacklinkCollectionJobs,
+  queueHhtBlDomainValidationJobs,
+  queueHhtBlSiteExpansionJobs,
   rankHhtBlCandidateSites,
   rawSql,
   resumeHhtBlJob,
   scoreHhtBlOpportunities,
   selectHhtBlResearchSites,
+  seedHhtBlCandidateSites,
   workspaceRoot,
   writeHhtBlLinkAnalysisQueue,
 } from '../index.js'
@@ -147,6 +152,27 @@ async function importResponse(): Promise<void> {
   console.log(JSON.stringify(results, null, 2))
 }
 
+async function seedSites(): Promise<void> {
+  const file = opt('file')
+  if (!file) throw new Error('--file is required')
+  const payload = JSON.parse(await readFile(resolve(file), 'utf8')) as unknown
+  if (!Array.isArray(payload)) throw new Error('site seed file must contain an array')
+  const seeds = payload.map((row) => {
+    if (typeof row === 'string') return { domain: row }
+    if (!row || typeof row !== 'object' || Array.isArray(row)) {
+      throw new Error('site seeds must be domain strings or objects')
+    }
+    const seed = row as Record<string, unknown>
+    if (typeof seed['domain'] !== 'string') throw new Error('site seed objects need a domain')
+    return {
+      domain: seed['domain'],
+      ...(typeof seed['cohort'] === 'string' ? { cohort: seed['cohort'] } : {}),
+      ...(typeof seed['source'] === 'string' ? { source: seed['source'] } : {}),
+    }
+  })
+  console.log(await seedHhtBlCandidateSites(db(), requireRunId(), seeds))
+}
+
 async function status(): Promise<void> {
   const dashboard = await getHhtBlDashboard(db())
   if (!dashboard.run) return void console.log('No HHT backlink run. Start with: pnpm hht:bl init')
@@ -175,6 +201,33 @@ async function main(): Promise<void> {
   if (command === 'expand-keywords') {
     const result = await expandHhtBlRunKeywords(db(), requireRunId(), integerOpt('total'))
     return void console.log(`Added ${result.added} keywords; run now has ${result.total}.`)
+  }
+  if (command === 'park-serps') {
+    return void console.log(`Parked ${await parkHhtBlSerpJobs(db(), requireRunId())} SERP jobs.`)
+  }
+  if (command === 'seed-sites') return seedSites()
+  if (command === 'queue-domain-validation') {
+    return void console.log(
+      await queueHhtBlDomainValidationJobs(db(), requireRunId(), integerOpt('limit', 1000)),
+    )
+  }
+  if (command === 'queue-site-expansion') {
+    return void console.log(
+      await queueHhtBlSiteExpansionJobs(db(), requireRunId(), {
+        seedLimit: integerOpt('seed-limit', 20),
+        organicLimit: integerOpt('organic-limit', 10),
+        backlinkLimit: integerOpt('backlink-limit', 10),
+      }),
+    )
+  }
+  if (command === 'queue-backlinks') {
+    return void console.log(
+      await queueHhtBlBacklinkCollectionJobs(db(), requireRunId(), {
+        siteLimit: integerOpt('site-limit', 20),
+        referringDomainLimit: integerOpt('refdomain-limit', 10),
+        backlinkLimit: integerOpt('backlink-limit', 50),
+      }),
+    )
   }
   if (command === 'request') return requestPayload()
   if (command === 'import') return importResponse()
@@ -236,6 +289,11 @@ async function main(): Promise<void> {
 
   init [--profile=pilot|scale]
   expand-keywords --run-id=N --total=N
+  park-serps --run-id=N            Park unfinished template-keyword jobs
+  seed-sites --run-id=N --file=seeds.json
+  queue-domain-validation --run-id=N [--limit=1000]
+  queue-site-expansion --run-id=N [--seed-limit=20 --organic-limit=10 --backlink-limit=10]
+  queue-backlinks --run-id=N [--site-limit=20 --refdomain-limit=10 --backlink-limit=50]
   discover serps --run-id=N       Queue one resumable MCP job per keyword
   request --job-id=N              Print the exact next MCP request
   import --run-id=N --job-id=N --file=envelope.json

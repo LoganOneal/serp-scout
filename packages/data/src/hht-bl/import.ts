@@ -71,7 +71,9 @@ async function importOrganicMetrics(
   let imported = 0
   let skipped = 0
   for (const row of rows) {
-    const domain = normalizeHhtBlDomain(row['domain'] || String(params['target'] ?? ''))
+    const domain = normalizeHhtBlDomain(
+      row['domain'] || String(params['domain'] ?? params['target'] ?? ''),
+    )
     if (!domain) {
       skipped += 1
       continue
@@ -142,6 +144,34 @@ async function upsertCandidate(
     .returning({ id: hhtBlCandidateSites.id })
   if (!inserted) throw new Error(`Failed to insert candidate ${domain}`)
   return inserted.id
+}
+
+export async function seedHhtBlCandidateSites(
+  db: Database,
+  runId: number,
+  seeds: Array<{ domain: string; cohort?: string; source?: string }>,
+): Promise<{ inserted: number; existing: number }> {
+  let inserted = 0
+  let existing = 0
+  for (const seed of seeds) {
+    const domain = normalizeHhtBlDomain(seed.domain)
+    if (!domain) continue
+    const [before] = await db
+      .select({ id: hhtBlCandidateSites.id })
+      .from(hhtBlCandidateSites)
+      .where(and(eq(hhtBlCandidateSites.runId, runId), eq(hhtBlCandidateSites.domain, domain)))
+      .limit(1)
+    await upsertCandidate(db, {
+      runId,
+      domain,
+      provenance: seed.cohort ? `curated_seed:${seed.cohort}` : seed.source ?? 'curated_seed',
+      seedDomain: domain,
+      depth: 0,
+    })
+    if (before) existing += 1
+    else inserted += 1
+  }
+  return { inserted, existing }
 }
 
 async function upsertRawResponse(

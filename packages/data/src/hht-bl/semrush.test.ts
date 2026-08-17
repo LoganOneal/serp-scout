@@ -87,6 +87,14 @@ describe('Semrush MCP response contracts', () => {
     expect(classifySemrushError(new Error('Insufficient credits remaining'))).toBe(
       'WAITING_FOR_CREDENTIALS',
     )
+    expect(
+      classifySemrushError(
+        new Error('The user does not have enough API units to complete this request.'),
+      ),
+    ).toBe('WAITING_FOR_CREDENTIALS')
+    expect(classifySemrushError(new Error('ERROR 132: API units balance is zero'))).toBe(
+      'WAITING_FOR_CREDENTIALS',
+    )
     expect(classifySemrushError(new Error('429 rate limit'))).toBe('RETRYABLE')
     expect(classifySemrushError(new Error('malformed response'))).toBe('FAILED')
   })

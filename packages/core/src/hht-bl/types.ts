@@ -20,6 +20,7 @@ export const HHT_BL_JOB_STATUSES = [
   'PENDING',
   'RUNNING',
   'COMPLETE',
+  'CANCELLED',
   'WAITING_FOR_CREDENTIALS',
   'FAILED',
 ] as const
