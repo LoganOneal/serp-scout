@@ -109,6 +109,7 @@ export * from './spaces/difficulty.js'
 export * from './spaces/directories.js'
 export * from './spaces/import-clusters.js'
 export * from './spaces/clusters.js'
+export * from './spaces/surfaces.js'
 
 // --- Affiliate economics -----------------------------------------------------
 export * from './economics/store.js'

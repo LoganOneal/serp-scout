@@ -11,6 +11,7 @@ import type {
   PaidVerdict,
   ProspectVerdict,
   ClusterKind,
+  SerpSurface,
   SiteKind,
   SupplyIngestMode,
   SupplyIngestStatus,
@@ -2916,6 +2917,59 @@ export const keywordImportRuns = pgTable(
   }),
 )
 
+/**
+ * One (keyword, surface) observation from a purchased SERP.
+ *
+ * ==================== present + ourRank ENCODE FOUR STATES ====================
+ *   present=false               -> ABSENT      Google returns no such block here
+ *   present=true, ourRank=null  -> THEIRS      it exists, somebody else holds it
+ *   ourRank set                 -> HELD
+ *   NO ROW                      -> UNMEASURED  no SERP has been bought
+ *
+ * Three of those look like "no" and mean completely different things — go
+ * compete, nothing to win, go and find out. That is why this is two columns plus
+ * an absence rather than one nullable enum, and why a grid built on it must
+ * render all four distinctly.
+ * =============================================================================
+ */
+export const serpSurfaceObservations = pgTable(
+  'serp_surface_observations',
+  {
+    id: serial('id').primaryKey(),
+    siteId: integer('site_id')
+      .notNull()
+      .references(() => sites.id, { onDelete: 'cascade' }),
+    keywordNorm: text('keyword_norm').notNull(),
+    clusterId: integer('cluster_id').references(() => keywordClusters.id, {
+      onDelete: 'set null',
+    }),
+    /** A SERP is a snapshot from ONE location on ONE device. Never compared across them. */
+    locationCode: integer('location_code'),
+    device: text('device').default('desktop'),
+    surface: text('surface').$type<SerpSurface>().notNull(),
+
+    present: boolean('present').notNull().default(false),
+    ourRank: integer('our_rank'),
+    ourUrl: text('our_url'),
+    /** Who does hold it — answers "who am I actually competing with here". */
+    holderDomains: jsonb('holder_domains').$type<string[]>(),
+    /**
+     * Where the block sits on the page. #1 organic beneath an AI Overview, a
+     * Maps pack and a video carousel is not #1 in any sense a searcher lives.
+     */
+    blockRankAbsolute: integer('block_rank_absolute'),
+
+    measuredAt: timestampCol('measured_at'),
+    source: text('source'),
+  },
+  (t) => ({
+    uq: uniqueIndex('serp_surface_obs_uq').on(t.siteId, t.keywordNorm, t.surface, t.device),
+    clusterIdx: index('serp_surface_obs_cluster_idx').on(t.clusterId, t.surface),
+    siteIdx: index('serp_surface_obs_site_idx').on(t.siteId, t.measuredAt),
+  }),
+)
+
+export type SerpSurfaceObservation = typeof serpSurfaceObservations.$inferSelect
 export type KeywordCluster = typeof keywordClusters.$inferSelect
 export type KeywordImportRun = typeof keywordImportRuns.$inferSelect
 export type Site = typeof sites.$inferSelect

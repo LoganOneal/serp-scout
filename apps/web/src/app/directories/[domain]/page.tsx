@@ -5,6 +5,8 @@ import {
   db,
   listClusterBoard,
   listKeywordBoard,
+  loadCoverageMatrix,
+  summariseSurfaceCoverage,
   loadDirectory,
   type DirectorySummary,
   queryOr,
@@ -15,6 +17,7 @@ import { PageHeader } from '@/components/shell/PageHeader'
 import { StageTile } from '@/components/directories/StageTile'
 import { NextAction } from '@/components/directories/NextAction'
 import { ClusterBoard } from '@/components/directories/ClusterBoard'
+import { CoverageMatrix } from '@/components/directories/CoverageMatrix'
 import { NULL_DISPLAY, money, num } from '@/lib/format'
 
 export const dynamic = 'force-dynamic'
@@ -96,6 +99,16 @@ export default async function DirectoryPage({
     () => listClusterBoard(db(), dir.siteId, { limit: 60 }),
     [],
   )
+  const matrix = await queryOr(
+    'loadCoverageMatrix',
+    () => loadCoverageMatrix(db(), dir.siteId, { limit: 60 }),
+    [],
+  )
+  const surfaceStats = await queryOr(
+    'summariseSurfaceCoverage',
+    () => summariseSurfaceCoverage(db(), dir.siteId),
+    null,
+  )
   const coverage = await queryOr('summariseCoverage', () => summariseCoverage(db(), dir.siteId), null)
   const opportunity = await queryOr(
     'supplyOpportunityReport',
@@ -126,6 +139,29 @@ export default async function DirectoryPage({
       </div>
 
       <NextAction action={dir.nextAction} decided={dir.decided} keywords={dir.keywords} />
+
+      {/* ---- SERP coverage --------------------------------------------------- */}
+      <section className="sm-panel" style={{ marginTop: 24 }}>
+        <div className="sm-toolbar">
+          <div className="sm-toolbar-title">SERP coverage</div>
+          <div className="sm-toolbar-meta">
+            {surfaceStats
+              ? `${num(surfaceStats.clustersMeasured)} of ${num(surfaceStats.clusters)} clusters measured` +
+                ` · ${num(surfaceStats.surfacesHeld)} surface(s) held` +
+                (surfaceStats.keywordsMeasured > surfaceStats.clustersMeasured
+                  ? ` · ${num(surfaceStats.keywordsMeasured)} keyword SERP(s) bought in total`
+                  : '')
+              : 'not measured'}
+          </div>
+        </div>
+        <div className="sm-panel-hint">
+          A SERP is a board, not a ranking: an AI Overview, a forums pack, images, video and People
+          Also Ask all sit above or beside the ten blue links. This is which of those we occupy.
+          Ordered by demand, never by coverage — five surfaces on a 20-search keyword is worth less
+          than one on a 1,900-search keyword.
+        </div>
+        <CoverageMatrix rows={matrix} />
+      </section>
 
       {/* ---- Clusters: the unit of work ------------------------------------- */}
       <section className="sm-panel" style={{ marginTop: 24 }}>
