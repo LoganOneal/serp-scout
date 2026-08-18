@@ -1,10 +1,11 @@
 import 'server-only'
 import { readFileSync, readdirSync } from 'node:fs'
 import { basename, join } from 'node:path'
-import { and, eq, inArray, isNotNull, sql } from 'drizzle-orm'
+import { and, eq, inArray, isNotNull, isNull, sql } from 'drizzle-orm'
 import {
   aggregateCluster,
   inferClusterKind,
+  matchEntities,
   normaliseKeyword,
   type ClusterKind,
   type ClusterMember,
@@ -565,4 +566,253 @@ function chunk<T>(rows: T[], size: number): T[][] {
  */
 function sqlExcluded(column: string) {
   return sql.raw(`excluded.${column}`)
+}
+
+// ---------------------------------------------------------------------------
+
+export interface AutoClusterResult {
+  considered: number
+  assigned: number
+  clustersCreated: number
+  ambiguous: number
+  unmatched: number
+  notes: string[]
+}
+
+/**
+ * Bind unclustered keywords to a locality cluster by matching the market name
+ * inside the keyword text.
+ *
+ * ==================== DETERMINISTIC, NOT SEMANTIC ====================
+ * This is not similarity clustering and does not pretend to be. It answers one
+ * mechanical question — does this keyword name a market in our corpus — using
+ * `matchEntities`, the same boundary-safe matcher the grid already uses to
+ * attribute what we rank for. A keyword that names no market, or names two, is
+ * left unclustered rather than guessed at.
+ *
+ * The gap it closes is large and measurable: only the standouts file carried
+ * hand-written cluster labels, so `city_houston` imported with 2 members while
+ * the export holds 34 Houston keywords. A cluster's volume_max is the highest
+ * member, so a cluster missing 32 of its members is not merely incomplete — its
+ * demand number is wrong, and it is wrong in the direction that hides work.
+ *
+ * ==================== AMBIGUITY IS LEFT ALONE ====================
+ * Two markets matched means two markets matched. Picking the first would attach
+ * a Springfield, Missouri keyword to Springfield, Illinois, and nothing
+ * downstream could tell — the same failure the supply resolver refuses, for the
+ * same reason.
+ * =====================================================================
+ */
+export async function autoClusterByEntity(
+  db: Database,
+  siteId: number,
+): Promise<AutoClusterResult> {
+  const notes: string[] = []
+
+  const geos = await db
+    .select({ market: researchGeos.market, stateAbbr: researchGeos.stateAbbr })
+    .from(researchGeos)
+    .where(and(eq(researchGeos.active, true), isNotNull(researchGeos.dataforseoLocationCode)))
+
+  const entities = geos.map((g) => ({
+    slug: geoSlugFor(g.market, g.stateAbbr),
+    label: g.market,
+    aliases: g.stateAbbr ? [`${g.market} ${g.stateAbbr}`] : [],
+    locationCode: null,
+  }))
+
+  const rows = await db
+    .select({ id: siteKeywordTargets.id, keywordNorm: siteKeywordTargets.keywordNorm })
+    .from(siteKeywordTargets)
+    .where(and(eq(siteKeywordTargets.siteId, siteId), isNull(siteKeywordTargets.clusterId)))
+
+  /**
+   * ==================== KEY ON THE ENTITY, NOT ON A SLUG STRING ============
+   * The first version keyed on `city_<entitySlug>` and created it when absent.
+   * The imported clusters are named the way the RESEARCHER wrote them
+   * (`city_houston`), not the way the corpus slugs them (`city_houston-tx`), so
+   * it produced a second cluster for the same city — `city_houston` with 2
+   * members beside `city_houston-tx` with 35.
+   *
+   * Two clusters for one page is the same failure as two state machines for one
+   * asset: both claim to describe it, they diverge, and each one's volume_max is
+   * computed over half the members. Existing clusters are therefore matched by
+   * `entity_slug`, and a new one is created only when no cluster binds that
+   * entity at all.
+   * ========================================================================
+   */
+  const existing = await db
+    .select({
+      id: keywordClusters.id,
+      slug: keywordClusters.slug,
+      entitySlug: keywordClusters.entitySlug,
+    })
+    .from(keywordClusters)
+    .where(eq(keywordClusters.siteId, siteId))
+
+  const idBySlug = new Map(existing.map((c) => [c.slug, c.id]))
+  const idByEntity = new Map(
+    existing.filter((c) => c.entitySlug).map((c) => [c.entitySlug as string, c.id]),
+  )
+
+  const assignments = new Map<string, number[]>()
+  let ambiguous = 0
+  let unmatched = 0
+
+  for (const row of rows) {
+    const hits = matchEntities(row.keywordNorm, entities)
+    if (hits.length === 0) {
+      unmatched += 1
+      continue
+    }
+    if (hits.length > 1) {
+      ambiguous += 1
+      continue
+    }
+    const entitySlug = hits[0]!.slug
+    const list = assignments.get(entitySlug) ?? []
+    list.push(row.id)
+    assignments.set(entitySlug, list)
+  }
+
+  // Create a cluster only where NO existing cluster already binds that entity.
+  let created = 0
+  for (const entitySlug of assignments.keys()) {
+    if (idByEntity.has(entitySlug)) continue
+    const slug = `city_${entitySlug}`
+    const [made] = await db
+      .insert(keywordClusters)
+      .values({
+        siteId,
+        slug,
+        kind: 'locality',
+        label: slug,
+        entityKind: 'locality',
+        entitySlug,
+        source: 'auto-entity',
+      })
+      .onConflictDoUpdate({
+        target: [keywordClusters.siteId, keywordClusters.slug],
+        set: { updatedAt: new Date() },
+      })
+      .returning({ id: keywordClusters.id })
+    if (made) {
+      idByEntity.set(entitySlug, made.id)
+      idBySlug.set(slug, made.id)
+      created += 1
+    }
+  }
+
+  let assigned = 0
+  for (const [entitySlug, ids] of assignments) {
+    const clusterId = idByEntity.get(entitySlug)
+    if (clusterId === undefined) continue
+    for (const batch of chunk(ids, 500)) {
+      await db
+        .update(siteKeywordTargets)
+        .set({ clusterId, updatedAt: new Date() })
+        .where(inArray(siteKeywordTargets.id, batch))
+      assigned += batch.length
+    }
+  }
+
+  notes.push(
+    `${assigned} keyword(s) bound to ${assignments.size} locality cluster(s), ${created} newly created.`,
+  )
+  if (ambiguous > 0) {
+    notes.push(
+      `${ambiguous} keyword(s) named MORE than one market and were left unclustered. Picking one ` +
+        `would attribute a keyword to the wrong city with nothing downstream able to notice.`,
+    )
+  }
+  notes.push(
+    `${unmatched} keyword(s) name no market in the corpus and stay unclustered — UNKNOWN-clustered, ` +
+      `not a cluster of one.`,
+  )
+
+  await refreshClusterAggregates(db, siteId)
+
+  return {
+    considered: rows.length,
+    assigned,
+    clustersCreated: created,
+    ambiguous,
+    unmatched,
+    notes,
+  }
+}
+
+/**
+ * Collapse clusters that bind the same entity into one.
+ *
+ * Repairs the duplicates the first auto-clustering pass created before it keyed
+ * on `entity_slug`. Idempotent, so it is safe to run whenever, and it prefers
+ * the HAND-LABELLED cluster: `city_houston` is the name the researcher uses and
+ * the one their notes and any page mapping refer to, so keeping the generated
+ * `city_houston-tx` would win the merge and lose the vocabulary.
+ */
+export async function mergeDuplicateEntityClusters(
+  db: Database,
+  siteId: number,
+): Promise<{ merged: number; removed: number; notes: string[] }> {
+  const rows = await db
+    .select({
+      id: keywordClusters.id,
+      slug: keywordClusters.slug,
+      entitySlug: keywordClusters.entitySlug,
+      source: keywordClusters.source,
+      primaryUrl: keywordClusters.primaryUrl,
+    })
+    .from(keywordClusters)
+    .where(and(eq(keywordClusters.siteId, siteId), isNotNull(keywordClusters.entitySlug)))
+
+  const byEntity = new Map<string, typeof rows>()
+  for (const r of rows) {
+    const list = byEntity.get(r.entitySlug!) ?? []
+    list.push(r)
+    byEntity.set(r.entitySlug!, list)
+  }
+
+  const notes: string[] = []
+  let merged = 0
+  let removed = 0
+
+  for (const [entity, group] of byEntity) {
+    if (group.length < 2) continue
+    // The hand-written one wins; a page mapping breaks the tie after that.
+    const keep =
+      group.find((g) => g.source === 'semrush-import' && g.primaryUrl) ??
+      group.find((g) => g.source === 'semrush-import') ??
+      group[0]!
+    const drop = group.filter((g) => g.id !== keep.id)
+
+    await db
+      .update(siteKeywordTargets)
+      .set({ clusterId: keep.id, updatedAt: new Date() })
+      .where(
+        and(
+          eq(siteKeywordTargets.siteId, siteId),
+          inArray(
+            siteKeywordTargets.clusterId,
+            drop.map((d) => d.id),
+          ),
+        ),
+      )
+
+    await db.delete(keywordClusters).where(
+      inArray(
+        keywordClusters.id,
+        drop.map((d) => d.id),
+      ),
+    )
+
+    merged += 1
+    removed += drop.length
+    if (notes.length < 5) {
+      notes.push(`${entity}: kept ${keep.slug}, merged ${drop.map((d) => d.slug).join(', ')}`)
+    }
+  }
+
+  if (merged > 0) await refreshClusterAggregates(db, siteId)
+  return { merged, removed, notes }
 }

@@ -12,7 +12,12 @@
 import 'dotenv/config'
 import { db } from '../db.js'
 import { findSiteByDomain } from '../spaces/sites.js'
-import { importClusterResearch, refreshClusterAggregates } from '../spaces/import-clusters.js'
+import {
+  autoClusterByEntity,
+  importClusterResearch,
+  mergeDuplicateEntityClusters,
+  refreshClusterAggregates,
+} from '../spaces/import-clusters.js'
 import { listClusterBoard, listClusterMembers, runClusterVerdicts } from '../spaces/clusters.js'
 
 const argv = process.argv.slice(2)
@@ -55,6 +60,25 @@ try {
       const s = await site(positional[0])
       const n = await refreshClusterAggregates(db(), s.id)
       console.log(`recomputed ${n} cluster aggregate(s)`)
+      break
+    }
+
+    case 'autocluster': {
+      const s = await site(positional[0])
+      const r = await autoClusterByEntity(db(), s.id)
+      console.log(
+        `considered ${r.considered} unclustered · assigned ${r.assigned} · ` +
+          `${r.clustersCreated} cluster(s) created · ${r.ambiguous} ambiguous · ${r.unmatched} unmatched`,
+      )
+      bullet(r.notes)
+      break
+    }
+
+    case 'merge': {
+      const s = await site(positional[0])
+      const r = await mergeDuplicateEntityClusters(db(), s.id)
+      console.log(`merged ${r.merged} entit(ies) · removed ${r.removed} duplicate cluster(s)`)
+      bullet(r.notes)
       break
     }
 
@@ -132,6 +156,8 @@ try {
           '',
           '  import  <domain> --dir=<path> [--dry-run]   $0',
           '  refresh <domain>                            $0',
+          '  autocluster <domain>   bind keywords to a market by name   $0',
+          '  merge   <domain>       collapse clusters on the same entity   $0',
           '  verdict <domain>                            $0',
           '  board   <domain> [--kind=locality]          $0',
           '  members <domain> <clusterSlug>              $0',
