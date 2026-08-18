@@ -4016,3 +4016,12 @@ a.kw-serp-title:hover {
   line-height: 1.45;
   color: var(--text-dim, #6b7280);
 }
+
+/* Cluster kind badges. Muted on purpose — the kind is context for the supply
+   cell (n/a vs unknown), not a status to scan for. */
+.cluster-kind-locality { background: rgba(37, 99, 235, 0.10); color: #1d4ed8; }
+.cluster-kind-brand { background: rgba(217, 119, 6, 0.10); color: #b45309; }
+.cluster-kind-head { background: rgba(22, 163, 74, 0.10); color: #15803d; }
+.cluster-kind-property_type,
+.cluster-kind-modifier,
+.cluster-kind-vocab { background: rgba(107, 114, 128, 0.10); color: #4b5563; }

@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation'
 import type { KeywordVerdict } from '@rnr/core'
 import {
   db,
+  listClusterBoard,
   listKeywordBoard,
   loadDirectory,
   type DirectorySummary,
@@ -13,6 +14,7 @@ import {
 import { PageHeader } from '@/components/shell/PageHeader'
 import { StageTile } from '@/components/directories/StageTile'
 import { NextAction } from '@/components/directories/NextAction'
+import { ClusterBoard } from '@/components/directories/ClusterBoard'
 import { NULL_DISPLAY, money, num } from '@/lib/format'
 
 export const dynamic = 'force-dynamic'
@@ -89,6 +91,11 @@ export default async function DirectoryPage({
     () => listKeywordBoard(db(), dir.siteId, { ...(verdict ? { verdicts: [verdict] } : {}), limit: 100 }),
     [],
   )
+  const clusters = await queryOr(
+    'listClusterBoard',
+    () => listClusterBoard(db(), dir.siteId, { limit: 60 }),
+    [],
+  )
   const coverage = await queryOr('summariseCoverage', () => summariseCoverage(db(), dir.siteId), null)
   const opportunity = await queryOr(
     'supplyOpportunityReport',
@@ -119,6 +126,22 @@ export default async function DirectoryPage({
       </div>
 
       <NextAction action={dir.nextAction} decided={dir.decided} keywords={dir.keywords} />
+
+      {/* ---- Clusters: the unit of work ------------------------------------- */}
+      <section className="sm-panel" style={{ marginTop: 24 }}>
+        <div className="sm-toolbar">
+          <div className="sm-toolbar-title">Clusters</div>
+          <div className="sm-toolbar-meta">{num(clusters.length)} shown · one cluster is one page</div>
+        </div>
+        <div className="sm-panel-hint">
+          A cluster is the set of keywords one page serves, so it — not the keyword — is the unit a
+          verdict, a value and a queue position belong to. Ranked on <strong>vol (max)</strong>, a
+          lower bound; <span className="dim">sum</span> is an upper bound and is never sorted on,
+          because near-identical phrasings share one pool of demand and summing them inflated three
+          cities in this import by 4.5×, 7.3× and 11.2×.
+        </div>
+        <ClusterBoard rows={clusters} />
+      </section>
 
       {/* ---- Keyword board -------------------------------------------------- */}
       <section className="sm-panel" style={{ marginTop: 24 }}>

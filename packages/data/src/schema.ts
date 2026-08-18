@@ -10,6 +10,7 @@ import type {
   OutreachMessageStatus,
   PaidVerdict,
   ProspectVerdict,
+  ClusterKind,
   SiteKind,
   SupplyIngestMode,
   SupplyIngestStatus,
@@ -1874,6 +1875,31 @@ export const siteKeywordTargets = pgTable(
     /** NULL whenever any economics input was unset. Never a fallback number. */
     monthlyValueMicros: bigint('monthly_value_micros', { mode: 'bigint' }),
 
+    // --- Clusters and imported vendor numbers -------------------------------
+    /**
+     * The page this keyword belongs to.
+     *
+     * NULLABLE on purpose: an unclustered keyword is UNKNOWN-clustered, not a
+     * cluster of one. Auto-promoting singletons would manufacture a thousand
+     * one-keyword clusters and bury the forty that matter.
+     */
+    clusterId: integer('cluster_id').references((): AnyPgColumn => keywordClusters.id, {
+      onDelete: 'set null',
+    }),
+    /**
+     * Semrush's KD, on Semrush's scale.
+     *
+     * Deliberately NOT `difficulty`, which is scoreDifficulty's 0-100 calibrated
+     * against local SERPs. One column for both would make them look comparable,
+     * and DEFAULT_BUILD_DIFFICULTY_CEILING reads the second one.
+     */
+    semrushKd: integer('semrush_kd'),
+    semrushVolume: integer('semrush_volume'),
+    /** Semrush intent, possibly compound: `I`, `T`, `I|C`. */
+    intent: text('intent'),
+    /** Which Keyword Magic seed(s) produced it. 524 of 2,359 came from several. */
+    seeds: jsonb('seeds').$type<string[]>(),
+
     /**
      * How this keyword was found. Extend the vocabulary, not the schema:
      * `grid`, `search_console`, `labs_ranked`, `competitor_gap`, `related_search`.
@@ -2792,6 +2818,106 @@ export const supplyIngestRuns = pgTable(
   }),
 )
 
+/**
+ * A cluster: the set of keywords one page serves.
+ *
+ * ==================== TWO VOLUME COLUMNS, AND WHY ====================
+ * Summing member volumes is the obvious aggregate and it is measurably wrong.
+ * In the imported export 109 of 2,359 keywords report the SAME volume as a
+ * longer or shorter variant of themselves, because Google groups near-identical
+ * queries and the export lists each surface form. Per city that inflated the
+ * total 4.5x, 7.3x and 11.2x — unevenly, so it REORDERS cities rather than
+ * merely inflating them.
+ *
+ * `volumeMax` is a genuine lower bound and the number to rank on. `volumeSum`
+ * is kept as an upper bound and must never be sorted on. See @rnr/core
+ * aggregateCluster.
+ * =====================================================================
+ */
+export const keywordClusters = pgTable(
+  'keyword_clusters',
+  {
+    id: serial('id').primaryKey(),
+    siteId: integer('site_id')
+      .notNull()
+      .references(() => sites.id, { onDelete: 'cascade' }),
+    slug: text('slug').notNull(),
+    /** Decides whether supply applies at all. See @rnr/core ClusterKind. */
+    kind: text('kind').$type<ClusterKind>().notNull().default('modifier'),
+    label: text('label').notNull(),
+    /** The head term. What a page title would target. */
+    primaryKeywordNorm: text('primary_keyword_norm'),
+
+    /** NULL = unresolved, never "no entity". Same rule as supply_suppliers. */
+    entityKind: text('entity_kind'),
+    entitySlug: text('entity_slug'),
+    unresolvedReason: text('unresolved_reason'),
+
+    primaryUrl: text('primary_url'),
+    supportingUrls: jsonb('supporting_urls').$type<string[]>(),
+
+    memberCount: integer('member_count').notNull().default(0),
+    /** Lower bound. THE ranking number. */
+    volumeMax: integer('volume_max'),
+    /** Upper bound, inflated by near-duplicate phrasings. Never sort on it. */
+    volumeSum: integer('volume_sum'),
+    kdMin: integer('kd_min'),
+    kdMedian: integer('kd_median'),
+    /** Best across members: if any member ranks, the page ranks. */
+    bestPosition: integer('best_position'),
+    /**
+     * Did ANY member actually get looked up?
+     *
+     * Deliberately a column rather than `bestPosition !== null`. Derived that
+     * way, "checked and nothing ranks" and "never checked" collapse into one
+     * state — and since Search Console silence is the measurement that turns
+     * UNKNOWN into BUILD, every not-yet-ranking cluster would be stuck at
+     * UNKNOWN permanently.
+     */
+    positionMeasured: boolean('position_measured').notNull().default(false),
+
+    verdict: text('verdict').$type<KeywordVerdict>(),
+    verdictReason: text('verdict_reason'),
+    verdictMissing: jsonb('verdict_missing').$type<string[]>(),
+
+    source: text('source'),
+    notes: text('notes'),
+    createdAt: now(),
+    updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => ({
+    siteSlugUq: uniqueIndex('keyword_clusters_site_slug_uq').on(t.siteId, t.slug),
+    rankIdx: index('keyword_clusters_rank_idx').on(t.siteId, t.kind, t.volumeMax),
+  }),
+)
+
+export const keywordImportRuns = pgTable(
+  'keyword_import_runs',
+  {
+    id: serial('id').primaryKey(),
+    siteId: integer('site_id')
+      .notNull()
+      .references(() => sites.id, { onDelete: 'cascade' }),
+    sourceDir: text('source_dir'),
+    files: jsonb('files').$type<string[]>(),
+    rowsRead: integer('rows_read').notNull().default(0),
+    /** rowsRead - keywordsUpserted is the duplicate count, and it is large. */
+    keywordsUpserted: integer('keywords_upserted').notNull().default(0),
+    clustersUpserted: integer('clusters_upserted').notNull().default(0),
+    unresolvedEntities: integer('unresolved_entities').notNull().default(0),
+    quarantined: integer('quarantined').notNull().default(0),
+    notes: jsonb('notes').$type<string[]>(),
+    startedAt: timestampCol('started_at'),
+    finishedAt: timestamp('finished_at', { withTimezone: true }),
+    error: text('error'),
+  },
+  (t) => ({
+    siteIdx: index('keyword_import_runs_site_idx').on(t.siteId, t.startedAt),
+  }),
+)
+
+export type KeywordCluster = typeof keywordClusters.$inferSelect
+export type KeywordImportRun = typeof keywordImportRuns.$inferSelect
 export type Site = typeof sites.$inferSelect
 export type NewSite = typeof sites.$inferInsert
 export type SupplySource = typeof supplySources.$inferSelect
