@@ -4194,3 +4194,175 @@ td.cov-held-cell { white-space: nowrap; }
 .stat-value { font-size: 20px; font-weight: 650; margin-top: 3px; letter-spacing: -0.01em; }
 /* Present, but the response attributes no domains. Not a "no" — an "unknown". */
 .cov-unattributable { color: #b45309; }
+
+/* ===========================================================================
+   Conquest board — territories, not rows.
+   ===========================================================================
+
+   The table version rendered 228 clusters as grey dots in whitespace: complete,
+   and unreadable at a glance. These cards make the three things that matter
+   legible without reading — how big the prize is, how much of it we hold, and
+   whether we have looked at all.
+
+   Fog is reserved for UNSCOUTED. It is the one game metaphor that makes this
+   more honest rather than less: unmeasured territory looks unknown, instead of
+   looking lost. */
+
+.cq-campaign {
+  display: flex;
+  align-items: flex-end;
+  gap: 28px;
+  flex-wrap: wrap;
+  padding: 16px 18px;
+  border-bottom: 1px solid var(--border);
+}
+.cq-camp-stat { min-width: 92px; }
+.cq-camp-value { font-size: 26px; font-weight: 680; letter-spacing: -0.02em; line-height: 1.1; }
+.cq-camp-label {
+  font-size: 10.5px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+  font-weight: 600;
+  margin-top: 3px;
+}
+.cq-ink-held { color: #15803d; }
+.cq-ink-contested { color: #b45309; }
+.cq-ink-fog { color: #94a3b8; }
+
+.cq-camp-bar-wrap { flex: 1 1 260px; min-width: 220px; }
+.cq-camp-bar {
+  height: 8px;
+  border-radius: 5px;
+  background: var(--surface-2);
+  box-shadow: inset 0 0 0 1px var(--border);
+  overflow: hidden;
+  margin-top: 6px;
+}
+.cq-camp-fill { display: block; height: 100%; background: #15803d; border-radius: 5px; }
+
+.cq-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(232px, 1fr));
+  gap: 12px;
+  padding: 16px 18px 20px;
+}
+
+.cq-card {
+  position: relative;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--surface);
+  padding: 12px 13px 11px;
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  transition: box-shadow 0.12s ease, transform 0.12s ease;
+}
+.cq-card:hover { box-shadow: 0 3px 12px rgba(15, 23, 42, 0.09); transform: translateY(-1px); }
+
+/* One accent per stance, and only holding gets the strong one. Contested is the
+   normal state of the world; painting it red would make the board an alarm. */
+.cq-held { border-left: 3px solid #15803d; }
+.cq-contested { border-left: 3px solid #d97706; }
+.cq-empty { border-left: 3px solid var(--border-strong); }
+.cq-unscouted { border-left: 3px solid #cbd5e1; background: var(--surface-2); }
+
+.cq-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; }
+.cq-name {
+  font-size: 13px;
+  font-weight: 620;
+  line-height: 1.25;
+  word-break: break-word;
+}
+.cq-stance {
+  flex: none;
+  font-size: 9.5px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  font-weight: 650;
+  padding: 2px 6px;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+.cq-stance-held { background: rgba(21, 128, 61, 0.10); color: #15803d; }
+.cq-stance-contested { background: rgba(217, 119, 6, 0.11); color: #b45309; }
+.cq-stance-unscouted { background: rgba(100, 116, 139, 0.10); color: #64748b; }
+.cq-stance-empty { background: var(--surface-2); color: var(--text-faint); }
+
+.cq-prize { display: flex; align-items: baseline; gap: 6px; }
+.cq-prize-value { font-size: 24px; font-weight: 680; letter-spacing: -0.02em; line-height: 1; }
+.cq-prize-unit { font-size: 10.5px; color: var(--text-faint); }
+
+.cq-slots { display: flex; gap: 4px; }
+.cq-slot {
+  flex: 1;
+  height: 22px;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: help;
+}
+.cq-slot-tag { font-size: 8.5px; letter-spacing: 0.03em; text-transform: uppercase; font-weight: 650; }
+
+/* Captured, contested, no-ground, unknown, unscouted — five, all distinct, and
+   none of them relying on colour alone: the tag inside carries the surface name
+   and the title carries the state in words. */
+.cq-slot-held { background: #15803d; }
+.cq-slot-held .cq-slot-tag { color: #fff; }
+.cq-slot-theirs { background: rgba(100, 116, 139, 0.16); }
+.cq-slot-theirs .cq-slot-tag { color: #475569; }
+.cq-slot-absent { background: repeating-linear-gradient(45deg, var(--surface-2), var(--surface-2) 3px, #eef2f7 3px, #eef2f7 6px); }
+.cq-slot-absent .cq-slot-tag { color: #cbd5e1; }
+.cq-slot-unattributable { background: rgba(180, 83, 9, 0.13); }
+.cq-slot-unattributable .cq-slot-tag { color: #b45309; }
+.cq-slot-unmeasured { background: #eef1f5; }
+.cq-slot-unmeasured .cq-slot-tag { color: #cbd5e1; }
+
+.cq-foot { display: flex; align-items: center; gap: 8px; font-size: 11px; color: var(--text-dim); }
+.cq-bar {
+  flex: 1;
+  height: 4px;
+  border-radius: 3px;
+  background: var(--surface-2);
+  box-shadow: inset 0 0 0 1px var(--border);
+  overflow: hidden;
+}
+.cq-bar-fill { display: block; height: 100%; background: #15803d; border-radius: 3px; }
+.cq-count { font-variant-numeric: tabular-nums; white-space: nowrap; }
+.cq-fogline { flex: 1; color: #94a3b8; font-style: italic; }
+.cq-kws { color: var(--text-faint); font-variant-numeric: tabular-nums; white-space: nowrap; }
+
+/* View switch */
+.view-switch { display: inline-flex; gap: 2px; background: var(--surface-2); padding: 2px; border-radius: 8px; }
+.view-switch a {
+  font-size: 11.5px;
+  font-weight: 600;
+  padding: 4px 11px;
+  border-radius: 6px;
+  color: var(--text-dim);
+  text-decoration: none;
+}
+.view-switch a.active { background: var(--surface); color: var(--text); box-shadow: 0 1px 2px rgba(15,23,42,0.08); }
+
+/* Rank bands. Control has degrees, and the pip must say which — a #34 that
+   looks like a #3 tells you to move on when the instruction is to push. */
+.cq-slot-band-owned { background: #15803d; }
+.cq-slot-band-owned .cq-slot-tag { color: #fff; }
+.cq-slot-band-page1 { background: #4ade80; }
+.cq-slot-band-page1 .cq-slot-tag { color: #14532d; }
+.cq-slot-band-fringe { background: rgba(217, 119, 6, 0.20); }
+.cq-slot-band-fringe .cq-slot-tag { color: #b45309; }
+.cq-slot-band-present { background: rgba(100, 116, 139, 0.18); }
+.cq-slot-band-present .cq-slot-tag { color: #64748b; }
+
+.cq-earning { border-left: 3px solid #15803d; }
+.cq-fringe { border-left: 3px solid #d97706; }
+.cq-stance-earning { background: rgba(21, 128, 61, 0.10); color: #15803d; }
+.cq-stance-fringe { background: rgba(217, 119, 6, 0.11); color: #b45309; }
+
+.cq-bar-fringe { background: #d97706; }
+.cq-camp-bar { display: flex; }
+.cq-camp-fill-fringe { display: block; height: 100%; background: rgba(217, 119, 6, 0.55); }
+.cq-camp-sub { color: var(--text-faint); text-transform: none; letter-spacing: 0; font-weight: 500; }

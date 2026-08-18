@@ -1,5 +1,5 @@
 import 'server-only'
-import { and, eq, inArray, sql } from 'drizzle-orm'
+import { and, eq, inArray, isNotNull, sql } from 'drizzle-orm'
 import {
   OCCUPIABLE_SURFACES,
   SERP_SURFACES,
@@ -11,9 +11,15 @@ import {
   type SerpSurface,
   type SurfaceObservation,
   type SurfaceState,
+  type ControlSummary,
+  summariseControl,
+  PRICE,
+  formatMicrosUsd,
 } from '@rnr/core'
 import type { Database } from '../db.js'
-import { keywordClusters, serpSurfaceObservations, siteKeywordTargets } from '../schema.js'
+import { keywordClusters, serpSurfaceObservations, sites } from '../schema.js'
+import { createDfsClientFromEnv } from '../providers/dataforseo/keyword-volume.js'
+import { fetchOrganicSerpDetailed } from '../providers/dataforseo/serp.js'
 
 /**
  * Turning a purchased SERP into per-surface coverage.
@@ -210,11 +216,16 @@ export interface CoverageRow {
   clusterId: number | null
   slug: string
   label: string
+  /** The head term. What a page title would target — shown on hover. */
+  primaryKeywordNorm: string | null
   kind: string
   volumeMax: number | null
   memberCount: number
   states: Record<SerpSurface, SurfaceState>
+  /** Our rank per surface, so the board can grade control rather than binarise it. */
+  ranks: Partial<Record<SerpSurface, number>>
   tally: CoverageTally
+  control: ControlSummary
   measuredAt: Date | null
 }
 
@@ -288,11 +299,16 @@ export async function loadCoverageMatrix(
       clusterId: c.id,
       slug: c.slug,
       label: c.label,
+      primaryKeywordNorm: c.primaryKeywordNorm,
       kind: c.kind,
       volumeMax: c.volumeMax,
       memberCount: c.memberCount,
       states,
+      ranks: Object.fromEntries(
+        asObs.filter((o) => o.ourRank !== null).map((o) => [o.surface, o.ourRank as number]),
+      ) as Partial<Record<SerpSurface, number>>,
       tally: tallyCoverage(asObs, OCCUPIABLE_SURFACES),
+      control: summariseControl(asObs, OCCUPIABLE_SURFACES),
       measuredAt: mine[0]?.measuredAt ?? null,
     }
   })
@@ -360,4 +376,159 @@ export async function summariseSurfaceCoverage(
     surfacesHeld: m?.surfacesHeld ?? 0,
     keywordsMeasured: k?.n ?? 0,
   }
+}
+
+// --- Scouting ---------------------------------------------------------------
+
+export interface ScoutResult {
+  eligible: number
+  scouted: number
+  serpsBought: number
+  costMicros: bigint
+  held: number
+  notes: string[]
+}
+
+export interface ScoutArgs {
+  siteId: number
+  /** Clusters to measure, highest demand first. */
+  limit?: number
+  live?: boolean
+  /** Hard ceiling on spend, in micros. */
+  budgetMicros?: bigint
+  /** Re-scout clusters measured before this. Default: skip anything already measured. */
+  staleBefore?: Date
+}
+
+/**
+ * Buy a SERP for each unscouted cluster's PRIMARY keyword and record its surfaces.
+ *
+ * ==================== CLUSTERS, NOT KEYWORDS ====================
+ * A cluster is one page, so the page's SERP is the one that matters. At 3,295
+ * keywords versus 229 clusters that is also the difference between a ~$7 sweep
+ * and a ~$0.50 one, which is what makes this runnable at all.
+ * ================================================================
+ *
+ * Priced, capped, and dry by default — the same shape as every other paid step
+ * here. A pass that stops at its budget says how many clusters it did NOT
+ * measure, because those stay UNSCOUTED rather than becoming "nothing there".
+ */
+export async function scoutClusters(db: Database, args: ScoutArgs): Promise<ScoutResult> {
+  const notes: string[] = []
+  const limit = args.limit ?? 25
+
+  const [site] = await db
+    .select({ domain: sites.domain, keywordSpace: sites.keywordSpace })
+    .from(sites)
+    .where(eq(sites.id, args.siteId))
+    .limit(1)
+
+  if (!site?.domain) throw new Error(`site ${args.siteId} has no domain`)
+  const locationCode = (site.keywordSpace as { serpLocationCode?: number } | null)?.serpLocationCode ?? 2840
+
+  const candidates = await db
+    .select({
+      id: keywordClusters.id,
+      slug: keywordClusters.slug,
+      primary: keywordClusters.primaryKeywordNorm,
+      volumeMax: keywordClusters.volumeMax,
+    })
+    .from(keywordClusters)
+    .where(
+      and(
+        eq(keywordClusters.siteId, args.siteId),
+        sql`${keywordClusters.kind} <> 'quarantine'`,
+        isNotNull(keywordClusters.primaryKeywordNorm),
+      ),
+    )
+    .orderBy(sql`${keywordClusters.volumeMax} desc nulls last`)
+    .limit(limit * 3)
+
+  const already = await db
+    .selectDistinct({ keywordNorm: serpSurfaceObservations.keywordNorm })
+    .from(serpSurfaceObservations)
+    .where(eq(serpSurfaceObservations.siteId, args.siteId))
+  const measured = new Set(already.map((a) => a.keywordNorm))
+
+  const todo = candidates
+    .filter((c) => args.staleBefore || !measured.has(c.primary!))
+    .slice(0, limit)
+
+  const budget = args.budgetMicros ?? PRICE.serpOrganicLive * BigInt(limit)
+  const estimate = PRICE.serpOrganicLive * BigInt(todo.length)
+
+  if (!args.live) {
+    return {
+      eligible: todo.length,
+      scouted: 0,
+      serpsBought: 0,
+      costMicros: 0n,
+      held: 0,
+      notes: [
+        `${todo.length} unscouted cluster(s). This BUYS SERPs — about ` +
+          `${formatMicrosUsd(estimate)} at ${formatMicrosUsd(PRICE.serpOrganicLive)} each. Pass --live to spend.`,
+      ],
+    }
+  }
+
+  const client = createDfsClientFromEnv()
+  if (!client) {
+    return {
+      eligible: todo.length,
+      scouted: 0,
+      serpsBought: 0,
+      costMicros: 0n,
+      held: 0,
+      notes: ['DATAFORSEO_LOGIN / DATAFORSEO_PASSWORD not set.'],
+    }
+  }
+
+  let costMicros = 0n
+  let serpsBought = 0
+  let scouted = 0
+  let held = 0
+  const now = new Date()
+
+  for (const c of todo) {
+    if (costMicros + PRICE.serpOrganicLive > budget) {
+      notes.push(
+        `Budget cap reached at ${formatMicrosUsd(costMicros)} after ${serpsBought} SERP(s). ` +
+          `${todo.length - serpsBought} cluster(s) were NOT scouted — they stay UNSCOUTED, not empty.`,
+      )
+      break
+    }
+    try {
+      const serp = await fetchOrganicSerpDetailed(client, {
+        keyword: c.primary!,
+        locationCode,
+      })
+      costMicros += PRICE.serpOrganicLive
+      serpsBought += 1
+
+      const detailed = readSurfacesDetailed(serp.rawItems, site.domain)
+      if (detailed.some((d) => d.ourRank !== null)) held += 1
+
+      await recordSurfaces(db, {
+        siteId: args.siteId,
+        keywordNorm: c.primary!,
+        clusterId: c.id,
+        ourDomain: site.domain,
+        raw: serp.rawItems,
+        locationCode,
+        source: 'cluster_scout',
+        now,
+      })
+      scouted += 1
+    } catch (e) {
+      /** One vendor failure must not lose the SERPs already bought and recorded. */
+      notes.push(`${c.slug}: ${(e as Error).message}`)
+    }
+  }
+
+  notes.push(
+    `${scouted} cluster(s) scouted for ${formatMicrosUsd(costMicros)}. ` +
+      `${held} hold at least one surface.`,
+  )
+
+  return { eligible: todo.length, scouted, serpsBought, costMicros, held, notes }
 }

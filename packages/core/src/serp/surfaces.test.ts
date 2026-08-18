@@ -1,6 +1,9 @@
 import { describe, expect, it } from 'vitest'
 import {
+  earnsTraffic,
   isOurDomain,
+  rankBand,
+  summariseControl,
   surfaceForItemType,
   surfaceState,
   tallyCoverage,
@@ -147,5 +150,69 @@ describe('isOurDomain', () => {
   it('is empty-safe', () => {
     expect(isOurDomain('', 'hotelhottubs.com')).toBe(false)
     expect(isOurDomain('hotelhottubs.com', '')).toBe(false)
+  })
+})
+
+describe('rankBand — control has degrees', () => {
+  /**
+   * The regression this exists for: the first board lit any rank green and
+   * reported "86% of demand held" for a site whose best position was #13 and
+   * whose average was #34. Nobody gets traffic at #34, so a binary encoding
+   * inverts the instruction — "you hold this" instead of "push, you are close".
+   */
+  it('separates positions that earn from positions that merely exist', () => {
+    expect(rankBand(1)).toBe('owned')
+    expect(rankBand(3)).toBe('owned')
+    expect(rankBand(4)).toBe('page1')
+    expect(rankBand(10)).toBe('page1')
+    expect(rankBand(11)).toBe('fringe')
+    expect(rankBand(30)).toBe('fringe')
+    expect(rankBand(31)).toBe('present')
+    expect(rankBand(53)).toBe('present')
+  })
+
+  it('has no band for an absent position', () => {
+    expect(rankBand(null)).toBeNull()
+    expect(rankBand(undefined)).toBeNull()
+  })
+
+  it('counts only page one as earning', () => {
+    expect(earnsTraffic(1)).toBe(true)
+    expect(earnsTraffic(10)).toBe(true)
+    expect(earnsTraffic(13)).toBe(false)
+    expect(earnsTraffic(34)).toBe(false)
+    expect(earnsTraffic(null)).toBe(false)
+  })
+})
+
+describe('summariseControl', () => {
+  it('reports the best rank and splits earning from fringe', () => {
+    const c = summariseControl([
+      obs('organic', true, 34),
+      obs('discussions', true, 6),
+      obs('images', false),
+    ])
+    expect(c.bestRank).toBe(6)
+    expect(c.band).toBe('page1')
+    expect(c.earning).toBe(1)
+    expect(c.fringe).toBe(1)
+  })
+
+  /** The real hotelhottubs shape: indexed everywhere, earning nowhere. */
+  it('reports zero earning when every position is past page one', () => {
+    const c = summariseControl([obs('organic', true, 34)])
+    expect(c.bestRank).toBe(34)
+    expect(c.band).toBe('present')
+    expect(c.earning).toBe(0)
+    expect(c.fringe).toBe(1)
+  })
+
+  it('is empty when we hold nothing', () => {
+    expect(summariseControl([obs('organic', true, null)])).toEqual({
+      bestRank: null,
+      band: null,
+      earning: 0,
+      fringe: 0,
+    })
   })
 })

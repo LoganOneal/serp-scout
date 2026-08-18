@@ -226,3 +226,81 @@ export function isOurDomain(candidate: string, ours: string): boolean {
   if (!c || !o) return false
   return c === o || c.endsWith(`.${o}`)
 }
+
+/**
+ * ==================== HOLDING A SLOT IS NOT HOLDING THE TERRITORY ==========
+ * The first conquest board rendered ownership as a binary: any rank at all lit
+ * the pip green and counted the cluster's whole volume as "demand held". Against
+ * real data that produced "18 holding ground · 86% of demand held" for a site
+ * whose BEST organic position was #13 and whose average was #34.
+ *
+ * Nobody gets traffic at #34. Click-through past page one is under a percent and
+ * effectively zero past the third, so a binary encoding does not merely flatter —
+ * it inverts the instruction. It says "you hold this, go elsewhere" when the
+ * truth is "you are almost there, push".
+ *
+ * So control has degrees, and they are the ones that change what you would do:
+ *
+ *   owned    1-3    the clicks actually arrive here
+ *   page1    4-10   real traffic, worth defending
+ *   fringe   11-30  indexed and close; PUSHING beats building something new
+ *   present  31+    indexed and earning nothing
+ * ==========================================================================
+ */
+export type RankBand = 'owned' | 'page1' | 'fringe' | 'present'
+
+export const RANK_BAND_LABELS: Readonly<Record<RankBand, string>> = {
+  owned: 'Owned',
+  page1: 'Page 1',
+  fringe: 'Fringe',
+  present: 'Present',
+}
+
+export function rankBand(rank: number | null | undefined): RankBand | null {
+  if (rank === null || rank === undefined) return null
+  if (rank <= 3) return 'owned'
+  if (rank <= 10) return 'page1'
+  if (rank <= 30) return 'fringe'
+  return 'present'
+}
+
+/**
+ * Does this position plausibly earn clicks?
+ *
+ * Page one, and nothing else. Used for the campaign figure so that "demand held"
+ * means demand that can actually arrive, rather than demand we are merely
+ * indexed against.
+ */
+export function earnsTraffic(rank: number | null | undefined): boolean {
+  const b = rankBand(rank)
+  return b === 'owned' || b === 'page1'
+}
+
+export interface ControlSummary {
+  /** Best position across every occupiable surface. */
+  bestRank: number | null
+  band: RankBand | null
+  /** Surfaces where we sit on page one. The only ones that earn. */
+  earning: number
+  /** Surfaces where we are indexed but below page one. */
+  fringe: number
+}
+
+export function summariseControl(
+  observations: SurfaceObservation[],
+  occupiable: readonly SerpSurface[] = OCCUPIABLE_SURFACES,
+): ControlSummary {
+  const ours = observations
+    .filter((o) => occupiable.includes(o.surface) && o.ourRank !== null)
+    .map((o) => o.ourRank as number)
+
+  if (ours.length === 0) return { bestRank: null, band: null, earning: 0, fringe: 0 }
+
+  const bestRank = Math.min(...ours)
+  return {
+    bestRank,
+    band: rankBand(bestRank),
+    earning: ours.filter((r) => earnsTraffic(r)).length,
+    fringe: ours.filter((r) => !earnsTraffic(r)).length,
+  }
+}

@@ -19,6 +19,7 @@ import {
   refreshClusterAggregates,
 } from '../spaces/import-clusters.js'
 import { listClusterBoard, listClusterMembers, runClusterVerdicts } from '../spaces/clusters.js'
+import { scoutClusters } from '../spaces/surfaces.js'
 
 const argv = process.argv.slice(2)
 const command = argv[0] ?? 'help'
@@ -91,6 +92,21 @@ try {
       break
     }
 
+    case 'scout': {
+      const s = await site(positional[0])
+      const r = await scoutClusters(db(), {
+        siteId: s.id,
+        limit: Number(opt('limit') ?? '25'),
+        live: flag('live'),
+      })
+      console.log(
+        `eligible ${r.eligible} · scouted ${r.scouted} · SERPs ${r.serpsBought} · ` +
+          `cost ${(Number(r.costMicros) / 1e6).toFixed(4)} · holding ${r.held}`,
+      )
+      bullet(r.notes)
+      break
+    }
+
     case 'board': {
       const s = await site(positional[0])
       const rows = await listClusterBoard(db(), s.id, {
@@ -159,6 +175,7 @@ try {
           '  autocluster <domain>   bind keywords to a market by name   $0',
           '  merge   <domain>       collapse clusters on the same entity   $0',
           '  verdict <domain>                            $0',
+          '  scout   <domain> [--limit=25] --live   buy a SERP per cluster   $',
           '  board   <domain> [--kind=locality]          $0',
           '  members <domain> <clusterSlug>              $0',
           '',
