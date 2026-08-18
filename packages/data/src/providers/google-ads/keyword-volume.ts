@@ -261,23 +261,65 @@ export async function fetchKeywordVolumes(
     for (let i = 0; i < unique.length; i += 100) {
       const chunk = unique.slice(i, i + 100)
       const url = `https://googleads.googleapis.com/${apiVersion}/customers/${customerId}:generateKeywordHistoricalMetrics`
-      const res = await fetchImpl(url, {
-        method: 'POST',
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-          'developer-token': developerToken,
-          'login-customer-id': loginCustomerId,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          keywords: chunk,
-          geoTargetConstants,
-          language: 'languageConstants/1000',
-          keywordPlanNetwork: 'GOOGLE_SEARCH',
-        }),
-      })
 
-      const text = await res.text()
+      /**
+       * ==================== 429 IS A RATE LIMIT, NOT A DEAD QUOTA ============
+       * A 3,295-keyword pass is 33 chunks, and this loop used to fire them
+       * back to back with no pause. Every one came back 429 "Resource has been
+       * exhausted (e.g. check quota)" — which reads exactly like a spent daily
+       * allowance and is not one. Bisecting proved it: 1, 5, 20, 50 and 100
+       * keywords all returned 200 when spaced ~1.2s apart, immediately after a
+       * full pass had failed on every chunk.
+       *
+       * So the failure was self-inflicted and the pass reported 3,295 keywords
+       * as unmeasured for a reason that had nothing to do with quota. Retry with
+       * exponential backoff, honouring Google's own `retryDelay` when it sends
+       * one, and pause briefly between chunks.
+       * ======================================================================
+       */
+      let res: Response | undefined
+      let text = ''
+      const MAX_ATTEMPTS = 5
+
+      for (let attempt = 1; attempt <= MAX_ATTEMPTS; attempt += 1) {
+        res = await fetchImpl(url, {
+          method: 'POST',
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+            'developer-token': developerToken,
+            'login-customer-id': loginCustomerId,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            keywords: chunk,
+            geoTargetConstants,
+            language: 'languageConstants/1000',
+            keywordPlanNetwork: 'GOOGLE_SEARCH',
+          }),
+        })
+        text = await res.text()
+
+        if (res.status !== 429 || attempt === MAX_ATTEMPTS) break
+
+        /**
+         * Google states how long to wait in `error.details[].retryDelay`. Using
+         * it beats guessing; the exponential fallback covers the case where it
+         * does not send one.
+         */
+        const asked = /"retryDelay"\s*:\s*{[^}]*"seconds"\s*:\s*"?(\d+)/i.exec(text)
+        const waitMs = asked?.[1]
+          ? Number(asked[1]) * 1000
+          : Math.min(30_000, 1_000 * 2 ** (attempt - 1))
+        await new Promise((r) => setTimeout(r, waitMs))
+      }
+
+      if (!res) throw new Error('Google Ads request never completed')
+
+      /**
+       * A courtesy pause between chunks. Cheap next to a whole pass reporting
+       * every keyword as unmeasured, which is what the alternative measured.
+       */
+      if (i + 100 < unique.length) await new Promise((r) => setTimeout(r, 350))
       let json: {
         results?: Array<{
           text?: string
