@@ -1,7 +1,8 @@
 node_modules/
 .next/
-# NEXT_DIST_DIR=.next-build pnpm build -- verifies a production build without the
-# dev server and the build fighting over .next.
+# Next dev and isolated production-build outputs. These are generated artifacts
+# and can contain hundreds of megabytes of webpack caches.
+.next-dev/
 .next-build/
 .vercel/
 dist/

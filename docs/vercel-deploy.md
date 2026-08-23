@@ -199,11 +199,12 @@ each verify their own caller (Retell HMAC, `CRON_SECRET`), but the **pages do no
 The clean fix is middleware requiring a password on page routes while exempting `/api/*`. It
 needs a decision from you (shared password? per-user?), so it is not built.
 
-## Local development is unchanged
+## Local development output is isolated
 
 `pnpm worker` still works and is the same code. Recordings still go to `.recordings/`.
-`NEXT_DIST_DIR=.next-build pnpm build` verifies a production build **without** killing a running
-dev server — the two share `.next` and do not fail cleanly when they collide.
+`next dev` writes to `.next-dev`, while production builds and `next start` keep using `.next`.
+That makes an ordinary `pnpm build` safe while the dev server is running. You can still use
+`NEXT_DIST_DIR=.next-build pnpm build` when you want a third, disposable build directory.
 
 `PUBLIC_BASE_URL` in `.env` now points at production, because that is where the webhooks point.
 To test locally against a tunnel again, change it and re-run the four commands in Part 5.

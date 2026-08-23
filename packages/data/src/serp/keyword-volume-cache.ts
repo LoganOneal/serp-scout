@@ -66,6 +66,10 @@ export async function readFreshVolumes(
       and(
         eq(keywordVolumeCache.locationCode, args.locationCode),
         eq(keywordVolumeCache.languageCode, args.languageCode ?? 'en'),
+        // Legacy runs cached provider failures as null rows. The write path no
+        // longer does that, and the read path must not let those old misses
+        // suppress a free retry until their 30-day TTL expires.
+        eq(keywordVolumeCache.hasData, true),
         inArray(keywordVolumeCache.keyword, keys),
         sql`${keywordVolumeCache.fetchedAt} > now() - (${VOLUME_CACHE_TTL_DAYS} || ' days')::interval`,
       ),

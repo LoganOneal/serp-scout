@@ -15,8 +15,8 @@ import {
   createHhtBlJob,
   createHhtBlRun,
   crawlHhtBlBacklinks,
+  crawlHhtBlCandidateSites,
   db,
-  applyHhtSemrushRequestFilters,
   expandHhtBlRunKeywords,
   exportHhtBlRun,
   getHhtBlDashboard,
@@ -28,8 +28,12 @@ import {
   importHhtBlSiteClassifications,
   markHhtBlJobError,
   parkHhtBlSerpJobs,
+  parkHhtBlCoveredBacklinkJobs,
+  parkHhtBlUnapprovedOrganicMetricJobs,
   parseHhtSemrushEnvelope,
+  hhtSemrushRequestParams,
   queueHhtBlBacklinkCollectionJobs,
+  queueHhtBlBacklinkMetricJobs,
   queueHhtBlDomainValidationJobs,
   queueHhtBlSiteExpansionJobs,
   rankHhtBlCandidateSites,
@@ -39,6 +43,7 @@ import {
   selectHhtBlResearchSites,
   seedHhtBlCandidateSites,
   workspaceRoot,
+  writeHhtBlSiteClassificationQueue,
   writeHhtBlLinkAnalysisQueue,
 } from '../index.js'
 
@@ -114,11 +119,14 @@ async function requestPayload(): Promise<void> {
     JSON.stringify(
       {
         report: job.reportType,
-        params: applyHhtSemrushRequestFilters(job.reportType, {
-          ...(job.parameters as Record<string, unknown>),
-          display_offset: job.offset,
-          display_limit: Math.min(job.limit, remaining || job.limit),
-        }),
+        params: hhtSemrushRequestParams(
+          job.reportType,
+          job.parameters as Record<string, unknown>,
+          {
+            offset: job.offset,
+            limit: Math.min(job.limit, remaining || job.limit),
+          },
+        ),
         checkpoint: { runId: job.runId, jobId: job.id, recordsCompleted: job.recordsCompleted },
       },
       null,
@@ -205,11 +213,44 @@ async function main(): Promise<void> {
   if (command === 'park-serps') {
     return void console.log(`Parked ${await parkHhtBlSerpJobs(db(), requireRunId())} SERP jobs.`)
   }
-  if (command === 'seed-sites') return seedSites()
-  if (command === 'queue-domain-validation') {
+  if (command === 'park-unapproved-organic-metrics') {
     return void console.log(
-      await queueHhtBlDomainValidationJobs(db(), requireRunId(), integerOpt('limit', 1000)),
+      await parkHhtBlUnapprovedOrganicMetricJobs(db(), requireRunId()),
     )
+  }
+  if (command === 'park-covered-backlinks') {
+    return void console.log(
+      `Parked ${await parkHhtBlCoveredBacklinkJobs(db(), requireRunId())} covered backlink jobs.`,
+    )
+  }
+  if (command === 'seed-sites') return seedSites()
+  if (command === 'queue-organic-metrics' || command === 'queue-domain-validation') {
+    const result = await queueHhtBlDomainValidationJobs(
+      db(),
+      requireRunId(),
+      integerOpt('limit', 1000),
+    )
+    return void console.log({
+      ...result,
+      provider: 'semrush_mcp',
+      report: 'domain_rank',
+      paid: true,
+      estimatedMaximumUnitsPerJob: 10,
+    })
+  }
+  if (command === 'queue-backlink-metrics') {
+    const result = await queueHhtBlBacklinkMetricJobs(db(), requireRunId(), {
+      limit: integerOpt('limit', 1000),
+      batchSize: integerOpt('batch-size', 40),
+    })
+    return void console.log({
+      ...result,
+      provider: 'semrush_mcp',
+      report: 'backlinks_comparison',
+      paid: true,
+      observedUnitsPerReturnedSite: 40,
+      estimatedUnitsAtObservedRate: result.selected * 40,
+    })
   }
   if (command === 'queue-site-expansion') {
     return void console.log(
@@ -264,6 +305,34 @@ async function main(): Promise<void> {
     const rows = await writeHhtBlLinkAnalysisQueue(db(), requireRunId(), output, integerOpt('limit', 100))
     return void console.log(`Wrote ${rows} rows to ${output}`)
   }
+  if (command === 'classification-queue') {
+    const output =
+      opt('file') ??
+      resolve(
+        workspaceRoot(),
+        'exports',
+        'hht-bl',
+        `classification-queue-run-${requireRunId()}.jsonl`,
+      )
+    await mkdir(dirname(output), { recursive: true })
+    const rows = await writeHhtBlSiteClassificationQueue(
+      db(),
+      requireRunId(),
+      output,
+      integerOpt('limit', 1000),
+    )
+    return void console.log(`Wrote ${rows} rows to ${output}`)
+  }
+  if (command === 'crawl-classification-sites') {
+    return void console.log(
+      await crawlHhtBlCandidateSites(db(), requireRunId(), {
+        limit: integerOpt('limit', 60),
+        concurrency: integerOpt('concurrency', 8),
+        timeoutMs: integerOpt('timeout-ms', 12_000),
+        maxAttempts: integerOpt('max-attempts', 2),
+      }),
+    )
+  }
   if (command === 'import-analyses') {
     const file = opt('file')
     if (!file) throw new Error('--file is required')
@@ -290,8 +359,16 @@ async function main(): Promise<void> {
   init [--profile=pilot|scale]
   expand-keywords --run-id=N --total=N
   park-serps --run-id=N            Park unfinished template-keyword jobs
+  park-unapproved-organic-metrics --run-id=N
+                                      Park paid domain metrics lacking relevance approval
+  park-covered-backlinks --run-id=N   Park jobs already covered by completed target reports
   seed-sites --run-id=N --file=seeds.json
+  queue-organic-metrics --run-id=N [--limit=1000]
+                                      Queue paid one-row Semrush domain_rank metrics
   queue-domain-validation --run-id=N [--limit=1000]
+                                      Legacy alias for queue-organic-metrics
+  queue-backlink-metrics --run-id=N [--limit=1000 --batch-size=40]
+                                      Queue paid summary metrics only for relevant classified sites
   queue-site-expansion --run-id=N [--seed-limit=20 --organic-limit=10 --backlink-limit=10]
   queue-backlinks --run-id=N [--site-limit=20 --refdomain-limit=10 --backlink-limit=50]
   discover serps --run-id=N       Queue one resumable MCP job per keyword
@@ -304,6 +381,8 @@ async function main(): Promise<void> {
   select-sites --run-id=N --limit=8
   crawl --run-id=N --limit=75
   analysis-queue --run-id=N [--file=queue.jsonl]
+  classification-queue --run-id=N [--limit=1000 --file=queue.jsonl]
+  crawl-classification-sites --run-id=N [--limit=60 --concurrency=8]
   import-analyses --file=results.jsonl
   import-site-classifications --file=results.jsonl
   score-opportunities --run-id=N

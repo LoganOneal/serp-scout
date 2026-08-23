@@ -4,6 +4,8 @@ import {
   applyHhtSemrushRequestFilters,
   classifySemrushError,
   HHT_SEMRUSH_FOLLOW_FILTER,
+  hhtSemrushRequestParams,
+  isHhtSemrushPaginatedReport,
   nextSemrushPage,
   parseHhtSemrushEnvelope,
   parseSemrushRows,
@@ -44,6 +46,35 @@ describe('Semrush MCP response contracts', () => {
     ).toEqual([{ source_url: 'https://example.com', source_title: 'Rob+" Adventures' }])
   })
 
+  it('recovers malformed triple quotes observed in Semrush anchor text', () => {
+    const [row] = parseSemrushRows(
+      'source_url;anchor;nofollow\nhttps://example.com;""" "dropped-pin" => """ Visit website;false',
+    )
+    expect(row).toEqual({
+      source_url: 'https://example.com',
+      anchor: '””” ”dropped-pin” => ””” Visit website',
+      nofollow: 'false',
+    })
+  })
+
+  it('repairs raw semicolons in detailed backlink anchors from the fixed trailing fields', () => {
+    const [row] = parseSemrushRows(
+      'page_ascore;page_score;response_code;source_url;source_title;target_url;target_title;anchor;first_seen;last_seen;nofollow;sitewide;newlink;lostlink\n' +
+        '22;22;200;https://source.example/;Source;https://target.example/;;target.example ; Opens a new tab;1700000000;1700000001;false;false;false;false',
+    )
+    expect(row?.['anchor']).toBe('target.example ; Opens a new tab')
+    expect(row?.['first_seen']).toBe('1700000000')
+    expect(row?.['nofollow']).toBe('false')
+  })
+
+  it('treats the provider no-data sentinel as a valid empty report', () => {
+    expect(
+      parseSemrushRows(
+        'get backlinks_competitors: ERROR 50 :: NOTHING FOUND\nNo data found for this request.\nnot found',
+      ),
+    ).toEqual([])
+  })
+
   it('builds idempotency keys independent of object key order', () => {
     expect(semrushRequestKey('backlinks', { target: 'x.com', display_limit: 10 })).toBe(
       semrushRequestKey('backlinks', { display_limit: 10, target: 'x.com' }),
@@ -72,6 +103,30 @@ describe('Semrush MCP response contracts', () => {
     expect(applyHhtSemrushRequestFilters('backlinks_refdomains', { target: 'x.com' })).toEqual({
       target: 'x.com',
     })
+  })
+
+  it('omits pagination fields from the batched backlink comparison contract', () => {
+    const params = {
+      targets: ['one.example', 'two.example'],
+      target_types: ['root_domain', 'root_domain'],
+      export_columns: ['target', 'authority_score'],
+    }
+    expect(hhtSemrushRequestParams('backlinks_comparison', params, { offset: 0, limit: 2 })).toEqual(
+      params,
+    )
+    expect(isHhtSemrushPaginatedReport('backlinks_comparison')).toBe(false)
+  })
+
+  it('adds the saved page checkpoint to paginated backlink requests', () => {
+    expect(
+      hhtSemrushRequestParams('backlinks', { target: 'x.com' }, { offset: 50, limit: 25 }),
+    ).toMatchObject({
+      target: 'x.com',
+      display_offset: 50,
+      display_limit: 25,
+      display_filter: [HHT_SEMRUSH_FOLLOW_FILTER],
+    })
+    expect(isHhtSemrushPaginatedReport('backlinks')).toBe(true)
   })
 
   it('rejects unsupported reports before durable import', () => {

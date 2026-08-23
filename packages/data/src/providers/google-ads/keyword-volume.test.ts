@@ -126,4 +126,73 @@ describe('fetchKeywordVolumes', () => {
     expect(r.rows[0]!.lowTopOfPageBidMicros).toBe(1_200_000n)
     expect(r.rows[1]?.avgMonthlySearches).toBeNull()
   })
+
+  it('chunks large requests without requiring callers to manage the planning quota', async () => {
+    let metricsCalls = 0
+    const fetchImpl = async (url: string | URL | Request): Promise<Response> => {
+      if (String(url).includes('oauth2')) {
+        return new Response(JSON.stringify({ access_token: 'ya29.test' }), { status: 200 })
+      }
+      metricsCalls += 1
+      return new Response(JSON.stringify({ results: [] }), { status: 200 })
+    }
+
+    await fetchKeywordVolumes(
+      Array.from({ length: 101 }, (_, i) => `keyword ${i}`),
+      {
+        live: true,
+        requestIntervalMs: 0,
+        env: {
+          GOOGLE_ADS_DEVELOPER_TOKEN: 'dev',
+          GOOGLE_ADS_CUSTOMER_ID: '3308824376',
+          GOOGLE_ADS_CLIENT_ID: 'id',
+          GOOGLE_ADS_CLIENT_SECRET: 'sec',
+          GOOGLE_ADS_REFRESH_TOKEN: 'ref',
+        },
+        fetchImpl: fetchImpl as typeof fetch,
+      },
+    )
+
+    expect(metricsCalls).toBe(2)
+  })
+
+  it('assigns grouped metrics to every returned close variant', async () => {
+    const fetchImpl = async (url: string | URL | Request): Promise<Response> => {
+      if (String(url).includes('oauth2')) {
+        return new Response(JSON.stringify({ access_token: 'ya29.test' }), { status: 200 })
+      }
+      return new Response(
+        JSON.stringify({
+          results: [
+            {
+              text: 'chicago hotel hot tub',
+              closeVariants: [
+                'chicago hotels with jacuzzi in room',
+                'hotels with hot tubs in room chicago',
+              ],
+              keywordMetrics: { avgMonthlySearches: 2900 },
+            },
+          ],
+        }),
+        { status: 200 },
+      )
+    }
+
+    const result = await fetchKeywordVolumes(
+      ['chicago hotels with jacuzzi in room', 'hotels with hot tubs in room chicago'],
+      {
+        live: true,
+        env: {
+          GOOGLE_ADS_DEVELOPER_TOKEN: 'dev',
+          GOOGLE_ADS_CUSTOMER_ID: '3308824376',
+          GOOGLE_ADS_CLIENT_ID: 'id',
+          GOOGLE_ADS_CLIENT_SECRET: 'sec',
+          GOOGLE_ADS_REFRESH_TOKEN: 'ref',
+        },
+        fetchImpl: fetchImpl as typeof fetch,
+      },
+    )
+
+    expect(result.rows.map((row) => row.avgMonthlySearches)).toEqual([2900, 2900])
+  })
 })

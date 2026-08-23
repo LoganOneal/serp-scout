@@ -22,6 +22,7 @@ import {
   hhtBlSiteReferringDomains,
 } from '../schema.js'
 import {
+  isHhtSemrushPaginatedReport,
   nextSemrushPage,
   normalizeSemrushHeader,
   parseHhtSemrushEnvelope,
@@ -34,14 +35,6 @@ import {
   semrushTimestamp,
   type HhtSemrushEnvelope,
 } from './semrush.js'
-
-const PAGINATED_REPORTS = new Set([
-  'domain_organic_organic',
-  'backlinks_competitors',
-  'backlinks_matrix',
-  'backlinks_refdomains',
-  'backlinks',
-])
 
 const PROVENANCE: Record<string, string> = {
   phrase_organic: 'serp',
@@ -591,7 +584,14 @@ async function importBacklinks(
     }
     const isNofollow = semrushBoolean(row['nofollow'])
     const follow = isNofollow === null ? null : !isNofollow
-    if (follow === false) nofollow += 1
+    // The provider request is follow-filtered, but keep normalization fail-closed:
+    // raw responses preserve every row while the actionable backlink table only
+    // receives rows Semrush explicitly identifies as follow links.
+    if (!shouldImportHhtBlBacklinkRow(row)) {
+      if (follow === false) nofollow += 1
+      skipped += 1
+      continue
+    }
     const refId = await upsertReferringDomain(db, {
       runId,
       domain: referringDomain,
@@ -645,6 +645,10 @@ async function importBacklinks(
     imported += 1
   }
   return { imported, skipped, nofollow }
+}
+
+export function shouldImportHhtBlBacklinkRow(row: Record<string, string>): boolean {
+  return semrushBoolean(row['nofollow']) === false
 }
 
 export async function importHhtBlSemrushResponse(
@@ -725,7 +729,7 @@ export async function importHhtBlSemrushResponse(
       totalRowsReceived: Math.max(0, uniqueRowsReceived - rows.length),
       maxRows: job.rowsRequested,
     })
-    const paginated = PAGINATED_REPORTS.has(envelope.report)
+    const paginated = isHhtSemrushPaginatedReport(envelope.report)
     jobStatus = paginated && !page.complete ? 'PENDING' : 'COMPLETE'
     nextOffset = paginated && !page.complete ? page.offset : null
     await db

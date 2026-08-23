@@ -1,6 +1,6 @@
 import 'server-only'
 import { readFile, writeFile } from 'node:fs/promises'
-import { and, desc, eq, isNull } from 'drizzle-orm'
+import { and, desc, eq, isNull, sql } from 'drizzle-orm'
 import pLimit from 'p-limit'
 import {
   HHT_BL_MECHANISMS,
@@ -18,6 +18,7 @@ import {
   hhtBlResearchSites,
   hhtBlRunEvents,
   hhtBlSiteClassifications,
+  hhtBlSiteMetrics,
 } from '../schema.js'
 import { crawlHhtBlPage, extractHhtBlLinkContext } from './crawl.js'
 
@@ -203,14 +204,21 @@ export async function writeHhtBlLinkAnalysisQueue(
     .select({
       backlinkId: hhtBlBacklinks.id,
       sourceDomain: hhtBlReferringDomains.domain,
+      sourceUrl: hhtBlBacklinks.sourceUrl,
       sourcePageTitle: hhtBlBacklinks.sourceTitle,
-      sourceSection: hhtBlLinkContexts.surroundingSection,
+      sourceParagraph: sql<string | null>`left(${hhtBlLinkContexts.surroundingParagraph}, 2000)`,
+      sourceSection: sql<string | null>`left(${hhtBlLinkContexts.surroundingSection}, 4000)`,
+      sourceHeadings: hhtBlLinkContexts.headingHierarchy,
+      sourceDomContext: sql<string | null>`left(${hhtBlLinkContexts.domContext}, 2000)`,
       anchor: hhtBlLinkContexts.anchor,
+      reportedAnchor: hhtBlBacklinks.anchor,
       competitorDomain: hhtBlCandidateSites.domain,
       competitorTargetUrl: hhtBlBacklinks.targetUrl,
       competitorTargetSummary: hhtBlLinkContexts.targetSummary,
       analogousSitesLinked: hhtBlReferringDomains.researchSitesLinked,
       authorityScore: hhtBlReferringDomains.authorityScore,
+      pageAuthorityScore: hhtBlBacklinks.authorityScore,
+      sitewide: hhtBlBacklinks.sitewide,
     })
     .from(hhtBlBacklinks)
     .innerJoin(hhtBlReferringDomains, eq(hhtBlBacklinks.referringDomainId, hhtBlReferringDomains.id))
@@ -330,4 +338,137 @@ export async function importHhtBlSiteClassifications(
     imported += 1
   }
   return imported
+}
+
+export async function writeHhtBlSiteClassificationQueue(
+  db: Database,
+  runId: number,
+  path: string,
+  limit = 1_000,
+): Promise<number> {
+  const rows = await db
+    .select({
+      candidateSiteId: hhtBlCandidateSites.id,
+      domain: hhtBlCandidateSites.domain,
+      provenance: hhtBlCandidateSites.provenance,
+      seedDomains: hhtBlCandidateSites.seedDomains,
+      discoveryDepth: hhtBlCandidateSites.discoveryDepth,
+      serpAppearances: hhtBlCandidateSites.serpAppearances,
+      top10Appearances: hhtBlCandidateSites.top10Appearances,
+      weightedVisibility: hhtBlCandidateSites.weightedVisibility,
+      organicKeywords: hhtBlSiteMetrics.organicKeywords,
+      estimatedOrganicTraffic: hhtBlSiteMetrics.estimatedOrganicTraffic,
+      estimatedTrafficValue: hhtBlSiteMetrics.estimatedTrafficValue,
+      homepageStatus: hhtBlCrawlResults.httpStatus,
+      homepageTitle: hhtBlCrawlResults.title,
+      homepageSummary: sql<string | null>`left(${hhtBlCrawlResults.pageText}, 4000)`,
+      homepageError: hhtBlCrawlResults.error,
+    })
+    .from(hhtBlCandidateSites)
+    .leftJoin(
+      hhtBlSiteClassifications,
+      eq(hhtBlSiteClassifications.candidateSiteId, hhtBlCandidateSites.id),
+    )
+    .leftJoin(hhtBlSiteMetrics, eq(hhtBlSiteMetrics.candidateSiteId, hhtBlCandidateSites.id))
+    .leftJoin(
+      hhtBlCrawlResults,
+      and(
+        eq(hhtBlCrawlResults.runId, runId),
+        eq(hhtBlCrawlResults.kind, 'site_sample'),
+        eq(hhtBlCrawlResults.url, sql`'https://' || ${hhtBlCandidateSites.domain} || '/'`),
+      ),
+    )
+    .where(and(eq(hhtBlCandidateSites.runId, runId), isNull(hhtBlSiteClassifications.id)))
+    .orderBy(
+      sql`${hhtBlSiteMetrics.estimatedOrganicTraffic} desc nulls last`,
+      desc(hhtBlCandidateSites.weightedVisibility),
+      hhtBlCandidateSites.discoveryDepth,
+      hhtBlCandidateSites.domain,
+    )
+    .limit(limit)
+  await writeFile(
+    path,
+    rows.map((row) => JSON.stringify(row)).join('\n') + (rows.length > 0 ? '\n' : ''),
+    'utf8',
+  )
+  return rows.length
+}
+
+export async function crawlHhtBlCandidateSites(
+  db: Database,
+  runId: number,
+  options: { limit: number; concurrency?: number; timeoutMs?: number; maxAttempts?: number },
+): Promise<{ attempted: number; successful: number; failed: number }> {
+  const rows = await db
+    .select({
+      domain: hhtBlCandidateSites.domain,
+    })
+    .from(hhtBlCandidateSites)
+    .leftJoin(
+      hhtBlSiteClassifications,
+      eq(hhtBlSiteClassifications.candidateSiteId, hhtBlCandidateSites.id),
+    )
+    .leftJoin(hhtBlSiteMetrics, eq(hhtBlSiteMetrics.candidateSiteId, hhtBlCandidateSites.id))
+    .leftJoin(
+      hhtBlCrawlResults,
+      and(
+        eq(hhtBlCrawlResults.runId, runId),
+        eq(hhtBlCrawlResults.kind, 'site_sample'),
+        eq(hhtBlCrawlResults.url, sql`'https://' || ${hhtBlCandidateSites.domain} || '/'`),
+      ),
+    )
+    .where(
+      and(
+        eq(hhtBlCandidateSites.runId, runId),
+        isNull(hhtBlSiteClassifications.id),
+        isNull(hhtBlCrawlResults.id),
+      ),
+    )
+    .orderBy(
+      sql`${hhtBlSiteMetrics.estimatedOrganicTraffic} desc nulls last`,
+      desc(hhtBlCandidateSites.weightedVisibility),
+      hhtBlCandidateSites.discoveryDepth,
+      hhtBlCandidateSites.domain,
+    )
+    .limit(options.limit)
+  const limit = pLimit(options.concurrency ?? 8)
+  let successful = 0
+  let failed = 0
+  await Promise.all(
+    rows.map((row) =>
+      limit(async () => {
+        const url = `https://${row.domain}/`
+        try {
+          const crawlId = await storeCrawl(db, runId, url, 'site_sample', options)
+          const [crawl] = await db
+            .select({ httpStatus: hhtBlCrawlResults.httpStatus, pageText: hhtBlCrawlResults.pageText })
+            .from(hhtBlCrawlResults)
+            .where(eq(hhtBlCrawlResults.id, crawlId))
+            .limit(1)
+          if (
+            crawl?.httpStatus !== null &&
+            crawl?.httpStatus !== undefined &&
+            crawl.httpStatus >= 200 &&
+            crawl.httpStatus < 400 &&
+            Boolean(crawl.pageText?.trim())
+          ) {
+            successful += 1
+          } else {
+            failed += 1
+          }
+        } catch {
+          failed += 1
+        }
+      }),
+    ),
+  )
+  await db.insert(hhtBlRunEvents).values({
+    runId,
+    stage: 'site_classification',
+    level: failed > 0 ? 'warn' : 'info',
+    message: `Sampled ${rows.length} candidate homepages; ${successful} successful; ${failed} failed`,
+    recordsProcessed: successful,
+    details: { failed },
+  })
+  return { attempted: rows.length, successful, failed }
 }

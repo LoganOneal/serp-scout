@@ -16,6 +16,18 @@ export const HHT_SEMRUSH_REPORTS = [
 
 export type HhtSemrushReport = (typeof HHT_SEMRUSH_REPORTS)[number]
 
+export const HHT_SEMRUSH_PAGINATED_REPORTS = [
+  'domain_organic_organic',
+  'backlinks_competitors',
+  'backlinks_matrix',
+  'backlinks_refdomains',
+  'backlinks',
+] as const satisfies readonly HhtSemrushReport[]
+
+export function isHhtSemrushPaginatedReport(report: string): boolean {
+  return (HHT_SEMRUSH_PAGINATED_REPORTS as readonly string[]).includes(report)
+}
+
 export const HHT_SEMRUSH_FOLLOW_FILTER = {
   field: 'type',
   operation: '',
@@ -46,6 +58,24 @@ export function applyHhtSemrushRequestFilters(
   return {
     ...params,
     display_filter: [...existing, HHT_SEMRUSH_FOLLOW_FILTER],
+  }
+}
+
+/**
+ * Build the exact request params for the next job page. Summary/comparison
+ * reports are single-shot and must not receive unsupported pagination fields.
+ */
+export function hhtSemrushRequestParams(
+  report: string,
+  params: Record<string, unknown>,
+  page: { offset: number; limit: number },
+): Record<string, unknown> {
+  const filtered = applyHhtSemrushRequestFilters(report, params)
+  if (!isHhtSemrushPaginatedReport(report)) return filtered
+  return {
+    ...filtered,
+    display_offset: page.offset,
+    display_limit: page.limit,
   }
 }
 
@@ -131,9 +161,59 @@ export function normalizeSemrushHeader(value: string): string {
     .toLowerCase()
 }
 
+function parseDetailedBacklinkRows(body: string): Array<Record<string, string>> | null {
+  const lines = body.split(/\r?\n/).filter((line) => line.trim() !== '')
+  const headers = (lines[0] ?? '').split(';').map(normalizeSemrushHeader)
+  const expected = [
+    'page_ascore',
+    'page_score',
+    'response_code',
+    'source_url',
+    'source_title',
+    'target_url',
+    'target_title',
+    'anchor',
+    'first_seen',
+    'last_seen',
+    'nofollow',
+    'sitewide',
+    'newlink',
+    'lostlink',
+  ]
+  if (headers.join('\n') !== expected.join('\n')) return null
+
+  return lines.slice(1).map((line) => {
+    const parts = line.replaceAll('"', '”').split(';')
+    let values = parts
+    if (parts.length > headers.length) {
+      const tailStart = parts.length - 6
+      const targetUrlIndex = parts.findIndex(
+        (part, index) => index >= 4 && index < tailStart && /^https?:\/\//i.test(part),
+      )
+      if (targetUrlIndex >= 4) {
+        const afterTarget = parts.slice(targetUrlIndex + 1, tailStart)
+        values = [
+          ...parts.slice(0, 4),
+          parts.slice(4, targetUrlIndex).join(';'),
+          parts[targetUrlIndex]!,
+          afterTarget[0] ?? '',
+          afterTarget.slice(1).join(';'),
+          ...parts.slice(tailStart),
+        ]
+      }
+    }
+    return Object.fromEntries(headers.map((header, index) => [header, values[index] ?? '']))
+  })
+}
+
 export function parseSemrushRows(body: string): Array<Record<string, string>> {
   if (!body.trim()) return []
-  return parse(body, {
+  if (/\bERROR 50\s*::\s*NOTHING FOUND\b/i.test(body) && /\bNo data found\b/i.test(body)) {
+    return []
+  }
+  const detailedBacklinks = parseDetailedBacklinkRows(body)
+  if (detailedBacklinks) return detailedBacklinks
+  const options = {
     bom: true,
     columns: (headers: string[]) => headers.map(normalizeSemrushHeader),
     delimiter: ';',
@@ -141,7 +221,17 @@ export function parseSemrushRows(body: string): Array<Record<string, string>> {
     relax_quotes: true,
     skip_empty_lines: true,
     trim: true,
-  }) as Array<Record<string, string>>
+  }
+  try {
+    return parse(body, options) as Array<Record<string, string>>
+  } catch (error) {
+    const message = error instanceof Error ? error.message : String(error)
+    if (!/Invalid Closing Quote/i.test(message)) throw error
+    // Observed in Semrush anchor text: `""" "icon" => """`. It is not
+    // valid CSV quoting, so preserve the visible text with typographic quotes
+    // and retry rather than discarding the paid response.
+    return parse(body.replaceAll('"', '”'), options) as Array<Record<string, string>>
+  }
 }
 
 export function semrushInteger(value: string | undefined): number | null {

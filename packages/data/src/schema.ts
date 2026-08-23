@@ -2775,6 +2775,99 @@ export const supplyIngestRuns = pgTable(
   }),
 )
 
+// --- HotelHotTubs Reddit keyword research -----------------------------------
+
+/**
+ * Immutable, content-addressed snapshots produced by the free Google Ads
+ * Keyword Ideas analysis. Keeping this separate from `site_keyword_targets`
+ * prevents a research phrase from silently becoming a paid SERP target.
+ */
+export const hhtRedditKeywordRuns = pgTable(
+  'hht_reddit_keyword_runs',
+  {
+    id: serial('id').primaryKey(),
+    siteId: integer('site_id')
+      .notNull()
+      .references(() => sites.id, { onDelete: 'cascade' }),
+    sourceHash: text('source_hash').notNull(),
+    generatedAt: timestamp('generated_at', { withTimezone: true }).notNull(),
+    audienceScope: text('audience_scope').notNull().default('country:US'),
+    googleAdsGeoTarget: integer('google_ads_geo_target').notNull().default(2840),
+    freeOnly: boolean('free_only').notNull().default(true),
+    destinationCount: integer('destination_count').notNull(),
+    ideasReturned: integer('ideas_returned').notNull(),
+    eligibleKeywordCount: integer('eligible_keyword_count').notNull(),
+    measuredKeywordCount: integer('measured_keyword_count').notNull(),
+    positiveClusterCount: integer('positive_cluster_count').notNull(),
+    measuredCityCount: integer('measured_city_count').notNull(),
+    rejections: jsonb('rejections').$type<Record<string, number>>().notNull().default({}),
+    createdAt: now(),
+  },
+  (t) => ({
+    sourceUq: uniqueIndex('hht_reddit_keyword_runs_source_uq').on(t.siteId, t.sourceHash),
+    latestIdx: index('hht_reddit_keyword_runs_latest_idx').on(t.siteId, t.generatedAt),
+  }),
+)
+
+export const hhtRedditCityAggregates = pgTable(
+  'hht_reddit_city_aggregates',
+  {
+    id: serial('id').primaryKey(),
+    runId: integer('run_id')
+      .notNull()
+      .references(() => hhtRedditKeywordRuns.id, { onDelete: 'cascade' }),
+    cityRank: integer('city_rank').notNull(),
+    city: text('city').notNull(),
+    citySlug: text('city_slug').notNull(),
+    conservativeAggregateVolume: integer('conservative_aggregate_volume').notNull(),
+    rawAggregateVolume: integer('raw_aggregate_volume').notNull(),
+    closeVariantOverlapDelta: integer('close_variant_overlap_delta').notNull(),
+    keywordCount: integer('keyword_count').notNull(),
+    measuredKeywordCount: integer('measured_keyword_count').notNull(),
+    unmeasuredKeywordCount: integer('unmeasured_keyword_count').notNull(),
+    intentClusterCount: integer('intent_cluster_count').notNull(),
+    topKeyword: text('top_keyword'),
+    topKeywordVolume: integer('top_keyword_volume'),
+    ideasReturned: integer('ideas_returned').notNull(),
+    ideaSource: text('idea_source').notNull(),
+    error: text('error'),
+  },
+  (t) => ({
+    cityUq: uniqueIndex('hht_reddit_city_aggregates_city_uq').on(t.runId, t.citySlug),
+    rankIdx: index('hht_reddit_city_aggregates_rank_idx').on(t.runId, t.cityRank),
+  }),
+)
+
+export const hhtRedditKeywords = pgTable(
+  'hht_reddit_keywords',
+  {
+    id: serial('id').primaryKey(),
+    runId: integer('run_id')
+      .notNull()
+      .references(() => hhtRedditKeywordRuns.id, { onDelete: 'cascade' }),
+    globalRank: integer('global_rank').notNull(),
+    cityRank: integer('city_rank').notNull(),
+    city: text('city').notNull(),
+    citySlug: text('city_slug').notNull(),
+    keyword: text('keyword').notNull(),
+    keywordNorm: text('keyword_norm').notNull(),
+    avgMonthlySearches: integer('avg_monthly_searches'),
+    intentTier: text('intent_tier').notNull(),
+    intentCluster: text('intent_cluster').notNull(),
+    competitionIndex: integer('competition_index'),
+    lowTopOfPageBidMicros: bigint('low_top_of_page_bid_micros', { mode: 'bigint' }),
+    highTopOfPageBidMicros: bigint('high_top_of_page_bid_micros', { mode: 'bigint' }),
+    clearsVolumeFloor: boolean('clears_volume_floor'),
+    sources: jsonb('sources').$type<string[]>().notNull(),
+    volumeScope: text('volume_scope').notNull().default('us/en'),
+  },
+  (t) => ({
+    keywordUq: uniqueIndex('hht_reddit_keywords_keyword_uq').on(t.runId, t.citySlug, t.keywordNorm),
+    cityRankIdx: index('hht_reddit_keywords_city_rank_idx').on(t.runId, t.citySlug, t.cityRank),
+    volumeIdx: index('hht_reddit_keywords_volume_idx').on(t.runId, t.avgMonthlySearches),
+  }),
+)
+
 // --- HotelHotTubs backlink research -----------------------------------------
 
 export const hhtBlRuns = pgTable(
@@ -3355,6 +3448,9 @@ export type KeywordVolumeCacheRow = typeof keywordVolumeCache.$inferSelect
 export type DomainEnrichRun = typeof domainEnrichRuns.$inferSelect
 export type DomainCandidateRow = typeof domainCandidates.$inferSelect
 export type NewDomainCandidate = typeof domainCandidates.$inferInsert
+export type HhtRedditKeywordRun = typeof hhtRedditKeywordRuns.$inferSelect
+export type HhtRedditCityAggregate = typeof hhtRedditCityAggregates.$inferSelect
+export type HhtRedditKeyword = typeof hhtRedditKeywords.$inferSelect
 export type HhtBlRun = typeof hhtBlRuns.$inferSelect
 export type HhtBlJob = typeof hhtBlJobs.$inferSelect
 export type HhtBlCandidateSite = typeof hhtBlCandidateSites.$inferSelect

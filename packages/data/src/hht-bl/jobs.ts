@@ -1,6 +1,6 @@
 import 'server-only'
-import { and, desc, eq, inArray, isNotNull, isNull } from 'drizzle-orm'
-import type { HhtBlJobStatus, HhtBlStage } from '@rnr/core'
+import { and, desc, eq, inArray, isNotNull, isNull, or } from 'drizzle-orm'
+import type { HhtBlJobStatus, HhtBlSiteType, HhtBlStage } from '@rnr/core'
 import type { Database } from '../db.js'
 import {
   hhtBlCandidateSites,
@@ -127,6 +127,81 @@ export interface CreateHhtBlJobInput {
   limit?: number
 }
 
+export const HHT_BL_BACKLINK_METRIC_SITE_TYPES = [
+  'independent_affiliate_publisher',
+  'travel_directory',
+  'programmatic_travel_site',
+  'independent_editorial_publisher',
+  'destination_guide',
+  'tourism_organization',
+] as const satisfies readonly HhtBlSiteType[]
+
+export const HHT_BL_BACKLINK_METRIC_COLUMNS = [
+  'target',
+  'target_type',
+  'authority_score',
+  'backlinks_num',
+  'domains_num',
+  'follows_num',
+  'nofollows_num',
+] as const
+
+export function isHhtBlRelevantResearchSiteType(
+  siteType: HhtBlSiteType | null,
+): siteType is (typeof HHT_BL_BACKLINK_METRIC_SITE_TYPES)[number] {
+  return Boolean(
+    siteType &&
+      (HHT_BL_BACKLINK_METRIC_SITE_TYPES as readonly HhtBlSiteType[]).includes(siteType),
+  )
+}
+
+export function isHhtBlBacklinkMetricEligible(input: {
+  siteType: HhtBlSiteType | null
+  authorityScore: number | null
+  totalBacklinks: number | null
+  referringDomains: number | null
+}): boolean {
+  return Boolean(
+    isHhtBlRelevantResearchSiteType(input.siteType) &&
+      (input.authorityScore === null ||
+        input.totalBacklinks === null ||
+        input.referringDomains === null),
+  )
+}
+
+export function hhtBlBacklinkMetricsJob(
+  runId: number,
+  domains: string[],
+): CreateHhtBlJobInput {
+  if (domains.length === 0) throw new Error('A backlink metric job needs at least one domain')
+  if (domains.length > 40) throw new Error('A backlink metric job supports at most 40 domains')
+  const parameters = {
+    targets: domains,
+    target_types: domains.map(() => 'root_domain'),
+    export_columns: [...HHT_BL_BACKLINK_METRIC_COLUMNS],
+  }
+  const batchKey = semrushRequestKey('backlinks_comparison', parameters).slice(0, 12)
+  return {
+    runId,
+    stage: 'site_enrichment',
+    reportType: 'backlinks_comparison',
+    target: `backlink-metrics-${batchKey}`,
+    parameters,
+    limit: domains.length,
+  }
+}
+
+export function chunkHhtBlBacklinkMetricTargets(domains: string[], batchSize: number): string[][] {
+  if (!Number.isInteger(batchSize) || batchSize < 1 || batchSize > 40) {
+    throw new Error('Backlink metric batch size must be an integer from 1 to 40')
+  }
+  const batches: string[][] = []
+  for (let index = 0; index < domains.length; index += batchSize) {
+    batches.push(domains.slice(index, index + batchSize))
+  }
+  return batches
+}
+
 export function hhtBlDomainValidationJob(
   runId: number,
   domain: string,
@@ -228,6 +303,61 @@ export async function parkHhtBlSerpJobs(
   return parked.length
 }
 
+/** Park old paid metric jobs that were planned before local relevance review. */
+export async function parkHhtBlUnapprovedOrganicMetricJobs(
+  db: Database,
+  runId: number,
+): Promise<{ considered: number; parked: number; retained: number }> {
+  const jobs = await db
+    .select({
+      id: hhtBlJobs.id,
+      siteType: hhtBlSiteClassifications.siteType,
+    })
+    .from(hhtBlJobs)
+    .leftJoin(
+      hhtBlCandidateSites,
+      and(
+        eq(hhtBlCandidateSites.runId, hhtBlJobs.runId),
+        eq(hhtBlCandidateSites.domain, hhtBlJobs.target),
+      ),
+    )
+    .leftJoin(
+      hhtBlSiteClassifications,
+      eq(hhtBlSiteClassifications.candidateSiteId, hhtBlCandidateSites.id),
+    )
+    .where(
+      and(
+        eq(hhtBlJobs.runId, runId),
+        eq(hhtBlJobs.reportType, 'domain_rank'),
+        inArray(hhtBlJobs.status, ['PENDING', 'WAITING_FOR_CREDENTIALS']),
+      ),
+    )
+  const ids = jobs
+    .filter((job) => !isHhtBlRelevantResearchSiteType(job.siteType))
+    .map((job) => job.id)
+  if (ids.length > 0) {
+    await db
+      .update(hhtBlJobs)
+      .set({
+        status: 'CANCELLED',
+        error: 'Parked: local relevance approval is required before paid organic metrics',
+        updatedAt: new Date(),
+      })
+      .where(inArray(hhtBlJobs.id, ids))
+    await recordHhtBlEvent(db, {
+      runId,
+      stage: 'site_enrichment',
+      message: `Parked ${ids.length} paid organic metric jobs without relevance approval`,
+      recordsProcessed: ids.length,
+      details: {
+        report: 'domain_rank',
+        policy: 'local_relevance_before_paid_metrics',
+      },
+    })
+  }
+  return { considered: jobs.length, parked: ids.length, retained: jobs.length - ids.length }
+}
+
 export async function queueHhtBlDomainValidationJobs(
   db: Database,
   runId: number,
@@ -247,6 +377,116 @@ export async function queueHhtBlDomainValidationJobs(
     }
   }
   return { considered: candidates.length, created }
+}
+
+/**
+ * Queue the missing authority/backlink summary metrics only after a site has
+ * been classified as a relevant research model. Existing comparison jobs are
+ * treated as durable coverage so a second planning pass cannot accidentally
+ * spend credits on the same domain.
+ */
+export async function queueHhtBlBacklinkMetricJobs(
+  db: Database,
+  runId: number,
+  options: { limit: number; batchSize: number },
+): Promise<{
+  eligible: number
+  alreadyCovered: number
+  selected: number
+  batches: number
+  created: number
+  domains: string[]
+}> {
+  if (!Number.isInteger(options.limit) || options.limit < 0) {
+    throw new Error('Backlink metric limit must be a non-negative integer')
+  }
+  // Validate before querying so an invalid plan cannot partially write jobs.
+  chunkHhtBlBacklinkMetricTargets([], options.batchSize)
+
+  const candidates = await db
+    .select({
+      domain: hhtBlCandidateSites.domain,
+      siteType: hhtBlSiteClassifications.siteType,
+      authorityScore: hhtBlSiteMetrics.authorityScore,
+      totalBacklinks: hhtBlSiteMetrics.totalBacklinks,
+      referringDomains: hhtBlSiteMetrics.referringDomains,
+    })
+    .from(hhtBlCandidateSites)
+    .innerJoin(
+      hhtBlSiteClassifications,
+      eq(hhtBlSiteClassifications.candidateSiteId, hhtBlCandidateSites.id),
+    )
+    .leftJoin(hhtBlSiteMetrics, eq(hhtBlSiteMetrics.candidateSiteId, hhtBlCandidateSites.id))
+    .where(
+      and(
+        eq(hhtBlCandidateSites.runId, runId),
+        inArray(hhtBlSiteClassifications.siteType, [...HHT_BL_BACKLINK_METRIC_SITE_TYPES]),
+        or(
+          isNull(hhtBlSiteMetrics.authorityScore),
+          isNull(hhtBlSiteMetrics.totalBacklinks),
+          isNull(hhtBlSiteMetrics.referringDomains),
+        ),
+      ),
+    )
+    .orderBy(
+      desc(hhtBlSiteClassifications.transferability),
+      desc(hhtBlSiteClassifications.hhtSimilarity),
+      desc(hhtBlSiteClassifications.travelRelevance),
+      desc(hhtBlCandidateSites.weightedVisibility),
+      hhtBlCandidateSites.domain,
+    )
+
+  const existingJobs = await db
+    .select({ parameters: hhtBlJobs.parameters })
+    .from(hhtBlJobs)
+    .where(and(eq(hhtBlJobs.runId, runId), eq(hhtBlJobs.reportType, 'backlinks_comparison')))
+  const coveredDomains = new Set<string>()
+  for (const job of existingJobs) {
+    const targets = job.parameters['targets']
+    if (!Array.isArray(targets)) continue
+    for (const target of targets) {
+      if (typeof target === 'string') coveredDomains.add(target)
+    }
+  }
+
+  const eligibleDomains = candidates
+    .filter((candidate) => isHhtBlBacklinkMetricEligible(candidate))
+    .map((candidate) => candidate.domain)
+  const uncoveredDomains = eligibleDomains.filter((domain) => !coveredDomains.has(domain))
+  const domains = uncoveredDomains.slice(0, options.limit)
+  const batches = chunkHhtBlBacklinkMetricTargets(domains, options.batchSize)
+  let created = 0
+  for (const batch of batches) {
+    if ((await createHhtBlJob(db, hhtBlBacklinkMetricsJob(runId, batch))).created) created += 1
+  }
+
+  if (created > 0) {
+    await db
+      .update(hhtBlRuns)
+      .set({ status: 'RUNNING', currentStage: 'site_enrichment', updatedAt: new Date() })
+      .where(eq(hhtBlRuns.id, runId))
+    await recordHhtBlEvent(db, {
+      runId,
+      stage: 'site_enrichment',
+      message: `Queued ${created} backlink metric batches for ${domains.length} relevant sites`,
+      recordsProcessed: domains.length,
+      details: {
+        report: 'backlinks_comparison',
+        batchSize: options.batchSize,
+        observedUnitsPerSite: 40,
+        estimatedUnitsAtObservedRate: domains.length * 40,
+      },
+    })
+  }
+
+  return {
+    eligible: eligibleDomains.length,
+    alreadyCovered: eligibleDomains.length - uncoveredDomains.length,
+    selected: domains.length,
+    batches: batches.length,
+    created,
+    domains,
+  }
 }
 
 export async function queueHhtBlSiteExpansionJobs(
@@ -306,6 +546,17 @@ export async function queueHhtBlBacklinkCollectionJobs(
     .where(and(eq(hhtBlResearchSites.runId, runId), eq(hhtBlResearchSites.active, true)))
     .orderBy(hhtBlResearchSites.rank)
     .limit(options.siteLimit)
+  const completed = await db
+    .select({ reportType: hhtBlJobs.reportType, target: hhtBlJobs.target })
+    .from(hhtBlJobs)
+    .where(
+      and(
+        eq(hhtBlJobs.runId, runId),
+        inArray(hhtBlJobs.reportType, ['backlinks_refdomains', 'backlinks']),
+        eq(hhtBlJobs.status, 'COMPLETE'),
+      ),
+    )
+  const covered = new Set(completed.map((job) => `${job.reportType}\n${job.target ?? ''}`))
   let created = 0
   for (const row of rows) {
     const inputs: CreateHhtBlJobInput[] = [
@@ -361,10 +612,59 @@ export async function queueHhtBlBacklinkCollectionJobs(
       },
     ]
     for (const input of inputs) {
+      if (covered.has(`${input.reportType}\n${input.target ?? ''}`)) continue
       if ((await createHhtBlJob(db, input)).created) created += 1
     }
   }
   return { sites: rows.map((row) => row.domain), created }
+}
+
+export async function parkHhtBlCoveredBacklinkJobs(
+  db: Database,
+  runId: number,
+): Promise<number> {
+  const jobs = await db
+    .select({
+      id: hhtBlJobs.id,
+      reportType: hhtBlJobs.reportType,
+      target: hhtBlJobs.target,
+      status: hhtBlJobs.status,
+    })
+    .from(hhtBlJobs)
+    .where(
+      and(
+        eq(hhtBlJobs.runId, runId),
+        inArray(hhtBlJobs.reportType, ['backlinks_refdomains', 'backlinks']),
+      ),
+    )
+  const completed = new Set(
+    jobs
+      .filter((job) => job.status === 'COMPLETE')
+      .map((job) => `${job.reportType}\n${job.target ?? ''}`),
+  )
+  const ids = jobs
+    .filter(
+      (job) =>
+        (job.status === 'PENDING' || job.status === 'WAITING_FOR_CREDENTIALS') &&
+        completed.has(`${job.reportType}\n${job.target ?? ''}`),
+    )
+    .map((job) => job.id)
+  if (ids.length === 0) return 0
+  await db
+    .update(hhtBlJobs)
+    .set({
+      status: 'CANCELLED',
+      error: 'Parked: a completed job already covers this report and target',
+      updatedAt: new Date(),
+    })
+    .where(inArray(hhtBlJobs.id, ids))
+  await recordHhtBlEvent(db, {
+    runId,
+    stage: 'backlink_collection',
+    message: `Parked ${ids.length} backlink jobs already covered by completed requests`,
+    recordsProcessed: ids.length,
+  })
+  return ids.length
 }
 
 export async function createHhtBlJob(

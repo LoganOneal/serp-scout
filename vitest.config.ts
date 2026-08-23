@@ -27,7 +27,7 @@ export default defineConfig({
     // database, so the e2e suite (which needs real Postgres) lives in its own
     // config rather than behind a skip-if-env guard -- a skipped test that
     // silently never runs is the same failure mode as an unmeasured signal.
-    include: ['packages/**/*.test.ts'],
+    include: ['packages/**/*.test.ts', 'apps/**/*.test.ts'],
     exclude: ['**/node_modules/**', '**/*.e2e.test.ts'],
     environment: 'node',
   },

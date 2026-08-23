@@ -5,6 +5,7 @@ import {
   type HhtBlDashboardView,
 } from '@rnr/data'
 import { NULL_DISPLAY, num } from '@/lib/format'
+import { HhtSectionTabs } from '@/components/hht/HhtSectionTabs'
 
 export const dynamic = 'force-dynamic'
 
@@ -109,6 +110,7 @@ export default async function HhtBlPage({
           <h1 className="page-title">HHT BL analysis</h1>
           <p className="page-desc">HotelHotTubs backlink research workspace</p>
         </div>
+        <HhtSectionTabs active="backlinks" />
         <div className="stopbox" role="alert">
           <strong>Workspace unavailable.</strong> {result.error}
         </div>
@@ -124,6 +126,7 @@ export default async function HhtBlPage({
           <h1 className="page-title">HHT BL analysis</h1>
           <p className="page-desc">{dashboard.site.domain}</p>
         </div>
+        <HhtSectionTabs active="backlinks" />
         <Empty>No research run exists yet.</Empty>
       </div>
     )
@@ -157,6 +160,8 @@ export default async function HhtBlPage({
           </div>
         </div>
       </header>
+
+      <HhtSectionTabs active="backlinks" />
 
       <nav className="hht-bl-tabs" aria-label="HHT backlink workspace views">
         {VIEWS.map((item) => {

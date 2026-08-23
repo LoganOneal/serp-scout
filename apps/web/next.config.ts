@@ -1,4 +1,5 @@
 import type { NextConfig } from 'next'
+import { PHASE_DEVELOPMENT_SERVER } from 'next/constants'
 import { config as loadEnv } from 'dotenv'
 import { fileURLToPath } from 'node:url'
 
@@ -9,9 +10,20 @@ import { fileURLToPath } from 'node:url'
 // populated before any server component asks for DATABASE_URL.
 loadEnv({ path: fileURLToPath(new URL('../../.env', import.meta.url)) })
 
-const config: NextConfig = {
+export function resolveNextDistDir(
+  phase: string,
+  env: Readonly<Record<string, string | undefined>> = process.env as Readonly<
+    Record<string, string | undefined>
+  >,
+): string | undefined {
+  const override = env['NEXT_DIST_DIR']?.trim()
+  if (override) return override
+  return phase === PHASE_DEVELOPMENT_SERVER ? '.next-dev' : undefined
+}
+
+const config = (phase: string): NextConfig => ({
   /**
-   * Somewhere other than `.next`, when asked.
+   * Dev always lives outside `.next`; builds may be overridden when asked.
    *
    * ==================== WHY THIS EXISTS ====================
    * `next dev` and `next build` share `.next`, so running a build while the dev server is
@@ -19,13 +31,16 @@ const config: NextConfig = {
    * starts throwing SegmentViewNode errors and dies, which reads as "the app broke" rather
    * than "two processes fought over a directory". It cost an hour here once.
    *
-   *   NEXT_DIST_DIR=.next-build pnpm build
+   *   next dev                                -> .next-dev
+   *   next build                              -> .next
+   *   NEXT_DIST_DIR=.next-build pnpm build   -> .next-build
    *
-   * verifies a production build with the dev server still running. Unset is the normal
-   * `.next`, so Vercel and `pnpm start` are unaffected.
+   * This makes the safe path the default instead of relying on every build
+   * caller to remember an environment variable. Vercel and `next start` keep
+   * the production `.next` default.
    * =======================================================
    */
-  ...(process.env['NEXT_DIST_DIR'] ? { distDir: process.env['NEXT_DIST_DIR'] } : {}),
+  ...(resolveNextDistDir(phase) ? { distDir: resolveNextDistDir(phase) } : {}),
 
   /**
    * Trace from the WORKSPACE ROOT, not from apps/web.
@@ -63,6 +78,6 @@ const config: NextConfig = {
     }
     return config
   },
-}
+})
 
 export default config

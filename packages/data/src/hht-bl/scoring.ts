@@ -15,12 +15,68 @@ import {
   hhtBlOpportunities,
   hhtBlReferringDomains,
   hhtBlResearchSites,
+  hhtBlRuns,
   hhtBlSiteClassifications,
   hhtBlSiteMetrics,
   hhtBlStrategyClusters,
 } from '../schema.js'
 
 const clamp = (value: number): number => Math.max(0, Math.min(100, value))
+
+export const HHT_BL_SITEWIDE_LINK_VALUE_PENALTY = 15
+
+export const HHT_BL_SHARED_PLATFORM_DOMAINS = new Set([
+  'alibaba.com',
+  'ameblo.jp',
+  'bing.com',
+  'bio.site',
+  'blogspot.com',
+  'goodreads.com',
+  'grokipedia.com',
+  'hive.blog',
+  'myportfolio.com',
+  'odoo.com',
+  'pinterest.com',
+  'substack.com',
+])
+
+export function hhtBlOpportunityAuthority(input: {
+  sourceDomain: string
+  pageAuthority: number | null
+  referringDomainAuthority: number | null
+}): number {
+  return HHT_BL_SHARED_PLATFORM_DOMAINS.has(input.sourceDomain)
+    ? (input.pageAuthority ?? 0)
+    : (input.referringDomainAuthority ?? input.pageAuthority ?? 0)
+}
+
+export function hhtBlOpportunityExclusionReason(
+  input: {
+    follow: boolean | null
+    replicable: boolean
+    relevance: number
+    authority: number
+  },
+  minAuthorityScore: number,
+): 'not_follow' | 'not_replicable' | 'low_relevance' | 'low_authority' | null {
+  if (input.follow !== true) return 'not_follow'
+  if (!input.replicable) return 'not_replicable'
+  if (input.relevance < 40) return 'low_relevance'
+  if (input.authority < minAuthorityScore) return 'low_authority'
+  return null
+}
+
+export function dedupeHhtBlOpportunitiesBySource<
+  T extends { sourceUrl: string; researchSiteId: number; overallScore: number },
+>(rows: T[]): T[] {
+  const best = new Map<string, T>()
+  for (const row of rows) {
+    const key = `${row.researchSiteId}\n${row.sourceUrl}`
+    const current = best.get(key)
+    if (!current || row.overallScore > current.overallScore) best.set(key, row)
+  }
+  return [...best.values()]
+}
 
 function tractability(totalBacklinks: number): number {
   return clamp(100 - (Math.log10(totalBacklinks + 1) / 6) * 100)
@@ -172,6 +228,11 @@ export async function selectHhtBlResearchSites(
     }
   }
 
+  await db
+    .update(hhtBlResearchSites)
+    .set({ active: false })
+    .where(eq(hhtBlResearchSites.runId, runId))
+
   for (let index = 0; index < selected.length; index += 1) {
     const row = selected[index]!
     await db
@@ -200,11 +261,25 @@ function effortFor(mechanism: HhtBlMechanism, requiresNewAsset: boolean): number
 }
 
 export async function scoreHhtBlOpportunities(db: Database, runId: number): Promise<number> {
+  const [run] = await db
+    .select({ configuration: hhtBlRuns.configuration })
+    .from(hhtBlRuns)
+    .where(eq(hhtBlRuns.id, runId))
+    .limit(1)
+  if (!run) throw new Error(`HHT backlink run ${runId} does not exist`)
+  const configuration = run.configuration as {
+    backlinks?: { min_authority_score?: number }
+  }
+  const minAuthorityScore = configuration.backlinks?.min_authority_score ?? 20
+
   await db.delete(hhtBlOpportunities).where(eq(hhtBlOpportunities.runId, runId))
   const rows = await db
     .select({
       backlinkId: hhtBlBacklinks.id,
+      researchSiteId: hhtBlBacklinks.researchSiteId,
+      sourceUrl: hhtBlBacklinks.sourceUrl,
       follow: hhtBlBacklinks.follow,
+      sitewide: hhtBlBacklinks.sitewide,
       pageAuthority: hhtBlBacklinks.authorityScore,
       pageScore: hhtBlBacklinks.sourcePageScore,
       refAuthority: hhtBlReferringDomains.authorityScore,
@@ -223,22 +298,47 @@ export async function scoreHhtBlOpportunities(db: Database, runId: number): Prom
     .innerJoin(hhtBlLinkAnalyses, eq(hhtBlLinkAnalyses.backlinkId, hhtBlBacklinks.id))
     .where(eq(hhtBlBacklinks.runId, runId))
 
-  const scored: Array<{ backlinkId: number; overallScore: number }> = []
+  const candidates: Array<{
+    backlinkId: number
+    researchSiteId: number
+    sourceUrl: string
+    overallScore: number
+    linkValue: number
+    gettability: number
+    transferability: number
+    effort: number
+    expectedValue: number
+    scoreInputs: Record<string, unknown>
+  }> = []
   for (const row of rows) {
-    if (!row.replicable || row.relevance < 40) continue
-    const sharedPlatform = ['bing.com', 'grokipedia.com', 'substack.com'].includes(
-      row.sourceDomain,
-    )
-    const authority = sharedPlatform
-      ? (row.pageAuthority ?? 0)
-      : (row.refAuthority ?? row.pageAuthority ?? 0)
+    const sharedPlatform = HHT_BL_SHARED_PLATFORM_DOMAINS.has(row.sourceDomain)
+    const authority = hhtBlOpportunityAuthority({
+      sourceDomain: row.sourceDomain,
+      pageAuthority: row.pageAuthority,
+      referringDomainAuthority: row.refAuthority,
+    })
+    if (
+      hhtBlOpportunityExclusionReason(
+        {
+          follow: row.follow,
+          replicable: row.replicable,
+          relevance: row.relevance,
+          authority,
+        },
+        minAuthorityScore,
+      ) !== null
+    ) {
+      continue
+    }
     const sitesLinked = sharedPlatform ? 1 : row.sitesLinked
+    const sitewidePenalty = row.sitewide ? HHT_BL_SITEWIDE_LINK_VALUE_PENALTY : 0
     const linkValue = clamp(
       authority * 0.3 +
         (row.follow === true ? 15 : row.follow === null ? 0 : -10) +
         (row.editorial ? 20 : 5) +
         row.relevance * 0.2 +
-        (row.pageScore ?? 0) * 0.15,
+        (row.pageScore ?? 0) * 0.15 -
+        sitewidePenalty,
     )
     const clearMechanism = row.mechanism === 'unknown' || row.mechanism === 'organic_unreplicable' ? 0 : 100
     const gettability = clamp(
@@ -250,33 +350,60 @@ export async function scoreHhtBlOpportunities(db: Database, runId: number): Prom
     const transferability = (row.relevance + row.replicability) / 2
     const effort = effortFor(row.mechanism, row.requiresNewAsset)
     const result = scoreHhtBlOpportunity({ linkValue, gettability, transferability, effort })
+    candidates.push({
+      backlinkId: row.backlinkId,
+      researchSiteId: row.researchSiteId,
+      sourceUrl: row.sourceUrl,
+      overallScore: result.overallScore,
+      linkValue: Math.round(result.linkValue),
+      gettability: Math.round(result.gettability),
+      transferability: Math.round(result.transferability),
+      effort: Math.round(result.effort),
+      expectedValue: result.expectedValue,
+      scoreInputs: {
+        authority,
+        minAuthorityScore,
+        follow: row.follow,
+        editorial: row.editorial,
+        relevance: row.relevance,
+        replicability: row.replicability,
+        sitesLinked,
+        mechanism: row.mechanism,
+        likelyPaid: row.likelyPaid,
+        sitewide: row.sitewide,
+        sitewidePenalty,
+      },
+    })
+  }
+
+  const scored = dedupeHhtBlOpportunitiesBySource(candidates)
+  for (const row of scored) {
     await db
       .insert(hhtBlOpportunities)
       .values({
         runId,
         backlinkId: row.backlinkId,
-        linkValue: Math.round(result.linkValue),
-        gettability: Math.round(result.gettability),
-        transferability: Math.round(result.transferability),
-        effort: Math.round(result.effort),
-        overallScore: result.overallScore,
-        expectedValue: result.expectedValue,
-        scoreInputs: { authority, follow: row.follow, editorial: row.editorial, relevance: row.relevance, replicability: row.replicability, sitesLinked, mechanism: row.mechanism, likelyPaid: row.likelyPaid },
+        linkValue: row.linkValue,
+        gettability: row.gettability,
+        transferability: row.transferability,
+        effort: row.effort,
+        overallScore: row.overallScore,
+        expectedValue: row.expectedValue,
+        scoreInputs: row.scoreInputs,
       })
       .onConflictDoUpdate({
         target: hhtBlOpportunities.backlinkId,
         set: {
-          linkValue: Math.round(result.linkValue),
-          gettability: Math.round(result.gettability),
-          transferability: Math.round(result.transferability),
-          effort: Math.round(result.effort),
-          overallScore: result.overallScore,
-          expectedValue: result.expectedValue,
-          scoreInputs: { authority, follow: row.follow, editorial: row.editorial, relevance: row.relevance, replicability: row.replicability, sitesLinked, mechanism: row.mechanism, likelyPaid: row.likelyPaid },
+          linkValue: row.linkValue,
+          gettability: row.gettability,
+          transferability: row.transferability,
+          effort: row.effort,
+          overallScore: row.overallScore,
+          expectedValue: row.expectedValue,
+          scoreInputs: row.scoreInputs,
           updatedAt: new Date(),
         },
       })
-    scored.push({ backlinkId: row.backlinkId, overallScore: result.overallScore })
   }
   scored.sort((a, b) => b.overallScore - a.overallScore)
   for (let index = 0; index < scored.length; index += 1) {
@@ -314,6 +441,7 @@ export async function clusterHhtBlStrategies(db: Database, runId: number): Promi
       effort: hhtBlOpportunities.effort,
       expectedValue: hhtBlOpportunities.expectedValue,
       authority: hhtBlReferringDomains.authorityScore,
+      pageAuthority: hhtBlBacklinks.authorityScore,
       sourceDomain: hhtBlReferringDomains.domain,
       sourceUrl: hhtBlBacklinks.sourceUrl,
       researchSiteId: hhtBlBacklinks.researchSiteId,
@@ -325,6 +453,10 @@ export async function clusterHhtBlStrategies(db: Database, runId: number): Promi
     .innerJoin(hhtBlLinkAnalyses, eq(hhtBlLinkAnalyses.backlinkId, hhtBlBacklinks.id))
     .where(eq(hhtBlOpportunities.runId, runId))
     .orderBy(desc(hhtBlOpportunities.overallScore))
+
+  // Clusters and campaigns are fully derived from the current opportunity set.
+  // Rebuild them so mechanisms removed by a rescore cannot survive as stale output.
+  await db.delete(hhtBlStrategyClusters).where(eq(hhtBlStrategyClusters.runId, runId))
   const groups = new Map<HhtBlMechanism, typeof rows>()
   for (const row of rows) groups.set(row.mechanism, [...(groups.get(row.mechanism) ?? []), row])
 
@@ -332,6 +464,13 @@ export async function clusterHhtBlStrategies(db: Database, runId: number): Promi
     const average = (values: number[]): number => values.reduce((sum, value) => sum + value, 0) / Math.max(1, values.length)
     const recommendation = CAMPAIGN_NAMES[mechanism] ?? mechanism.replaceAll('_', ' ')
     const prospectCount = new Set(group.map((row) => row.sourceDomain)).size
+    const authorities = group.map((row) =>
+      hhtBlOpportunityAuthority({
+        sourceDomain: row.sourceDomain,
+        pageAuthority: row.pageAuthority,
+        referringDomainAuthority: row.authority,
+      }),
+    )
     const [cluster] = await db
       .insert(hhtBlStrategyClusters)
       .values({
@@ -339,7 +478,7 @@ export async function clusterHhtBlStrategies(db: Database, runId: number): Promi
         mechanism,
         prospectCount,
         researchSitesObserved: new Set(group.map((row) => row.researchSiteId)).size,
-        medianAuthority: median(group.map((row) => row.authority).filter((value): value is number => value !== null)),
+        medianAuthority: median(authorities),
         averageLinkValue: average(group.map((row) => row.linkValue)),
         averageGettability: average(group.map((row) => row.gettability)),
         averageEffort: average(group.map((row) => row.effort)),
@@ -352,7 +491,7 @@ export async function clusterHhtBlStrategies(db: Database, runId: number): Promi
         set: {
           prospectCount,
           researchSitesObserved: new Set(group.map((row) => row.researchSiteId)).size,
-          medianAuthority: median(group.map((row) => row.authority).filter((value): value is number => value !== null)),
+          medianAuthority: median(authorities),
           averageLinkValue: average(group.map((row) => row.linkValue)),
           averageGettability: average(group.map((row) => row.gettability)),
           averageEffort: average(group.map((row) => row.effort)),

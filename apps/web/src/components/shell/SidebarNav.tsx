@@ -54,8 +54,13 @@ const GROUPS: NavGroup[] = [
     items: [
       {
         href: '/hht-bl',
-        label: 'HHT BL analysis',
+        label: 'Backlinks',
         hint: 'Backlink research, opportunities, and acquired links',
+      },
+      {
+        href: '/hht-reddit',
+        label: 'Reddit',
+        hint: 'City demand and raw keywords for manual Reddit research',
       },
     ],
   },

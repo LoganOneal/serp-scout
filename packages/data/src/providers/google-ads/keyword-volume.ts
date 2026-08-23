@@ -22,6 +22,9 @@ import type { Micros } from '@rnr/core'
 /** United States — Keyword Planner national default. */
 export const GOOGLE_ADS_GEO_US = 2840
 
+/** Google caps KeywordPlanIdeaService planning methods at one request per second per CID. */
+export const GOOGLE_ADS_PLANNING_MIN_INTERVAL_MS = 1_100
+
 /**
  * Prefer city/metro Google Ads criteria when the locality code is from google
  * geotargets (same ID family). Otherwise fall back to US national.
@@ -188,6 +191,8 @@ export async function fetchKeywordVolumes(
      * Empty/omitted → United States national (2840).
      */
     geoTargetCriteriaIds?: number[]
+    /** Override only for deterministic tests. Production defaults above Google's 1 QPS floor. */
+    requestIntervalMs?: number
   } = {},
 ): Promise<KeywordVolumeResult> {
   const env = opts.env ?? process.env
@@ -258,6 +263,10 @@ export async function fetchKeywordVolumes(
     const byKeyword = new Map<string, KeywordVolumeRow>()
     const geoTargetConstants = geoTargetCriteriaIds.map((id) => `geoTargetConstants/${id}`)
 
+    const requestIntervalMs = Math.max(
+      0,
+      opts.requestIntervalMs ?? GOOGLE_ADS_PLANNING_MIN_INTERVAL_MS,
+    )
     for (let i = 0; i < unique.length; i += 100) {
       const chunk = unique.slice(i, i + 100)
       const url = `https://googleads.googleapis.com/${apiVersion}/customers/${customerId}:generateKeywordHistoricalMetrics`
@@ -313,14 +322,29 @@ export async function fetchKeywordVolumes(
         const keyword = (r.text ?? '').trim()
         if (!keyword) continue
         const m = r.keywordMetrics
-        byKeyword.set(keyword.toLowerCase(), {
-          keyword,
+        const metrics = {
           avgMonthlySearches: numOrNull(m?.avgMonthlySearches),
           competitionIndex: numOrNull(m?.competitionIndex),
           lowTopOfPageBidMicros: microsOrNull(m?.lowTopOfPageBidMicros),
           highTopOfPageBidMicros: microsOrNull(m?.highTopOfPageBidMicros),
           monthlySearches: mapMonthlyVolumes(m?.monthlySearchVolumes),
-        })
+        }
+        byKeyword.set(keyword.toLowerCase(), { keyword, ...metrics })
+        /**
+         * Historical Metrics groups close variants into one result. Ignoring
+         * this array left most requested phrases null even though Google had
+         * measured them in the returned group. Each requested surface form
+         * receives the group's metrics; aggregation is responsible for not
+         * summing the variants as independent audiences.
+         */
+        for (const closeVariant of r.closeVariants ?? []) {
+          const variant = closeVariant.trim()
+          if (variant) byKeyword.set(variant.toLowerCase(), { keyword: variant, ...metrics })
+        }
+      }
+
+      if (i + 100 < unique.length && requestIntervalMs > 0) {
+        await new Promise((resolve) => setTimeout(resolve, requestIntervalMs))
       }
     }
 
