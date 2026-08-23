@@ -5,6 +5,9 @@ export interface HhtDestination {
   slug: string
   label: string
   aliases: string[]
+  countryCode: 'US' | 'CA'
+  googleAdsGeoTarget: number
+  volumeScope: 'us/en' | 'ca/en'
   /** Restrict matching for ambiguous names such as Arlington, VA vs Arlington, TX. */
   matchAliases?: string[]
 }
@@ -14,6 +17,9 @@ export type HhtIntentTier = 'room' | 'suite' | 'romantic' | 'lodging'
 export interface HhtKeywordCandidate {
   city: string
   citySlug: string
+  countryCode: 'US' | 'CA'
+  googleAdsGeoTarget: number
+  volumeScope: 'us/en' | 'ca/en'
   keyword: string
   keywordNorm: string
   avgMonthlySearches: number | null
@@ -40,6 +46,9 @@ export interface HhtRejectedKeyword {
 export interface HhtCityAggregate {
   city: string
   citySlug: string
+  countryCode: 'US' | 'CA'
+  googleAdsGeoTarget: number
+  volumeScope: 'us/en' | 'ca/en'
   keywordCount: number
   measuredKeywordCount: number
   unmeasuredKeywordCount: number
@@ -84,8 +93,24 @@ const US_STATES: Record<string, string> = {
   wa: 'washington', wv: 'west virginia', wi: 'wisconsin', wy: 'wyoming',
 }
 
+const CANADIAN_PROVINCES: Record<string, string> = {
+  ab: 'alberta', bc: 'british columbia', mb: 'manitoba', nb: 'new brunswick',
+  nl: 'newfoundland and labrador', ns: 'nova scotia', nt: 'northwest territories',
+  nu: 'nunavut', on: 'ontario', pe: 'prince edward island', qc: 'quebec',
+  sk: 'saskatchewan', yt: 'yukon',
+}
+
+const REGIONS: Record<string, string> = { ...US_STATES, ...CANADIAN_PROVINCES }
+
 const STATE_CLUSTER_TERMS = new RegExp(
-  `\\b(?:${[...Object.keys(US_STATES), ...Object.values(US_STATES)]
+  `\\b(?:${[
+    ...Object.keys(REGIONS),
+    ...Object.values(REGIONS),
+    'canada',
+    'canadian',
+    'united states',
+    'usa',
+  ]
     .sort((a, b) => b.length - a.length)
     .join('|')})\\b`,
   'g',
@@ -110,7 +135,7 @@ function expectedState(destination: HhtDestination): { abbreviation: string; nam
   for (const alias of destination.aliases.map(normalizeHhtText)) {
     if (!alias.startsWith(`${label} `)) continue
     const suffix = alias.slice(label.length + 1)
-    if (US_STATES[suffix]) return { abbreviation: suffix, name: US_STATES[suffix] }
+    if (REGIONS[suffix]) return { abbreviation: suffix, name: REGIONS[suffix] }
   }
   return null
 }
@@ -123,12 +148,12 @@ function hasConflictingState(keywordNorm: string, destination: HhtDestination): 
   const cityNames = [label, ...(COMMON_CITY_ALIASES[label] ?? [])]
 
   for (const city of cityNames) {
-    for (const [abbreviation, name] of Object.entries(US_STATES)) {
+    for (const [abbreviation, name] of Object.entries(REGIONS)) {
       if (abbreviation === expected.abbreviation) continue
       if (phraseIn(keywordNorm, `${city} ${name}`)) return true
       // IN, ME, and OR are ordinary query words as well as state abbreviations.
       if (
-        !['in', 'me', 'or'].includes(abbreviation) &&
+        !['in', 'me', 'on', 'or'].includes(abbreviation) &&
         phraseIn(keywordNorm, `${city} ${abbreviation}`)
       ) {
         return true
@@ -251,6 +276,9 @@ export function mergeHhtKeywords(args: {
     byKeyword.set(classified.keywordNorm, {
       city: args.destination.label,
       citySlug: args.destination.slug,
+      countryCode: args.destination.countryCode,
+      googleAdsGeoTarget: args.destination.googleAdsGeoTarget,
+      volumeScope: args.destination.volumeScope,
       keyword: idea.keyword.trim().toLowerCase().replace(/\s+/g, ' '),
       keywordNorm: classified.keywordNorm,
       avgMonthlySearches: chooseVolume(existing, idea),
@@ -290,6 +318,9 @@ export function aggregateHhtCity(
   return {
     city: destination.label,
     citySlug: destination.slug,
+    countryCode: destination.countryCode,
+    googleAdsGeoTarget: destination.googleAdsGeoTarget,
+    volumeScope: destination.volumeScope,
     keywordCount: candidates.length,
     measuredKeywordCount: measured.length,
     unmeasuredKeywordCount: candidates.length - measured.length,

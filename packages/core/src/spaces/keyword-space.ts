@@ -38,6 +38,9 @@
 /** United States. The same integer in DataForSEO location codes AND Google Ads geo targets. */
 export const LOCATION_US = 2840
 
+/** Canada. The same integer in DataForSEO location codes AND Google Ads geo targets. */
+export const LOCATION_CA = 2124
+
 /**
  * Volume asked for with no location at all.
  *
@@ -71,7 +74,7 @@ export type AudienceScope = 'worldwide' | 'per_locality' | `country:${string}`
 /** ISO alpha-2 → provider location code. Extend deliberately, never guess. */
 export const COUNTRY_LOCATION_CODES: Readonly<Record<string, number>> = {
   US: LOCATION_US,
-  CA: 2124,
+  CA: LOCATION_CA,
   GB: 2826,
   AU: 2036,
 }
@@ -261,6 +264,7 @@ export function assertRequestLocation(
 export function volumeScopeLabel(space: KeywordSpace, used: number | Worldwide): string {
   if (used === WORLDWIDE) return 'worldwide/en'
   if (used === LOCATION_US) return 'us/en'
+  if (used === LOCATION_CA) return 'ca/en'
   return `location_code=${used}/en`
 }
 

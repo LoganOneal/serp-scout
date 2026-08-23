@@ -22,6 +22,9 @@ import type { Micros } from '@rnr/core'
 /** United States — Keyword Planner national default. */
 export const GOOGLE_ADS_GEO_US = 2840
 
+/** Canada — Keyword Planner national audience. */
+export const GOOGLE_ADS_GEO_CA = 2124
+
 /** Google caps KeywordPlanIdeaService planning methods at one request per second per CID. */
 export const GOOGLE_ADS_PLANNING_MIN_INTERVAL_MS = 1_100
 

@@ -3,18 +3,16 @@ import { LOCATION_US, type KeywordSpace } from '@rnr/core'
 /**
  * The two live affiliate sites, as keyword spaces.
  *
- * ==================== BOTH ARE country:US, FOR DIFFERENT REASONS ====================
- * `hotelhottubs` because its destinations are domestic-traveller markets and
- * because its CPC and seasonality terms need a single ad market — worldwide
- * blends hemispheres and ad economies, and two of the three value terms become
- * meaningless.
+ * ==================== BOTH BASE GRIDS ARE country:US ====================
+ * `hotelhottubs` keeps its canonical generated grid US-scoped because its CPC
+ * and seasonality terms need a single ad market — worldwide blends hemispheres
+ * and ad economies. Its Reddit research workspace supplements that grid with
+ * explicit Canadian destinations measured separately at country:CA.
  *
  * `borenhealth` because shipping and regulation are national.
  *
  * Two sites agreeing is NOT evidence that agreement is automatic, which is why
  * `audienceScope` has no default and each of these states it explicitly. The
- * condition that flips hotelhottubs to `worldwide` is named in the plan: the
- * site covering non-US destinations.
  * ==================================================================================
  */
 
@@ -57,7 +55,8 @@ export const HOTEL_HOT_TUBS: AffiliateSiteSeed = {
     volumeFloor: 50,
   },
   notes:
-    'Affiliate: hotel bookings. Destination is in the keyword; audience is the whole US. ' +
+    'Affiliate: hotel bookings. Destination is in the keyword; the base grid audience is the whole US. ' +
+    'The Reddit research pipeline adds Canadian destinations with a separate CA-national scope. ' +
     'Seasonality (monthly_series) is load-bearing here — Aspen and Vegas peak six months apart.',
 }
 

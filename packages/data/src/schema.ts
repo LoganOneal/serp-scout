@@ -2792,7 +2792,8 @@ export const hhtRedditKeywordRuns = pgTable(
     sourceHash: text('source_hash').notNull(),
     generatedAt: timestamp('generated_at', { withTimezone: true }).notNull(),
     audienceScope: text('audience_scope').notNull().default('country:US'),
-    googleAdsGeoTarget: integer('google_ads_geo_target').notNull().default(2840),
+    /** Null when a snapshot contains more than one country audience. */
+    googleAdsGeoTarget: integer('google_ads_geo_target').default(2840),
     freeOnly: boolean('free_only').notNull().default(true),
     destinationCount: integer('destination_count').notNull(),
     ideasReturned: integer('ideas_returned').notNull(),
@@ -2819,6 +2820,9 @@ export const hhtRedditCityAggregates = pgTable(
     cityRank: integer('city_rank').notNull(),
     city: text('city').notNull(),
     citySlug: text('city_slug').notNull(),
+    countryCode: text('country_code').$type<'US' | 'CA'>().notNull().default('US'),
+    googleAdsGeoTarget: integer('google_ads_geo_target').notNull().default(2840),
+    volumeScope: text('volume_scope').notNull().default('us/en'),
     conservativeAggregateVolume: integer('conservative_aggregate_volume').notNull(),
     rawAggregateVolume: integer('raw_aggregate_volume').notNull(),
     closeVariantOverlapDelta: integer('close_variant_overlap_delta').notNull(),
@@ -2835,6 +2839,11 @@ export const hhtRedditCityAggregates = pgTable(
   (t) => ({
     cityUq: uniqueIndex('hht_reddit_city_aggregates_city_uq').on(t.runId, t.citySlug),
     rankIdx: index('hht_reddit_city_aggregates_rank_idx').on(t.runId, t.cityRank),
+    countryRankIdx: index('hht_reddit_city_aggregates_country_rank_idx').on(
+      t.runId,
+      t.countryCode,
+      t.cityRank,
+    ),
   }),
 )
 
@@ -2849,6 +2858,8 @@ export const hhtRedditKeywords = pgTable(
     cityRank: integer('city_rank').notNull(),
     city: text('city').notNull(),
     citySlug: text('city_slug').notNull(),
+    countryCode: text('country_code').$type<'US' | 'CA'>().notNull().default('US'),
+    googleAdsGeoTarget: integer('google_ads_geo_target').notNull().default(2840),
     keyword: text('keyword').notNull(),
     keywordNorm: text('keyword_norm').notNull(),
     avgMonthlySearches: integer('avg_monthly_searches'),
@@ -2865,6 +2876,11 @@ export const hhtRedditKeywords = pgTable(
     keywordUq: uniqueIndex('hht_reddit_keywords_keyword_uq').on(t.runId, t.citySlug, t.keywordNorm),
     cityRankIdx: index('hht_reddit_keywords_city_rank_idx').on(t.runId, t.citySlug, t.cityRank),
     volumeIdx: index('hht_reddit_keywords_volume_idx').on(t.runId, t.avgMonthlySearches),
+    countryVolumeIdx: index('hht_reddit_keywords_country_volume_idx').on(
+      t.runId,
+      t.countryCode,
+      t.avgMonthlySearches,
+    ),
   }),
 )
 

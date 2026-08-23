@@ -72,8 +72,17 @@ export default async function HhtRedditPage({
     )
   }
 
-  const { cities, keywordPagination, keywords, keywordScope, run, selectedCity, site } =
-    result.dashboard
+  const {
+    cities,
+    keywordPagination,
+    keywords,
+    keywordScope,
+    run,
+    scopeCities,
+    selectedCity,
+    selectedCountryCode,
+    site,
+  } = result.dashboard
   if (!run) {
     return (
       <div className="opp-workspace hht-bl-workspace">
@@ -90,23 +99,28 @@ export default async function HhtRedditPage({
   }
 
   const showingAllCities = keywordScope === 'all'
-  const globalConservativeVolume = cities.reduce(
+  const showingMultipleCities = keywordScope !== 'city'
+  const countryLabel = selectedCountryCode === 'CA' ? 'Canada' : 'United States'
+  const selectedScope = showingAllCities
+    ? 'all'
+    : selectedCountryCode
+      ? `country-${selectedCountryCode.toLowerCase()}`
+      : selectedCity?.citySlug
+  const globalConservativeVolume = scopeCities.reduce(
     (sum, row) => sum + row.conservativeAggregateVolume,
     0,
   )
-  const globalRawVolume = cities.reduce((sum, row) => sum + row.rawAggregateVolume, 0)
-  const measuredKeywordCount = showingAllCities
-    ? run.measuredKeywordCount
-    : (selectedCity?.measuredKeywordCount ?? 0)
-  const unmeasuredKeywordCount = showingAllCities
-    ? run.eligibleKeywordCount - run.measuredKeywordCount
-    : (selectedCity?.unmeasuredKeywordCount ?? 0)
-  const conservativeVolume = showingAllCities
-    ? globalConservativeVolume
-    : (selectedCity?.conservativeAggregateVolume ?? 0)
-  const rawVolume = showingAllCities
-    ? globalRawVolume
-    : (selectedCity?.rawAggregateVolume ?? 0)
+  const globalRawVolume = scopeCities.reduce((sum, row) => sum + row.rawAggregateVolume, 0)
+  const measuredKeywordCount = scopeCities.reduce(
+    (sum, row) => sum + row.measuredKeywordCount,
+    0,
+  )
+  const unmeasuredKeywordCount = scopeCities.reduce(
+    (sum, row) => sum + row.unmeasuredKeywordCount,
+    0,
+  )
+  const conservativeVolume = globalConservativeVolume
+  const rawVolume = globalRawVolume
   const firstVisibleKeyword =
     keywordPagination.totalRows === 0 ? 0 : keywordPagination.offset + 1
   const lastVisibleKeyword = Math.min(
@@ -121,7 +135,7 @@ export default async function HhtRedditPage({
           <div>
             <h1 className="page-title">HHT Reddit research</h1>
             <p className="page-desc">
-              {site.domain} · US keyword demand · Updated {dateTime(run.generatedAt)}
+              {site.domain} · US + Canada keyword demand · Updated {dateTime(run.generatedAt)}
             </p>
           </div>
           <div className="hht-bl-run-state">
@@ -146,7 +160,10 @@ export default async function HhtRedditPage({
         <div className="hht-reddit-method" role="note">
           <strong>Use conservative volume to rank cities.</strong> It takes the highest-volume
           phrase in each normalized intent cluster. Raw volume is the direct keyword sum and can
-          double-count close variants. Null keyword volume remains unmeasured, never zero.
+          double-count close variants. Google Keyword Planner groups close variants, so volume is
+          not a literal exact-query count. Every destination phrase is measured country-wide
+          (US or Canada), never with city-bound targeting. Null volume remains unmeasured, never
+          zero.
         </div>
 
         <form className="hht-reddit-city-picker" method="get" aria-label="Select keyword scope">
@@ -154,15 +171,26 @@ export default async function HhtRedditPage({
           <select
             id="hht-reddit-city"
             name="city"
-            defaultValue={showingAllCities ? 'all' : selectedCity?.citySlug}
+            defaultValue={selectedScope}
           >
             <option value="all">
-              All cities — volume descending ({num(run.measuredKeywordCount)} measured)
+              All US + Canada — volume descending ({num(run.measuredKeywordCount)} measured)
             </option>
-            {cities.map((row) => (
-              <option key={row.citySlug} value={row.citySlug}>
-                {row.city} — {num(row.conservativeAggregateVolume)}
-              </option>
+            <option value="country-us">United States only</option>
+            <option value="country-ca">Canada only</option>
+            {(['CA', 'US'] as const).map((countryCode) => (
+              <optgroup
+                key={countryCode}
+                label={countryCode === 'CA' ? 'Canadian cities' : 'US cities'}
+              >
+                {cities
+                  .filter((row) => row.countryCode === countryCode)
+                  .map((row) => (
+                    <option key={row.citySlug} value={row.citySlug}>
+                      {row.city} — {num(row.conservativeAggregateVolume)}
+                    </option>
+                  ))}
+              </optgroup>
             ))}
           </select>
           <button type="submit" className="btn-secondary">
@@ -177,7 +205,7 @@ export default async function HhtRedditPage({
                 <h2 id="hht-reddit-cities-heading">City demand</h2>
                 <p>Cluster-deduped and raw monthly search sums</p>
               </div>
-              <span>{num(cities.length)} cities</span>
+              <span>{num(scopeCities.length)} cities</span>
             </div>
             <div className="hht-reddit-table-wrap">
               <table className="hht-reddit-table hht-reddit-city-table">
@@ -191,11 +219,11 @@ export default async function HhtRedditPage({
                   </tr>
                 </thead>
                 <tbody>
-                  {cities.map((row) => {
+                  {scopeCities.map((row, index) => {
                     const active = row.citySlug === selectedCity?.citySlug
                     return (
                       <tr key={row.citySlug} className={active ? 'is-selected' : undefined}>
-                        <td className="num">{num(row.cityRank)}</td>
+                        <td className="num">{num(index + 1)}</td>
                         <td>
                           <Link
                             href={`/hht-reddit?city=${encodeURIComponent(row.citySlug)}#keywords`}
@@ -203,6 +231,7 @@ export default async function HhtRedditPage({
                           >
                             {row.city}
                           </Link>
+                          <span className="hht-reddit-country">{row.countryCode}</span>
                           <span className="hht-reddit-top-keyword" title={row.topKeyword ?? undefined}>
                             {row.topKeyword ?? 'No measured keyword'}
                           </span>
@@ -230,10 +259,14 @@ export default async function HhtRedditPage({
             <div className="hht-reddit-panel-head">
               <div>
                 <h2 id="hht-reddit-keywords-heading">
-                  {showingAllCities ? 'All-city keywords' : `${selectedCity?.city} keywords`}
+                  {showingAllCities
+                    ? 'All-market keywords'
+                    : selectedCountryCode
+                      ? `${countryLabel} keywords`
+                      : `${selectedCity?.city} keywords`}
                 </h2>
                 <p>
-                  {showingAllCities
+                  {showingMultipleCities
                     ? `Showing ${num(firstVisibleKeyword)}–${num(lastVisibleKeyword)} of ${num(
                         keywordPagination.totalRows,
                       )} · volume descending`
@@ -257,9 +290,9 @@ export default async function HhtRedditPage({
                   <tr>
                     <th className="num">#</th>
                     <th>Keyword</th>
-                    {showingAllCities ? <th>City</th> : null}
+                    {showingMultipleCities ? <th>Market</th> : null}
                     <th className="num" aria-sort="descending">
-                      Volume ↓
+                      Close-variant vol ↓
                     </th>
                     <th>Intent</th>
                     <th>Cluster</th>
@@ -270,17 +303,18 @@ export default async function HhtRedditPage({
                   </tr>
                 </thead>
                 <tbody>
-                  {keywords.map((row) => (
+                  {keywords.map((row, index) => (
                     <tr key={row.id}>
                       <td className="num">
-                        {num(showingAllCities ? row.globalRank : row.cityRank)}
+                        {num(showingMultipleCities ? firstVisibleKeyword + index : row.cityRank)}
                       </td>
                       <td className="hht-reddit-keyword">{row.keyword}</td>
-                      {showingAllCities ? (
+                      {showingMultipleCities ? (
                         <td className="hht-reddit-keyword-city">
                           <Link href={`/hht-reddit?city=${encodeURIComponent(row.citySlug)}#keywords`}>
                             {row.city}
                           </Link>
+                          <span className="hht-reddit-country">{row.countryCode}</span>
                         </td>
                       ) : null}
                       <td className="num hht-reddit-primary-volume">
@@ -297,11 +331,11 @@ export default async function HhtRedditPage({
                 </tbody>
               </table>
             </div>
-            {showingAllCities && keywordPagination.totalPages > 1 ? (
-              <nav className="hht-reddit-pagination" aria-label="Global keyword pages">
+            {showingMultipleCities && keywordPagination.totalPages > 1 ? (
+              <nav className="hht-reddit-pagination" aria-label="Keyword result pages">
                 {keywordPagination.page > 1 ? (
                   <Link
-                    href={`/hht-reddit?city=all&page=${keywordPagination.page - 1}#keywords`}
+                    href={`/hht-reddit?city=${encodeURIComponent(selectedScope ?? 'all')}&page=${keywordPagination.page - 1}#keywords`}
                     rel="prev"
                   >
                     ← Previous
@@ -314,7 +348,7 @@ export default async function HhtRedditPage({
                 </strong>
                 {keywordPagination.page < keywordPagination.totalPages ? (
                   <Link
-                    href={`/hht-reddit?city=all&page=${keywordPagination.page + 1}#keywords`}
+                    href={`/hht-reddit?city=${encodeURIComponent(selectedScope ?? 'all')}&page=${keywordPagination.page + 1}#keywords`}
                     rel="next"
                   >
                     Next →

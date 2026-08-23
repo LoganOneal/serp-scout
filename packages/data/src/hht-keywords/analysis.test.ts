@@ -11,6 +11,9 @@ const chicago: HhtDestination = {
   slug: 'chicago-il',
   label: 'Chicago',
   aliases: ['Chicago IL'],
+  countryCode: 'US',
+  googleAdsGeoTarget: 2840,
+  volumeScope: 'us/en',
 }
 
 const idea = (keyword: string, volume: number | null) => ({
@@ -49,7 +52,12 @@ describe('classifyHhtKeyword', () => {
   })
 
   it('recognises safe common aliases', () => {
-    const nyc = { slug: 'new-york-city-ny', label: 'New York City', aliases: ['New York City NY'] }
+    const nyc = {
+      ...chicago,
+      slug: 'new-york-city-ny',
+      label: 'New York City',
+      aliases: ['New York City NY'],
+    }
     expect(classifyHhtKeyword('NYC hotels with private hot tub', nyc)).toMatchObject({
       eligible: true,
     })
@@ -57,6 +65,7 @@ describe('classifyHhtKeyword', () => {
 
   it('rejects a same-named city in another explicit state', () => {
     const lancaster = {
+      ...chicago,
       slug: 'lancaster-ca',
       label: 'Lancaster',
       aliases: ['Lancaster CA'],
@@ -67,6 +76,24 @@ describe('classifyHhtKeyword', () => {
     })
     expect(classifyHhtKeyword('Lancaster hotels with jacuzzi in room', lancaster)).toMatchObject({
       eligible: true,
+    })
+  })
+
+  it('keeps a bare Canadian city while rejecting an explicit wrong province', () => {
+    const london: HhtDestination = {
+      slug: 'london-on-ca',
+      label: 'London',
+      aliases: ['London ON', 'London Ontario'],
+      countryCode: 'CA',
+      googleAdsGeoTarget: 2124,
+      volumeScope: 'ca/en',
+    }
+    expect(classifyHhtKeyword('London hotels with private hot tubs', london)).toMatchObject({
+      eligible: true,
+    })
+    expect(classifyHhtKeyword('London Kentucky hotels with jacuzzi', london)).toEqual({
+      eligible: false,
+      reason: 'wrong_geography',
     })
   })
 
@@ -90,6 +117,20 @@ describe('hhtIntentCluster', () => {
   it('does not split clusters on state spelling or redundant tub wording', () => {
     expect(hhtIntentCluster('Chicago Illinois hotels with jacuzzi tub in room', chicago)).toBe(
       hhtIntentCluster('Chicago IL hotels with hot tubs in room', chicago),
+    )
+  })
+
+  it('does not split Canadian clusters on a redundant country qualifier', () => {
+    const toronto: HhtDestination = {
+      slug: 'toronto-on-ca',
+      label: 'Toronto',
+      aliases: ['Toronto ON', 'Toronto Ontario'],
+      countryCode: 'CA',
+      googleAdsGeoTarget: 2124,
+      volumeScope: 'ca/en',
+    }
+    expect(hhtIntentCluster('Toronto hotels with hot tubs in room', toronto)).toBe(
+      hhtIntentCluster('hotels with jacuzzi in room Toronto Canada', toronto),
     )
   })
 })

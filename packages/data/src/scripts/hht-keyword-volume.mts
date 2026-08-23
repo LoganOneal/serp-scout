@@ -3,7 +3,7 @@
  *
  * This command calls Google Ads only. It never imports DataForSEO, Semrush, or
  * a SERP provider. Destination names stay in the keyword while every request is
- * scoped to the US audience (geoTargetConstants/2840).
+ * scoped to each destination's country audience (US 2840 or Canada 2124).
  *
  *   node --import tsx --conditions=react-server \
  *     packages/data/src/scripts/hht-keyword-volume.mts --live
@@ -22,9 +22,13 @@ import {
   type HhtKeywordCandidate,
   type HhtRejectedKeyword,
 } from '../hht-keywords/analysis.js'
+import { HHT_CANADIAN_DESTINATIONS } from '../hht-keywords/markets.js'
 import { saveHhtRedditAnalysis } from '../hht-keywords/store.js'
 import { fetchKeywordIdeas, type KeywordIdea } from '../providers/google-ads/keyword-ideas.js'
-import { GOOGLE_ADS_GEO_US } from '../providers/google-ads/keyword-volume.js'
+import {
+  GOOGLE_ADS_GEO_CA,
+  GOOGLE_ADS_GEO_US,
+} from '../providers/google-ads/keyword-volume.js'
 import { siteKeywordTargets } from '../schema.js'
 import { ensureKeywordVolumes } from '../serp/keyword-volume-cache.js'
 import { loadDimensionEntities } from '../spaces/entities.js'
@@ -44,7 +48,8 @@ const positiveInt = (name: string, fallback: number): number => {
 }
 
 const domain = value('domain', 'hotelhottubs.com')
-const maxCities = positiveInt('max-cities', 195)
+const maxUsCities = positiveInt('max-cities', 195)
+const maxCanadianCities = positiveInt('max-canadian-cities', HHT_CANADIAN_DESTINATIONS.length)
 const pageSize = positiveInt('page-size', 100)
 const delayMs = positiveInt('delay-ms', 1_100)
 const live = has('live')
@@ -52,6 +57,18 @@ const refresh = has('refresh')
 const persist = has('persist')
 const outputDir = resolve(value('output-dir', 'exports/hht-keywords'))
 const cacheDir = resolve(value('cache-dir', '.cache/hht-keyword-ideas-us-v1'))
+const countries = new Set(
+  value('countries', 'US,CA')
+    .split(',')
+    .map((country) => country.trim().toUpperCase())
+    .filter(Boolean),
+)
+for (const country of countries) {
+  if (country !== 'US' && country !== 'CA') {
+    throw new Error(`--countries only accepts US and CA; received ${country}`)
+  }
+}
+if (countries.size === 0) throw new Error('--countries must include US, CA, or both')
 
 if (!live && refresh) throw new Error('--refresh requires --live')
 
@@ -81,7 +98,14 @@ interface CityRun {
 const sleep = (ms: number) => new Promise((resolvePromise) => setTimeout(resolvePromise, ms))
 
 function asDestination(entity: SpaceEntity): HhtDestination {
-  return { slug: entity.slug, label: entity.label, aliases: entity.aliases }
+  return {
+    slug: entity.slug,
+    label: entity.label,
+    aliases: entity.aliases,
+    countryCode: 'US',
+    googleAdsGeoTarget: GOOGLE_ADS_GEO_US,
+    volumeScope: 'us/en',
+  }
 }
 
 function serialiseIdeas(
@@ -182,8 +206,8 @@ async function fetchIdeasWithRetry(
   let lastError: string | null = null
   for (let attempt = 1; attempt <= 3; attempt += 1) {
     const result = await fetchKeywordIdeas(seeds, {
-      // The destination is in every seed. 2840 is the audience, never the city's code.
-      geoTargetCriteriaIds: [GOOGLE_ADS_GEO_US],
+      // The destination is in every seed. This is its country audience, never its city code.
+      geoTargetCriteriaIds: [destination.googleAdsGeoTarget],
       pageSize,
     })
     if (result.source === 'google_ads') return { ideas: result.ideas, error: null }
@@ -201,19 +225,25 @@ async function main(): Promise<void> {
   const site = await findSiteByDomain(database, domain)
   if (!site?.keywordSpace) throw new Error(`No keyword space found for ${domain}`)
   const space = site.keywordSpace as KeywordSpace
-  if (space.geoMode !== 'in_keyword' || space.serpLocationCode !== GOOGLE_ADS_GEO_US) {
+  if (space.geoMode !== 'in_keyword') {
     throw new Error(
-      `${domain} must use geoMode=in_keyword and fixed US location 2840; refusing a city-bound request`,
+      `${domain} must use geoMode=in_keyword; refusing a city-bound request`,
     )
   }
 
   const entities = await loadDimensionEntities(database, space)
-  const destinations = (entities['locality'] ?? []).slice(0, maxCities).map(asDestination)
+  const usDestinations = countries.has('US')
+    ? (entities['locality'] ?? []).slice(0, maxUsCities).map(asDestination)
+    : []
+  const canadianDestinations = countries.has('CA')
+    ? HHT_CANADIAN_DESTINATIONS.slice(0, maxCanadianCities)
+    : []
+  const destinations = [...usDestinations, ...canadianDestinations]
   if (destinations.length === 0) throw new Error('No locality entities resolved for this site')
   const destinationSlugs = new Set(destinations.map((destination) => destination.slug))
   const labelCounts = new Map<string, number>()
   for (const destination of destinations) {
-    const label = normalizeHhtText(destination.label)
+    const label = `${destination.countryCode}:${normalizeHhtText(destination.label)}`
     labelCounts.set(label, (labelCounts.get(label) ?? 0) + 1)
   }
 
@@ -243,8 +273,10 @@ async function main(): Promise<void> {
 
   console.log(
     `Hotel Hot Tubs free keyword run: ${destinations.length} destinations, ` +
-      `${scopedGridRows.length} grid seeds, US audience 2840`,
+      `${scopedGridRows.length} US grid seeds, ` +
+      `${usDestinations.length} US markets + ${canadianDestinations.length} Canadian markets`,
   )
+  console.log('Audience targets: US 2840, Canada 2124; city names stay inside the query.')
   console.log('Paid providers disabled by construction: no SERP, DataForSEO, or Semrush imports.')
 
   /**
@@ -290,21 +322,36 @@ async function main(): Promise<void> {
     const cityGrid = rowsByCity.get(destination.slug) ?? []
     /**
      * A per-site keyword is unique, so two cities with the same bare name
-     * cannot both own `hotels ... arlington`. Seed both ambiguous cities with
-     * state-qualified phrases and require that explicit geography in ideas.
+     * cannot both own `hotels ... arlington`. Seed same-name markets with a
+     * region-qualified phrase and require that explicit geography in ideas.
+     * New Canadian markets also use qualified seeds, but retain bare-city
+     * matches because the country-level request already disambiguates them.
      */
     const explicitLabel = destination.aliases[0] ?? destination.label
-    const requiresExplicitGeography =
-      cityGrid.length === 0 || (labelCounts.get(normalizeHhtText(destination.label)) ?? 0) > 1
-    const analysisDestination: HhtDestination = requiresExplicitGeography
+    const ambiguousWithinCountry =
+      (labelCounts.get(
+        `${destination.countryCode}:${normalizeHhtText(destination.label)}`,
+      ) ?? 0) > 1
+    const needsGeneratedSeeds = cityGrid.length === 0
+    const analysisDestination: HhtDestination = ambiguousWithinCountry
       ? { ...destination, matchAliases: [explicitLabel] }
       : destination
-    const seeds = (
-      requiresExplicitGeography
-        ? space.patterns.map((pattern) => pattern.template.replaceAll('{locality}', explicitLabel))
-        : cityGrid.map((row) => row.keyword)
-    ).slice(0, 20)
-    const cachePath = join(cacheDir, `${destination.slug}.json`)
+    const seedPatterns = (label: string) =>
+      space.patterns.map((pattern) => pattern.template.replaceAll('{locality}', label))
+    const seeds = [
+      ...new Set(
+        ambiguousWithinCountry
+          ? seedPatterns(explicitLabel)
+          : needsGeneratedSeeds
+            ? [...seedPatterns(destination.label), ...seedPatterns(explicitLabel)]
+            : cityGrid.map((row) => row.keyword),
+      ),
+    ].slice(0, 20)
+    const cacheFile =
+      destination.countryCode === 'US'
+        ? `${destination.slug}.json`
+        : `${destination.countryCode.toLowerCase()}-${destination.slug}.json`
+    const cachePath = join(cacheDir, cacheFile)
     let ideas = refresh ? null : await readIdeasCache(cachePath, seeds)
     let source: CityRun['source'] = ideas ? 'cache' : 'unavailable'
     let error: string | null = null
@@ -366,6 +413,8 @@ async function main(): Promise<void> {
       city_rank: rank,
       city: row.city,
       city_slug: row.citySlug,
+      country_code: row.countryCode,
+      google_ads_geo_target: row.googleAdsGeoTarget,
       keyword: row.keyword,
       avg_monthly_searches: row.avgMonthlySearches,
       intent_tier: row.intentTier,
@@ -376,7 +425,7 @@ async function main(): Promise<void> {
       clears_50_volume_floor:
         row.avgMonthlySearches === null ? null : row.avgMonthlySearches >= space.volumeFloor,
       sources: row.sources.join('|'),
-      volume_scope: 'us/en',
+      volume_scope: row.volumeScope,
     }
   })
 
@@ -396,6 +445,8 @@ async function main(): Promise<void> {
       city_rank: rank,
       city: row.city,
       city_slug: row.citySlug,
+      country_code: row.countryCode,
+      google_ads_geo_target: row.googleAdsGeoTarget,
       keyword: row.keyword,
       avg_monthly_searches: row.avgMonthlySearches,
       intent_tier: row.intentTier,
@@ -404,7 +455,7 @@ async function main(): Promise<void> {
       low_top_of_page_bid_usd: usdFromMicros(row.lowTopOfPageBidMicros),
       high_top_of_page_bid_usd: usdFromMicros(row.highTopOfPageBidMicros),
       sources: row.sources.join('|'),
-      volume_scope: 'us/en',
+      volume_scope: row.volumeScope,
     }
   })
 
@@ -426,6 +477,8 @@ async function main(): Promise<void> {
       city_rank: index + 1,
       city: row.city,
       city_slug: row.citySlug,
+      country_code: row.countryCode,
+      google_ads_geo_target: row.googleAdsGeoTarget,
       conservative_aggregate_volume: row.conservativeAggregateVolume,
       raw_aggregate_volume: row.rawAggregateVolume,
       close_variant_overlap_delta: row.rawAggregateVolume - row.conservativeAggregateVolume,
@@ -438,7 +491,7 @@ async function main(): Promise<void> {
       ideas_returned: row.ideasReturned,
       idea_source: row.ideaSource,
       error: row.error,
-      volume_scope: 'us/en',
+      volume_scope: row.volumeScope,
     }))
 
   const keywordPath = join(outputDir, 'hotel-hot-tub-keywords.csv')
@@ -459,8 +512,20 @@ async function main(): Promise<void> {
     generatedAt: generatedAt.toISOString(),
     domain,
     freeOnly: true,
-    audienceScope: 'country:US',
-    googleAdsGeoTarget: GOOGLE_ADS_GEO_US,
+    audienceScope: countries.size > 1
+      ? 'country:US+CA'
+      : countries.has('US')
+        ? 'country:US'
+        : 'country:CA',
+    googleAdsGeoTarget: countries.size === 1
+      ? destinations[0]?.googleAdsGeoTarget ?? null
+      : null,
+    googleAdsGeoTargets: Object.fromEntries(
+      [...countries].sort().map((country) => [
+        country,
+        country === 'US' ? GOOGLE_ADS_GEO_US : GOOGLE_ADS_GEO_CA,
+      ]),
+    ),
     destinationsRequested: destinations.length,
     destinationsWithIdeas: runs.filter((run) => run.source !== 'unavailable').length,
     destinationsFetchedLive: liveCalls,
@@ -478,6 +543,8 @@ async function main(): Promise<void> {
       'Raw aggregate volume is a direct sum and can overlap across close variants.',
       'Conservative aggregate volume sums the maximum-volume keyword in each visible intent_cluster.',
       'A null volume is unmeasured, never zero.',
+      'Keyword Planner search volume includes Google close variants; it is not an exact-query count.',
+      'Each city phrase is measured against its country audience, never a city-bound audience.',
       'No SERP, DataForSEO, Semrush, Maps, or Reddit API was called.',
     ],
   }
@@ -503,6 +570,9 @@ async function main(): Promise<void> {
         cityRank: row.city_rank,
         city: row.city,
         citySlug: row.city_slug,
+        countryCode: row.country_code,
+        googleAdsGeoTarget: row.google_ads_geo_target,
+        volumeScope: row.volume_scope,
         conservativeAggregateVolume: row.conservative_aggregate_volume,
         rawAggregateVolume: row.raw_aggregate_volume,
         closeVariantOverlapDelta: row.close_variant_overlap_delta,
@@ -521,6 +591,8 @@ async function main(): Promise<void> {
         cityRank: Number(keywordRows[index]?.city_rank ?? 0),
         city: row.city,
         citySlug: row.citySlug,
+        countryCode: row.countryCode,
+        googleAdsGeoTarget: row.googleAdsGeoTarget,
         keyword: row.keyword,
         keywordNorm: row.keywordNorm,
         avgMonthlySearches: row.avgMonthlySearches,
@@ -532,7 +604,7 @@ async function main(): Promise<void> {
         clearsVolumeFloor:
           row.avgMonthlySearches === null ? null : row.avgMonthlySearches >= space.volumeFloor,
         sources: row.sources,
-        volumeScope: 'us/en',
+        volumeScope: row.volumeScope,
       })),
     })
     console.log(

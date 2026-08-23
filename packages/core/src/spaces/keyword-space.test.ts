@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import {
   LOCATION_US,
+  LOCATION_CA,
   WORLDWIDE,
   assertRequestLocation,
   audienceLocation,
@@ -109,6 +110,7 @@ describe('audienceScope', () => {
 
   it('labels record English scope, because languageConstants/1000 is hardcoded', () => {
     expect(volumeScopeLabel(HOTEL_SPACE, LOCATION_US)).toBe('us/en')
+    expect(volumeScopeLabel(HOTEL_SPACE, LOCATION_CA)).toBe('ca/en')
     expect(volumeScopeLabel(HOTEL_SPACE, WORLDWIDE)).toBe('worldwide/en')
   })
 })

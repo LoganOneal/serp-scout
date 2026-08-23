@@ -16,7 +16,7 @@ type KeywordInsert = Omit<typeof hhtRedditKeywords.$inferInsert, 'id' | 'runId'>
 export interface HhtRedditAnalysisSummary {
   generatedAt: Date
   audienceScope: string
-  googleAdsGeoTarget: number
+  googleAdsGeoTarget: number | null
   freeOnly: boolean
   destinationCount: number
   ideasReturned: number
@@ -123,7 +123,9 @@ export async function getHhtRedditDashboard(
       site,
       run: null,
       cities: [],
+      scopeCities: [],
       selectedCity: null,
+      selectedCountryCode: null,
       keywordScope: 'all' as const,
       keywordPagination: resolveHhtKeywordPage(1, 0),
       keywords: [],
@@ -137,14 +139,31 @@ export async function getHhtRedditDashboard(
     .orderBy(asc(hhtRedditCityAggregates.cityRank))
 
   const showAllCities = !requestedCitySlug || requestedCitySlug === 'all'
-  const selectedCity = showAllCities
+  const selectedCountryCode =
+    requestedCitySlug === 'country-us'
+      ? ('US' as const)
+      : requestedCitySlug === 'country-ca'
+        ? ('CA' as const)
+        : null
+  const selectedCity = showAllCities || selectedCountryCode
     ? null
     : (cities.find((city) => city.citySlug === requestedCitySlug) ?? cities[0] ?? null)
+  const keywordScope = showAllCities ? 'all' : selectedCountryCode ? 'country' : 'city'
+  const scopeCities = selectedCountryCode
+    ? cities.filter((city) => city.countryCode === selectedCountryCode)
+    : keywordScope === 'city' && selectedCity
+      ? [selectedCity]
+      : cities
+  const scopedKeywordCount = scopeCities.reduce((sum, city) => sum + city.keywordCount, 0)
   const keywordPagination = resolveHhtKeywordPage(
-    showAllCities ? requestedPage : 1,
-    showAllCities ? run.eligibleKeywordCount : (selectedCity?.keywordCount ?? 0),
+    keywordScope === 'city' ? 1 : requestedPage,
+    keywordScope === 'all'
+      ? run.eligibleKeywordCount
+      : keywordScope === 'country'
+        ? scopedKeywordCount
+        : (selectedCity?.keywordCount ?? 0),
   )
-  const keywords = showAllCities
+  const keywords = keywordScope === 'all'
     ? await database
         .select()
         .from(hhtRedditKeywords)
@@ -152,7 +171,20 @@ export async function getHhtRedditDashboard(
         .orderBy(asc(hhtRedditKeywords.globalRank))
         .limit(keywordPagination.pageSize)
         .offset(keywordPagination.offset)
-    : selectedCity
+    : keywordScope === 'country' && selectedCountryCode
+      ? await database
+          .select()
+          .from(hhtRedditKeywords)
+          .where(
+            and(
+              eq(hhtRedditKeywords.runId, run.id),
+              eq(hhtRedditKeywords.countryCode, selectedCountryCode),
+            ),
+          )
+          .orderBy(asc(hhtRedditKeywords.globalRank))
+          .limit(keywordPagination.pageSize)
+          .offset(keywordPagination.offset)
+      : selectedCity
       ? await database
           .select()
           .from(hhtRedditKeywords)
@@ -169,8 +201,10 @@ export async function getHhtRedditDashboard(
     site,
     run,
     cities,
+    scopeCities,
     selectedCity,
-    keywordScope: showAllCities ? ('all' as const) : ('city' as const),
+    selectedCountryCode,
+    keywordScope,
     keywordPagination,
     keywords,
   }
