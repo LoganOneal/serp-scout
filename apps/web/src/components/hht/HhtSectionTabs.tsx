@@ -1,11 +1,12 @@
 import Link from 'next/link'
 
 export type HhtSectionTabsProps = {
-  active: 'backlinks' | 'reddit'
+  active: 'backlinks' | 'hotel-backlink-scout' | 'reddit'
 }
 
 const ITEMS: Array<{ id: HhtSectionTabsProps['active']; href: string; label: string }> = [
   { id: 'backlinks', href: '/hht-bl', label: 'Backlinks' },
+  { id: 'hotel-backlink-scout', href: '/hotel-backlink-scout', label: 'Hotel Backlink Scout' },
   { id: 'reddit', href: '/hht-reddit', label: 'Reddit' },
 ]
 

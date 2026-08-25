@@ -58,6 +58,11 @@ const GROUPS: NavGroup[] = [
         hint: 'Backlink research, opportunities, and acquired links',
       },
       {
+        href: '/hotel-backlink-scout',
+        label: 'Hotel Backlink Scout',
+        hint: 'Inventory-first hotel and linking-entity opportunities',
+      },
+      {
         href: '/hht-reddit',
         label: 'Reddit',
         hint: 'City demand and raw keywords for manual Reddit research',

@@ -65,7 +65,7 @@ const config = (phase: string): NextConfig => ({
   // if a client component ever reaches for it.
   transpilePackages: ['@rnr/core', '@rnr/data'],
   experimental: {
-    serverActions: { bodySizeLimit: '2mb' },
+    serverActions: { bodySizeLimit: '10mb' },
   },
   // The workspace packages import with explicit `.js` extensions, which is
   // correct for Node ESM and required by tsx and the worker. Webpack does not

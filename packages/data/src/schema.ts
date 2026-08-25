@@ -10,6 +10,16 @@ import type {
   HhtBlRunStatus,
   HhtBlSiteType,
   HhtBlStage,
+  HotelBlContactType,
+  HotelBlContentType,
+  HotelBlEntityScope,
+  HotelBlEntityType,
+  HotelBlOpportunityStatus,
+  HotelBlPageType,
+  HotelBlRelationshipType,
+  HotelBlSiteControlType,
+  HotelBlStage,
+  HotelBlUrlValidationStatus,
   ContactConfidence,
   CallIngestState,
   KeywordSpace,
@@ -3435,6 +3445,355 @@ export const hhtBlRunEvents = pgTable(
   }),
 )
 
+// ---------------------------------------------------------------------------
+// Inventory-first Hotel Backlink Scout. Kept separate from the competitor-first
+// hht_bl_* research tables because the opportunity unit and lifecycle differ.
+
+export const hotelBlRuns = pgTable(
+  'hotel_bl_runs',
+  {
+    id: serial('id').primaryKey(),
+    name: text('name').notNull(),
+    sourceFilename: text('source_filename'),
+    status: text('status').notNull().default('draft'),
+    currentStage: text('current_stage').$type<HotelBlStage>().notNull().default('import'),
+    configuration: jsonb('configuration').$type<Record<string, unknown>>().notNull().default({}),
+    progress: jsonb('progress').$type<Record<string, number>>().notNull().default({}),
+    externalApiUsage: jsonb('external_api_usage').$type<Record<string, number>>().notNull().default({}),
+    error: text('error'),
+    createdAt: now(),
+    startedAt: timestamp('started_at', { withTimezone: true }),
+    updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
+    finishedAt: timestamp('finished_at', { withTimezone: true }),
+  },
+  (t) => ({ statusIdx: index('hotel_bl_runs_status_idx').on(t.status, t.createdAt) }),
+)
+
+export const hotelBlHotels = pgTable(
+  'hotel_bl_hotels',
+  {
+    id: serial('id').primaryKey(),
+    lastRunId: integer('last_run_id').references(() => hotelBlRuns.id, { onDelete: 'set null' }),
+    sourceKey: text('source_key').notNull(),
+    hotelName: text('hotel_name').notNull(),
+    city: text('city'),
+    state: text('state'),
+    country: text('country'),
+    existingHhtUrl: text('existing_hht_url'),
+    sourceUrl: text('source_url'),
+    sourceLinkType: text('source_link_type'),
+    canonicalPropertyDomain: text('canonical_property_domain'),
+    sourceEntityScope: text('source_entity_scope').$type<HotelBlEntityScope>().notNull().default('unknown'),
+    sourceEntityType: text('source_entity_type').$type<HotelBlEntityType>().notNull().default('unknown'),
+    listingSourceUrl: text('listing_source_url'),
+    listingFinalUrl: text('listing_final_url'),
+    listingStatusCode: integer('listing_status_code'),
+    listingMatched: boolean('listing_matched'),
+    listingAddress: text('listing_address'),
+    candidateFinalUrl: text('candidate_final_url'),
+    urlValidationStatus: text('url_validation_status').$type<HotelBlUrlValidationStatus>(),
+    urlValidationConfidence: doublePrecision('url_validation_confidence'),
+    urlValidationReason: text('url_validation_reason'),
+    urlValidationEvidence: jsonb('url_validation_evidence').$type<Record<string, unknown>>().notNull().default({}),
+    urlValidatedAt: timestamp('url_validated_at', { withTimezone: true }),
+    brandName: text('brand_name'),
+    brandControlSegment: text('brand_control_segment'),
+    siteControlType: text('site_control_type').$type<HotelBlSiteControlType>().notNull().default('unknown'),
+    siteControlConfidence: doublePrecision('site_control_confidence').notNull().default(0),
+    siteControlReason: text('site_control_reason'),
+    rawSource: jsonb('raw_source').$type<Record<string, string>>().notNull().default({}),
+    needsReview: boolean('needs_review').notNull().default(false),
+    manualSiteControlType: text('manual_site_control_type').$type<HotelBlSiteControlType>(),
+    manualBrandName: text('manual_brand_name'),
+    createdAt: now(),
+    updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => ({
+    sourceKeyUq: uniqueIndex('hotel_bl_hotels_source_key_uq').on(t.sourceKey),
+    geoIdx: index('hotel_bl_hotels_geo_idx').on(t.state, t.city),
+    controlIdx: index('hotel_bl_hotels_control_idx').on(t.siteControlType, t.brandControlSegment),
+    validationIdx: index('hotel_bl_hotels_validation_idx').on(t.sourceEntityScope, t.urlValidationStatus),
+  }),
+)
+
+export const hotelBlDomains = pgTable(
+  'hotel_bl_domains',
+  {
+    id: serial('id').primaryKey(),
+    lastRunId: integer('last_run_id').references(() => hotelBlRuns.id, { onDelete: 'set null' }),
+    domain: text('domain').notNull(),
+    rootDomain: text('root_domain').notNull(),
+    canonicalUrl: text('canonical_url').notNull(),
+    entityName: text('entity_name'),
+    entityType: text('entity_type'),
+    entityScope: text('entity_scope').$type<HotelBlEntityScope>().notNull().default('unknown'),
+    siteControlType: text('site_control_type').$type<HotelBlSiteControlType>().notNull().default('unknown'),
+    siteControlConfidence: doublePrecision('site_control_confidence').notNull().default(0),
+    siteControlReason: text('site_control_reason'),
+    hotelCount: integer('hotel_count').notNull().default(0),
+    singletonDomain: boolean('singleton_domain').notNull().default(false),
+    centralizedBrand: boolean('centralized_brand').notNull().default(false),
+    crawlStatus: text('crawl_status').notNull().default('pending'),
+    lastCrawledAt: timestamp('last_crawled_at', { withTimezone: true }),
+    crawlError: text('crawl_error'),
+    hasPressPage: boolean('has_press_page').notNull().default(false),
+    hasAwardsPage: boolean('has_awards_page').notNull().default(false),
+    hasBlogOrNews: boolean('has_blog_or_news').notNull().default(false),
+    hasExternalPressLinks: boolean('has_external_press_links').notNull().default(false),
+    externalPressLinkCount: integer('external_press_link_count').notNull().default(0),
+    dofollowExternalPressLinkCount: integer('dofollow_external_press_link_count').notNull().default(0),
+    pressLinkRatio: doublePrecision('press_link_ratio'),
+    latestPressDate: timestamp('latest_press_date', { withTimezone: true }),
+    freshnessDays: integer('freshness_days'),
+    freshnessConfidence: doublePrecision('freshness_confidence'),
+    hasNamedPrContact: boolean('has_named_pr_contact').notNull().default(false),
+    hasPrEmail: boolean('has_pr_email').notNull().default(false),
+    hasPressKit: boolean('has_press_kit').notNull().default(false),
+    authorityScore: integer('authority_score'),
+    organicTraffic: integer('organic_traffic'),
+    referringDomains: integer('referring_domains'),
+    alreadyLinksToHht: boolean('already_links_to_hht'),
+    backlinkValueScore: doublePrecision('backlink_value_score'),
+    semrushRaw: jsonb('semrush_raw').$type<Record<string, unknown>>(),
+    semrushMeasuredAt: timestamp('semrush_measured_at', { withTimezone: true }),
+    needsReview: boolean('needs_review').notNull().default(false),
+    manualSiteControlType: text('manual_site_control_type').$type<HotelBlSiteControlType>(),
+    createdAt: now(),
+    updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => ({
+    domainUq: uniqueIndex('hotel_bl_domains_domain_uq').on(t.domain),
+    rootIdx: index('hotel_bl_domains_root_idx').on(t.rootDomain),
+    crawlIdx: index('hotel_bl_domains_crawl_idx').on(t.crawlStatus, t.siteControlType),
+  }),
+)
+
+export const hotelBlRelationships = pgTable(
+  'hotel_bl_relationships',
+  {
+    id: serial('id').primaryKey(),
+    hotelId: integer('hotel_id').notNull().references(() => hotelBlHotels.id, { onDelete: 'cascade' }),
+    domainId: integer('domain_id').notNull().references(() => hotelBlDomains.id, { onDelete: 'cascade' }),
+    relationshipType: text('relationship_type').$type<HotelBlRelationshipType>().notNull(),
+    entityScope: text('entity_scope').$type<HotelBlEntityScope>().notNull().default('unknown'),
+    entityType: text('entity_type').$type<HotelBlEntityType>().notNull().default('unknown'),
+    entityName: text('entity_name'),
+    confidence: doublePrecision('confidence').notNull().default(0),
+    source: text('source').notNull(),
+    sourceUrl: text('source_url'),
+    evidence: jsonb('evidence').$type<string[]>().notNull().default([]),
+    urlValidationStatus: text('url_validation_status').$type<HotelBlUrlValidationStatus>(),
+    urlValidationConfidence: doublePrecision('url_validation_confidence'),
+    urlValidationReason: text('url_validation_reason'),
+    candidateFinalUrl: text('candidate_final_url'),
+    validatedAt: timestamp('validated_at', { withTimezone: true }),
+    needsReview: boolean('needs_review').notNull().default(false),
+    manualRelationshipType: text('manual_relationship_type').$type<HotelBlRelationshipType>(),
+    createdAt: now(),
+    updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => ({
+    relationshipUq: uniqueIndex('hotel_bl_relationships_uq').on(t.hotelId, t.domainId, t.relationshipType),
+    domainIdx: index('hotel_bl_relationships_domain_idx').on(t.domainId, t.relationshipType),
+    validationIdx: index('hotel_bl_relationships_validation_idx').on(t.entityScope, t.urlValidationStatus),
+  }),
+)
+
+export const hotelBlDiscoveredPages = pgTable(
+  'hotel_bl_discovered_pages',
+  {
+    id: serial('id').primaryKey(),
+    domainId: integer('domain_id').notNull().references(() => hotelBlDomains.id, { onDelete: 'cascade' }),
+    url: text('url').notNull(),
+    pageType: text('page_type').$type<HotelBlPageType>().notNull().default('other'),
+    title: text('title'),
+    statusCode: integer('status_code'),
+    lastModifiedOrDetectedDate: timestamp('last_modified_or_detected_date', { withTimezone: true }),
+    externalLinkCount: integer('external_link_count').notNull().default(0),
+    externalPressLinkCount: integer('external_press_link_count').notNull().default(0),
+    dofollowExternalPressLinkCount: integer('dofollow_external_press_link_count').notNull().default(0),
+    lastContentDate: timestamp('last_content_date', { withTimezone: true }),
+    dateConfidence: doublePrecision('date_confidence'),
+    rawHtml: text('raw_html'),
+    contentHash: text('content_hash'),
+    error: text('error'),
+    crawlTimestamp: timestampCol('crawl_timestamp'),
+  },
+  (t) => ({
+    pageUq: uniqueIndex('hotel_bl_discovered_pages_uq').on(t.domainId, t.url),
+    typeIdx: index('hotel_bl_discovered_pages_type_idx').on(t.domainId, t.pageType),
+  }),
+)
+
+export const hotelBlEditorialLinks = pgTable(
+  'hotel_bl_editorial_links',
+  {
+    id: serial('id').primaryKey(),
+    pageId: integer('page_id').notNull().references(() => hotelBlDiscoveredPages.id, { onDelete: 'cascade' }),
+    destinationUrl: text('destination_url').notNull(),
+    destinationDomain: text('destination_domain').notNull(),
+    anchorText: text('anchor_text'),
+    destinationUrlHash: text('destination_url_hash').generatedAlwaysAs(sql`md5("destination_url")`),
+    anchorTextHash: text('anchor_text_hash').generatedAlwaysAs(sql`md5("anchor_text")`),
+    rel: text('rel'),
+    nofollow: boolean('nofollow').notNull().default(false),
+    sponsored: boolean('sponsored').notNull().default(false),
+    ugc: boolean('ugc').notNull().default(false),
+    followed: boolean('followed').notNull(),
+    editorial: boolean('editorial').notNull().default(true),
+    publicationName: text('publication_name'),
+    createdAt: now(),
+  },
+  (t) => ({
+    linkUq: uniqueIndex('hotel_bl_editorial_links_uq').on(t.pageId, t.destinationUrlHash, t.anchorTextHash),
+    domainIdx: index('hotel_bl_editorial_links_domain_idx').on(t.destinationDomain, t.followed),
+  }),
+)
+
+export const hotelBlContacts = pgTable(
+  'hotel_bl_contacts',
+  {
+    id: serial('id').primaryKey(),
+    domainId: integer('domain_id').notNull().references(() => hotelBlDomains.id, { onDelete: 'cascade' }),
+    hotelId: integer('hotel_id').references(() => hotelBlHotels.id, { onDelete: 'cascade' }),
+    name: text('name'),
+    title: text('title'),
+    email: text('email'),
+    phone: text('phone'),
+    contactType: text('contact_type').$type<HotelBlContactType>().notNull().default('general'),
+    sourceUrl: text('source_url').notNull(),
+    confidence: doublePrecision('confidence').notNull().default(0),
+    createdAt: now(),
+    updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => ({
+    contactUq: uniqueIndex('hotel_bl_contacts_uq').on(t.domainId, t.sourceUrl, t.email, t.phone),
+    typeIdx: index('hotel_bl_contacts_type_idx').on(t.domainId, t.contactType),
+  }),
+)
+
+export const hotelBlOpportunities = pgTable(
+  'hotel_bl_opportunities',
+  {
+    id: serial('id').primaryKey(),
+    hotelId: integer('hotel_id').notNull().references(() => hotelBlHotels.id, { onDelete: 'cascade' }),
+    domainId: integer('domain_id').notNull().references(() => hotelBlDomains.id, { onDelete: 'cascade' }),
+    relationshipId: integer('relationship_id').notNull().references(() => hotelBlRelationships.id, { onDelete: 'cascade' }),
+    relationshipType: text('relationship_type').$type<HotelBlRelationshipType>().notNull(),
+    feasibilityScore: doublePrecision('feasibility_score').notNull().default(0),
+    feasibilityComponents: jsonb('feasibility_components').$type<Record<string, number>>().notNull().default({}),
+    linkValueScore: doublePrecision('link_value_score').notNull().default(0),
+    linkValueComponents: jsonb('link_value_components').$type<Record<string, number>>().notNull().default({}),
+    contentFitScore: doublePrecision('content_fit_score').notNull().default(0),
+    contentFitComponents: jsonb('content_fit_components').$type<Record<string, number>>().notNull().default({}),
+    effortScore: doublePrecision('effort_score').notNull().default(100),
+    priorityScore: doublePrecision('priority_score').notNull().default(0),
+    recommendedContentType: text('recommended_content_type').$type<HotelBlContentType>(),
+    recommendedTargetPage: text('recommended_target_page'),
+    recommendedPitchAngle: text('recommended_pitch_angle'),
+    reasoningSummary: text('reasoning_summary'),
+    status: text('status').$type<HotelBlOpportunityStatus>().notNull().default('new'),
+    needsReview: boolean('needs_review').notNull().default(false),
+    manualRecommendedContentType: text('manual_recommended_content_type').$type<HotelBlContentType>(),
+    createdAt: now(),
+    updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => ({
+    opportunityUq: uniqueIndex('hotel_bl_opportunities_uq').on(t.hotelId, t.domainId, t.relationshipType),
+    priorityIdx: index('hotel_bl_opportunities_priority_idx').on(t.priorityScore, t.feasibilityScore),
+    statusIdx: index('hotel_bl_opportunities_status_idx').on(t.status, t.needsReview),
+  }),
+)
+
+export const hotelBlContentOpportunities = pgTable(
+  'hotel_bl_content_opportunities',
+  {
+    id: serial('id').primaryKey(),
+    runId: integer('run_id').notNull().references(() => hotelBlRuns.id, { onDelete: 'cascade' }),
+    contentType: text('content_type').$type<HotelBlContentType>().notNull(),
+    topic: text('topic').notNull(),
+    geography: text('geography'),
+    hotelCount: integer('hotel_count').notNull(),
+    highFeasibilityHotelCount: integer('high_feasibility_hotel_count').notNull().default(0),
+    strongPressBehaviorCount: integer('strong_press_behavior_count').notNull().default(0),
+    aggregateOpportunityValue: doublePrecision('aggregate_opportunity_value').notNull().default(0),
+    newReferringDomains: integer('new_referring_domains').notNull().default(0),
+    estimatedEffort: doublePrecision('estimated_effort').notNull().default(0),
+    contentRoiScore: doublePrecision('content_roi_score').notNull().default(0),
+    suggestedSlug: text('suggested_slug').notNull(),
+    status: text('status').notNull().default('new'),
+    createdAt: now(),
+    updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => ({
+    contentUq: uniqueIndex('hotel_bl_content_opportunities_uq').on(t.runId, t.suggestedSlug),
+    roiIdx: index('hotel_bl_content_opportunities_roi_idx').on(t.runId, t.contentRoiScore),
+  }),
+)
+
+export const hotelBlOutcomes = pgTable(
+  'hotel_bl_outcomes',
+  {
+    id: serial('id').primaryKey(),
+    opportunityId: integer('opportunity_id').notNull().references(() => hotelBlOpportunities.id, { onDelete: 'cascade' }),
+    outreachSentAt: timestamp('outreach_sent_at', { withTimezone: true }),
+    contactedEmail: text('contacted_email'),
+    response: text('response'),
+    positiveResponse: boolean('positive_response'),
+    backlinkAcquired: boolean('backlink_acquired').notNull().default(false),
+    backlinkUrl: text('backlink_url'),
+    isDofollow: boolean('is_dofollow'),
+    anchorText: text('anchor_text'),
+    acquiredAt: timestamp('acquired_at', { withTimezone: true }),
+    notes: text('notes'),
+    featureSnapshot: jsonb('feature_snapshot').$type<Record<string, unknown>>().notNull().default({}),
+    createdAt: now(),
+    updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => ({ opportunityUq: uniqueIndex('hotel_bl_outcomes_opportunity_uq').on(t.opportunityId) }),
+)
+
+export const hotelBlJobs = pgTable(
+  'hotel_bl_jobs',
+  {
+    id: serial('id').primaryKey(),
+    runId: integer('run_id').notNull().references(() => hotelBlRuns.id, { onDelete: 'cascade' }),
+    domainId: integer('domain_id').references(() => hotelBlDomains.id, { onDelete: 'cascade' }),
+    stage: text('stage').$type<HotelBlStage>().notNull(),
+    status: text('status').notNull().default('pending'),
+    requestKey: text('request_key').notNull(),
+    attempts: integer('attempts').notNull().default(0),
+    recordsProcessed: integer('records_processed').notNull().default(0),
+    configuration: jsonb('configuration').$type<Record<string, unknown>>().notNull().default({}),
+    claimedAt: timestamp('claimed_at', { withTimezone: true }),
+    lastSuccessAt: timestamp('last_success_at', { withTimezone: true }),
+    error: text('error'),
+    createdAt: now(),
+    updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
+    finishedAt: timestamp('finished_at', { withTimezone: true }),
+  },
+  (t) => ({
+    requestUq: uniqueIndex('hotel_bl_jobs_request_uq').on(t.runId, t.requestKey),
+    statusIdx: index('hotel_bl_jobs_status_idx').on(t.runId, t.status, t.stage),
+  }),
+)
+
+export const hotelBlRunEvents = pgTable(
+  'hotel_bl_run_events',
+  {
+    id: serial('id').primaryKey(),
+    runId: integer('run_id').notNull().references(() => hotelBlRuns.id, { onDelete: 'cascade' }),
+    jobId: integer('job_id').references(() => hotelBlJobs.id, { onDelete: 'set null' }),
+    domainId: integer('domain_id').references(() => hotelBlDomains.id, { onDelete: 'set null' }),
+    stage: text('stage').$type<HotelBlStage>().notNull(),
+    level: text('level').notNull().default('info'),
+    message: text('message').notNull(),
+    details: jsonb('details').$type<Record<string, unknown>>(),
+    createdAt: now(),
+  },
+  (t) => ({ runIdx: index('hotel_bl_run_events_run_idx').on(t.runId, t.createdAt) }),
+)
+
 export type Site = typeof sites.$inferSelect
 export type NewSite = typeof sites.$inferInsert
 export type SupplySource = typeof supplySources.$inferSelect
@@ -3473,3 +3832,8 @@ export type HhtBlCandidateSite = typeof hhtBlCandidateSites.$inferSelect
 export type HhtBlResearchSite = typeof hhtBlResearchSites.$inferSelect
 export type HhtBlBacklink = typeof hhtBlBacklinks.$inferSelect
 export type HhtBlOpportunity = typeof hhtBlOpportunities.$inferSelect
+export type HotelBlRun = typeof hotelBlRuns.$inferSelect
+export type HotelBlHotel = typeof hotelBlHotels.$inferSelect
+export type HotelBlDomain = typeof hotelBlDomains.$inferSelect
+export type HotelBlRelationship = typeof hotelBlRelationships.$inferSelect
+export type HotelBlOpportunity = typeof hotelBlOpportunities.$inferSelect

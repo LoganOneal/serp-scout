@@ -171,6 +171,13 @@ export * from './hht-bl/processing.js'
 export * from './hht-bl/scoring.js'
 export * from './hht-bl/dashboard.js'
 export * from './hht-bl/export.js'
+export * from './hotel-bl/import.js'
+export * from './hotel-bl/scoring.js'
+export * from './hotel-bl/crawl.js'
+export * from './hotel-bl/pipeline.js'
+export * from './hotel-bl/dashboard.js'
+export * from './hotel-bl/updates.js'
+export * from './hotel-bl/validation.js'
 export {
   fetchTrafficEstimates,
   TRAFFIC_BATCH_MAX,

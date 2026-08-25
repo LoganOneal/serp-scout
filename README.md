@@ -1,5 +1,9 @@
 # Rank & Rent — locality opportunity research
 
+The inventory-first HotelHotTubs backlink opportunity pipeline is documented in
+[Hotel Backlink Scout](docs/hotel-backlink-scout.md), including importer,
+crawler, scoring, Semrush checkpoints, UI, and operator commands.
+
 An operator names one place — "Kenosha, Wisconsin" — and this answers two
 questions: **which local service niche can I win here**, and **can an exact-match
 `.com` rank inside a month?**
