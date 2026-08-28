@@ -1,0 +1,11 @@
+{
+  "version": 1,
+  "skills": {
+    "qwoted-seo-backlinks": {
+      "source": "Bomx/qwoted-seo-backlinks-skill",
+      "sourceType": "github",
+      "skillPath": "SKILL.md",
+      "computedHash": "7158aa4090224346133166dc39f2707745e009993e18ca9c3bcccd27dfc67a71"
+    }
+  }
+}

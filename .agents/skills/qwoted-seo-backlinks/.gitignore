@@ -1,0 +1,39 @@
+# --- Auth & local state (NEVER commit) -----------------------------
+.env
+.env.*
+!.env.example
+qwoted_sessions/
+qwoted_pitches/
+qwoted_opportunities/
+*.cookies.json
+storage_state.json
+
+# Isolated browser profiles (live under QWOTED_HOME, never commit)
+chrome-profile/
+chromium-profile/
+
+# --- Stage-3 generated stats pages (per-user output) ---------------
+# Keep the example template under templates/ committed, but never
+# commit any generated pages — they belong to the end user.
+statistics_pages/
+
+# --- Python --------------------------------------------------------
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+.venv/
+venv/
+.pytest_cache/
+
+# --- Editors / OS --------------------------------------------------
+.DS_Store
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# --- Logs / scratch ------------------------------------------------
+*.log
+.tmp/
+tmp/
