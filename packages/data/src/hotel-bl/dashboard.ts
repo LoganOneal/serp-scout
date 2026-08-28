@@ -1,6 +1,14 @@
 import 'server-only'
 import { and, asc, desc, eq, gte, inArray, or, sql, type SQL } from 'drizzle-orm'
-import type { HotelBlContentType, HotelBlEntityScope, HotelBlRelationshipType, HotelBlSiteControlType } from '@rnr/core'
+import {
+  hotelBlContactChannel,
+  type HotelBlContactChannel,
+  type HotelBlContactType,
+  type HotelBlContentType,
+  type HotelBlEntityScope,
+  type HotelBlRelationshipType,
+  type HotelBlSiteControlType,
+} from '@rnr/core'
 import type { Database } from '../db.js'
 import {
   hotelBlContacts,
@@ -57,6 +65,45 @@ function opportunityConditions(filters: HotelBlOpportunityFilters): SQL[] {
   return conditions
 }
 
+function bestContactColumn(column: 'name' | 'title' | 'email' | 'phone' | 'contact_type' | 'source_url') {
+  return sql`(
+    select c.${sql.raw(column)}
+      from ${hotelBlContacts} c
+     where c.domain_id = ${hotelBlDomains.id}
+     order by
+       case c.contact_type
+         when 'pr' then 0
+         when 'media' then 1
+         when 'marketing' then 2
+         when 'management' then 3
+         else 4
+       end,
+       (c.email is not null) desc,
+       (c.name is not null) desc,
+       c.confidence desc nulls last,
+       c.id
+     limit 1
+  )`
+}
+
+const contactPageUrlSql = sql<string | null>`(
+  select p.url
+    from ${hotelBlDiscoveredPages} p
+   where p.domain_id = ${hotelBlDomains.id}
+     and p.page_type in ('contact', 'press', 'media')
+     and p.status_code is not null
+     and p.status_code < 400
+   order by
+     case p.page_type
+       when 'press' then 0
+       when 'media' then 1
+       when 'contact' then 2
+       else 3
+     end,
+     p.id
+   limit 1
+)`
+
 export async function listHotelBlOpportunities(
   db: Database,
   filters: HotelBlOpportunityFilters = {},
@@ -72,7 +119,7 @@ export async function listHotelBlOpportunities(
   } as const
   const sortColumn = sortColumns[filters.sort ?? 'priority']
   const order = filters.direction === 'asc' ? asc(sortColumn) : desc(sortColumn)
-  return db
+  const rows = await db
     .select({
       id: hotelBlOpportunities.id,
       hotelId: hotelBlHotels.id,
@@ -103,6 +150,14 @@ export async function listHotelBlOpportunities(
       dofollowExternalPressLinkCount: hotelBlDomains.dofollowExternalPressLinkCount,
       latestPressDate: hotelBlDomains.latestPressDate,
       hasPrContact: sql<boolean>`(${hotelBlDomains.hasPrEmail} or ${hotelBlDomains.hasNamedPrContact})`,
+      hasPressKit: hotelBlDomains.hasPressKit,
+      prName: sql<string | null>`${bestContactColumn('name')}`,
+      prTitle: sql<string | null>`${bestContactColumn('title')}`,
+      prEmail: sql<string | null>`${bestContactColumn('email')}`,
+      prPhone: sql<string | null>`${bestContactColumn('phone')}`,
+      prContactType: sql<HotelBlContactType | null>`${bestContactColumn('contact_type')}`,
+      prSourceUrl: sql<string | null>`${bestContactColumn('source_url')}`,
+      contactPageUrl: contactPageUrlSql,
       authorityScore: hotelBlDomains.authorityScore,
       organicTraffic: hotelBlDomains.organicTraffic,
       referringDomains: hotelBlDomains.referringDomains,
@@ -122,6 +177,14 @@ export async function listHotelBlOpportunities(
     .where(and(...opportunityConditions(filters)))
     .orderBy(order, desc(hotelBlOpportunities.priorityScore))
     .limit(Math.max(1, Math.min(limit, 20_000)))
+  return rows.map((row) => ({
+    ...row,
+    contactChannel: hotelBlContactChannel({
+      email: row.prEmail,
+      name: row.prName,
+      contactPageUrl: row.contactPageUrl,
+    }) satisfies HotelBlContactChannel,
+  }))
 }
 
 export async function getHotelBlDashboard(

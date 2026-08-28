@@ -54,6 +54,21 @@ export type HotelBlPageType = (typeof HOTEL_BL_PAGE_TYPES)[number]
 export const HOTEL_BL_CONTACT_TYPES = ['pr', 'media', 'marketing', 'general', 'management'] as const
 export type HotelBlContactType = (typeof HOTEL_BL_CONTACT_TYPES)[number]
 
+export const HOTEL_BL_CONTACT_CHANNELS = ['email', 'named', 'contact_page', 'none'] as const
+export type HotelBlContactChannel = (typeof HOTEL_BL_CONTACT_CHANNELS)[number]
+
+/** How an operator can actually reach this domain. Email beats a contact form. */
+export function hotelBlContactChannel(input: {
+  email?: string | null
+  name?: string | null
+  contactPageUrl?: string | null
+}): HotelBlContactChannel {
+  if (input.email?.trim()) return 'email'
+  if (input.contactPageUrl?.trim()) return 'contact_page'
+  if (input.name?.trim()) return 'named'
+  return 'none'
+}
+
 export const HOTEL_BL_CONTENT_TYPES = [
   'existing_property_page',
   'city_roundup',

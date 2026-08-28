@@ -4,8 +4,9 @@ import {
   classifyHotelBlPageType,
   classifyHotelBlSiteControl,
   hotelBlBrandControlSegment,
-  hotelBlSourceRelationshipType,
+  hotelBlContactChannel,
   hotelBlSourceKey,
+  hotelBlSourceRelationshipType,
   isFollowedHotelBlLink,
   normalizeHotelBlUrl,
   recommendHotelBlContent,
@@ -391,6 +392,15 @@ describe('Hotel Backlink Scout normalization and classification', () => {
     expect(isFollowedHotelBlLink(null)).toBe(true)
     expect(isFollowedHotelBlLink('noopener nofollow')).toBe(false)
     expect(isFollowedHotelBlLink('sponsored')).toBe(false)
+  })
+})
+
+describe('Hotel Backlink Scout contact channel', () => {
+  it('prefers a public email over a contact page, and a contact page over a name-only mention', () => {
+    expect(hotelBlContactChannel({ email: 'press@hotel.test', contactPageUrl: 'https://hotel.test/contact' })).toBe('email')
+    expect(hotelBlContactChannel({ name: 'Jane Rivera', contactPageUrl: 'https://hotel.test/press' })).toBe('contact_page')
+    expect(hotelBlContactChannel({ name: 'Jane Rivera' })).toBe('named')
+    expect(hotelBlContactChannel({})).toBe('none')
   })
 })
 

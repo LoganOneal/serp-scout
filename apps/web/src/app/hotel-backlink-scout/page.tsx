@@ -339,7 +339,7 @@ function Opportunities({ dashboard, filters }: { dashboard: Dashboard; filters: 
         <TableFrame>
           <table className="hht-bl-table hotel-bl-opportunities-table">
             <thead><tr>
-              <th className="num">Priority</th><th>Hotel</th><th>Location</th><th>Brand</th><th>Target entity</th><th>Entity role</th><th>Relationship</th><th>URL validation</th><th>Target domain</th><th>Site control</th><th className="num">Feasibility</th><th className="num">Link value</th><th className="num">Content fit</th><th className="num">Effort</th><th>Press page</th><th className="num">Press links</th><th className="num">Followed</th><th>Latest activity</th><th>PR/contact</th><th>Recommended content</th><th>Recommended pitch</th><th>Status</th>
+              <th className="num">Priority</th><th>Hotel</th><th>Location</th><th>Brand</th><th>Target entity</th><th>Entity role</th><th>Relationship</th><th>URL validation</th><th>Target domain</th><th>Site control</th><th className="num">Feasibility</th><th className="num">Link value</th><th className="num">Content fit</th><th className="num">Effort</th><th>Press page</th><th className="num">Press links</th><th className="num">Followed</th><th>Latest activity</th><th>Contact channel</th><th>PR/contact</th><th>Contact page</th><th>Recommended content</th><th>Recommended pitch</th><th>Status</th>
             </tr></thead>
             <tbody>{dashboard.opportunities.map((row) => (
               <tr key={row.id} className="hotel-bl-data-row">
@@ -361,7 +361,9 @@ function Opportunities({ dashboard, filters }: { dashboard: Dashboard; filters: 
                 <td className="num">{num(row.externalPressLinkCount)}</td>
                 <td className="num">{num(row.dofollowExternalPressLinkCount)}</td>
                 <td>{date(row.latestPressDate)}</td>
-                <td>{row.hasPrContact ? <span className="badge go">available</span> : NULL_DISPLAY}</td>
+                <td><span className={`badge ${row.contactChannel === 'email' ? 'go' : row.contactChannel === 'contact_page' ? 'warn' : 'neutral'}`}>{label(row.contactChannel)}</span></td>
+                <td>{row.prEmail ? <a href={`mailto:${row.prEmail}`}>{row.prEmail}</a> : row.prName ? row.prName : NULL_DISPLAY}{row.prTitle ? <><br /><small>{row.prTitle}</small></> : null}{row.prPhone && !row.prEmail ? <><br /><small>{row.prPhone}</small></> : null}</td>
+                <td>{row.contactPageUrl ? <a href={row.contactPageUrl} target="_blank" rel="noreferrer" className="mono">{row.contactChannel === 'contact_page' ? 'Contact page' : 'Source'}</a> : NULL_DISPLAY}</td>
                 <td>
                   <form action={updateHotelBlOpportunityAction} className="hotel-bl-inline-form">
                     <input type="hidden" name="opportunityId" value={row.id} />
