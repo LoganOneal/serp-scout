@@ -1,0 +1,138 @@
+{
+  "personas": [
+    "contractors", "roofing contractors", "hvac technicians", "plumbers", "electricians",
+    "landscapers", "painters", "general contractors", "remodelers", "home inspectors",
+    "real estate agents", "realtors", "property managers", "landlords", "airbnb hosts",
+    "dentists", "orthodontists", "chiropractors", "therapists", "veterinarians",
+    "lawyers", "attorneys", "paralegals", "accountants", "bookkeepers", "tax preparers",
+    "insurance agents", "mortgage brokers", "financial advisors", "loan officers",
+    "photographers", "videographers", "graphic designers", "interior designers",
+    "wedding planners", "event planners", "florists", "caterers",
+    "freelancers", "consultants", "coaches", "tutors", "teachers",
+    "creators", "youtubers", "podcasters", "newsletter writers", "bloggers",
+    "ecommerce sellers", "shopify merchants", "amazon sellers", "etsy sellers",
+    "recruiters", "hr managers", "sales reps", "marketers", "seo specialists",
+    "restaurant owners", "salon owners", "gym owners", "clinic owners",
+    "truckers", "dispatchers", "fleet managers", "warehouse managers",
+    "farmers", "ranchers", "construction estimators", "project managers",
+    "students", "parents", "homeowners", "landlords", "renters",
+    "solopreneurs", "agency owners", "franchise owners"
+  ],
+  "industries": [
+    "roofing", "hvac", "plumbing", "electrical", "landscaping", "painting",
+    "construction", "remodeling", "solar", "pest control", "cleaning",
+    "moving", "junk removal", "pool service", "fencing", "flooring",
+    "dental", "medical", "veterinary", "legal", "accounting", "insurance",
+    "mortgage", "real estate", "property management", "hospitality",
+    "restaurants", "salons", "fitness", "childcare", "education",
+    "trucking", "logistics", "warehousing", "manufacturing",
+    "ecommerce", "retail", "wholesale", "dropshipping",
+    "marketing", "advertising", "recruiting", "staffing",
+    "photography", "video production", "interior design", "architecture",
+    "agriculture", "landscaping design", "home services", "auto repair",
+    "auto detailing", "car dealerships", "saas", "agencies"
+  ],
+  "workflows": [
+    "estimating", "quoting", "proposal generation", "invoicing", "billing",
+    "scheduling", "dispatching", "routing", "booking", "appointment booking",
+    "follow up", "lead capture", "lead qualification", "crm",
+    "onboarding", "offboarding", "payroll", "time tracking", "expense tracking",
+    "inventory", "purchase orders", "job costing", "change orders",
+    "collections", "reminders", "contract signing", "e-signature",
+    "reporting", "forecasting", "budgeting", "reconciliation",
+    "content writing", "keyword research", "outreach", "link building",
+    "social scheduling", "email sequences", "review requests",
+    "employee scheduling", "shift swapping", "candidate screening",
+    "resume parsing", "interview scheduling", "background checks"
+  ],
+  "businessFunctions": [
+    "sales", "marketing", "finance", "operations", "hr", "support",
+    "customer success", "procurement", "compliance", "legal ops",
+    "revops", "product", "engineering", "analytics", "security"
+  ],
+  "consumerTasks": [
+    "meal planning", "grocery lists", "calorie tracking", "habit tracking",
+    "budgeting", "bill splitting", "chore charts", "packing lists",
+    "travel itineraries", "gift lists", "baby names", "wedding planning",
+    "home inventory", "password management", "file conversion",
+    "photo cleanup", "resume writing", "cover letters", "study flashcards",
+    "workout plans", "sleep tracking", "meditation", "journaling",
+    "recipe scaling", "unit conversion", "tip calculation", "tax estimates"
+  ],
+  "creatorTasks": [
+    "thumbnail generation", "caption writing", "hashtag research",
+    "script writing", "hook writing", "newsletter drafting",
+    "youtube titles", "shorts editing", "podcast show notes",
+    "media kits", "sponsorship outreach", "content calendars",
+    "repurposing clips", "transcript cleanup", "brand kits"
+  ],
+  "documentTypes": [
+    "proposal", "invoice", "estimate", "quote", "contract", "nda",
+    "resume", "cover letter", "sop", "policy", "report", "brief",
+    "presentation", "pitch deck", "white paper", "case study",
+    "job description", "offer letter", "lease", "will", "terms of service"
+  ],
+  "mediaTypes": [
+    "image", "photo", "headshot", "logo", "icon", "video", "audio",
+    "pdf", "screenshot", "thumbnail", "avatar", "background", "watermark"
+  ],
+  "financialActivities": [
+    "invoicing", "expense tracking", "bookkeeping", "tax prep",
+    "payroll", "forecasting", "cash flow", "reconciliation",
+    "accounts receivable", "accounts payable", "budgeting",
+    "subscription tracking", "profit and loss", "quoting"
+  ],
+  "homeLifestyle": [
+    "interior design", "room layout", "garden planning", "home renovation",
+    "decluttering", "moving", "packing", "cleaning schedules",
+    "meal prep", "family calendar", "pet care", "plant care"
+  ],
+  "healthWellness": [
+    "symptom checking", "medication reminders", "calorie counting",
+    "macro tracking", "workout programming", "pt notes",
+    "therapy notes", "sleep logs", "cycle tracking"
+  ],
+  "professionalServices": [
+    "law firm", "accounting firm", "dental practice", "medical practice",
+    "architecture firm", "engineering firm", "consulting firm",
+    "staffing agency", "insurance brokerage", "wealth management"
+  ],
+  "ecommerceWorkflows": [
+    "product listing", "pricing", "inventory sync", "returns",
+    "review generation", "bundle builder", "upsell", "abandon cart",
+    "supplier sourcing", "product photography", "size charts"
+  ],
+  "marketingWorkflows": [
+    "seo audits", "keyword clustering", "content briefs", "serp tracking",
+    "backlink monitoring", "competitor tracking", "ad copy",
+    "landing pages", "ab testing", "attribution", "utm builder"
+  ],
+  "salesWorkflows": [
+    "lead enrichment", "sequence writing", "call notes", "pipeline",
+    "proposal", "quote", "demo scheduling", "commission tracking"
+  ],
+  "hrWorkflows": [
+    "applicant tracking", "interview scorecards", "onboarding checklists",
+    "offer letters", "org charts", "performance reviews", "time off"
+  ],
+  "operationsWorkflows": [
+    "sop writing", "qa checklists", "vendor management", "fleet tracking",
+    "work orders", "maintenance logs", "inspection forms"
+  ],
+  "objects": [
+    "proposal", "invoice", "estimate", "quote", "contract", "resume",
+    "headshot", "logo", "name", "email", "caption", "thumbnail",
+    "room", "garden", "meal plan", "workout", "budget", "schedule",
+    "route", "form", "survey", "quiz", "flashcard", "presentation"
+  ],
+  "companies": [
+    "jobber", "servicetitan", "housecall pro", "jobnimbus", "accuLynx",
+    "quickbooks", "freshbooks", "xero", "wave", "stripe",
+    "hubspot", "salesforce", "pipedrive", "close",
+    "canva", "adobe", "figma", "notion", "airtable", "monday",
+    "calendly", "cal.com", "typeform", "jotform",
+    "shopify", "wix", "squarespace", "wordpress",
+    "mailchimp", "klaviyo", "convertkit",
+    "grammarly", "jasper", "copy.ai", "midjourney", "chatgpt"
+  ]
+}

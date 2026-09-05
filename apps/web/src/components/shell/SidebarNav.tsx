@@ -37,6 +37,11 @@ const GROUPS: NavGroup[] = [
         hint: 'Screen niches × markets, then sweep their SERPs',
       },
       {
+        href: '/scout/opportunity-miner',
+        label: 'Opportunity Miner',
+        hint: 'National search-market anomalies for PLG / SMB businesses',
+      },
+      {
         href: '/scout/domains',
         label: 'Domains',
         hint: 'Find acquirable domains in a market',

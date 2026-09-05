@@ -192,3 +192,22 @@ export * from './supply/resolve.js'
 export * from './supply/ingest.js'
 export * from './supply/coverage.js'
 export * from './supply/query.js'
+
+// --- Opportunity Miner -------------------------------------------------------
+export { createSemrushClient, semrushApiKey, SemrushUnavailable } from './opportunity-miner/semrush/client.js'
+export { seedQueue, expandNamedKeyword, discoverKeyword, omLive } from './opportunity-miner/discovery.js'
+export { clusterMarkets } from './opportunity-miner/cluster.js'
+export { scoreAllMarkets } from './opportunity-miner/score.js'
+export { analyzeDomain, discoverSerpAndAds } from './opportunity-miner/domains.js'
+export { runDaily, runSeed, drainQueue } from './opportunity-miner/run.js'
+export { exportOpportunitiesCsv } from './opportunity-miner/export.js'
+export { ingestSemrushHarvest, ingestSemrushHarvestFile } from './opportunity-miner/harvest.js'
+export {
+  listOpportunityMarkets,
+  getMarketDetail,
+  minerStats,
+  listAnomalies,
+  updateMarketReview,
+  type MarketListFilters,
+} from './opportunity-miner/queries.js'
+export { materializeSeeds, loadDictionaries } from './opportunity-miner/seeds.js'

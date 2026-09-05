@@ -20,6 +20,21 @@ import type {
   HotelBlSiteControlType,
   HotelBlStage,
   HotelBlUrlValidationStatus,
+  AnomalyKind,
+  BusinessType,
+  BuyerType,
+  Confidence,
+  OmDomainClass,
+  DomainRole,
+  KeywordIntent,
+  KeywordRelationType,
+  KeywordSourceType,
+  MarketStatus,
+  MonetizationModel,
+  QueueJobStatus,
+  QueueJobType,
+  RankingType,
+  RejectionReason,
   ContactConfidence,
   CallIngestState,
   KeywordSpace,
@@ -3837,3 +3852,417 @@ export type HotelBlHotel = typeof hotelBlHotels.$inferSelect
 export type HotelBlDomain = typeof hotelBlDomains.$inferSelect
 export type HotelBlRelationship = typeof hotelBlRelationships.$inferSelect
 export type HotelBlOpportunity = typeof hotelBlOpportunities.$inferSelect
+
+// ---------------------------------------------------------------------------
+// Opportunity Miner — national search-market discovery (not local rank-and-rent)
+// ---------------------------------------------------------------------------
+
+export const omKeywords = pgTable(
+  'om_keywords',
+  {
+    id: serial('id').primaryKey(),
+    keyword: text('keyword').notNull(),
+    normalizedKeyword: text('normalized_keyword').notNull(),
+    country: text('country').notNull().default('us'),
+    volume: integer('volume'),
+    cpc: doublePrecision('cpc'),
+    competition: doublePrecision('competition'),
+    keywordDifficulty: doublePrecision('keyword_difficulty'),
+    intent: text('intent').$type<KeywordIntent>().notNull().default('unknown'),
+    results: bigint('results', { mode: 'number' }),
+    trend: text('trend'),
+    sourceType: text('source_type').$type<KeywordSourceType>().notNull(),
+    sourceId: text('source_id'),
+    metricsSource: text('metrics_source').notNull().default('unknown'),
+    metricsFetchedAt: timestamp('metrics_fetched_at', { withTimezone: true }),
+    expandedAt: timestamp('expanded_at', { withTimezone: true }),
+    expansionPriority: doublePrecision('expansion_priority'),
+    discoveredAt: timestampCol('discovered_at'),
+    updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => ({
+    keywordCountryUq: uniqueIndex('om_keywords_norm_country_uq').on(t.normalizedKeyword, t.country),
+    priorityIdx: index('om_keywords_priority_idx').on(t.expansionPriority),
+    sourceIdx: index('om_keywords_source_idx').on(t.sourceType),
+  }),
+)
+
+export const omKeywordMonthlyVolume = pgTable(
+  'om_keyword_monthly_volume',
+  {
+    id: serial('id').primaryKey(),
+    keywordId: integer('keyword_id')
+      .notNull()
+      .references(() => omKeywords.id, { onDelete: 'cascade' }),
+    year: integer('year').notNull(),
+    month: integer('month').notNull(),
+    volume: integer('volume').notNull(),
+    source: text('source').notNull().default('semrush'),
+  },
+  (t) => ({
+    kwMonthUq: uniqueIndex('om_keyword_monthly_volume_uq').on(t.keywordId, t.year, t.month, t.source),
+  }),
+)
+
+export const omKeywordEdges = pgTable(
+  'om_keyword_edges',
+  {
+    id: serial('id').primaryKey(),
+    sourceKeywordId: integer('source_keyword_id')
+      .notNull()
+      .references(() => omKeywords.id, { onDelete: 'cascade' }),
+    targetKeywordId: integer('target_keyword_id')
+      .notNull()
+      .references(() => omKeywords.id, { onDelete: 'cascade' }),
+    relationType: text('relation_type').$type<KeywordRelationType>().notNull(),
+    depth: integer('depth').notNull().default(0),
+    seedFamily: text('seed_family'),
+    createdAt: now(),
+  },
+  (t) => ({
+    edgeUq: uniqueIndex('om_keyword_edges_uq').on(t.sourceKeywordId, t.targetKeywordId, t.relationType),
+    sourceIdx: index('om_keyword_edges_source_idx').on(t.sourceKeywordId),
+  }),
+)
+
+export const omKeywordConcepts = pgTable(
+  'om_keyword_concepts',
+  {
+    keywordId: integer('keyword_id')
+      .primaryKey()
+      .references(() => omKeywords.id, { onDelete: 'cascade' }),
+    workflow: text('workflow'),
+    industry: text('industry'),
+    persona: text('persona'),
+    object: text('object'),
+    productArchetype: text('product_archetype'),
+    commercialIntent: integer('commercial_intent').notNull(),
+    recurringUsageLikelihood: integer('recurring_usage_likelihood').notNull(),
+    confidence: text('confidence').$type<Confidence>().notNull(),
+    source: text('source').notNull().default('rules'),
+    updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
+  },
+)
+
+export const omDomains = pgTable(
+  'om_domains',
+  {
+    id: serial('id').primaryKey(),
+    domain: text('domain').notNull(),
+    authorityScore: doublePrecision('authority_score'),
+    estimatedOrganicTraffic: integer('estimated_organic_traffic'),
+    estimatedPaidTraffic: integer('estimated_paid_traffic'),
+    referringDomains: integer('referring_domains'),
+    classification: text('classification').$type<OmDomainClass>().notNull().default('unknown'),
+    /** Semrush Rank / organic keyword totals come from domain_rank, not Traffic Analytics. */
+    organicKeywords: integer('organic_keywords'),
+    paidKeywords: integer('paid_keywords'),
+    overviewFetchedAt: timestamp('overview_fetched_at', { withTimezone: true }),
+    reverseMinedAt: timestamp('reverse_mined_at', { withTimezone: true }),
+    discoveredAt: timestampCol('discovered_at'),
+    updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => ({ domainUq: uniqueIndex('om_domains_domain_uq').on(t.domain) }),
+)
+
+export const omKeywordDomains = pgTable(
+  'om_keyword_domains',
+  {
+    id: serial('id').primaryKey(),
+    keywordId: integer('keyword_id')
+      .notNull()
+      .references(() => omKeywords.id, { onDelete: 'cascade' }),
+    domainId: integer('domain_id')
+      .notNull()
+      .references(() => omDomains.id, { onDelete: 'cascade' }),
+    rankingType: text('ranking_type').$type<RankingType>().notNull(),
+    position: integer('position'),
+    url: text('url'),
+    firstSeen: timestampCol('first_seen'),
+    lastSeen: timestamp('last_seen', { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => ({
+    kwDomainUq: uniqueIndex('om_keyword_domains_uq').on(t.keywordId, t.domainId, t.rankingType),
+    domainIdx: index('om_keyword_domains_domain_idx').on(t.domainId),
+  }),
+)
+
+export const omAds = pgTable(
+  'om_ads',
+  {
+    id: serial('id').primaryKey(),
+    domainId: integer('domain_id')
+      .notNull()
+      .references(() => omDomains.id, { onDelete: 'cascade' }),
+    keywordId: integer('keyword_id').references(() => omKeywords.id, { onDelete: 'set null' }),
+    adTitle: text('ad_title'),
+    adText: text('ad_text'),
+    visibleUrl: text('visible_url'),
+    dateSeen: text('date_seen'),
+    createdAt: now(),
+  },
+  (t) => ({ domainIdx: index('om_ads_domain_idx').on(t.domainId, t.keywordId) }),
+)
+
+export const omMarkets = pgTable(
+  'om_markets',
+  {
+    id: serial('id').primaryKey(),
+    name: text('name').notNull(),
+    slug: text('slug').notNull(),
+    description: text('description'),
+    canonicalProblem: text('canonical_problem'),
+    likelyCustomer: text('likely_customer'),
+    businessType: text('business_type').$type<BusinessType>().notNull().default('unknown'),
+    monetizationModel: text('monetization_model').$type<MonetizationModel>().notNull().default('unknown'),
+    buyerType: text('buyer_type').$type<BuyerType>().notNull().default('unknown'),
+    clusterKey: text('cluster_key'),
+    thesis: text('thesis'),
+    businessIdea: text('business_idea'),
+    risks: text('risks'),
+    expansionNotes: text('expansion_notes'),
+    discoveryPath: text('discovery_path'),
+    status: text('status').$type<MarketStatus>().notNull().default('new'),
+    rejectionReasons: jsonb('rejection_reasons').$type<RejectionReason[]>().notNull().default([]),
+    notes: text('notes'),
+    scoreOverride: doublePrecision('score_override'),
+    tags: jsonb('tags').$type<string[]>().notNull().default([]),
+    country: text('country').notNull().default('us'),
+    rawVolume: integer('raw_volume'),
+    adjustedVolume: integer('adjusted_volume'),
+    weightedCpc: doublePrecision('weighted_cpc'),
+    weightedKd: doublePrecision('weighted_kd'),
+    medianKd: doublePrecision('median_kd'),
+    commercialVolume: integer('commercial_volume'),
+    highIntentVolume: integer('high_intent_volume'),
+    brandedShare: doublePrecision('branded_share'),
+    growth3m: doublePrecision('growth_3m'),
+    growth6m: doublePrecision('growth_6m'),
+    growth12m: doublePrecision('growth_12m'),
+    growth24m: doublePrecision('growth_24m'),
+    uniqueAdvertisers: integer('unique_advertisers').notNull().default(0),
+    persistentAdvertisers: integer('persistent_advertisers').notNull().default(0),
+    competitorCount: integer('competitor_count').notNull().default(0),
+    serpWeakness: doublePrecision('serp_weakness'),
+    recurringUsage: integer('recurring_usage'),
+    willingnessToPay: integer('willingness_to_pay'),
+    expansionPotential: integer('expansion_potential'),
+    buildComplexity: integer('build_complexity'),
+    llmConfidence: text('llm_confidence').$type<Confidence>().notNull().default('unknown'),
+    createdAt: now(),
+    updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => ({
+    slugUq: uniqueIndex('om_markets_slug_uq').on(t.slug),
+    statusIdx: index('om_markets_status_idx').on(t.status),
+    clusterIdx: index('om_markets_cluster_key_idx').on(t.clusterKey),
+  }),
+)
+
+export const omMarketKeywords = pgTable(
+  'om_market_keywords',
+  {
+    marketId: integer('market_id')
+      .notNull()
+      .references(() => omMarkets.id, { onDelete: 'cascade' }),
+    keywordId: integer('keyword_id')
+      .notNull()
+      .references(() => omKeywords.id, { onDelete: 'cascade' }),
+    relevanceScore: doublePrecision('relevance_score').notNull().default(1),
+    intentScore: doublePrecision('intent_score'),
+  },
+  (t) => ({
+    pk: uniqueIndex('om_market_keywords_uq').on(t.marketId, t.keywordId),
+    kwIdx: index('om_market_keywords_kw_idx').on(t.keywordId),
+  }),
+)
+
+export const omMarketDomains = pgTable(
+  'om_market_domains',
+  {
+    marketId: integer('market_id')
+      .notNull()
+      .references(() => omMarkets.id, { onDelete: 'cascade' }),
+    domainId: integer('domain_id')
+      .notNull()
+      .references(() => omDomains.id, { onDelete: 'cascade' }),
+    role: text('role').$type<DomainRole>().notNull(),
+    relevanceScore: doublePrecision('relevance_score').notNull().default(1),
+    keywordCount: integer('keyword_count').notNull().default(0),
+  },
+  (t) => ({
+    pk: uniqueIndex('om_market_domains_uq').on(t.marketId, t.domainId, t.role),
+  }),
+)
+
+export const omOpportunityEconomics = pgTable(
+  'om_opportunity_economics',
+  {
+    marketId: integer('market_id')
+      .primaryKey()
+      .references(() => omMarkets.id, { onDelete: 'cascade' }),
+    estimatedMonthlyPriceBear: doublePrecision('estimated_monthly_price_bear'),
+    estimatedMonthlyPriceBase: doublePrecision('estimated_monthly_price_base'),
+    estimatedMonthlyPriceBull: doublePrecision('estimated_monthly_price_bull'),
+    estimatedLifetimeMonthsBear: doublePrecision('estimated_lifetime_months_bear'),
+    estimatedLifetimeMonthsBase: doublePrecision('estimated_lifetime_months_base'),
+    estimatedLifetimeMonthsBull: doublePrecision('estimated_lifetime_months_bull'),
+    grossMarginBear: doublePrecision('gross_margin_bear'),
+    grossMarginBase: doublePrecision('gross_margin_base'),
+    grossMarginBull: doublePrecision('gross_margin_bull'),
+    clickToPaidBear: doublePrecision('click_to_paid_bear'),
+    clickToPaidBase: doublePrecision('click_to_paid_base'),
+    clickToPaidBull: doublePrecision('click_to_paid_bull'),
+    grossProfitLtvBear: doublePrecision('gross_profit_ltv_bear'),
+    grossProfitLtvBase: doublePrecision('gross_profit_ltv_base'),
+    grossProfitLtvBull: doublePrecision('gross_profit_ltv_bull'),
+    allowableCacBear: doublePrecision('allowable_cac_bear'),
+    allowableCacBase: doublePrecision('allowable_cac_base'),
+    allowableCacBull: doublePrecision('allowable_cac_bull'),
+    sustainableCpcBear: doublePrecision('sustainable_cpc_bear'),
+    sustainableCpcBase: doublePrecision('sustainable_cpc_base'),
+    sustainableCpcBull: doublePrecision('sustainable_cpc_bull'),
+    observedWeightedCpc: doublePrecision('observed_weighted_cpc'),
+    cpcCoverageBear: doublePrecision('cpc_coverage_bear'),
+    cpcCoverageBase: doublePrecision('cpc_coverage_base'),
+    cpcCoverageBull: doublePrecision('cpc_coverage_bull'),
+    observedLowPrice: doublePrecision('observed_low_price'),
+    observedMedianPrice: doublePrecision('observed_median_price'),
+    observedHighPrice: doublePrecision('observed_high_price'),
+    pricingObservationCount: integer('pricing_observation_count').notNull().default(0),
+    priceConfidence: text('price_confidence').$type<Confidence>().notNull().default('unknown'),
+    lifetimeConfidence: text('lifetime_confidence').$type<Confidence>().notNull().default('weakly_inferred'),
+    organicClicksBase: doublePrecision('organic_clicks_base'),
+    estimatedMonthlyNewLtv: doublePrecision('estimated_monthly_new_ltv'),
+    seoEconomicScore: doublePrecision('seo_economic_score'),
+    updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
+  },
+)
+
+export const omMarketScores = pgTable(
+  'om_market_scores',
+  {
+    marketId: integer('market_id')
+      .primaryKey()
+      .references(() => omMarkets.id, { onDelete: 'cascade' }),
+    demandScore: doublePrecision('demand_score').notNull(),
+    commercialIntentScore: doublePrecision('commercial_intent_score').notNull(),
+    monetizationEvidenceScore: doublePrecision('monetization_evidence_score').notNull(),
+    willingnessToPayScore: doublePrecision('willingness_to_pay_score').notNull(),
+    recurringUsageScore: doublePrecision('recurring_usage_score').notNull(),
+    expansionScore: doublePrecision('expansion_score').notNull(),
+    seoAccessibilityScore: doublePrecision('seo_accessibility_score').notNull(),
+    paidAcquisitionScore: doublePrecision('paid_acquisition_score').notNull(),
+    competitorWeaknessScore: doublePrecision('competitor_weakness_score').notNull(),
+    growthScore: doublePrecision('growth_score').notNull(),
+    buildFeasibilityScore: doublePrecision('build_feasibility_score').notNull(),
+    totalScore: doublePrecision('total_score').notNull(),
+    updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
+  },
+)
+
+export const omPricingObservations = pgTable(
+  'om_pricing_observations',
+  {
+    id: serial('id').primaryKey(),
+    domainId: integer('domain_id')
+      .notNull()
+      .references(() => omDomains.id, { onDelete: 'cascade' }),
+    marketId: integer('market_id').references(() => omMarkets.id, { onDelete: 'set null' }),
+    sourceUrl: text('source_url'),
+    freeTier: boolean('free_tier'),
+    cheapestPaid: doublePrecision('cheapest_paid'),
+    popularPlan: doublePrecision('popular_plan'),
+    highestSelfServe: doublePrecision('highest_self_serve'),
+    annual: boolean('annual'),
+    perSeat: boolean('per_seat'),
+    usageBased: boolean('usage_based'),
+    enterpriseOnly: boolean('enterprise_only'),
+    rawExcerpt: text('raw_excerpt'),
+    confidence: text('confidence').$type<Confidence>().notNull().default('observed'),
+    fetchedAt: timestampCol('fetched_at'),
+  },
+)
+
+export const omAnomalies = pgTable(
+  'om_anomalies',
+  {
+    id: serial('id').primaryKey(),
+    marketId: integer('market_id')
+      .notNull()
+      .references(() => omMarkets.id, { onDelete: 'cascade' }),
+    kind: text('kind').$type<AnomalyKind>().notNull(),
+    why: text('why').notNull(),
+    createdAt: now(),
+  },
+  (t) => ({
+    marketKindUq: uniqueIndex('om_anomalies_uq').on(t.marketId, t.kind),
+    kindIdx: index('om_anomalies_kind_idx').on(t.kind),
+  }),
+)
+
+export const omQueue = pgTable(
+  'om_queue',
+  {
+    id: serial('id').primaryKey(),
+    jobType: text('job_type').$type<QueueJobType>().notNull(),
+    status: text('status').$type<QueueJobStatus>().notNull().default('pending'),
+    priority: doublePrecision('priority').notNull().default(0),
+    depth: integer('depth').notNull().default(0),
+    seedFamily: text('seed_family'),
+    keywordId: integer('keyword_id').references(() => omKeywords.id, { onDelete: 'cascade' }),
+    domainId: integer('domain_id').references(() => omDomains.id, { onDelete: 'cascade' }),
+    payload: jsonb('payload').$type<Record<string, unknown>>().notNull().default({}),
+    attempts: integer('attempts').notNull().default(0),
+    error: text('error'),
+    claimedAt: timestamp('claimed_at', { withTimezone: true }),
+    finishedAt: timestamp('finished_at', { withTimezone: true }),
+    createdAt: now(),
+  },
+  (t) => ({
+    pendingIdx: index('om_queue_pending_idx').on(t.status, t.priority),
+    keywordIdx: index('om_queue_keyword_idx').on(t.keywordId, t.jobType),
+  }),
+)
+
+export const omSemrushCache = pgTable(
+  'om_semrush_cache',
+  {
+    id: serial('id').primaryKey(),
+    cacheKey: text('cache_key').notNull(),
+    report: text('report').notNull(),
+    payload: jsonb('payload').$type<unknown>().notNull(),
+    fetchedAt: timestampCol('fetched_at'),
+    expiresAt: timestamp('expires_at', { withTimezone: true }).notNull(),
+  },
+  (t) => ({ keyUq: uniqueIndex('om_semrush_cache_key_uq').on(t.cacheKey) }),
+)
+
+export const omRuns = pgTable(
+  'om_runs',
+  {
+    id: serial('id').primaryKey(),
+    command: text('command').notNull(),
+    status: text('status').notNull().default('running'),
+    notes: text('notes'),
+    startedAt: timestampCol('started_at'),
+    finishedAt: timestamp('finished_at', { withTimezone: true }),
+  },
+)
+
+export const omRunEvents = pgTable(
+  'om_run_events',
+  {
+    id: serial('id').primaryKey(),
+    runId: integer('run_id').references(() => omRuns.id, { onDelete: 'cascade' }),
+    channel: text('channel').notNull(),
+    message: text('message').notNull(),
+    details: jsonb('details').$type<Record<string, unknown>>(),
+    createdAt: now(),
+  },
+)
+
+export type OmKeyword = typeof omKeywords.$inferSelect
+export type OmMarket = typeof omMarkets.$inferSelect
+export type OmDomain = typeof omDomains.$inferSelect
+export type OmQueueJob = typeof omQueue.$inferSelect

@@ -39,7 +39,11 @@ export default function SettingsPage() {
             <strong>DataForSEO</strong> — organic + maps SERPs (research &amp; monitoring)
           </li>
           <li>
-            <strong>Google Ads</strong> — keyword volume on promote (OAuth + developer token)
+            <strong>Google Ads</strong> — keyword volume on promote (OAuth + developer token); Opportunity Miner idea expansion
+          </li>
+          <li>
+            <strong>Semrush</strong> — Opportunity Miner keyword/domain/ads evidence via{' '}
+            <code>SEMRUSH_API_KEY</code> (same Analytics reports as the Semrush MCP)
           </li>
           <li>
             <strong>Retell / Twilio</strong> — voice agent CRM (
@@ -69,6 +73,14 @@ export default function SettingsPage() {
           <dd>Modelled, not a quote from a tenant.</dd>
           <dt>Nulls</dt>
           <dd>Render as — . Zero means measured zero.</dd>
+          <dt>Opportunity Miner</dt>
+          <dd>
+            Volume, CPC, KD, advertisers, and domain_rank traffic are Semrush or Google Ads
+            evidence. Prices and lifetime are marked observed vs inferred. Traffic Analytics
+            visits are unavailable on the current Semrush MCP plan — we do not invent them.
+            Adjusted cluster volume takes the max of semantic near-duplicates, then applies a
+            conservative overlap factor.
+          </dd>
         </dl>
       </div>
 

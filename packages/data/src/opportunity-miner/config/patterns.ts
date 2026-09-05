@@ -1,0 +1,70 @@
+export interface SeedPattern {
+  family: string
+  template: string
+  slot: 'x' | 'persona' | 'workflow' | 'company' | 'industry'
+  priority: number
+  firstRun: boolean
+}
+
+export const SEED_PATTERNS: SeedPattern[] = [
+  { family: 'generator', template: '{x} generator', slot: 'x', priority: 100, firstRun: true },
+  { family: 'ai', template: 'AI for {x}', slot: 'x', priority: 98, firstRun: true },
+  { family: 'ai', template: '{x} AI', slot: 'x', priority: 96, firstRun: true },
+  { family: 'software', template: '{x} software', slot: 'x', priority: 94, firstRun: true },
+  { family: 'software', template: 'software for {persona}', slot: 'persona', priority: 93, firstRun: true },
+  { family: 'app', template: '{x} app', slot: 'x', priority: 90, firstRun: true },
+  { family: 'app', template: 'app for {persona}', slot: 'persona', priority: 89, firstRun: true },
+  { family: 'checker', template: '{x} checker', slot: 'x', priority: 86, firstRun: true },
+  { family: 'planner', template: '{x} planner', slot: 'x', priority: 85, firstRun: true },
+  { family: 'tracker', template: '{x} tracker', slot: 'x', priority: 84, firstRun: true },
+  { family: 'calculator', template: '{x} calculator', slot: 'x', priority: 83, firstRun: true },
+  { family: 'automation', template: '{x} automation', slot: 'x', priority: 82, firstRun: true },
+  { family: 'automation', template: 'automate {x}', slot: 'x', priority: 81, firstRun: true },
+  { family: 'alternative', template: '{company} alternative', slot: 'company', priority: 80, firstRun: true },
+  { family: 'alternative', template: 'alternative to {company}', slot: 'company', priority: 79, firstRun: true },
+  { family: 'maker', template: '{x} maker', slot: 'x', priority: 70, firstRun: false },
+  { family: 'creator', template: '{x} creator', slot: 'x', priority: 70, firstRun: false },
+  { family: 'builder', template: '{x} builder', slot: 'x', priority: 68, firstRun: false },
+  { family: 'analyzer', template: '{x} analyzer', slot: 'x', priority: 67, firstRun: false },
+  { family: 'scheduler', template: '{x} scheduler', slot: 'x', priority: 66, firstRun: false },
+  { family: 'converter', template: '{x} converter', slot: 'x', priority: 65, firstRun: false },
+  { family: 'optimizer', template: '{x} optimizer', slot: 'x', priority: 64, firstRun: false },
+  { family: 'monitor', template: '{x} monitor', slot: 'x', priority: 63, firstRun: false },
+  { family: 'editor', template: '{x} editor', slot: 'x', priority: 62, firstRun: false },
+  { family: 'enhancer', template: '{x} enhancer', slot: 'x', priority: 50, firstRun: false },
+  { family: 'remover', template: '{x} remover', slot: 'x', priority: 50, firstRun: false },
+  { family: 'finder', template: '{x} finder', slot: 'x', priority: 55, firstRun: false },
+  { family: 'software', template: '{x} tool', slot: 'x', priority: 72, firstRun: false },
+  { family: 'software', template: '{x} platform', slot: 'x', priority: 60, firstRun: false },
+  { family: 'software', template: 'best {x} software', slot: 'x', priority: 74, firstRun: false },
+  { family: 'software', template: 'best {x} app', slot: 'x', priority: 73, firstRun: false },
+  { family: 'software', template: 'best tool for {x}', slot: 'x', priority: 71, firstRun: false },
+  { family: 'persona', template: 'AI for {persona}', slot: 'persona', priority: 88, firstRun: false },
+  { family: 'persona', template: 'tools for {persona}', slot: 'persona', priority: 75, firstRun: false },
+  { family: 'automation', template: 'automatic {workflow}', slot: 'workflow', priority: 70, firstRun: false },
+  { family: 'automation', template: 'AI {workflow}', slot: 'workflow', priority: 78, firstRun: false },
+  { family: 'automation', template: '{workflow} AI', slot: 'workflow', priority: 77, firstRun: false },
+  { family: 'alternative', template: '{company} competitors', slot: 'company', priority: 60, firstRun: false },
+  { family: 'alternative', template: 'cheaper than {company}', slot: 'company', priority: 55, firstRun: false },
+  { family: 'alternative', template: '{company} vs', slot: 'company', priority: 50, firstRun: false },
+  { family: 'commercial', template: '{x} pricing', slot: 'x', priority: 76, firstRun: false },
+  { family: 'commercial', template: '{x} cost', slot: 'x', priority: 70, firstRun: false },
+  { family: 'commercial', template: 'best {x}', slot: 'x', priority: 58, firstRun: false },
+  { family: 'commercial', template: '{x} reviews', slot: 'x', priority: 57, firstRun: false },
+  { family: 'commercial', template: '{x} free', slot: 'x', priority: 40, firstRun: false },
+  { family: 'commercial', template: '{x} online', slot: 'x', priority: 40, firstRun: false },
+  { family: 'commercial', template: '{x} template', slot: 'x', priority: 62, firstRun: false },
+]
+
+export const FIRST_RUN_FAMILIES = [
+  'generator',
+  'ai',
+  'software',
+  'app',
+  'checker',
+  'planner',
+  'tracker',
+  'calculator',
+  'automation',
+  'alternative',
+] as const
