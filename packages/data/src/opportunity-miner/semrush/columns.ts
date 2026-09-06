@@ -70,6 +70,7 @@ export const MCP_TO_API_TYPE: Record<string, string> = {
   domain_adwords_adwords: 'domain_adwords_adwords',
   domain_adwords_historical: 'domain_adwords_historical',
   backlinks_overview: 'backlinks_overview',
+  backlinks_refdomains: 'backlinks_refdomains',
 }
 
 export const MCP_SORT_TO_API: Record<string, string> = {

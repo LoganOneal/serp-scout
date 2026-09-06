@@ -20,6 +20,20 @@ import type {
   HotelBlSiteControlType,
   HotelBlStage,
   HotelBlUrlValidationStatus,
+  HhtOppConfidence,
+  HhtOppContactStatus,
+  HhtOppDraftStatus,
+  HhtOppEligibility,
+  HhtOppLinkType,
+  HhtOppPriceStatus,
+  HhtOppPricingModel,
+  HhtOppQuality,
+  HhtOppRequirementGroup,
+  HhtOppScoreWeights,
+  HhtOppSeoRisk,
+  HhtOppStatus,
+  HhtOppStrategy,
+  HhtOppType,
   AnomalyKind,
   BusinessType,
   BuyerType,
@@ -4266,3 +4280,360 @@ export type OmKeyword = typeof omKeywords.$inferSelect
 export type OmMarket = typeof omMarkets.$inferSelect
 export type OmDomain = typeof omDomains.$inferSelect
 export type OmQueueJob = typeof omQueue.$inferSelect
+
+// --- HHT Backlink Opportunity Engine ---------------------------------------
+
+export const hhtOppSettings = pgTable('hht_opp_settings', {
+  id: serial('id').primaryKey(),
+  scoreWeights: jsonb('score_weights').$type<HhtOppScoreWeights>().notNull(),
+  competitorDomains: jsonb('competitor_domains').$type<string[]>().notNull().default([]),
+  updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
+})
+
+export const hhtOppDiscoveryRuns = pgTable(
+  'hht_opp_discovery_runs',
+  {
+    id: serial('id').primaryKey(),
+    name: text('name').notNull(),
+    status: text('status').notNull().default('running'),
+    notes: text('notes'),
+    startedAt: timestampCol('started_at'),
+    finishedAt: timestamp('finished_at', { withTimezone: true }),
+  },
+)
+
+export const hhtOppSearchQueries = pgTable(
+  'hht_opp_search_queries',
+  {
+    id: serial('id').primaryKey(),
+    runId: integer('run_id').references(() => hhtOppDiscoveryRuns.id, { onDelete: 'cascade' }),
+    query: text('query').notNull(),
+    strategy: text('strategy').$type<HhtOppStrategy>().notNull(),
+    family: text('family'),
+    resultsFound: integer('results_found').notNull().default(0),
+    newDomains: integer('new_domains').notNull().default(0),
+    qualifiedDomains: integer('qualified_domains').notNull().default(0),
+    passDomains: integer('pass_domains').notNull().default(0),
+    createdAt: now(),
+  },
+  (t) => ({
+    strategyIdx: index('hht_opp_search_queries_strategy_idx').on(t.strategy, t.createdAt),
+    queryIdx: index('hht_opp_search_queries_query_idx').on(t.query),
+  }),
+)
+
+export const hhtOppDomains = pgTable(
+  'hht_opp_domains',
+  {
+    id: serial('id').primaryKey(),
+    rootDomain: text('root_domain').notNull(),
+    displayName: text('display_name'),
+    canonicalUrl: text('canonical_url'),
+    quality: text('quality').$type<HhtOppQuality>().notNull().default('OK'),
+    qualityReasons: jsonb('quality_reasons').$type<string[]>().notNull().default([]),
+    avgExternalLinks: doublePrecision('avg_external_links'),
+    uniqueExternalDomains: integer('unique_external_domains'),
+    avgInternalLinks: doublePrecision('avg_internal_links'),
+    externalToInternalRatio: doublePrecision('external_to_internal_ratio'),
+    commercialLinkDensity: doublePrecision('commercial_link_density'),
+    outboundSampleSize: integer('outbound_sample_size'),
+    alreadyLinksToHht: boolean('already_links_to_hht'),
+    firstSeenAt: timestampCol('first_seen_at'),
+    lastCheckedAt: timestamp('last_checked_at', { withTimezone: true }),
+    updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => ({
+    domainUq: uniqueIndex('hht_opp_domains_root_uq').on(t.rootDomain),
+  }),
+)
+
+export const hhtOppDiscoveredDomains = pgTable(
+  'hht_opp_discovered_domains',
+  {
+    id: serial('id').primaryKey(),
+    queryId: integer('query_id').references(() => hhtOppSearchQueries.id, { onDelete: 'cascade' }),
+    domainId: integer('domain_id')
+      .notNull()
+      .references(() => hhtOppDomains.id, { onDelete: 'cascade' }),
+    seedUrl: text('seed_url'),
+    createdAt: now(),
+  },
+  (t) => ({
+    queryDomainUq: uniqueIndex('hht_opp_discovered_domains_uq').on(t.queryId, t.domainId),
+  }),
+)
+
+export const hhtOppOpportunities = pgTable(
+  'hht_opp_opportunities',
+  {
+    id: serial('id').primaryKey(),
+    domainId: integer('domain_id')
+      .notNull()
+      .references(() => hhtOppDomains.id, { onDelete: 'cascade' }),
+    opportunityType: text('opportunity_type').$type<HhtOppType>().notNull(),
+    inventedType: jsonb('invented_type').$type<Record<string, string> | null>(),
+    opportunityUrl: text('opportunity_url').notNull(),
+    status: text('status').$type<HhtOppStatus>().notNull().default('NEW'),
+    eligibility: text('eligibility').$type<HhtOppEligibility>().notNull().default('REVIEW'),
+    eligibilityReason: text('eligibility_reason').notNull(),
+    eligibilityConfidence: text('eligibility_confidence').$type<HhtOppConfidence>().notNull().default('LOW'),
+    eligibilitySourceUrl: text('eligibility_source_url'),
+    eligibilityExcerpt: text('eligibility_excerpt'),
+    eligibilityCheckedAt: timestamp('eligibility_checked_at', { withTimezone: true }),
+    linkType: text('link_type').$type<HhtOppLinkType>().notNull().default('unknown'),
+    seoRisk: text('seo_risk').$type<HhtOppSeoRisk>().notNull().default('LOW'),
+    seoRiskReasons: jsonb('seo_risk_reasons').$type<string[]>().notNull().default([]),
+    priceStatus: text('price_status').$type<HhtOppPriceStatus>().notNull().default('UNKNOWN'),
+    priceAmount: doublePrecision('price_amount'),
+    priceCurrency: text('price_currency'),
+    pricingModel: text('pricing_model').$type<HhtOppPricingModel>().notNull().default('unspecified'),
+    priceEvidenceUrl: text('price_evidence_url'),
+    priceEvidenceText: text('price_evidence_text'),
+    priceCheckedAt: timestamp('price_checked_at', { withTimezone: true }),
+    requirementsSummary: jsonb('requirements_summary').$type<string[]>().notNull().default([]),
+    whyItMatters: text('why_it_matters'),
+    pitchAngle: text('pitch_angle'),
+    relevantArticleUrl: text('relevant_article_url'),
+    brokenUrl: text('broken_url'),
+    replacementUrl: text('replacement_url'),
+    discoveredByStrategy: text('discovered_by_strategy').$type<HhtOppStrategy>().notNull().default('manual_seed'),
+    contacted: boolean('contacted').notNull().default(false),
+    requirementsChanged: boolean('requirements_changed').notNull().default(false),
+    feasibilityScore: doublePrecision('feasibility_score'),
+    seoValueScore: doublePrecision('seo_value_score'),
+    topicalRelevanceScore: doublePrecision('topical_relevance_score'),
+    editorialQualityScore: doublePrecision('editorial_quality_score'),
+    costEfficiencyScore: doublePrecision('cost_efficiency_score'),
+    freshnessScore: doublePrecision('freshness_score'),
+    overallScore: doublePrecision('overall_score'),
+    lastCheckedAt: timestamp('last_checked_at', { withTimezone: true }),
+    createdAt: now(),
+    updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => ({
+    domainTypeUrlUq: uniqueIndex('hht_opp_opportunities_dedupe_uq').on(t.domainId, t.opportunityType, t.opportunityUrl),
+    statusIdx: index('hht_opp_opportunities_status_idx').on(t.status, t.overallScore),
+    typeIdx: index('hht_opp_opportunities_type_idx').on(t.opportunityType),
+  }),
+)
+
+export const hhtOppRequirements = pgTable(
+  'hht_opp_requirements',
+  {
+    id: serial('id').primaryKey(),
+    opportunityId: integer('opportunity_id')
+      .notNull()
+      .references(() => hhtOppOpportunities.id, { onDelete: 'cascade' }),
+    groupName: text('group_name').$type<HhtOppRequirementGroup>().notNull(),
+    label: text('label').notNull(),
+    requirementText: text('requirement_text').notNull(),
+    sourceUrl: text('source_url').notNull(),
+    sourceExcerpt: text('source_excerpt').notNull(),
+    dateChecked: timestampCol('date_checked'),
+    confidence: text('confidence').$type<HhtOppConfidence>().notNull().default('MEDIUM'),
+  },
+  (t) => ({
+    oppIdx: index('hht_opp_requirements_opp_idx').on(t.opportunityId, t.groupName),
+  }),
+)
+
+export const hhtOppSources = pgTable(
+  'hht_opp_sources',
+  {
+    id: serial('id').primaryKey(),
+    opportunityId: integer('opportunity_id')
+      .notNull()
+      .references(() => hhtOppOpportunities.id, { onDelete: 'cascade' }),
+    url: text('url').notNull(),
+    title: text('title'),
+    role: text('role').notNull(),
+    excerpt: text('excerpt'),
+    checkedAt: timestampCol('checked_at'),
+  },
+)
+
+export const hhtOppPricingOptions = pgTable(
+  'hht_opp_pricing_options',
+  {
+    id: serial('id').primaryKey(),
+    opportunityId: integer('opportunity_id')
+      .notNull()
+      .references(() => hhtOppOpportunities.id, { onDelete: 'cascade' }),
+    label: text('label'),
+    amount: doublePrecision('amount'),
+    currency: text('currency'),
+    pricingModel: text('pricing_model').$type<HhtOppPricingModel>().notNull().default('unspecified'),
+    included: text('included'),
+    linkAttribute: text('link_attribute'),
+    evidenceUrl: text('evidence_url').notNull(),
+    evidenceText: text('evidence_text'),
+    dateChecked: timestampCol('date_checked'),
+  },
+)
+
+export const hhtOppContacts = pgTable(
+  'hht_opp_contacts',
+  {
+    id: serial('id').primaryKey(),
+    opportunityId: integer('opportunity_id')
+      .notNull()
+      .references(() => hhtOppOpportunities.id, { onDelete: 'cascade' }),
+    email: text('email'),
+    name: text('name'),
+    role: text('role'),
+    formUrl: text('form_url'),
+    status: text('status').$type<HhtOppContactStatus>().notNull().default('UNKNOWN'),
+    sourceUrl: text('source_url').notNull(),
+    sourceExcerpt: text('source_excerpt'),
+    createdAt: now(),
+  },
+)
+
+export const hhtOppDrafts = pgTable(
+  'hht_opp_drafts',
+  {
+    id: serial('id').primaryKey(),
+    opportunityId: integer('opportunity_id')
+      .notNull()
+      .references(() => hhtOppOpportunities.id, { onDelete: 'cascade' }),
+    subject: text('subject').notNull(),
+    body: text('body').notNull(),
+    pitchAngle: text('pitch_angle'),
+    articleIdeas: jsonb('article_ideas').$type<string[]>().notNull().default([]),
+    tone: text('tone').notNull().default('default'),
+    status: text('status').$type<HhtOppDraftStatus>().notNull().default('draft'),
+    createdAt: now(),
+  },
+  (t) => ({
+    oppIdx: index('hht_opp_drafts_opp_idx').on(t.opportunityId, t.createdAt),
+  }),
+)
+
+export const hhtOppSeoMetrics = pgTable(
+  'hht_opp_seo_metrics',
+  {
+    id: serial('id').primaryKey(),
+    domainId: integer('domain_id')
+      .notNull()
+      .references(() => hhtOppDomains.id, { onDelete: 'cascade' }),
+    metric: text('metric').notNull(),
+    value: doublePrecision('value'),
+    source: text('source').notNull().default('semrush'),
+    retrievedAt: timestampCol('retrieved_at'),
+  },
+  (t) => ({
+    domainMetricIdx: index('hht_opp_seo_metrics_domain_idx').on(t.domainId, t.metric, t.retrievedAt),
+  }),
+)
+
+export const hhtOppCrawledPages = pgTable(
+  'hht_opp_crawled_pages',
+  {
+    id: serial('id').primaryKey(),
+    domainId: integer('domain_id')
+      .notNull()
+      .references(() => hhtOppDomains.id, { onDelete: 'cascade' }),
+    url: text('url').notNull(),
+    title: text('title'),
+    httpStatus: integer('http_status'),
+    contentHash: text('content_hash'),
+    pageText: text('page_text'),
+    rawHtml: text('raw_html'),
+    externalLinkCount: integer('external_link_count'),
+    internalLinkCount: integer('internal_link_count'),
+    uniqueExternalDomains: integer('unique_external_domains'),
+    commercialLinkCount: integer('commercial_link_count'),
+    fetchedAt: timestampCol('fetched_at'),
+    error: text('error'),
+  },
+  (t) => ({
+    urlUq: uniqueIndex('hht_opp_crawled_pages_url_uq').on(t.domainId, t.url),
+  }),
+)
+
+export const hhtOppOutreachEvents = pgTable(
+  'hht_opp_outreach_events',
+  {
+    id: serial('id').primaryKey(),
+    opportunityId: integer('opportunity_id')
+      .notNull()
+      .references(() => hhtOppOpportunities.id, { onDelete: 'cascade' }),
+    dateSent: timestamp('date_sent', { withTimezone: true }),
+    channel: text('channel'),
+    reply: boolean('reply'),
+    positiveReply: boolean('positive_reply'),
+    priceQuoted: doublePrecision('price_quoted'),
+    linkAcquired: boolean('link_acquired'),
+    linkUrl: text('link_url'),
+    targetHhtUrl: text('target_hht_url'),
+    finalCost: doublePrecision('final_cost'),
+    linkAttribute: text('link_attribute'),
+    liveDate: timestamp('live_date', { withTimezone: true }),
+    notes: text('notes'),
+    createdAt: now(),
+  },
+)
+
+export const hhtOppAuthors = pgTable(
+  'hht_opp_authors',
+  {
+    id: serial('id').primaryKey(),
+    domainId: integer('domain_id')
+      .notNull()
+      .references(() => hhtOppDomains.id, { onDelete: 'cascade' }),
+    name: text('name').notNull(),
+    sourceUrl: text('source_url').notNull(),
+    sourceExcerpt: text('source_excerpt'),
+    createdAt: now(),
+  },
+  (t) => ({
+    domainNameUq: uniqueIndex('hht_opp_authors_domain_name_uq').on(t.domainId, t.name),
+  }),
+)
+
+export const hhtOppAuthorPublications = pgTable(
+  'hht_opp_author_publications',
+  {
+    id: serial('id').primaryKey(),
+    authorId: integer('author_id')
+      .notNull()
+      .references(() => hhtOppAuthors.id, { onDelete: 'cascade' }),
+    domain: text('domain').notNull(),
+    url: text('url'),
+    createdAt: now(),
+  },
+  (t) => ({
+    authorDomainUq: uniqueIndex('hht_opp_author_pubs_uq').on(t.authorId, t.domain),
+  }),
+)
+
+export const hhtOppCompetitorHits = pgTable(
+  'hht_opp_competitor_hits',
+  {
+    id: serial('id').primaryKey(),
+    domainId: integer('domain_id').references(() => hhtOppDomains.id, { onDelete: 'set null' }),
+    referringDomain: text('referring_domain').notNull(),
+    competitorCount: integer('competitor_count').notNull(),
+    competitors: jsonb('competitors').$type<string[]>().notNull().default([]),
+    alreadyLinksToHht: boolean('already_links_to_hht').notNull().default(false),
+    reason: text('reason'),
+    createdAt: now(),
+  },
+  (t) => ({
+    referringUq: uniqueIndex('hht_opp_competitor_hits_domain_uq').on(t.referringDomain),
+  }),
+)
+
+export const hhtOppStrategyRecommendations = pgTable('hht_opp_strategy_recommendations', {
+  id: serial('id').primaryKey(),
+  summary: text('summary').notNull(),
+  rationale: text('rationale').notNull(),
+  evidence: jsonb('evidence').$type<Record<string, number | string>>().notNull().default({}),
+  status: text('status').notNull().default('proposed'),
+  createdAt: now(),
+  updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
+})
+
+export type HhtOppDomain = typeof hhtOppDomains.$inferSelect
+export type HhtOppOpportunity = typeof hhtOppOpportunities.$inferSelect
+export type HhtOppDraft = typeof hhtOppDrafts.$inferSelect

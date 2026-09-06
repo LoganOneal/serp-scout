@@ -384,6 +384,29 @@ export class SemrushClient {
     })).filter((r) => r.domain)
   }
 
+  async referringDomains(
+    domain: string,
+    limit = 40,
+  ): Promise<Array<{ domain: string; authorityScore: number | null; backlinks: number | null }>> {
+    const rows = await this.report(
+      'backlinks_refdomains',
+      {
+        target: domain,
+        target_type: 'root_domain',
+        export_columns: ['domain', 'domain_ascore', 'backlinks_num'],
+        display_limit: limit,
+      },
+      OM_CACHE_TTL_DAYS.backlinks,
+    )
+    return rows
+      .map((r) => ({
+        domain: String(r['domain'] ?? '').toLowerCase(),
+        authorityScore: numOrNull(r['domain_ascore'] ?? r['authority_score'] ?? r['ascore']),
+        backlinks: numOrNull(r['backlinks_num'] ?? r['backlinks']),
+      }))
+      .filter((row) => row.domain)
+  }
+
   async domainBacklinks(domain: string): Promise<BacklinkOverview | null> {
     const rows = await this.report('backlinks_overview', {
       target: domain,
@@ -440,7 +463,11 @@ export class SemrushClient {
     const apiType = MCP_TO_API_TYPE[mcpReport]
     if (!apiType) throw new SemrushUnavailable(`Unmapped Semrush report: ${mcpReport}`)
 
-    const url = new URL(apiType === 'backlinks_overview' ? 'https://api.semrush.com/analytics/v1/' : 'https://api.semrush.com/')
+    const url = new URL(
+      apiType === 'backlinks_overview' || apiType === 'backlinks_refdomains'
+        ? 'https://api.semrush.com/analytics/v1/'
+        : 'https://api.semrush.com/',
+    )
     url.searchParams.set('key', this.apiKey)
     url.searchParams.set('type', apiType)
     url.searchParams.set('export_escape', '1')

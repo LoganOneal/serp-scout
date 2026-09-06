@@ -1,11 +1,15 @@
-import { liveCallsEnabled } from '@rnr/data'
+import { DEFAULT_HHT_OPP_COMPETITORS, DEFAULT_HHT_OPP_SCORE_WEIGHTS } from '@rnr/core'
+import { db, getHhtOppCompetitors, getHhtOppScoreWeights, liveCallsEnabled, queryOr } from '@rnr/data'
 import { PageHeader } from '@/components/shell/PageHeader'
 import Link from 'next/link'
+import { saveHhtOppCompetitorsAction, saveHhtOppWeightsAction } from '../hht-opp/actions'
 
 export const dynamic = 'force-dynamic'
 
-export default function SettingsPage() {
+export default async function SettingsPage() {
   const live = liveCallsEnabled()
+  const weights = await queryOr('hhtOppWeights', () => getHhtOppScoreWeights(db()), DEFAULT_HHT_OPP_SCORE_WEIGHTS)
+  const competitors = await queryOr('hhtOppCompetitors', () => getHhtOppCompetitors(db()), [...DEFAULT_HHT_OPP_COMPETITORS])
 
   return (
     <div>
@@ -73,6 +77,13 @@ export default function SettingsPage() {
           <dd>Modelled, not a quote from a tenant.</dd>
           <dt>Nulls</dt>
           <dd>Render as — . Zero means measured zero.</dd>
+          <dt>HHT Opportunity Engine</dt>
+          <dd>
+            Eligibility, prices, and contacts are extracted from publisher pages with source excerpts.
+            Absence of a prohibition is REVIEW, never PASS. Missing prices are labeled
+            “Price unknown — contact publisher.” Semrush Authority Score is shown only after
+            explicit enrichment of PASS or approved REVIEW domains.
+          </dd>
           <dt>Opportunity Miner</dt>
           <dd>
             Volume, CPC, KD, advertisers, and domain_rank traffic are Semrush or Google Ads
@@ -84,6 +95,40 @@ export default function SettingsPage() {
         </dl>
       </div>
 
+      <div className="card" id="hht-opp-weights">
+        <h3 style={{ marginTop: 0 }}>HHT Opportunity Engine score weights</h3>
+        <p className="sub" style={{ marginTop: 0 }}>
+          Overall score is a weighted blend. Values are normalized to 100%. Cost efficiency is a comparative score, not a precise financial model.
+        </p>
+        <form action={saveHhtOppWeightsAction} className="hht-opp-weights-form">
+          <WeightInput name="seoValue" label="SEO value" value={weights.seoValue} />
+          <WeightInput name="feasibility" label="Feasibility" value={weights.feasibility} />
+          <WeightInput name="topicalRelevance" label="Topical relevance" value={weights.topicalRelevance} />
+          <WeightInput name="editorialQuality" label="Editorial quality" value={weights.editorialQuality} />
+          <WeightInput name="costEfficiency" label="Cost efficiency" value={weights.costEfficiency} />
+          <WeightInput name="freshness" label="Freshness" value={weights.freshness} />
+          <button className="primary" type="submit">
+            Save weights
+          </button>
+        </form>
+      </div>
+
+      <div className="card" id="hht-opp-competitors">
+        <h3 style={{ marginTop: 0 }}>HHT competitor domains</h3>
+        <p className="sub" style={{ marginTop: 0 }}>
+          Used for Semrush referring-domain overlap. Prioritize domains that link to two or more of these and not HotelHotTubs.com. OTAs are ignored.
+        </p>
+        <form action={saveHhtOppCompetitorsAction}>
+          <label>
+            <span className="sub">One domain per line</span>
+            <textarea name="competitors" rows={5} defaultValue={competitors.join('\n')} style={{ width: '100%', font: '12.5px var(--mono)' }} />
+          </label>
+          <button className="primary" type="submit">
+            Save competitors
+          </button>
+        </form>
+      </div>
+
       <div className="card">
         <h3 style={{ marginTop: 0 }}>Product flow</h3>
         <p className="sub" style={{ marginTop: 0, marginBottom: 0 }}>
@@ -92,5 +137,14 @@ export default function SettingsPage() {
         </p>
       </div>
     </div>
+  )
+}
+
+function WeightInput({ name, label, value }: { name: string; label: string; value: number }) {
+  return (
+    <label>
+      <span>{label}</span>
+      <input name={name} type="number" step="0.01" min="0" max="1" defaultValue={value} />
+    </label>
   )
 }

@@ -211,3 +211,52 @@ export {
   type MarketListFilters,
 } from './opportunity-miner/queries.js'
 export { materializeSeeds, loadDictionaries } from './opportunity-miner/seeds.js'
+
+// --- HHT Backlink Opportunity Engine ----------------------------------------
+export { researchHhtOppSeed, researchHhtOppSeeds, type ResearchSeedResult } from './hht-opp/research.js'
+export {
+  listHhtOppOpportunities,
+  getHhtOppDetail,
+  hhtOppStats,
+  strategyYield,
+  updateHhtOppStatus,
+  listDiscoveryQueries,
+  listDiscoveryRuns,
+  FILTER_ENUMS,
+  type HhtOppDashboardView,
+  type HhtOppFilters,
+  type HhtOppListRow,
+} from './hht-opp/queries.js'
+export { generateHhtOppDraft, type DraftTone } from './hht-opp/drafts.js'
+export { enrichHhtOppDomains, enrichQualifiedHhtOppDomains } from './hht-opp/enrich.js'
+export {
+  getHhtOppCompetitors,
+  getHhtOppScoreWeights,
+  getHhtOppSettings,
+  saveHhtOppCompetitors,
+  saveHhtOppScoreWeights,
+} from './hht-opp/settings.js'
+export { suggestHhtAssets } from './hht-opp/assets.js'
+export { mineHhtOppCompetitors } from './hht-opp/competitors.js'
+export { discoverHhtOppMentions } from './hht-opp/mentions.js'
+export { scanHhtOppBrokenLinks } from './hht-opp/broken.js'
+export { expandHhtOppAuthors, listHhtOppAuthors } from './hht-opp/authors.js'
+export { expandHhtOppGraph, mineHhtOppDirectories } from './hht-opp/directories.js'
+export { hhtOppOutcomeStats, listHhtOppOutreach, recordHhtOppOutreach } from './hht-opp/outcomes.js'
+export {
+  generateHhtOppRecommendations,
+  listHhtOppRecommendations,
+  setHhtOppRecommendationStatus,
+} from './hht-opp/learning.js'
+export { listStaleHhtOppOpportunities, refreshStaleHhtOppOpportunities } from './hht-opp/refresh.js'
+export {
+  createHhtOppDiscoveryRun,
+  executeHhtOppDiscoveryRun,
+  failHhtOppDiscoveryRun,
+  isHhtOppSearchStrategy,
+  parseDiscoveryRunNotes,
+  runHhtOppDiscovery,
+  type HhtOppDiscoveryOptions,
+  type HhtOppDiscoveryResult,
+} from './hht-opp/discover.js'
+export { createHhtOppSearchProvider } from './hht-opp/search.js'
