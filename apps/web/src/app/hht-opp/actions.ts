@@ -126,7 +126,7 @@ export async function enrichHhtOppQualifiedAction(): Promise<never> {
     const results = await enrichQualifiedHhtOppDomains(db())
     const ok = results.filter((row) => row.enriched).length
     revalidatePath('/hht-opp')
-    redirect(messageUrl('/hht-opp', `Enriched ${ok} PASS domain${ok === 1 ? '' : 's'}. REVIEW rows were left for manual approval.`))
+    redirect(messageUrl('/hht-opp', `Enriched ${ok} placement-accepting domain${ok === 1 ? '' : 's'}.`))
   } catch (error) {
     redirect(messageUrl('/hht-opp', error instanceof Error ? error.message : 'Enrichment failed.', 'error'))
   }
@@ -177,7 +177,7 @@ export async function startHhtOppDiscoveryAction(formData: FormData): Promise<ne
     }
 
     const result = await executeHhtOppDiscoveryRun(db(), runId)
-    const source = result.live ? 'DataForSEO' : 'offline fixture catalog (no SERP spend)'
+    const source = result.provider === 'semrush' ? 'Semrush' : result.live ? result.provider : 'offline fixture catalog'
     const summary = `Run #${result.runId} via ${source}: ${result.queries} queries, ${result.newDomains} new domains, ${result.created} opportunities created.`
     revalidatePath('/hht-opp')
     redirect(

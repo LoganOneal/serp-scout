@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { analyzeOutbound, extractRelatedUrls, listOutboundLinks, pageLinksToHht, pageMentionsHht, sanitizePageBytes } from './crawl.js'
+import { analyzeOutbound, extractRelatedUrls, extractUgcOutboundLinks, listOutboundLinks, pageLinksToHht, pageMentionsHht, sanitizePageBytes } from './crawl.js'
 
 const html = `
 <html><body>
@@ -33,5 +33,21 @@ describe('hht opp crawl helpers', () => {
 
   it('strips null bytes so Postgres will accept the page', () => {
     expect(sanitizePageBytes('hello\u0000world')).toBe('helloworld')
+  })
+
+  it('measures UGC outbound rel attributes and ignores nav links', () => {
+    const thread = `
+      <html><body>
+        <nav><a href="https://sponsor.example/">Sponsor</a></nav>
+        <div class="postbody">
+          <a href="https://hotelhottubs.com/vermont">HotelHotTubs</a>
+          <a rel="nofollow ugc" href="https://casino.example/offer">Casino</a>
+        </div>
+      </body></html>
+    `
+    const links = extractUgcOutboundLinks(thread, 'https://talk.example/forums/thread')
+    expect(links.some((link) => link.domain === 'sponsor.example')).toBe(false)
+    expect(links.find((link) => link.domain === 'hotelhottubs.com')?.dofollow).toBe(true)
+    expect(links.find((link) => link.domain === 'casino.example')?.dofollow).toBe(false)
   })
 })

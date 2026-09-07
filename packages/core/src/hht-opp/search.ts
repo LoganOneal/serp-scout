@@ -1,7 +1,7 @@
 /**
  * Search is provider-independent. Do not scrape Google result pages.
- * Live discovery uses DataForSEO organic SERP. Offline mode uses a labeled
- * fixture catalog — never the generic local-service SERP fixtures.
+ * Live discovery prefers Semrush phrase_organic (same reports as the Semrush
+ * MCP). DataForSEO is optional. Offline mode uses a labeled fixture catalog.
  */
 export interface SearchHit {
   url: string

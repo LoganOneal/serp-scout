@@ -1,4 +1,5 @@
 import { excerptAround, firstMatch, makeEvidence } from './evidence.js'
+import { detectForumSignals, forumEvidence, forumOpportunityWhy } from './forum.js'
 import type {
   HhtOppEvidence,
   HhtOppInventedType,
@@ -181,6 +182,7 @@ const URL_TYPE_HINTS: Array<{ type: HhtOppType; pattern: RegExp; why: string }> 
   { type: 'sponsored_content', pattern: /advertise|advertising|media-kit|sponsorship|sponsored/i, why: 'URL path is an advertising or media-kit page.' },
   { type: 'hotel_tourism_partnership', pattern: /partners?|partnerships?|work-with-us/i, why: 'URL path is a partnership page.' },
   { type: 'directory_listing', pattern: /submit-listing|add-your|directory/i, why: 'URL path is a listing or directory submission page.' },
+  { type: 'forum_ugc', pattern: /\/(?:forums?|community|discussions?|threads?|topics?|showthread|viewtopic)\b/i, why: 'URL path is a forum, community, or thread page.' },
 ]
 
 export function classifyOpportunityTypes(page: PageSignalInput, checkedAt = new Date()): ClassifiedOpportunity[] {
@@ -223,6 +225,20 @@ export function classifyOpportunityTypes(page: PageSignalInput, checkedAt = new 
       opportunityUrl: page.url,
       evidence: makeEvidence(page.url, text, match?.[0] ?? 'sponsored', 'MEDIUM', checkedAt),
     })
+  }
+
+  if (!seen.has('forum_ugc')) {
+    const signals = detectForumSignals(page)
+    if (signals.isForum && signals.allowsUgc) {
+      seen.add('forum_ugc')
+      found.push({
+        type: 'forum_ugc',
+        inventedType: null,
+        why: forumOpportunityWhy(signals, null),
+        opportunityUrl: page.url,
+        evidence: forumEvidence(page.url, text, signals, checkedAt),
+      })
+    }
   }
 
   return found
@@ -305,6 +321,15 @@ export const NAV_PATH_HINTS = [
   'guidelines',
   'contact',
   'about',
+  'forum',
+  'forums',
+  'community',
+  'discussion',
+  'discussions',
+  'thread',
+  'showthread',
+  'viewtopic',
+  'viewforum',
 ] as const
 
 export function looksLikeOpportunityPath(href: string): boolean {

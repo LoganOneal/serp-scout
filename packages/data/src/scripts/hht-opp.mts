@@ -16,7 +16,7 @@ import {
   parseDiscoveryRunNotes,
   runHhtOppDiscovery,
 } from '../hht-opp/discover.js'
-import { enrichHhtOppDomains, enrichQualifiedHhtOppDomains } from '../hht-opp/enrich.js'
+import { applyHhtOppBacklinkSnapshot, enrichHhtOppDomains, enrichQualifiedHhtOppDomains } from '../hht-opp/enrich.js'
 import { expandHhtOppAuthors } from '../hht-opp/authors.js'
 import { scanHhtOppBrokenLinks } from '../hht-opp/broken.js'
 import { mineHhtOppCompetitors } from '../hht-opp/competitors.js'
@@ -76,6 +76,17 @@ async function main(): Promise<void> {
       }
       break
     }
+    case 'seo': {
+      const domainId = Number(opt('domain-id') ?? '')
+      if (!Number.isInteger(domainId) || domainId <= 0) throw new Error('Pass --domain-id=N')
+      await applyHhtOppBacklinkSnapshot(database, domainId, {
+        authorityScore: Number(opt('as') ?? '') || null,
+        backlinks: Number(opt('backlinks') ?? '') || null,
+        referringDomains: Number(opt('rd') ?? '') || null,
+      })
+      console.log(`stored seo for domain ${domainId}`)
+      break
+    }
     case 'enrich': {
       if (flag('all-qualified')) {
         console.log(JSON.stringify(await enrichQualifiedHhtOppDomains(database), null, 2))
@@ -97,6 +108,10 @@ async function main(): Promise<void> {
     }
     case 'list': {
       const rows = await listHhtOppOpportunities(database, { sort: 'score' })
+      if (flag('json')) {
+        console.log(JSON.stringify(rows, null, 2))
+        break
+      }
       console.log(`${rows.length} opportunities`)
       for (const row of rows.slice(0, 30)) {
         console.log(`${row.overallScore?.toFixed(1) ?? '—'}  ${row.eligibility}  ${row.site}  ${row.opportunityType}`)

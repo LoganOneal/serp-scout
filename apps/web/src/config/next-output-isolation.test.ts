@@ -14,3 +14,4 @@ describe('Next output isolation', () => {
     ).toBe('.next-build')
   })
 })
+

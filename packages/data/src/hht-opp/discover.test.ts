@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { FixtureHhtOppSearchProvider } from '@rnr/core'
-import { createHhtOppSearchProvider } from './search.js'
+import { createHhtOppSearchProvider, semrushPhrase } from './search.js'
 import { isHhtOppSearchStrategy, parseDiscoveryRunNotes } from './discover.js'
 
 describe('discovery run notes', () => {
@@ -24,8 +24,26 @@ describe('discovery run notes', () => {
   })
 })
 
+describe('semrushPhrase', () => {
+  it('strips Google operators Semrush will not honor', () => {
+    expect(semrushPhrase('"travel" "write for us"')).toBe('travel write for us')
+    expect(semrushPhrase('site:afar.com write for us')).toBe('write for us')
+  })
+})
+
 describe('search provider gate', () => {
-  it('uses the labeled fixture catalog when live calls are off', () => {
+  it('prefers Semrush over DataForSEO when a Semrush key is present', () => {
+    const provider = createHhtOppSearchProvider({
+      LIVE_CALLS_ENABLED: 'true',
+      SEMRUSH_API_KEY: 'test-key',
+      DATAFORSEO_LOGIN: 'x',
+      DATAFORSEO_PASSWORD: 'y',
+    })
+    expect(provider.id).toBe('semrush')
+    expect(provider.live).toBe(true)
+  })
+
+  it('uses the labeled fixture catalog when no Semrush key is set and fixture is requested', () => {
     const provider = createHhtOppSearchProvider({ LIVE_CALLS_ENABLED: 'false' })
     expect(provider).toBeInstanceOf(FixtureHhtOppSearchProvider)
     expect(provider.live).toBe(false)

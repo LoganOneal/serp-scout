@@ -19,10 +19,38 @@ export const HHT_OPP_TYPES = [
   'data_pr',
   'expert_source',
   'hotel_tourism_partnership',
+  'forum_ugc',
   'other',
 ] as const
 
 export type HhtOppType = (typeof HHT_OPP_TYPES)[number]
+
+/** Pages that show the publisher accepts guest posts or paid placements. */
+export const HHT_OPP_PLACEMENT_TYPES: ReadonlySet<HhtOppType> = new Set([
+  'editorial_guest',
+  'paid_guest_post',
+  'paid_link_insertion',
+  'sponsored_content',
+  'hotel_tourism_partnership',
+])
+
+export function acceptsGuestOrPaidPlacement(types: Iterable<HhtOppType>): boolean {
+  for (const type of types) {
+    if (HHT_OPP_PLACEMENT_TYPES.has(type)) return true
+  }
+  return false
+}
+
+/** Semrush inbound links ÷ sampled avg. outbound links. Null when either side is missing. */
+export function inboundOutboundRatio(
+  inboundLinks: number | null | undefined,
+  avgOutboundLinks: number | null | undefined,
+): number | null {
+  if (inboundLinks == null || avgOutboundLinks == null) return null
+  if (!Number.isFinite(inboundLinks) || !Number.isFinite(avgOutboundLinks)) return null
+  if (avgOutboundLinks <= 0) return null
+  return inboundLinks / avgOutboundLinks
+}
 
 export const HHT_OPP_TYPE_LABELS: Record<HhtOppType, string> = {
   editorial_guest: 'Editorial guest contribution',
@@ -37,6 +65,7 @@ export const HHT_OPP_TYPE_LABELS: Record<HhtOppType, string> = {
   data_pr: 'Data / digital PR',
   expert_source: 'Expert-source',
   hotel_tourism_partnership: 'Hotel / tourism partnership',
+  forum_ugc: 'Forum / UGC comments',
   other: 'Other opportunity',
 }
 
@@ -48,6 +77,8 @@ export const HHT_OPP_LINK_TYPES = [
   'bio_nofollow',
   'directory_dofollow',
   'directory_nofollow',
+  'ugc_dofollow',
+  'ugc_nofollow',
   'unknown',
   'prohibited',
 ] as const
@@ -134,6 +165,7 @@ export const HHT_OPP_STRATEGIES = [
   'broken_links',
   'unlinked_mentions',
   'local_tourism',
+  'forum_ugc',
   'creative_query',
 ] as const
 export type HhtOppStrategy = (typeof HHT_OPP_STRATEGIES)[number]

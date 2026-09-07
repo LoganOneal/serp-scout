@@ -501,6 +501,7 @@ export class SemrushClient {
     if (!res.ok) {
       throw new SemrushUnavailable(`Semrush HTTP ${res.status} for ${mcpReport}: ${text.slice(0, 200)}`)
     }
+    if (/ERROR\s+50\b/i.test(text)) return []
     if (/ERROR\s+\d+/i.test(text) || text.startsWith('ERROR')) {
       throw new SemrushUnavailable(`Semrush ${mcpReport}: ${text.slice(0, 240)}`)
     }

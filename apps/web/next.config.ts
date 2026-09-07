@@ -64,6 +64,15 @@ const config = (phase: string): NextConfig => ({
   // components; @rnr/data imports 'server-only' and will fail the build loudly
   // if a client component ever reaches for it.
   transpilePackages: ['@rnr/core', '@rnr/data'],
+  /**
+   * `/` is a server-only `redirect('/scout')`. Next 15.5.x then asks for a
+   * clientReferenceManifest that was never generated and 500s the homepage
+   * after webpack cache churn. Handle the hop at the routing layer so the
+   * page never has to render.
+   */
+  async redirects() {
+    return [{ source: '/', destination: '/scout', permanent: false }]
+  },
   experimental: {
     serverActions: { bodySizeLimit: '10mb' },
   },

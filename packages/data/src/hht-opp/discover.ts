@@ -6,6 +6,7 @@ import {
   HHT_OPP_DISCOVERY_STRATEGY_ORDER,
   planDiscoveryTargets,
   selectDiscoveryBatch,
+  selectSemrushYieldBatch,
   type HhtOppSearchStrategy,
   type SearchProvider,
 } from '@rnr/core'
@@ -19,7 +20,7 @@ import {
   hhtOppSearchQueries,
 } from '../schema.js'
 import { researchHhtOppSeed, type ResearchSeedResult } from './research.js'
-import { createHhtOppSearchProvider } from './search.js'
+import { createHhtOppSearchProvider, semrushPhrase } from './search.js'
 
 export interface HhtOppDiscoveryOptions {
   name?: string
@@ -224,14 +225,24 @@ export async function executeHhtOppDiscoveryRun(
       })
       .from(hhtOppSearchQueries)
     const creative = creativeQueriesFromYield(priorYield, queryLimit > 4 ? 1 : 0)
-    const batch = [
-      ...selectDiscoveryBatch({
-        limit: queryLimit - creative.length,
-        strategies,
-        excludeQueries: [...priorYield.map((row) => row.query), ...creative.map((row) => row.query)],
-      }),
-      ...creative,
-    ]
+    const excludeQueries = [...priorYield.map((row) => row.query), ...creative.map((row) => row.query)]
+    const batch =
+      provider.id === 'semrush'
+        ? [
+            ...selectSemrushYieldBatch({
+              limit: queryLimit - creative.length,
+              excludePhrases: excludeQueries.map((query) => semrushPhrase(query)),
+            }),
+            ...creative,
+          ]
+        : [
+            ...selectDiscoveryBatch({
+              limit: queryLimit - creative.length,
+              strategies,
+              excludeQueries,
+            }),
+            ...creative,
+          ]
 
     let remaining = domainLimit
     for (const template of batch) {

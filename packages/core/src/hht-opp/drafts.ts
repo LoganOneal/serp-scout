@@ -50,6 +50,8 @@ export function defaultPitchAngle(type: HhtOppType): string {
       return 'HotelHotTubs as a specialist source on in-room hotel amenities.'
     case 'hotel_tourism_partnership':
       return 'Editor’s Choice recognition, destination data, or a hotel profile partnership.'
+    case 'forum_ugc':
+      return 'A factual HotelHotTubs resource mention in a relevant traveler discussion, only if the thread rules allow it.'
     case 'other':
       return 'A relevant, evidence-backed way HotelHotTubs can help their readers.'
   }
@@ -162,6 +164,9 @@ export function fallbackDraft(ctx: DraftContext): { subject: string; body: strin
     case 'hotel_tourism_partnership':
       ask = `We maintain Editor’s Choice and destination pages that may be useful for a partnership, badge, or data mention.`
       break
+    case 'forum_ugc':
+      ask = `If this thread allows a factual resource mention — not a promotional dump — I can share a HotelHotTubs page that verifies in-room hot tubs for the destination being discussed. I will follow the forum rules and will not post if commercial links are prohibited.`
+      break
     default:
       break
   }
@@ -218,6 +223,8 @@ function subjectFor(ctx: DraftContext): string {
       return `Link insertion inquiry: ${ctx.publicationName}`
     case 'data_pr':
       return `Hotel amenity data for ${ctx.publicationName}`
+    case 'forum_ugc':
+      return `Forum resource mention from ${HHT_SITE_NAME}`
     default:
       return `Contribution inquiry from ${HHT_SITE_NAME}`
   }

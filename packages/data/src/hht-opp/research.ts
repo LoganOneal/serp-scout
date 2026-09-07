@@ -1,6 +1,8 @@
 import 'server-only'
 import {
+  acceptsGuestOrPaidPlacement,
   classifyCorporateEligibility,
+  classifyForumUgcEligibility,
   classifyLinkType,
   classifyOpportunityTypes,
   classifySeoRisk,
@@ -10,6 +12,9 @@ import {
   extractContacts,
   extractPricing,
   extractRequirements,
+  forumHasSubmissionRoute,
+  forumOpportunityWhy,
+  detectForumSignals,
   HHT_OPP_SINGLETON_TYPES,
   HHT_SITE_DOMAIN,
   looksLikeOpportunityPath,
@@ -18,6 +23,7 @@ import {
   registrableDomain,
   scoreOpportunity,
   summarizeRequirements,
+  summarizeUgcLinkPolicy,
   topicalRelevanceFor,
   type HhtOppStrategy,
   type HhtOppType,
@@ -25,7 +31,8 @@ import {
 import { eq } from 'drizzle-orm'
 import type { Database } from '../db.js'
 import { hhtOppDomains, hhtOppOpportunities } from '../schema.js'
-import { commonPathUrls, crawlHhtOppPage, HHT_OPP_CRAWL, type HhtOppCrawlResult } from './crawl.js'
+import { commonPathUrls, crawlHhtOppPage, extractUgcOutboundLinks, HHT_OPP_CRAWL, type HhtOppCrawlResult } from './crawl.js'
+import { enrichHhtOppDomains } from './enrich.js'
 import { getHhtOppScoreWeights } from './settings.js'
 import {
   findOpportunity,
@@ -204,8 +211,28 @@ export async function researchHhtOppSeed(
       usable[0] ??
       pages[0]
     const text = `${page?.title ?? ''}\n${page?.pageText ?? ''}`
-    const eligibility = classifyCorporateEligibility(item.url, text)
-    const link = classifyLinkType(text)
+    const ugcLinks = usable.flatMap((row) =>
+      row.rawHtml ? extractUgcOutboundLinks(row.rawHtml, row.finalUrl ?? row.url) : [],
+    )
+    const ugcPolicy = summarizeUgcLinkPolicy(ugcLinks)
+    const forumPage = {
+      url: item.url,
+      title: page?.title ?? null,
+      text,
+      html: page?.rawHtml ?? null,
+    }
+    const forumSignals = detectForumSignals(forumPage)
+    const eligibility =
+      item.type === 'forum_ugc'
+        ? classifyForumUgcEligibility(item.url, text)
+        : classifyCorporateEligibility(item.url, text)
+    const link =
+      item.type === 'forum_ugc'
+        ? { linkType: ugcPolicy.linkType, evidence: ugcPolicy.evidence }
+        : classifyLinkType(text)
+    if (item.type === 'forum_ugc') {
+      item.why = forumOpportunityWhy(forumSignals, ugcPolicy)
+    }
     const risk = classifySeoRisk({
       text,
       title: page?.title ?? null,
@@ -218,7 +245,10 @@ export async function researchHhtOppSeed(
     const scores = scoreOpportunity({
       feasibility: {
         eligibility: eligibility.eligibility,
-        hasSubmissionRoute: Boolean(pickPrimaryContact(contacts) || /submit|pitch|form|email/i.test(text)),
+        hasSubmissionRoute:
+          item.type === 'forum_ugc'
+            ? forumHasSubmissionRoute(text)
+            : Boolean(pickPrimaryContact(contacts) || /submit|pitch|form|email/i.test(text)),
         linkType: link.linkType,
         topicalFit: topical,
         pitchClarity: requirements.length > 0 ? 70 : 35,
@@ -366,6 +396,10 @@ export async function researchHhtOppSeed(
         sourceExcerpt: row.sourceExcerpt,
       })),
     })
+  }
+
+  if (acceptsGuestOrPaidPlacement(classified.map((row) => row.type))) {
+    await enrichHhtOppDomains(db, [domainId])
   }
 
   return {

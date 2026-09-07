@@ -224,7 +224,7 @@ export default async function HhtOppPage({ searchParams }: { searchParams: Promi
               <form action={refreshStaleHhtOppAction}>
                 <button type="submit">Refresh stale ({stale.length})</button>
               </form>
-              <p>Semrush Authority Score only — never labeled DA. Enrichment runs on PASS, or on REVIEW when you click Enrich selected.</p>
+              <p>Semrush Authority Score (not Moz DA) and inbound/outbound ratio enrich automatically once a guest-post or paid-placement page is verified. Repeat calls are skipped for 30 days.</p>
             </div>
 
             <Filters filters={filters} />
@@ -243,6 +243,8 @@ export default async function HhtOppPage({ searchParams }: { searchParams: Promi
                       <th className="num">Authority</th>
                       <th className="num">Organic traffic</th>
                       <th className="num">Referring domains</th>
+                      <th className="num">Inbound</th>
+                      <th className="num">In/out</th>
                       <th className="num">Avg outbound</th>
                       <th>Link type</th>
                       <th>Price</th>
@@ -275,6 +277,15 @@ export default async function HhtOppPage({ searchParams }: { searchParams: Promi
                         <td className="num">{num(row.authorityScore)}</td>
                         <td className="num">{num(row.organicTraffic)}</td>
                         <td className="num">{num(row.referringDomains)}</td>
+                        <td className="num" title="Semrush inbound links for the root domain.">
+                          {num(row.inboundLinks)}
+                        </td>
+                        <td
+                          className="num"
+                          title="Semrush inbound links ÷ average external links on sampled pages. Empty if either side is missing."
+                        >
+                          {row.inboundOutboundRatio == null ? NULL_DISPLAY : row.inboundOutboundRatio.toFixed(1)}
+                        </td>
                         <td className="num" title="Average external links on sampled pages, not a sitewide total.">
                           {row.avgOutboundLinks == null ? NULL_DISPLAY : row.avgOutboundLinks.toFixed(1)}
                         </td>
@@ -438,7 +449,7 @@ function Filters({ filters }: { filters: HhtOppFilters }) {
       </label>
       <label className="hotel-bl-check">
         <input type="checkbox" name="dofollow" value="1" defaultChecked={filters.dofollow} />
-        <span>Dofollow</span>
+        <span>Dofollow (includes UGC)</span>
       </label>
       <div className="hotel-bl-filter-actions">
         <button className="primary" type="submit">
@@ -456,7 +467,7 @@ function DiscoveryForm() {
       <div>
         <h2 id="hht-opp-discover-heading">Search discovery</h2>
         <p>
-          Runs a small query batch, dedupes by root domain, skips OTAs and platforms, then researches only new publishers. Does not scrape Google. Live mode uses DataForSEO; otherwise the labeled fixture catalog runs at $0. Nothing is sent.
+          Runs a small query batch, dedupes by root domain, skips OTAs and platforms, then researches only new publishers. Live Semrush batches prefer travel/hotel forums, then guest-post phrases. Forum rows are classified from crawled HTML: dofollow is measured from comment/thread rel attributes, never inferred from “comments welcome.” Does not scrape Google. Nothing is sent.
         </p>
       </div>
       <form action={startHhtOppDiscoveryAction} className="hht-opp-discover-form">
@@ -561,7 +572,7 @@ function Strategies({
                           {run.status}
                         </span>
                       </td>
-                      <td>{notes.live ? 'DataForSEO' : notes.provider ?? 'fixture'}</td>
+                      <td>{notes.provider ?? (notes.live ? 'live' : 'fixture')}</td>
                       <td className="num">{num(notes.queries)}</td>
                       <td className="num">{num(notes.newDomains)}</td>
                       <td className="num">{num(notes.created)}</td>

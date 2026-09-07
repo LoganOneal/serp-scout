@@ -14,11 +14,11 @@ import {
   selectDiscoveryBatch,
 } from './discovery.js'
 import { isRefreshDue, proposeStrategyRecommendations, refreshIntervalDays } from './learning.js'
-import { expandQueryTemplates } from './queries.js'
+import { expandQueryTemplates, selectSemrushYieldBatch } from './queries.js'
+import { acceptsGuestOrPaidPlacement, DEFAULT_HHT_OPP_SCORE_WEIGHTS, inboundOutboundRatio } from './types.js'
 import { scoreFeasibility, scoreOverall, scoreSeoValue } from './scoring.js'
 import { classifySpam } from './spam.js'
 import { fallbackDraft } from './drafts.js'
-import { DEFAULT_HHT_OPP_SCORE_WEIGHTS } from './types.js'
 
 describe('opportunity classification', () => {
   it('classifies from the URL when the body is empty', () => {
@@ -189,6 +189,7 @@ describe('query expansion', () => {
     expect(templates.length).toBeGreaterThanOrEqual(200)
     expect(templates.some((t) => t.query.includes('contribute a story'))).toBe(true)
     expect(templates.some((t) => t.strategy === 'unlinked_mentions')).toBe(true)
+    expect(templates.some((t) => t.strategy === 'forum_ugc' && t.query === 'travel forum')).toBe(true)
   })
 })
 
@@ -206,6 +207,7 @@ describe('discovery batching and filters', () => {
     expect(excludeDiscoveryDomain('https://hotelhottubs.com/vermont').excluded).toBe(true)
     expect(excludeDiscoveryDomain('https://kayak.com/hotels').excluded).toBe(true)
     expect(excludeDiscoveryDomain('https://expertvagabond.com/write-for-us/').excluded).toBe(false)
+    expect(excludeDiscoveryDomain('vefogix.com').excluded).toBe(true)
   })
 
   it('keeps one hit per domain and prefers an opportunity path', () => {
@@ -255,6 +257,7 @@ describe('discovery batching and filters', () => {
     const hits = fixtureHitsForQuery('"travel" "write for us"')
     expect(hits.some((hit) => hit.domain === 'expertvagabond.com')).toBe(true)
     expect(hits.every((hit) => !/yelp|angi|thumbtack/i.test(hit.domain ?? ''))).toBe(true)
+    expect(fixtureHitsForQuery('travel forum').some((hit) => hit.domain === 'flyertalk.com')).toBe(true)
   })
 })
 
@@ -327,5 +330,27 @@ describe('draft fallback', () => {
     expect(draft.body).toMatch(/commercial website/)
     expect(draft.body).not.toMatch(/\$\d+/)
     expect(draft.body).toMatch(/image rights require review|will not claim firsthand/i)
+  })
+})
+
+describe('placement enrichment helpers', () => {
+  it('treats guest and paid types as placement-accepting', () => {
+    expect(acceptsGuestOrPaidPlacement(['editorial_guest'])).toBe(true)
+    expect(acceptsGuestOrPaidPlacement(['sponsored_content', 'existing_article'])).toBe(true)
+    expect(acceptsGuestOrPaidPlacement(['existing_article', 'unlinked_mention'])).toBe(false)
+  })
+
+  it('computes inbound/outbound ratio only when outbound exists', () => {
+    expect(inboundOutboundRatio(1200, 12)).toBe(100)
+    expect(inboundOutboundRatio(10, 0)).toBeNull()
+    expect(inboundOutboundRatio(null, 8)).toBeNull()
+  })
+
+  it('skips Semrush phrases already spent and prefers forum queries', () => {
+    expect(selectSemrushYieldBatch({ limit: 2 }).map((row) => row.query)).toEqual(['travel forum', 'hotel forum'])
+    expect(selectSemrushYieldBatch({ limit: 2, excludePhrases: ['travel forum'] }).map((row) => row.query)).toEqual([
+      'hotel forum',
+      'honeymoon forum',
+    ])
   })
 })

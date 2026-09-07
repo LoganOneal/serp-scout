@@ -39,6 +39,7 @@ export const HHT_OPP_SINGLETON_TYPES: ReadonlySet<HhtOppType> = new Set([
   'hotel_tourism_partnership',
   'data_pr',
   'expert_source',
+  'forum_ugc',
   'other',
 ])
 
@@ -62,6 +63,12 @@ const EXTRA_DISCOVERY_EXCLUSIONS: ReadonlySet<string> = new Set([
   'travelocity.com',
   'hopper.com',
   'hotels.com',
+  'vefogix.com',
+  'travelwriteforus.com',
+  'serpzilla.com',
+  'guestpostlinks.net',
+  'loganix.com',
+  'fiverr.com',
 ])
 
 export function clampDiscoveryLimit(value: number | undefined, fallback: number, max: number): number {
@@ -327,6 +334,17 @@ export const HHT_OPP_FIXTURE_CATALOG: Array<{ needles: string[]; hits: SearchHit
         title: 'Expert Vagabond',
         snippet: 'Independent travel blog.',
         domain: 'expertvagabond.com',
+      },
+    ],
+  },
+  {
+    needles: ['travel forum', 'hotel forum', 'hot tub forum', 'message board', 'frequent flyer forum'],
+    hits: [
+      {
+        url: 'https://www.flyertalk.com/',
+        title: 'FlyerTalk',
+        snippet: 'Independent travel discussion forum.',
+        domain: 'flyertalk.com',
       },
     ],
   },

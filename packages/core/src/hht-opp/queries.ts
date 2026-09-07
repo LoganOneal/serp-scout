@@ -90,6 +90,7 @@ export type HhtOppSearchStrategy = Extract<
   | 'paid_placement_language'
   | 'unlinked_mentions'
   | 'local_tourism'
+  | 'forum_ugc'
   | 'creative_query'
 >
 
@@ -99,8 +100,65 @@ export interface QueryTemplate {
   family: string
 }
 
+/**
+ * Semrush phrase_organic only has data for real search demand. Quoted Google
+ * operators usually return ERROR 50 and still spend a unit. Use these first.
+ */
+export const HHT_OPP_FORUM_QUERIES = [
+  'travel forum',
+  'hotel forum',
+  'honeymoon forum',
+  'road trip forum',
+  'camping forum',
+  'hot tub forum',
+  'jacuzzi forum',
+  'travel community forum',
+  'frequent flyer forum',
+  'hotel discussion',
+  'travel message board',
+] as const
+
+export const HHT_OPP_SEMRUSH_FORUM_QUERIES: QueryTemplate[] = HHT_OPP_FORUM_QUERIES.map((query) => ({
+  query,
+  strategy: 'forum_ugc' as const,
+  family: 'semrush_forum',
+}))
+
+export const HHT_OPP_SEMRUSH_YIELD_QUERIES: QueryTemplate[] = [
+  ...HHT_OPP_SEMRUSH_FORUM_QUERIES,
+  { query: 'travel write for us', strategy: 'direct_keyword_search', family: 'semrush_yield' },
+  { query: 'write for us travel', strategy: 'direct_keyword_search', family: 'semrush_yield' },
+  { query: 'travel blogs that accept guest posts', strategy: 'direct_keyword_search', family: 'semrush_yield' },
+  { query: 'family travel write for us', strategy: 'direct_keyword_search', family: 'semrush_yield' },
+  { query: 'travel guest post', strategy: 'direct_keyword_search', family: 'semrush_yield' },
+  { query: 'travel submit guest post', strategy: 'direct_keyword_search', family: 'semrush_yield' },
+  { query: 'write for us travelling', strategy: 'direct_keyword_search', family: 'semrush_yield' },
+]
+
+export function selectSemrushYieldBatch(opts: {
+  limit?: number
+  excludePhrases?: Iterable<string>
+}): QueryTemplate[] {
+  const limit = opts.limit ?? 4
+  const exclude = new Set(
+    [...(opts.excludePhrases ?? [])]
+      .map((phrase) => phrase.replaceAll('"', ' ').replace(/\s+/g, ' ').trim().toLowerCase())
+      .filter(Boolean),
+  )
+  const picked: QueryTemplate[] = []
+  for (const row of HHT_OPP_SEMRUSH_YIELD_QUERIES) {
+    if (picked.length >= limit) break
+    const phrase = row.query.toLowerCase()
+    if (exclude.has(phrase)) continue
+    exclude.add(phrase)
+    picked.push(row)
+  }
+  return picked
+}
+
 /** Order for a small live batch. Do not fire the full template list. */
 export const HHT_OPP_DISCOVERY_STRATEGY_ORDER: HhtOppSearchStrategy[] = [
+  'forum_ugc',
   'direct_keyword_search',
   'paid_placement_language',
   'local_tourism',
@@ -148,11 +206,22 @@ export function expandQueryTemplates(): QueryTemplate[] {
   for (const query of HHT_OPP_DIRECTORY_SEEDS) add(query, 'directory_mining', 'directories')
   for (const query of HHT_OPP_PAID_GLOBAL) add(query, 'paid_placement_language', 'paid_global')
   for (const query of HHT_OPP_MENTION_QUERIES) add(query, 'unlinked_mentions', 'brand')
+  for (const query of HHT_OPP_FORUM_QUERIES) add(query, 'forum_ugc', 'forums')
 
   return out
 }
 
 export function siteSearchQueries(domain: string): string[] {
-  const terms = ['sponsored', 'advertise', 'guest post', 'link insertion', 'media kit', 'partnership', 'branded content']
+  const terms = [
+    'sponsored',
+    'advertise',
+    'guest post',
+    'link insertion',
+    'media kit',
+    'partnership',
+    'branded content',
+    'forum',
+    'community',
+  ]
   return terms.map((term) => `site:${domain} ${term.includes(' ') ? `"${term}"` : term}`)
 }

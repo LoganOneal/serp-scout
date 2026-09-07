@@ -88,8 +88,12 @@ export default async function HhtOppDetailPage({
           <Fact label="Feasibility" value={opportunity.feasibilityScore == null ? NULL_DISPLAY : opportunity.feasibilityScore.toFixed(1)} />
           <Fact label="SEO value" value={opportunity.seoValueScore == null ? NULL_DISPLAY : opportunity.seoValueScore.toFixed(1)} />
           <Fact label="Authority Score" value={num(metrics['authority_score'] ?? null)} />
-          <Fact label="Organic traffic" value={num(metrics['organic_traffic'] ?? null)} />
           <Fact label="Referring domains" value={num(metrics['referring_domains'] ?? null)} />
+          <Fact label="Inbound links" value={num(metrics['backlinks'] ?? null)} />
+          <Fact
+            label="In/out ratio"
+            value={metrics['inbound_outbound_ratio'] == null ? NULL_DISPLAY : metrics['inbound_outbound_ratio'].toFixed(1)}
+          />
         </section>
 
         <div className="hht-opp-detail-grid">
@@ -344,7 +348,7 @@ export default async function HhtOppDetailPage({
                 <dd>{num(metrics['backlinks'] ?? null)}</dd>
               </div>
             </dl>
-            <p className="muted">Semrush Authority Score, not DA. Empty until you enrich a PASS or approved REVIEW domain.</p>
+            <p className="muted">Semrush Authority Score, not Moz DA. Filled automatically after a guest-post or paid-placement page is verified. Empty is missing, not zero.</p>
           </article>
 
           <article className="hotel-bl-detail-card">

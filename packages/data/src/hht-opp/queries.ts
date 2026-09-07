@@ -70,6 +70,8 @@ export interface HhtOppListRow {
   authorityScore: number | null
   organicTraffic: number | null
   referringDomains: number | null
+  inboundLinks: number | null
+  inboundOutboundRatio: number | null
   avgOutboundLinks: number | null
   linkType: string
   priceLabel: string
@@ -179,6 +181,8 @@ export async function listHhtOppOpportunities(db: Database, filters: HhtOppFilte
       authorityScore: latestMetric('authority_score'),
       organicTraffic: latestMetric('organic_traffic'),
       referringDomains: latestMetric('referring_domains'),
+      inboundLinks: latestMetric('backlinks'),
+      inboundOutboundRatio: latestMetric('inbound_outbound_ratio'),
       contact: primaryContactSql(),
       draftCount: sql<number>`(select count(*)::int from ${hhtOppDrafts} d where d.opportunity_id = ${hhtOppOpportunities.id})`,
     })
@@ -186,7 +190,7 @@ export async function listHhtOppOpportunities(db: Database, filters: HhtOppFilte
     .innerJoin(hhtOppDomains, eq(hhtOppDomains.id, hhtOppOpportunities.domainId))
     .where(where.length ? and(...where) : undefined)
     .orderBy(direction(sortExpr), desc(hhtOppOpportunities.id))
-    .limit(400)
+    .limit(1000)
 
   return rows.map((row) => ({
     id: row.id,
@@ -200,6 +204,8 @@ export async function listHhtOppOpportunities(db: Database, filters: HhtOppFilte
     authorityScore: row.authorityScore,
     organicTraffic: row.organicTraffic,
     referringDomains: row.referringDomains,
+    inboundLinks: row.inboundLinks,
+    inboundOutboundRatio: row.inboundOutboundRatio,
     avgOutboundLinks: row.avgOutboundLinks,
     linkType: row.linkType,
     priceLabel: formatPrice({

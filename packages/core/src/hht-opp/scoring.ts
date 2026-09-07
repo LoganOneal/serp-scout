@@ -166,6 +166,7 @@ export function topicalRelevanceFor(type: HhtOppType, pageText: string): number 
   }
   if (type === 'unlinked_mention') score += 20
   if (type === 'existing_article' || type === 'resource_page') score += 8
+  if (type === 'forum_ugc') score += 6
   return clamp(score)
 }
 

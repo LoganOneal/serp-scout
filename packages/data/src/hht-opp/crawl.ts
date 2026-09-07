@@ -1,7 +1,7 @@
 import 'server-only'
 import { createHash } from 'node:crypto'
 import { load, type CheerioAPI } from 'cheerio'
-import { looksLikeOpportunityPath, normalizeHhtBlUrl, registrableDomain } from '@rnr/core'
+import { isDofollowRel, looksLikeOpportunityPath, normalizeHhtBlUrl, registrableDomain } from '@rnr/core'
 
 const USER_AGENT = 'Mozilla/5.0 (compatible; HotelHotTubsOpportunityEngine/0.1; +https://hotelhottubs.com)'
 
@@ -32,6 +32,11 @@ const COMMON_PATHS = [
   '/about',
   '/about-us',
   '/press',
+  '/forum',
+  '/forums',
+  '/community',
+  '/discussions',
+  '/discussion',
 ]
 
 const COMMERCIAL_HINT = /casino|crypto|cbd|loan|insurance|vpn|seo service|buy now|sponsored/i
@@ -71,6 +76,40 @@ export interface OutboundLink {
   anchor: string
 }
 
+export interface UgcOutboundLink {
+  url: string
+  domain: string
+  rel: string
+  dofollow: boolean
+  anchor: string
+}
+
+const UGC_CONTAINERS = [
+  '.comment',
+  '.comments',
+  '#comments',
+  '#comment',
+  '.comment-body',
+  '.comment-content',
+  '.comment-text',
+  'article.comment',
+  '[itemprop="comment"]',
+  '.postbody',
+  '.post-content',
+  '.post-message',
+  '.message-body',
+  '.messageContent',
+  '.bbWrapper',
+  '.cooked',
+  '.topic-body',
+  '.cPost',
+  '.forum-post',
+  '.ipsComment',
+  '.message-userContent',
+] as const
+
+const NON_UGC_CONTAINERS = 'nav, header, footer, aside, .sidebar, .menu, .widget, .ad, .ads, .advert'
+
 export function listOutboundLinks(html: string, pageUrl: string, limit = 80): OutboundLink[] {
   const $ = load(html)
   const pageDomain = registrableDomain(pageUrl)?.domain
@@ -95,6 +134,51 @@ export function listOutboundLinks(html: string, pageUrl: string, limit = 80): Ou
     out.push({ url, domain: destDomain, anchor: ($(el).text() || '').replace(/\s+/g, ' ').trim() })
   })
   return out
+}
+
+function collectUgcOutbound($: CheerioAPI, pageUrl: string, limit: number): UgcOutboundLink[] {
+  const pageDomain = registrableDomain(pageUrl)?.domain
+  const out: UgcOutboundLink[] = []
+  const seen = new Set<string>()
+  const consider = (selector: string) => {
+    $(selector).each((_, el) => {
+      if (out.length >= limit) return
+      const node = $(el)
+      const href = node.attr('href')
+      if (!href || /^(mailto|tel|javascript|#)/i.test(href)) return
+      if (node.closest(NON_UGC_CONTAINERS).length) return
+      let dest: URL
+      try {
+        dest = new URL(href, pageUrl)
+      } catch {
+        return
+      }
+      if (!/^https?:$/.test(dest.protocol)) return
+      const destDomain = registrableDomain(dest.hostname)?.domain
+      if (!destDomain || !pageDomain || destDomain === pageDomain) return
+      const url = dest.toString()
+      if (seen.has(url)) return
+      seen.add(url)
+      const rel = (node.attr('rel') ?? '').trim()
+      out.push({
+        url,
+        domain: destDomain,
+        rel,
+        dofollow: isDofollowRel(rel),
+        anchor: (node.text() || '').replace(/\s+/g, ' ').trim(),
+      })
+    })
+  }
+
+  consider(UGC_CONTAINERS.map((selector) => `${selector} a[href]`).join(', '))
+  if (out.length === 0) {
+    consider('article a[href], main a[href], .post a[href], .postbody a[href], #content a[href]')
+  }
+  return out
+}
+
+export function extractUgcOutboundLinks(html: string, pageUrl: string, limit = 40): UgcOutboundLink[] {
+  return collectUgcOutbound(load(html), pageUrl, limit)
 }
 
 export function analyzeOutbound(html: string, pageUrl: string): OutboundSample {

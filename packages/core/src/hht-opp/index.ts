@@ -1,5 +1,6 @@
 export * from './types.js'
 export * from './evidence.js'
+export * from './forum.js'
 export * from './classify.js'
 export * from './eligibility.js'
 export * from './extract.js'
