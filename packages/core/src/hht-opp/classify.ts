@@ -1,5 +1,5 @@
 import { excerptAround, firstMatch, makeEvidence } from './evidence.js'
-import { detectForumSignals, forumEvidence, forumOpportunityWhy } from './forum.js'
+import { detectForumSignals, forumEvidence, forumInventedType, forumOpportunityWhy } from './forum.js'
 import type {
   HhtOppEvidence,
   HhtOppInventedType,
@@ -182,7 +182,7 @@ const URL_TYPE_HINTS: Array<{ type: HhtOppType; pattern: RegExp; why: string }> 
   { type: 'sponsored_content', pattern: /advertise|advertising|media-kit|sponsorship|sponsored/i, why: 'URL path is an advertising or media-kit page.' },
   { type: 'hotel_tourism_partnership', pattern: /partners?|partnerships?|work-with-us/i, why: 'URL path is a partnership page.' },
   { type: 'directory_listing', pattern: /submit-listing|add-your|directory/i, why: 'URL path is a listing or directory submission page.' },
-  { type: 'forum_ugc', pattern: /\/(?:forums?|community|discussions?|threads?|topics?|showthread|viewtopic)\b/i, why: 'URL path is a forum, community, or thread page.' },
+  { type: 'forum_ugc', pattern: /\/(?:forums?|community|discussions?|threads?|topics?|showthread|viewtopic|ubbthreads|talk|chatter|boards?)|message[-_]?boards?/i, why: 'URL path is a forum, community, or thread page.' },
 ]
 
 export function classifyOpportunityTypes(page: PageSignalInput, checkedAt = new Date()): ClassifiedOpportunity[] {
@@ -227,16 +227,20 @@ export function classifyOpportunityTypes(page: PageSignalInput, checkedAt = new 
     })
   }
 
-  if (!seen.has('forum_ugc')) {
-    const signals = detectForumSignals(page)
-    if (signals.isForum && signals.allowsUgc) {
+  const forumSignals = detectForumSignals(page)
+  if (forumSignals.allowsUgc || forumSignals.isForum) {
+    const existing = found.find((row) => row.type === 'forum_ugc')
+    if (existing) {
+      existing.inventedType = forumInventedType(forumSignals)
+      existing.why = forumOpportunityWhy(forumSignals, null)
+    } else {
       seen.add('forum_ugc')
       found.push({
         type: 'forum_ugc',
-        inventedType: null,
-        why: forumOpportunityWhy(signals, null),
+        inventedType: forumInventedType(forumSignals),
+        why: forumOpportunityWhy(forumSignals, null),
         opportunityUrl: page.url,
-        evidence: forumEvidence(page.url, text, signals, checkedAt),
+        evidence: forumEvidence(page.url, text, forumSignals, checkedAt),
       })
     }
   }
@@ -330,6 +334,9 @@ export const NAV_PATH_HINTS = [
   'showthread',
   'viewtopic',
   'viewforum',
+  'ubbthreads',
+  'message-board',
+  'messageboard',
 ] as const
 
 export function looksLikeOpportunityPath(href: string): boolean {

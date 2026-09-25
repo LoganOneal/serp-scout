@@ -1,0 +1,522 @@
+{
+  "source": "claire@hotelhottubs.com sent + inbound Editor's Choice / HHT outreach after:2026/09/01 \u2014 matched by hotel name and listing URL, not only scraped CSV recipient",
+  "capturedAt": "2026-09-22",
+  "rows": [
+    {
+      "email": "bschwartz@trappfamily.com",
+      "outbound": [
+        "2026-09-04"
+      ],
+      "inbound": null,
+      "hotelHints": [
+        "von Trapp Family Lodge & Resort"
+      ],
+      "hhtSlugs": [
+        "von-trapp-family-lodge-and-resort"
+      ],
+      "firstTouch": "no_backlink"
+    },
+    {
+      "email": "contact@coupletraveltheworld.com",
+      "outbound": [
+        "2026-09-07"
+      ],
+      "inbound": null
+    },
+    {
+      "email": "amangus@harthotels.com",
+      "outbound": [
+        "2026-09-08"
+      ],
+      "inbound": null,
+      "hotelHints": [
+        "1000 Islands Harbor Hotel"
+      ],
+      "firstTouch": "asked_backlink"
+    },
+    {
+      "email": "anderson.james@destinationhotels.com",
+      "outbound": [
+        "2026-09-08"
+      ],
+      "inbound": null,
+      "hotelHints": [
+        "The Lodge at Spruce Peak"
+      ],
+      "firstTouch": "asked_backlink"
+    },
+    {
+      "email": "communications@aspen.com",
+      "outbound": [
+        "2026-09-08"
+      ],
+      "inbound": null,
+      "hotelHints": [
+        "Limelight Denver"
+      ],
+      "firstTouch": "asked_backlink"
+    },
+    {
+      "email": "edgewaterpr@jwadepr.com",
+      "outbound": [
+        "2026-09-08"
+      ],
+      "inbound": null,
+      "hotelHints": [
+        "Edgewater Hotel",
+        "The Edgewater Hotel"
+      ],
+      "firstTouch": "asked_backlink"
+    },
+    {
+      "email": "hotelvanzandt@giantnoise.com",
+      "outbound": [
+        "2026-09-08"
+      ],
+      "inbound": null,
+      "hotelHints": [
+        "Hotel Van Zandt"
+      ],
+      "firstTouch": "asked_backlink"
+    },
+    {
+      "email": "info@rittenhousehotel.com",
+      "outbound": [
+        "2026-09-08"
+      ],
+      "inbound": null,
+      "hotelHints": [
+        "Rittenhouse Hotel",
+        "The Rittenhouse"
+      ],
+      "hhtSlugs": [
+        "the-rittenhouse-philadelphia"
+      ],
+      "firstTouch": "asked_backlink"
+    },
+    {
+      "email": "jbarnhart@noblehousehotels.com",
+      "outbound": [
+        "2026-09-08"
+      ],
+      "inbound": null,
+      "hotelHints": [
+        "Inn at Cape Kiwanda"
+      ],
+      "firstTouch": "asked_backlink"
+    },
+    {
+      "email": "ldepledge@vestahospitality.com",
+      "outbound": [
+        "2026-09-08"
+      ],
+      "inbound": null,
+      "hotelHints": [
+        "Cannery Pier Hotel & Spa"
+      ],
+      "firstTouch": "asked_backlink"
+    },
+    {
+      "email": "lisa.hill@awordsmith.com",
+      "outbound": [
+        "2026-09-08"
+      ],
+      "inbound": null,
+      "hotelHints": [
+        "Headlands Coastal Lodge & Spa"
+      ],
+      "firstTouch": "asked_backlink"
+    },
+    {
+      "email": "media@montereyplazahotel.com",
+      "outbound": [
+        "2026-09-08"
+      ],
+      "inbound": null,
+      "hotelHints": [
+        "Monterey Plaza Hotel & Spa"
+      ],
+      "firstTouch": "asked_backlink"
+    },
+    {
+      "email": "pr@charlestonharborresort.com",
+      "outbound": [
+        "2026-09-08"
+      ],
+      "inbound": null,
+      "hotelHints": [
+        "Charleston Harbor Resort & Marina"
+      ],
+      "hhtSlugs": [
+        "charleston-harbor-resort-and-marina"
+      ],
+      "firstTouch": "asked_backlink"
+    },
+    {
+      "email": "pr@madehotels.com",
+      "outbound": [
+        "2026-09-08"
+      ],
+      "inbound": null,
+      "hotelHints": [
+        "MADE Hotel"
+      ],
+      "firstTouch": "asked_backlink"
+    },
+    {
+      "email": "rittenhouse@20twostudio.com",
+      "outbound": [
+        "2026-09-08"
+      ],
+      "inbound": null,
+      "hotelHints": [
+        "The Rittenhouse"
+      ],
+      "hhtSlugs": [
+        "the-rittenhouse-philadelphia"
+      ],
+      "firstTouch": "asked_backlink"
+    },
+    {
+      "email": "thechanler@jpublicrelations.com",
+      "outbound": [
+        "2026-09-08"
+      ],
+      "inbound": null,
+      "hotelHints": [
+        "The Chanler"
+      ],
+      "firstTouch": "asked_backlink"
+    },
+    {
+      "email": "acquahotel@marinhotels.com",
+      "outbound": [
+        "2026-09-09"
+      ],
+      "inbound": null,
+      "hotelHints": [
+        "Acqua Hotel Mill Valley"
+      ],
+      "firstTouch": "no_backlink"
+    },
+    {
+      "email": "info@azurepalm.com",
+      "outbound": [
+        "2026-09-09"
+      ],
+      "inbound": null,
+      "hotelHints": [
+        "Azure Palm Hot Springs"
+      ],
+      "firstTouch": "no_backlink"
+    },
+    {
+      "email": "info@lithiaspringsresort.com",
+      "outbound": [
+        "2026-09-09"
+      ],
+      "inbound": null,
+      "hotelHints": [
+        "Lithia Springs Resort"
+      ],
+      "firstTouch": "no_backlink"
+    },
+    {
+      "email": "liana@engagedcommunication.net",
+      "outbound": [
+        "2026-09-09"
+      ],
+      "inbound": null,
+      "hotelHints": [
+        "Salishan Coastal Lodge"
+      ],
+      "firstTouch": "no_backlink"
+    },
+    {
+      "email": "marketingteam@eatdrinkandsleep.net",
+      "outbound": [
+        "2026-09-09"
+      ],
+      "inbound": null,
+      "hotelHints": [
+        "TOWER23 Hotel"
+      ],
+      "firstTouch": "no_backlink"
+    },
+    {
+      "email": "media@thedavenporthotel.com",
+      "outbound": [
+        "2026-09-09"
+      ],
+      "inbound": null,
+      "hotelHints": [
+        "Centennial Hotel Spokane"
+      ],
+      "firstTouch": "no_backlink"
+    },
+    {
+      "email": "michelle.heston@fairmont.com",
+      "outbound": [
+        "2026-09-09"
+      ],
+      "inbound": null,
+      "hotelHints": [
+        "Fairmont Sonoma Mission Inn & Spa"
+      ],
+      "firstTouch": "no_backlink"
+    },
+    {
+      "email": "pr@sandshotelandspa.com",
+      "outbound": [
+        "2026-09-09"
+      ],
+      "inbound": null,
+      "hotelHints": [
+        "Sands Hotel & Spa"
+      ],
+      "firstTouch": "no_backlink"
+    },
+    {
+      "email": "ranchovalencia@jpublicrelations.com",
+      "outbound": [
+        "2026-09-09"
+      ],
+      "inbound": null,
+      "hotelHints": [
+        "Rancho Valencia Resort & Spa"
+      ],
+      "firstTouch": "no_backlink"
+    },
+    {
+      "email": "reservations@coastcabins.com",
+      "outbound": [
+        "2026-09-09",
+        "2026-09-10"
+      ],
+      "inbound": "2026-09-10",
+      "hotelHints": [
+        "Coast Cabins"
+      ],
+      "firstTouch": "no_backlink"
+    },
+    {
+      "email": "reservations@willowslodge.com",
+      "outbound": [
+        "2026-09-09"
+      ],
+      "inbound": null,
+      "hotelHints": [
+        "Willows Lodge"
+      ],
+      "firstTouch": "no_backlink"
+    },
+    {
+      "email": "ssfrontdesk@vestahospitality.com",
+      "outbound": [
+        "2026-09-09"
+      ],
+      "inbound": null,
+      "hotelHints": [
+        "Surfsand Resort"
+      ],
+      "firstTouch": "no_backlink"
+    },
+    {
+      "email": "valvarez@vestahospitality.com",
+      "outbound": [
+        "2026-09-09"
+      ],
+      "inbound": null,
+      "hotelHints": [
+        "Surfsand Resort"
+      ],
+      "firstTouch": "no_backlink"
+    },
+    {
+      "email": "balboabay@wagstaffmktg.com",
+      "outbound": [
+        "2026-09-10"
+      ],
+      "inbound": null,
+      "hotelHints": [
+        "Balboa Bay",
+        "Balboa Bay Resort"
+      ],
+      "hhtSlugs": [
+        "balboa-bay-resort"
+      ],
+      "firstTouch": "no_backlink"
+    },
+    {
+      "email": "castlesandturrets@gmail.com",
+      "outbound": [
+        "2026-09-10"
+      ],
+      "inbound": null
+    },
+    {
+      "email": "courtney@sandovalcreative.com",
+      "outbound": [
+        "2026-09-10"
+      ],
+      "inbound": null,
+      "hotelHints": [
+        "Casino Del Sol"
+      ],
+      "firstTouch": "no_backlink"
+    },
+    {
+      "email": "hotelglorieta@m18pr.com",
+      "outbound": [
+        "2026-09-10"
+      ],
+      "inbound": null,
+      "hotelHints": [
+        "Hotel Glorieta"
+      ],
+      "firstTouch": "no_backlink"
+    },
+    {
+      "email": "info@newparkresort.com",
+      "outbound": [
+        "2026-09-10"
+      ],
+      "inbound": null,
+      "hotelHints": [
+        "Newpark Resort"
+      ],
+      "firstTouch": "no_backlink"
+    },
+    {
+      "email": "marketing@essexresort.com",
+      "outbound": [
+        "2026-09-10"
+      ],
+      "inbound": null,
+      "hotelHints": [
+        "The Essex Resort & Spa"
+      ],
+      "firstTouch": "no_backlink"
+    },
+    {
+      "email": "marketing@mountainshadows.com",
+      "outbound": [
+        "2026-09-10"
+      ],
+      "inbound": null,
+      "hotelHints": [
+        "Mountain Shadows Resort Scottsdale"
+      ],
+      "hhtSlugs": [
+        "mountain-shadows-resort-scottsdale"
+      ],
+      "firstTouch": "no_backlink"
+    },
+    {
+      "email": "media@sensei.com",
+      "outbound": [
+        "2026-09-10"
+      ],
+      "inbound": null,
+      "hotelHints": [
+        "Sensei Porcupine Creek"
+      ],
+      "hhtSlugs": [
+        "sensei-porcupine-creek"
+      ],
+      "firstTouch": "no_backlink"
+    },
+    {
+      "email": "pr@arcadepartners.io",
+      "outbound": [
+        "2026-09-10"
+      ],
+      "inbound": null,
+      "hotelHints": [
+        "Little America Hotel - Flagstaff"
+      ],
+      "firstTouch": "no_backlink"
+    },
+    {
+      "email": "press@lafondasantafe.com",
+      "outbound": [
+        "2026-09-10"
+      ],
+      "inbound": null,
+      "hotelHints": [
+        "La Fonda On the Plaza"
+      ],
+      "firstTouch": "no_backlink"
+    },
+    {
+      "email": "ravenscraftl@southpointcasino.com",
+      "outbound": [
+        "2026-09-10"
+      ],
+      "inbound": null,
+      "hotelHints": [
+        "South Point Hotel Casino-Spa"
+      ],
+      "firstTouch": "no_backlink"
+    },
+    {
+      "email": "sbodnar@charminginns.com",
+      "outbound": [
+        "2026-09-10"
+      ],
+      "inbound": null,
+      "hotelHints": [
+        "Wentworth Mansion",
+        "Fulton Lane Inn"
+      ],
+      "hhtSlugs": [
+        "wentworth-mansion",
+        "fulton-lane-inn"
+      ],
+      "firstTouch": "no_backlink"
+    },
+    {
+      "email": "travis.noland@cnent.com",
+      "outbound": [
+        "2026-09-10"
+      ],
+      "inbound": null,
+      "hotelHints": [
+        "Gold Strike Casino Resort"
+      ],
+      "firstTouch": "no_backlink"
+    },
+    {
+      "email": "floridarambler@gmail.com",
+      "outbound": [
+        "2026-09-11"
+      ],
+      "inbound": null
+    },
+    {
+      "email": "social@vacationidea.com",
+      "outbound": [
+        "2026-09-11"
+      ],
+      "inbound": null
+    },
+    {
+      "email": "darcy.stephens@cnent.com",
+      "outbound": [],
+      "inbound": "2026-09-11",
+      "hotelHints": [
+        "Gold Strike Casino Resort"
+      ],
+      "firstTouch": "no_backlink"
+    },
+    {
+      "email": "julia.fourt@m18pr.com",
+      "outbound": [],
+      "inbound": "2026-09-14",
+      "hotelHints": [
+        "Hotel Glorieta"
+      ],
+      "firstTouch": "no_backlink"
+    }
+  ]
+}

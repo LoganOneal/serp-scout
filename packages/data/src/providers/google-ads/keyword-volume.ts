@@ -54,9 +54,16 @@ export function googleAdsGeoIdsForLocation(args: {
 }
 
 export interface KeywordVolumeRow {
+  /** The phrase we asked about. Keep this even when Google returns a canonical form. */
   keyword: string
+  /** Canonical phrase Google returned. Null when the call was skipped or unmatched. */
+  returnedKeyword: string | null
+  /** Other surface forms Google grouped with the returned phrase. */
+  closeVariants: string[]
   /** Avg monthly searches. Null = API had no data or call skipped. */
   avgMonthlySearches: number | null
+  /** LOW / MEDIUM / HIGH when Google returns a competition bucket. */
+  competition: string | null
   /** Competition index 0–100 when present. */
   competitionIndex: number | null
   /** Low top-of-page bid in micros (USD). */
@@ -167,7 +174,10 @@ function geoLabel(ids: number[]): string {
 function emptyRows(keywords: string[]): KeywordVolumeRow[] {
   return keywords.map((keyword) => ({
     keyword,
+    returnedKeyword: null,
+    closeVariants: [],
     avgMonthlySearches: null,
+    competition: null,
     competitionIndex: null,
     lowTopOfPageBidMicros: null,
     highTopOfPageBidMicros: null,
@@ -295,6 +305,7 @@ export async function fetchKeywordVolumes(
           text?: string
           keywordMetrics?: {
             avgMonthlySearches?: string | number
+            competition?: string
             competitionIndex?: string | number
             lowTopOfPageBidMicros?: string | number
             highTopOfPageBidMicros?: string | number
@@ -325,8 +336,12 @@ export async function fetchKeywordVolumes(
         const keyword = (r.text ?? '').trim()
         if (!keyword) continue
         const m = r.keywordMetrics
+        const closeVariants = (r.closeVariants ?? []).map((value) => value.trim()).filter(Boolean)
         const metrics = {
+          returnedKeyword: keyword,
+          closeVariants,
           avgMonthlySearches: numOrNull(m?.avgMonthlySearches),
+          competition: m?.competition?.replace(/^COMPETITION_/, '') || null,
           competitionIndex: numOrNull(m?.competitionIndex),
           lowTopOfPageBidMicros: microsOrNull(m?.lowTopOfPageBidMicros),
           highTopOfPageBidMicros: microsOrNull(m?.highTopOfPageBidMicros),
@@ -340,9 +355,8 @@ export async function fetchKeywordVolumes(
          * receives the group's metrics; aggregation is responsible for not
          * summing the variants as independent audiences.
          */
-        for (const closeVariant of r.closeVariants ?? []) {
-          const variant = closeVariant.trim()
-          if (variant) byKeyword.set(variant.toLowerCase(), { keyword: variant, ...metrics })
+        for (const variant of closeVariants) {
+          byKeyword.set(variant.toLowerCase(), { keyword: variant, ...metrics })
         }
       }
 
@@ -353,16 +367,23 @@ export async function fetchKeywordVolumes(
 
     const rows: KeywordVolumeRow[] = unique.map((keyword) => {
       const hit = byKeyword.get(keyword.toLowerCase())
-      return (
-        hit ?? {
+      if (!hit) {
+        return {
           keyword,
+          returnedKeyword: null,
+          closeVariants: [],
           avgMonthlySearches: null,
+          competition: null,
           competitionIndex: null,
           lowTopOfPageBidMicros: null,
           highTopOfPageBidMicros: null,
           monthlySearches: [],
         }
-      )
+      }
+      return {
+        ...hit,
+        keyword,
+      }
     })
 
     return {

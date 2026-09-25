@@ -25,6 +25,20 @@ describe('hht opp crawl helpers', () => {
     expect(extractRelatedUrls(html, 'https://publisher.com/story')).toContain('https://publisher.com/write-for-us')
   })
 
+  it('prefers forum thread URLs over generic nav when crawling a board', () => {
+    const board = `
+      <html><body>
+        <a href="/about">About</a>
+        <a href="/community">Community</a>
+        <a href="/threads/hotels-with-hot-tubs.31830/">Hotels with hot tubs</a>
+        <a href="/t/accessible-hotels/441">Accessible hotels</a>
+      </body></html>
+    `
+    const related = extractRelatedUrls(board, 'https://talk.example/forums')
+    expect(related[0]).toContain('/threads/hotels-with-hot-tubs.31830')
+    expect(related).toContain('https://talk.example/t/accessible-hotels/441')
+  })
+
   it('lists outbound publisher links without counting internal nav', () => {
     const links = listOutboundLinks(html, 'https://publisher.com/story')
     expect(links.some((link) => link.domain === 'hotelhottubs.com')).toBe(true)

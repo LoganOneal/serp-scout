@@ -1,0 +1,63 @@
+name: Attio CRM sync
+
+on:
+  workflow_dispatch:
+    inputs:
+      apply:
+        description: Mutate Attio (otherwise dry-run)
+        type: boolean
+        default: false
+      source:
+        description: backlinks, guest-posts, or all
+        type: choice
+        options: [all, backlinks, guest-posts]
+        default: all
+  schedule:
+    - cron: '20 7 * * *'
+  push:
+    paths:
+      - 'config/attio/**'
+      - 'packages/core/src/attio/**'
+      - 'packages/data/src/attio/**'
+      - 'packages/data/src/hht-px/**'
+      - 'packages/data/src/hht-opp/**'
+      - 'packages/data/drizzle/0035_hht_prospecting.sql'
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9.15.0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - name: Setup Attio lists
+        env:
+          ATTIO_API_KEY: ${{ secrets.ATTIO_API_KEY }}
+          ATTIO_SEND_ENABLED: 'false'
+        run: |
+          MODE_FLAG="--dry-run"
+          if [ "${{ github.event_name }}" = "schedule" ] || [ "${{ github.event_name }}" = "push" ] || [ "${{ inputs.apply }}" = "true" ]; then
+            MODE_FLAG="--apply"
+          fi
+          pnpm attio:setup $MODE_FLAG
+      - name: Sync targets
+        env:
+          ATTIO_API_KEY: ${{ secrets.ATTIO_API_KEY }}
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          ATTIO_SEND_ENABLED: 'false'
+        run: |
+          MODE_FLAG="--dry-run"
+          if [ "${{ github.event_name }}" = "schedule" ] || [ "${{ github.event_name }}" = "push" ] || [ "${{ inputs.apply }}" = "true" ]; then
+            MODE_FLAG="--apply"
+          fi
+          SOURCE="${{ inputs.source }}"
+          if [ -z "$SOURCE" ]; then SOURCE=all; fi
+          pnpm attio:sync --source="$SOURCE" $MODE_FLAG

@@ -27,3 +27,7 @@ exports/
 .vercel
 .env*.local
 .gstack/
+
+# Local Semrush MCP harvest CSVs for HHT PX ingest
+.tmp-hht-px-mcp/
+**/.tmp-hht-px-mcp/

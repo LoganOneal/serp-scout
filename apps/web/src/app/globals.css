@@ -4239,6 +4239,81 @@ a.kw-serp-title:hover {
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+.hht-px-stages {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 0 0 16px;
+  padding: 0;
+  list-style: none;
+}
+.hht-px-stages li {
+  padding: 6px 10px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  color: var(--text-dim);
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: capitalize;
+}
+.hht-px-stages li.active {
+  border-color: var(--text);
+  color: var(--text);
+  background: var(--surface-2);
+}
+.hht-px-actions {
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: end;
+}
+.hht-px-actions form,
+.hht-px-override,
+.hht-px-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: end;
+}
+.hht-px-filters {
+  margin-bottom: 14px;
+}
+.hht-px-filters label,
+.hht-px-actions label {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  color: var(--text-dim);
+  font-size: 11px;
+  font-weight: 600;
+}
+.hht-px-filters input,
+.hht-px-filters select,
+.hht-px-actions input[type='number'],
+.hht-px-override select {
+  min-height: 32px;
+  padding: 4px 8px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--surface);
+  color: var(--text);
+}
+.hht-px-badge-editorial { background: #d9f2e3; }
+.hht-px-badge-blog { background: #dce9fb; }
+.hht-px-badge-local_media { background: #f3e4c8; }
+.hht-px-badge-tourism { background: #e4f0d8; }
+.hht-px-badge-ota,
+.hht-px-badge-hotel,
+.hht-px-badge-competitor { background: #f8d7d3; }
+.hht-px-badge-ugc,
+.hht-px-badge-other { background: var(--surface-2); }
+
+.hht-px-article {
+  max-width: 28rem;
+}
+
+.hht-px-article-url {
+  word-break: break-all;
+}
 .hht-bl-source-cell {
   width: 290px;
 }

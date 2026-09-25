@@ -1,7 +1,7 @@
 import 'server-only'
 import { createHash } from 'node:crypto'
 import { load, type CheerioAPI } from 'cheerio'
-import { isDofollowRel, looksLikeOpportunityPath, normalizeHhtBlUrl, registrableDomain } from '@rnr/core'
+import { isDofollowRel, looksLikeForumPath, looksLikeOpportunityPath, normalizeHhtBlUrl, registrableDomain } from '@rnr/core'
 
 const USER_AGENT = 'Mozilla/5.0 (compatible; HotelHotTubsOpportunityEngine/0.1; +https://hotelhottubs.com)'
 
@@ -106,6 +106,12 @@ const UGC_CONTAINERS = [
   '.forum-post',
   '.ipsComment',
   '.message-userContent',
+  '.ForumPostContentArea',
+  '.ForumPostContent',
+  '.ForumPostArea',
+  '.post-wrapper',
+  '.post',
+  '[id^="Post"]',
 ] as const
 
 const NON_UGC_CONTAINERS = 'nav, header, footer, aside, .sidebar, .menu, .widget, .ad, .ads, .advert'
@@ -243,21 +249,29 @@ export function pageLinksToHht(html: string, pageUrl: string): boolean {
 export function extractRelatedUrls(html: string, pageUrl: string, limit = HHT_OPP_CRAWL.maxRelatedPages): string[] {
   const $ = load(html)
   const pageDomain = registrableDomain(pageUrl)?.domain
-  const found = new Set<string>()
-  const add = (raw: string | undefined) => {
-    if (!raw || found.size >= limit) return
+  const scored: Array<{ url: string; thread: boolean }> = []
+  const seen = new Set<string>()
+  $('a[href]').each((_, el) => {
+    const raw = $(el).attr('href')
+    if (!raw) return
     try {
       const dest = new URL(raw, pageUrl)
       if (registrableDomain(dest.hostname)?.domain !== pageDomain) return
       const normalized = normalizeHhtBlUrl(dest.toString())
-      if (normalized && looksLikeOpportunityPath(normalized)) found.add(normalized)
+      if (!normalized || seen.has(normalized)) return
+      const forum = looksLikeForumPath(normalized)
+      if (!forum && !looksLikeOpportunityPath(normalized)) return
+      seen.add(normalized)
+      scored.push({
+        url: normalized,
+        thread: /\/(?:threads?|t\/|topics?|showthread|viewtopic|posts?|\d{4,})/i.test(normalized),
+      })
     } catch {
       // ignore
     }
-  }
-
-  $('a[href]').each((_, el) => add($(el).attr('href')))
-  return [...found]
+  })
+  scored.sort((a, b) => Number(b.thread) - Number(a.thread))
+  return scored.slice(0, limit).map((row) => row.url)
 }
 
 export async function crawlHhtOppPage(

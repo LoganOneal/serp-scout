@@ -1,0 +1,45 @@
+{
+  "startedAt": "2026-09-23T15:41:00Z",
+  "staggerMinutes": [2, 4],
+  "alreadySent": [
+    {"hotel":"Charleston Harbor Resort & Marina","to":"pr@charlestonharborresort.com","draftId":"r-2071341607435329052"},
+    {"hotel":"Von Trapp Family Lodge & Resort","to":"bschwartz@trappfamily.com","draftId":"r-7107698079902280298"},
+    {"hotel":"Cannery Pier Hotel & Spa","to":"ldepledge@vestahospitality.com","draftId":"r1332749854927545485"},
+    {"hotel":"1000 Islands Harbor Hotel","to":"amangus@harthotels.com","draftId":"r3758463847624695174"}
+  ],
+  "skip": [
+    { "draftId": "r726462251821296985", "reason": "empty Charleston signature leftover" },
+    { "draftId": "r2638315728636600435", "reason": "Whiteface Lodge leftover, not in queue" }
+  ],
+  "remaining": [
+    {"hotel":"Von Trapp Family Lodge & Resort","to":"bschwartz@trappfamily.com","draftId":"r-7107698079902280298"},
+    {"hotel":"Cannery Pier Hotel & Spa","to":"ldepledge@vestahospitality.com","draftId":"r1332749854927545485"},
+    {"hotel":"1000 Islands Harbor Hotel","to":"amangus@harthotels.com","draftId":"r3758463847624695174"},
+    {"hotel":"Headlands Coastal Lodge & Spa","to":"lisa.hill@awordsmith.com","draftId":"r-2648800674553475991"},
+    {"hotel":"Hotel Van Zandt","to":"hotelvanzandt@giantnoise.com","draftId":"r901840028736122581"},
+    {"hotel":"Inn at Cape Kiwanda","to":"jbarnhart@noblehousehotels.com","draftId":"r3546576598780400879"},
+    {"hotel":"Limelight Denver","to":"communications@aspen.com","draftId":"r-9081093372218411401"},
+    {"hotel":"MADE Hotel","to":"pr@madehotels.com","draftId":"r-9118200627371256160"},
+    {"hotel":"Monterey Plaza Hotel & Spa","to":"media@montereyplazahotel.com","draftId":"r7742440381319861529"},
+    {"hotel":"The Chanler at Cliff Walk","to":"thechanler@jpublicrelations.com","draftId":"r8736568983183769624"},
+    {"hotel":"The Edgewater Hotel","to":"edgewaterpr@jwadepr.com","draftId":"r-8428926868172041763"},
+    {"hotel":"The Lodge at Spruce Peak","to":"anderson.james@destinationhotels.com","draftId":"r-1345702272075288139"},
+    {"hotel":"The Rittenhouse","to":"info@rittenhousehotel.com","draftId":"r4172897883119372487"},
+    {"hotel":"Acqua Hotel Mill Valley","to":"acquahotel@marinhotels.com","draftId":"r8058787900568350095"},
+    {"hotel":"Azure Palm Hot Springs","to":"info@azurepalm.com","draftId":"r1481634023451341342"},
+    {"hotel":"Centennial Hotel Spokane","to":"media@thedavenporthotel.com","draftId":"r735495058051631661"},
+    {"hotel":"Fairmont Sonoma Mission Inn & Spa","to":"michelle.heston@fairmont.com","draftId":"r-3101525534817011141"},
+    {"hotel":"Lithia Springs Resort","to":"info@lithiaspringsresort.com","draftId":"r-6312642537270184317"},
+    {"hotel":"Rancho Valencia Resort & Spa","to":"ranchovalencia@jpublicrelations.com","draftId":"r4091788301598384879"},
+    {"hotel":"Salishan Coastal Lodge","to":"liana@engagedcommunication.net","draftId":"r-1937884272386485304"},
+    {"hotel":"Sands Hotel & Spa","to":"pr@sandshotelandspa.com","draftId":"r-3233826492813704954"},
+    {"hotel":"Surfsand Resort","to":"ssfrontdesk@vestahospitality.com","draftId":"r4072793191612664646"},
+    {"hotel":"TOWER23 Hotel","to":"marketingteam@eatdrinkandsleep.net","draftId":"r3827008895582794499"},
+    {"hotel":"Willows Lodge","to":"reservations@willowslodge.com","draftId":"r6115743812552873944"},
+    {"hotel":"Balboa Bay Resort","to":"balboabay@wagstaffmktg.com","draftId":"r8552293277975320516"},
+    {"hotel":"Casino Del Sol","to":"courtney@sandovalcreative.com","draftId":"r-5937796319634472845"},
+    {"hotel":"Fulton Lane Inn","to":"sbodnar@charminginns.com","draftId":"r4168401640097760336"},
+    {"hotel":"La Fonda On the Plaza","to":"press@lafondasantafe.com","draftId":"r8961217497619346806"},
+    {"hotel":"Little America Hotel","to":"pr@arcadepartners.io","draftId":"r-7031791898564067122"}
+  ]
+}

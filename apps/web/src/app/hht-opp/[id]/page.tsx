@@ -69,6 +69,7 @@ export default async function HhtOppDetailPage({
           </Link>
           <h1 className="page-title">{domain.rootDomain}</h1>
           <p className="page-desc">
+            {opportunity.opportunityType === 'forum_ugc' ? <span className="badge">Forum</span> : null}{' '}
             {label(opportunity.opportunityType)}
             {opportunity.inventedType && typeof opportunity.inventedType['name'] === 'string'
               ? ` · ${opportunity.inventedType['name']}`

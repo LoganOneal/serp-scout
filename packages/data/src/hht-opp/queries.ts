@@ -41,6 +41,7 @@ export interface HhtOppFilters {
   minReferringDomains?: number
   contextual?: boolean
   dofollow?: boolean
+  forum?: boolean
   eligibility?: HhtOppEligibility
   minScore?: number
   seoRisk?: HhtOppSeoRisk
@@ -131,6 +132,7 @@ function conditions(filters: HhtOppFilters): SQL[] {
   }
   if (filters.contextual) out.push(sql`${hhtOppOpportunities.linkType} like 'contextual_%'`)
   if (filters.dofollow) out.push(sql`${hhtOppOpportunities.linkType} like '%dofollow%'`)
+  if (filters.forum) out.push(eq(hhtOppOpportunities.opportunityType, 'forum_ugc'))
   if (filters.contacted === 'yes') out.push(eq(hhtOppOpportunities.contacted, true))
   if (filters.contacted === 'no') out.push(eq(hhtOppOpportunities.contacted, false))
   if (filters.minAuthority != null) out.push(sql`${latestMetric('authority_score')} >= ${filters.minAuthority}`)

@@ -1,0 +1,165 @@
+{
+  "name": "Editor's Choice outreach",
+  "status": "copy_approved",
+  "send": true,
+  "from": "claire@hotelhottubs.com",
+  "maxEmailsPerDay": 30,
+  "staggerMinutes": [2, 4],
+  "workstreamOrder": [
+    "editors-choice-asked-backlink",
+    "editors-choice-no-backlink",
+    "editors-choice"
+  ],
+  "priority": {
+    "followUpsBeforeNewSequences": true,
+    "overdueExistingThreadsGoFirst": true,
+    "oneEmailPerLeadPerDay": true,
+    "cadenceDaysAfterEachSend": 2,
+    "rules": [
+      "Due follow-ups always take the daily 30 slots before any new first-touch.",
+      "Existing threads whose last email was more than 2 days ago are due today (one catch-up email). Being overdue does not skip them and does not dump the rest of the sequence the same day.",
+      "After that send, the next step in the same thread waits 2 days.",
+      "Replied / Positive / Won / Rejected / No Response never enter the queue."
+    ]
+  },
+  "schedule": {
+    "drafts": "Weekdays 20:00 America/New_York: create next day's personalized Gmail drafts",
+    "review": "Claire verifies every draft the same night",
+    "send": "Weekdays 09:00 America/New_York: send only drafts that still exist (edited drafts send as edited; deleted drafts are skipped)"
+  },
+  "exitWhen": [
+    "replied_at is set",
+    "status is Replied, Positive, Won / Published, Rejected, or No Response"
+  ],
+  "classifier": {
+    "asked_backlink": "First email asked to include the recognition on a Press/Awards page and/or offered badge, logo files, and copy.",
+    "no_backlink": "First email only asked to fact-check rooms/amenities or send photos. No placement ask.",
+    "new_contact": "No 1st Contact yet. Uses the four-email sequence that withholds the backlink ask until email 3."
+  },
+  "personalization": {
+    "requiredOnEveryEmail": ["first_name", "hotel_name", "hht_listing_url"],
+    "requiredOnNewContactEmail1": ["property_blurb", "fact_to_verify"],
+    "requiredOnNewContactEmail2": ["fact_to_verify"],
+    "requiredOnFactCheckFollowup1": ["fact_to_verify"],
+    "rules": [
+      "Never send or queue a draft that still contains a bracket placeholder.",
+      "first_name is the Primary Contact first name. If unknown, use '{{hotel_name}} team' (or the hotel-team greeting already in that template).",
+      "hht_listing_url must be the live Hotel Hot Tubs listing for that hotel, never a homepage or OTA link.",
+      "property_blurb is 1-2 sentences about THIS property, written from the listing (room types, tub type, setting). It must name something specific (a suite, a tub style, oceanfront/courtyard/etc). Do not reuse another hotel's blurb. Do not use the oceanfront example from the spec. If you cannot write a specific blurb from real listing facts, skip the lead. Do not send a generic compliment.",
+      "fact_to_verify is one concrete listing question to confirm (a room type, tub location, or amenity). Pull it from the live listing. Write it as a complete question. Do not invent it.",
+      "Do not invent room names, amenities, or photos.",
+      "Do not use em dashes in sent copy. Prefer a period, comma, or a new sentence.",
+      "Pick the sequence from the first-touch body, not from the scraped CSV recipient. Asked-backlink vs fact-check is about what Claire already sent."
+    ]
+  },
+  "workstreams": {
+    "editors-choice": {
+      "audience": "Hotels we have not emailed yet (no 1st Contact). Initial email does not ask for a backlink.",
+      "sequence": "New contact",
+      "steps": [
+        {
+          "n": 1,
+          "column": "contact_1_date",
+          "waitDays": 0,
+          "name": "Recognition + listing check",
+          "subject": "{{hotel_name}} selected for Hotel Hot Tubs Editor's Choice 2026",
+          "required": ["first_name", "hotel_name", "hht_listing_url", "property_blurb", "fact_to_verify"],
+          "body": "Hi {{first_name}},\n\nI'm Claire, communications manager at Hotel Hot Tubs. We selected {{hotel_name}} for our 2026 Editor's Choice, one of about 200 properties selected from 6,000+ U.S. stays.\n\nHere's the hotel feature:\n{{hht_listing_url}}\n\nAnd the full Editor's Choice collection:\nhttps://hotelhottubs.com/editors-choice\n\n{{property_blurb}}\n\n{{fact_to_verify}} If anything else has changed, I'd be glad to update that too.\n\nIf you have preferred photos of the rooms, tubs, or property, feel free to send them over and we'll use the best current imagery.\n\nThanks,\nClaire"
+        },
+        {
+          "n": 2,
+          "column": "contact_2_date",
+          "waitDays": 2,
+          "name": "Make the reply easy",
+          "subject": "Quick check on the {{hotel_name}} feature",
+          "required": ["first_name", "hotel_name", "hht_listing_url", "fact_to_verify"],
+          "body": "Hi {{first_name}},\n\nJust following up on the {{hotel_name}} feature. We're doing a final accuracy pass and I wanted to make sure we have the tub details right.\n\n{{fact_to_verify}}\n\nA quick reply is perfect. If someone else at the property would know, feel free to point me their way.\n\nFeature:\n{{hht_listing_url}}\n\nThanks,\nClaire"
+        },
+        {
+          "n": 3,
+          "column": "contact_3_date",
+          "waitDays": 2,
+          "name": "Introduce the Editor's Choice assets",
+          "subject": "Editor's Choice assets for {{hotel_name}}",
+          "required": ["first_name", "hotel_name"],
+          "body": "Hi {{first_name}},\n\nOne other thing I wanted to send your way. We have Editor's Choice 2026 badge and logo assets available for the hotels we selected.\n\nIf those would be useful for your marketing or PR team, I'm happy to send them along with a short piece of copy explaining the recognition.\n\nWe're also still happy to update the feature with any preferred photography or corrected property details.\n\nBest,\nClaire"
+        },
+        {
+          "n": 4,
+          "column": "contact_4_date",
+          "waitDays": 2,
+          "name": "Soft awards / press page ask",
+          "subject": "Re: {{hotel_name}} selected for Editor's Choice 2026",
+          "required": ["first_name", "hotel_name", "hht_listing_url"],
+          "body": "Hi {{first_name}},\n\nLast note from me on this. We're glad to have {{hotel_name}} included in this year's Editor's Choice collection.\n\nIf the hotel maintains a Press, Awards, News, or Accolades page, we'd love for the recognition to be included there with a link to the feature:\n{{hht_listing_url}}\n\nI can send the badge, logo files, and ready-to-use copy if that makes it easier. If someone else handles PR or website updates, I'm happy to connect with them directly.\n\nThanks,\nClaire"
+        }
+      ]
+    },
+    "editors-choice-asked-backlink": {
+      "audience": "Already contacted. The first email explicitly asked for a Press/Awards placement and/or offered badge assets. Follow-ups 1-3 map to 2nd-4th Contact.",
+      "sequence": "Asked backlink",
+      "steps": [
+        {
+          "n": 2,
+          "column": "contact_2_date",
+          "waitDays": 2,
+          "name": "Reopen on editorial accuracy",
+          "subject": "Quick question about the {{hotel_name}} feature",
+          "required": ["first_name", "hotel_name", "hht_listing_url"],
+          "body": "Hi {{first_name}},\n\nWanted to follow up on one part of my earlier note. We're doing another pass through the Editor's Choice pages and want to make sure we're highlighting the right rooms and experiences.\n\nIs there a particular room type, suite, or private hot tub or whirlpool experience that you think we should feature more prominently?\n\nIf you have newer photography you'd prefer us to use, I'd be glad to update that too.\n\nHere's the feature again:\n{{hht_listing_url}}\n\nBest,\nClaire"
+        },
+        {
+          "n": 3,
+          "column": "contact_3_date",
+          "waitDays": 2,
+          "name": "Offer the Editor's Choice assets",
+          "subject": "{{hotel_name}} Editor's Choice assets",
+          "required": ["first_name", "hotel_name"],
+          "body": "Hi {{first_name}},\n\nOne other thing I meant to mention. We have Editor's Choice 2026 badge and logo assets for the properties in this year's collection.\n\nI'm happy to send those over, along with a short blurb about the recognition that your team can use wherever useful.\n\nIf PR, marketing, or digital is handled by someone else, feel free to point me in the right direction.\n\nBest,\nClaire"
+        },
+        {
+          "n": 4,
+          "column": "contact_4_date",
+          "waitDays": 2,
+          "name": "Return to the placement ask",
+          "subject": "Re: {{hotel_name}} Editor's Choice 2026",
+          "required": ["first_name", "hotel_name", "hht_listing_url"],
+          "body": "Hi {{first_name}},\n\nJust closing the loop on {{hotel_name}}'s Editor's Choice feature.\n\nWe're still happy to update any details or photography your team sends over. I can also provide the badge, logo files, and a short piece of ready-to-use copy.\n\nIf {{hotel_name}} maintains a Press, Awards, News, or Accolades page, we'd appreciate the recognition being included there with a link to the feature:\n{{hht_listing_url}}\n\nIf someone else handles that part of the site, I'm happy to reach out to them directly.\n\nThanks,\nClaire"
+        }
+      ]
+    },
+    "editors-choice-no-backlink": {
+      "audience": "Already contacted. The first email only asked to verify a listing detail or send photos. Follow-ups 1-3 map to 2nd-4th Contact.",
+      "sequence": "Fact-check",
+      "steps": [
+        {
+          "n": 2,
+          "column": "contact_2_date",
+          "waitDays": 2,
+          "name": "Get the factual answer",
+          "subject": "Re: {{hotel_name}} Editor's Choice 2026",
+          "required": ["first_name", "hotel_name", "hht_listing_url", "fact_to_verify"],
+          "body": "Hi {{first_name}},\n\nJust following up on the listing detail below. Even a quick answer is helpful so we don't give guests the wrong impression.\n\n{{fact_to_verify}}\n\nHere's the feature again:\n{{hht_listing_url}}\n\nIf someone else at the property is better placed to confirm, feel free to point me their way.\n\nThanks,\nClaire"
+        },
+        {
+          "n": 3,
+          "column": "contact_3_date",
+          "waitDays": 2,
+          "name": "Reinforce the recognition and offer assets",
+          "subject": "{{hotel_name}} Editor's Choice feature",
+          "required": ["first_name", "hotel_name"],
+          "body": "Hi {{first_name}},\n\nOne other note on {{hotel_name}}. It was selected as one of roughly 200 Editor's Choice properties from the 6,000+ U.S. stays we reviewed, so we'd like to make sure the feature represents the property accurately.\n\nIf you have newer or preferred photography of the relevant rooms, tubs, or property, we'd be happy to use it.\n\nWe also have an Editor's Choice badge and logo assets available if those would be useful to your marketing or PR team.\n\nThanks,\nClaire"
+        },
+        {
+          "n": 4,
+          "column": "contact_4_date",
+          "waitDays": 2,
+          "name": "Make the awards / press page ask",
+          "subject": "Re: {{hotel_name}} Editor's Choice 2026",
+          "required": ["first_name", "hotel_name", "hht_listing_url"],
+          "body": "Hi {{first_name}},\n\nJust closing the loop on {{hotel_name}}'s Editor's Choice feature.\n\nWe're still happy to update any room details or photography your team sends over, and I can provide the Editor's Choice badge, logo files, and ready-to-use recognition copy.\n\nIf {{hotel_name}} maintains a Press, Awards, News, or Accolades page, we'd love for the recognition to be included there with a link to the feature:\n{{hht_listing_url}}\n\nIf someone else handles PR or website updates, I'm happy to connect with them directly.\n\nThanks,\nClaire"
+        }
+      ]
+    }
+  }
+}

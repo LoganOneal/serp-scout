@@ -7,9 +7,8 @@
  */
 
 import { excerptAround, firstMatch, makeEvidence } from './evidence.js'
-import type { HhtOppConfidence, HhtOppEvidence, HhtOppLinkType } from './types.js'
+import type { HhtOppConfidence, HhtOppEvidence, HhtOppInventedType, HhtOppLinkType } from './types.js'
 import type { EligibilityResult } from './eligibility.js'
-import { classifyCorporateEligibility } from './eligibility.js'
 
 export interface ForumPageInput {
   url: string
@@ -41,7 +40,9 @@ export interface UgcLinkPolicy {
 }
 
 const FORUM_PATH =
-  /\/(?:forums?|community|discussions?|threads?|topics?|showthread|viewtopic|viewforum|board)\b/i
+  /(?:\/(?:forums?|community|discussions?|threads?|topics?|showthread|viewtopic|viewforum|boards?|talk|chatter|xf|t\/[a-z0-9-]+)|[-_](?:forums?|boards?)|message[-_]?boards?)\b/i
+
+const COMMUNITY_HOST = /(?:^|\.)(?:community|boards|forum)\./i
 
 const FORUM_SOFTWARE: Array<{ name: string; pattern: RegExp }> = [
   { name: 'discourse', pattern: /discourse|data-theme-name|\/t\/[a-z0-9-]+\/\d+/i },
@@ -52,6 +53,10 @@ const FORUM_SOFTWARE: Array<{ name: string; pattern: RegExp }> = [
   { name: 'flarum', pattern: /flarum/i },
   { name: 'nodebb', pattern: /nodebb/i },
   { name: 'vanilla', pattern: /vanilla.?forums?|vanillaforums/i },
+  { name: 'telligent', pattern: /telligent|communityserver|reportpost\.aspx|post quoted reply/i },
+  { name: 'ubb', pattern: /ubbthreads\.php|\bubb\b/i },
+  { name: 'disqus', pattern: /disqus\.com|id=["']disqus_thread/i },
+  { name: 'wordpress-comments', pattern: /wp-comments|comment-form|id=["']respond/i },
 ]
 
 const FORUM_COPY = [
@@ -66,20 +71,16 @@ const UGC_OPEN = [
   /post a reply/i,
   /leave a comment/i,
   /add a comment/i,
+  /post a comment/i,
+  /write a comment/i,
   /start (?:a )?new (?:thread|topic|discussion)/i,
   /register to (?:post|comment|reply)/i,
   /sign up to (?:post|comment|reply)/i,
   /reply to this (?:thread|topic)/i,
   /join the (?:discussion|conversation)/i,
-]
-
-const FORUM_PROMO_FAIL = [
-  /advertising (?:is )?(?:not allowed|not permitted|prohibited)/i,
-  /no advertising(?: or self-?promo)?/i,
-  /no commercial (?:posts?|links?|advertising)/i,
-  /promotional (?:posts?|links?) (?:are )?(?:not allowed|prohibited)/i,
-  /no spam(?:ming)? or advertising/i,
-  /self-?promotion (?:is )?(?:not allowed|prohibited)/i,
+  /post quoted reply/i,
+  /login \/ register/i,
+  /comments? are (?:open|welcome)/i,
 ]
 
 const NOFOLLOW_RELS = new Set(['nofollow', 'ugc', 'sponsored'])
@@ -96,15 +97,24 @@ export function isDofollowRel(rel: string | null | undefined): boolean {
   return tokens.every((token) => !NOFOLLOW_RELS.has(token))
 }
 
+function communityHost(url: string): boolean {
+  try {
+    return COMMUNITY_HOST.test(new URL(url).hostname)
+  } catch {
+    return false
+  }
+}
+
 export function detectForumSignals(page: ForumPageInput): ForumSignals {
   const blob = `${page.title ?? ''}\n${page.text}\n${page.html ?? ''}\n${page.url}`
   const software = FORUM_SOFTWARE.find((row) => row.pattern.test(blob))?.name ?? null
   const pathHit = looksLikeForumPath(page.url)
+  const hostHit = communityHost(page.url)
   const copy = firstMatch(`${page.title ?? ''}\n${page.text}`, FORUM_COPY)
-  const isForum = Boolean(software || pathHit || copy)
+  const isForum = Boolean(software || pathHit || hostHit || copy)
   const ugc = firstMatch(`${page.title ?? ''}\n${page.text}`, UGC_OPEN)
-  const allowsUgc = Boolean(ugc || software || pathHit)
-  const evidence = software ?? copy?.[0] ?? (pathHit ? page.url : ugc?.[0] ?? null)
+  const allowsUgc = Boolean(ugc || software || pathHit || hostHit)
+  const evidence = software ?? copy?.[0] ?? (hostHit || pathHit ? page.url : ugc?.[0] ?? null)
   return { isForum, allowsUgc, software, evidence }
 }
 
@@ -152,16 +162,25 @@ export function classifyForumUgcEligibility(
   text: string,
   checkedAt = new Date(),
 ): EligibilityResult {
-  const fail = firstMatch(text, FORUM_PROMO_FAIL)
-  if (fail?.[0]) {
-    return {
-      eligibility: 'FAIL',
-      reason: 'Forum rules explicitly forbid advertising or commercial posts.',
-      evidence: makeEvidence(url, text, fail[0], 'HIGH', checkedAt),
-      confidence: 'HIGH',
-    }
+  const ugc = firstMatch(text, UGC_OPEN)
+  return {
+    eligibility: 'REVIEW',
+    reason:
+      'Comments or replies appear open. Commercial-post rules are not a disqualifier. Dofollow is measured from HTML rel attributes, not from site policy copy.',
+    evidence: ugc?.[0] ? makeEvidence(url, text, ugc[0], 'MEDIUM', checkedAt) : null,
+    confidence: ugc?.[0] ? 'MEDIUM' : 'LOW',
   }
-  return classifyCorporateEligibility(url, text, checkedAt)
+}
+
+export function forumInventedType(signals: ForumSignals): HhtOppInventedType {
+  const commentOnly = !signals.isForum && Boolean(signals.allowsUgc)
+  return {
+    name: signals.software ? `Forum (${signals.software})` : commentOnly ? 'Comments' : 'Forum',
+    definition: 'User-generated discussion board or comment thread.',
+    whyBacklink: 'Travelers ask destination and lodging questions; outbound links in posts or comments can be dofollow.',
+    discoveryMethod: 'forum_ugc',
+    outreachMethod: 'Leave a relevant comment or reply if the form is open. Never send automatically.',
+  }
 }
 
 export function forumOpportunityWhy(signals: ForumSignals, policy: UgcLinkPolicy | null): string {

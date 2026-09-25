@@ -81,6 +81,20 @@ A queued scan only starts when the worker is running. There is no Redis: the
 poll — which is what made the previous build's "Start scan" button silently do
 nothing forever.
 
+### Attio outreach CRM (Hotel Hot Tubs)
+
+Backlink and guest-post targets sync from this repo to Company-based Attio lists.
+Editor's Choice sync lives in the Hotel Hot Tubs repo so Actions never check out
+the other private repo. Nothing sends email. See [docs/attio-crm.md](docs/attio-crm.md).
+
+```bash
+pnpm attio:setup --dry-run
+pnpm attio:sync --source=backlinks --dry-run
+pnpm attio:sync --source=guest-posts --dry-run
+pnpm attio:followups --dry-run
+pnpm attio:outreach --dry-run
+```
+
 ### Everything runs for $0 by default
 
 `LIVE_CALLS_ENABLED` must be the **exact string** `true` to spend money. Anything

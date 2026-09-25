@@ -68,6 +68,11 @@ const GROUPS: NavGroup[] = [
         hint: 'Discover and qualify publisher backlink opportunities for HotelHotTubs',
       },
       {
+        href: '/hht-px',
+        label: 'SERP Prospects',
+        hint: 'Find ranking editorial articles that could logically link to Hotel Hot Tubs',
+      },
+      {
         href: '/hotel-backlink-scout',
         label: 'Hotel Backlink Scout',
         hint: 'Inventory-first hotel and linking-entity opportunities',

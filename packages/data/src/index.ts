@@ -260,3 +260,54 @@ export {
   type HhtOppDiscoveryResult,
 } from './hht-opp/discover.js'
 export { createHhtOppSearchProvider } from './hht-opp/search.js'
+
+export {
+  seedHhtPxLibrary,
+  fetchHhtPxVolumes,
+  prioritizeHhtPxKeywords,
+  previewHhtPxSerpCalls,
+  fetchHhtPxSerps,
+  ingestHhtPxMcpOrganicSerps,
+  ingestHhtPxMcpDomainEnrichment,
+  overrideHhtPxSerpResult,
+  reclassifyHhtPxSerpResults,
+  aggregateHhtPxProspects,
+  enrichHhtPxDomains,
+  expandHhtPxKeywordIdeas,
+  promoteHhtPxKeywordIdeas,
+  pauseHhtPxRun,
+  getLatestHhtPxRun,
+  type PipelineLimitOptions,
+  type SerpCallPreview,
+  type HhtPxMcpOrganicHarvest,
+  type HhtPxMcpDomainHarvest,
+} from './hht-px/pipeline.js'
+export {
+  serpRowsFromMcpPayload,
+  HHT_PX_MCP_SERP_MESSAGE,
+  HHT_PX_MCP_ENRICH_MESSAGE,
+} from './hht-px/mcp.js'
+export {
+  getHhtPxDashboard,
+  listHhtPxKeywords,
+  listHhtPxPages,
+  listHhtPxDomains,
+  getHhtPxKeywordDetail,
+  getHhtPxPageDetail,
+  parseHhtPxKeywordFilters,
+  parseHhtPxPageFilters,
+  parseHhtPxDomainFilters,
+  HHT_PX_FILTER_ENUMS,
+  type HhtPxDashboardView,
+  type HhtPxKeywordFilters,
+  type HhtPxPageFilters,
+  type HhtPxDomainFilters,
+} from './hht-px/dashboard.js'
+export { exportHhtPxCsv, updateHhtPxOutreach, type HhtPxExportKind } from './hht-px/export.js'
+export { seedHhtPxGeographies, seedHhtPxTemplates, generateHhtPxKeywordRows } from './hht-px/seed.js'
+export { AttioClient, AttioError, attioClientFromEnv } from './attio/client.js'
+export { setupAttioLists, plannedSetupReport } from './attio/setup.js'
+export { syncTargets, listSourceKeys } from './attio/sync.js'
+export { processFollowups } from './attio/followups.js'
+export { backfillOutreachFromGmail, loadGmailOutreachFile } from './attio/gmail-backfill.js'
+export { parseArgv, runAttioCli } from './attio/cli.js'

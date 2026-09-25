@@ -68,6 +68,8 @@ function friendlyName(header: string): string {
     phrase: 'keyword',
     competition: 'competitive_density',
     keyword_difficulty_index: 'keyword_difficulty',
+    keywords_serp_features: 'triggered_serp_features',
+    serp_features: 'triggered_serp_features',
   }
   return aliases[cleaned] ?? aliases[header.toLowerCase()] ?? cleaned
 }

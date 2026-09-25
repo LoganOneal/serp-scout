@@ -93,6 +93,7 @@ function parseFilters(params: SearchParams): HhtOppFilters {
     minScore: numberFilter(one(params['minScore'])),
     contextual: one(params['contextual']) === '1',
     dofollow: one(params['dofollow']) === '1',
+    forum: one(params['forum']) === '1',
     contacted: contacted === 'yes' || contacted === 'no' ? contacted : undefined,
     sort: ['score', 'authority', 'traffic', 'referring', 'outbound', 'price', 'checked'].includes(sort ?? '')
       ? (sort as HhtOppFilters['sort'])
@@ -262,6 +263,11 @@ export default async function HhtOppPage({ searchParams }: { searchParams: Promi
                           <Link href={`/hht-opp/${row.id}`} className="hht-bl-domain">
                             {row.site}
                           </Link>
+                          {row.opportunityType === 'forum_ugc' ? (
+                            <div>
+                              <span className="badge">Forum</span>
+                            </div>
+                          ) : null}
                           <div className="hht-bl-subcell">{row.displayName}</div>
                         </td>
                         <td>
@@ -450,6 +456,10 @@ function Filters({ filters }: { filters: HhtOppFilters }) {
       <label className="hotel-bl-check">
         <input type="checkbox" name="dofollow" value="1" defaultChecked={filters.dofollow} />
         <span>Dofollow (includes UGC)</span>
+      </label>
+      <label className="hotel-bl-check">
+        <input type="checkbox" name="forum" value="1" defaultChecked={filters.forum} />
+        <span>Forums only</span>
       </label>
       <div className="hotel-bl-filter-actions">
         <button className="primary" type="submit">

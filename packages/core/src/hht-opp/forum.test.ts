@@ -43,6 +43,31 @@ describe('forum and UGC link policy', () => {
     expect(nofollow.linkType).toBe('ugc_nofollow')
   })
 
+  it('treats official tourism community hosts as forums', () => {
+    const signals = detectForumSignals({
+      url: 'https://community.ireland.com/31830/hot-tubs-in-ireland',
+      title: 'Ireland.com Community',
+      text: 'Reply. Login / Register. Post Quoted Reply.',
+    })
+    expect(signals.isForum).toBe(true)
+    expect(signals.allowsUgc).toBe(true)
+    expect(detectForumSignals({
+      url: 'https://boards.cruisecritic.com/',
+      title: 'Cruise Critic Message Boards',
+      text: 'Start a new thread.',
+    }).isForum).toBe(true)
+    expect(detectForumSignals({
+      url: 'https://www.mumsnet.com/talk',
+      title: 'Mumsnet Talk',
+      text: 'Join the discussion.',
+    }).isForum).toBe(true)
+    expect(detectForumSignals({
+      url: 'https://www.ukcampsite.co.uk/chatter/',
+      title: 'Campsite chatter',
+      text: 'Post a reply.',
+    }).isForum).toBe(true)
+  })
+
   it('classifies a forum thread URL as forum_ugc', () => {
     const found = classifyOpportunityTypes({
       url: 'https://talk.example/forums/hotels-with-hot-tubs',
@@ -50,9 +75,10 @@ describe('forum and UGC link policy', () => {
       text: 'Post a reply. Start a new thread about jacuzzi suites.',
     })
     expect(found.some((row) => row.type === 'forum_ugc')).toBe(true)
+    expect(found.find((row) => row.type === 'forum_ugc')?.inventedType?.name).toMatch(/^Forum/)
   })
 
-  it('fails forums that ban commercial posts and does not PASS from registration alone', () => {
+  it('keeps open-comment boards in REVIEW even when rules ban advertising', () => {
     const silent = classifyForumUgcEligibility(
       'https://talk.example/forums',
       'Register to post. Post a reply. Community guidelines.',
@@ -61,8 +87,17 @@ describe('forum and UGC link policy', () => {
 
     const banned = classifyForumUgcEligibility(
       'https://talk.example/forums',
-      'No advertising. Promotional posts are not allowed.',
+      'No advertising. Promotional posts are not allowed. Leave a comment.',
     )
-    expect(banned.eligibility).toBe('FAIL')
+    expect(banned.eligibility).toBe('REVIEW')
+  })
+
+  it('tags tour-operator pages with an open comment form as UGC', () => {
+    const found = classifyOpportunityTypes({
+      url: 'https://tours.example/uzbekistan-itinerary',
+      title: 'Uzbekistan itinerary',
+      text: 'Leave a comment. Comments are welcome.',
+    })
+    expect(found.some((row) => row.type === 'forum_ugc')).toBe(true)
   })
 })

@@ -194,5 +194,13 @@ describe('fetchKeywordVolumes', () => {
     )
 
     expect(result.rows.map((row) => row.avgMonthlySearches)).toEqual([2900, 2900])
+    expect(result.rows[0]).toMatchObject({
+      keyword: 'chicago hotels with jacuzzi in room',
+      returnedKeyword: 'chicago hotel hot tub',
+      closeVariants: [
+        'chicago hotels with jacuzzi in room',
+        'hotels with hot tubs in room chicago',
+      ],
+    })
   })
 })

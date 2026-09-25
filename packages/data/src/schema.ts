@@ -34,6 +34,19 @@ import type {
   HhtOppStatus,
   HhtOppStrategy,
   HhtOppType,
+  HhtPxCluster,
+  HhtPxCompetitorStrength,
+  HhtPxGeoType,
+  HhtPxJobStatus,
+  HhtPxKeywordSource,
+  HhtPxLinkability,
+  HhtPxOutreachStatus,
+  HhtPxPageType,
+  HhtPxPriority,
+  HhtPxRunStatus,
+  HhtPxSerpStatus,
+  HhtPxStage,
+  HhtPxWhyLinkCategory,
   AnomalyKind,
   BusinessType,
   BuyerType,
@@ -4637,3 +4650,352 @@ export const hhtOppStrategyRecommendations = pgTable('hht_opp_strategy_recommend
 export type HhtOppDomain = typeof hhtOppDomains.$inferSelect
 export type HhtOppOpportunity = typeof hhtOppOpportunities.$inferSelect
 export type HhtOppDraft = typeof hhtOppDrafts.$inferSelect
+
+// --- HotelHotTubs SERP backlink prospecting ---------------------------------
+
+export const hhtPxGeographies = pgTable(
+  'hht_px_geographies',
+  {
+    id: serial('id').primaryKey(),
+    name: text('name').notNull(),
+    queryName: text('query_name').notNull(),
+    normalizedName: text('normalized_name').notNull(),
+    state: text('state'),
+    stateCode: text('state_code'),
+    type: text('type').$type<HhtPxGeoType>().notNull(),
+    parentGeoId: integer('parent_geo_id').references((): AnyPgColumn => hhtPxGeographies.id, {
+      onDelete: 'set null',
+    }),
+    hhtSlug: text('hht_slug'),
+    hotelCount: integer('hotel_count'),
+    privateHotTubCount: integer('private_hot_tub_count'),
+    sharedHotTubCount: integer('shared_hot_tub_count'),
+    editorsChoiceCount: integer('editors_choice_count'),
+    active: boolean('active').notNull().default(true),
+    priority: integer('priority').notNull().default(50),
+    createdAt: now(),
+    updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => ({
+    typeNameStateUq: uniqueIndex('hht_px_geographies_type_name_state_uq').on(
+      t.type,
+      t.normalizedName,
+      t.stateCode,
+    ),
+    activeIdx: index('hht_px_geographies_active_idx').on(t.active, t.priority, t.type),
+  }),
+)
+
+export const hhtPxKeywordTemplates = pgTable(
+  'hht_px_keyword_templates',
+  {
+    id: serial('id').primaryKey(),
+    template: text('template').notNull(),
+    cluster: text('cluster').$type<HhtPxCluster>().notNull(),
+    variantGroup: text('variant_group').notNull(),
+    priority: text('priority').$type<HhtPxPriority>().notNull(),
+    expectedLinkability: text('expected_linkability').$type<HhtPxLinkability>().notNull(),
+    geographic: boolean('geographic').notNull().default(true),
+    enabled: boolean('enabled').notNull().default(true),
+    createdAt: now(),
+  },
+  (t) => ({
+    templateUq: uniqueIndex('hht_px_keyword_templates_template_uq').on(t.template),
+    clusterIdx: index('hht_px_keyword_templates_cluster_idx').on(t.cluster, t.variantGroup),
+  }),
+)
+
+export const hhtPxKeywords = pgTable(
+  'hht_px_keywords',
+  {
+    id: serial('id').primaryKey(),
+    geographyId: integer('geography_id').references(() => hhtPxGeographies.id, { onDelete: 'cascade' }),
+    templateId: integer('template_id').references(() => hhtPxKeywordTemplates.id, {
+      onDelete: 'set null',
+    }),
+    keyword: text('keyword').notNull(),
+    keywordNorm: text('keyword_norm').notNull(),
+    cluster: text('cluster').$type<HhtPxCluster>().notNull(),
+    variantGroup: text('variant_group').notNull(),
+    source: text('source').$type<HhtPxKeywordSource>().notNull().default('template'),
+    priority: text('priority').$type<HhtPxPriority>().notNull(),
+    expectedLinkability: text('expected_linkability').$type<HhtPxLinkability>().notNull(),
+    isRepresentative: boolean('is_representative').notNull().default(false),
+    serpEquivalent: boolean('serp_equivalent').notNull().default(false),
+    serpStatus: text('serp_status').$type<HhtPxSerpStatus>().notNull().default('unchecked'),
+    promoted: boolean('promoted').notNull().default(true),
+    createdAt: now(),
+    updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => ({
+    keywordUq: uniqueIndex('hht_px_keywords_norm_uq').on(t.keywordNorm, t.geographyId),
+    nationalUq: uniqueIndex('hht_px_keywords_national_norm_uq')
+      .on(t.keywordNorm)
+      .where(sql`${t.geographyId} is null`),
+    variantIdx: index('hht_px_keywords_variant_idx').on(t.geographyId, t.variantGroup, t.isRepresentative),
+    clusterIdx: index('hht_px_keywords_cluster_idx').on(t.cluster, t.serpStatus),
+    sourceIdx: index('hht_px_keywords_source_idx').on(t.source, t.promoted),
+  }),
+)
+
+export const hhtPxKeywordVolumes = pgTable(
+  'hht_px_keyword_volumes',
+  {
+    id: serial('id').primaryKey(),
+    keywordId: integer('keyword_id')
+      .notNull()
+      .references(() => hhtPxKeywords.id, { onDelete: 'cascade' }),
+    requestedKeyword: text('requested_keyword').notNull(),
+    returnedKeyword: text('returned_keyword'),
+    closeVariants: jsonb('close_variants').$type<string[]>().notNull().default([]),
+    nationalDestinationVolume: integer('national_destination_volume'),
+    localSearcherVolume: integer('local_searcher_volume'),
+    monthlySearches: jsonb('monthly_searches')
+      .$type<Array<{ year: number; month: number; searchVolume: number }>>()
+      .notNull()
+      .default([]),
+    competition: text('competition'),
+    competitionIndex: integer('competition_index'),
+    lowBidMicros: bigint('low_bid_micros', { mode: 'bigint' }),
+    highBidMicros: bigint('high_bid_micros', { mode: 'bigint' }),
+    googleAdsGeoTarget: integer('google_ads_geo_target').notNull().default(2840),
+    googleAdsGeoLabel: text('google_ads_geo_label'),
+    retrievedAt: timestamp('retrieved_at', { withTimezone: true }),
+    error: text('error'),
+    createdAt: now(),
+    updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => ({
+    keywordUq: uniqueIndex('hht_px_keyword_volumes_keyword_uq').on(t.keywordId),
+  }),
+)
+
+export const hhtPxPipelineRuns = pgTable(
+  'hht_px_pipeline_runs',
+  {
+    id: serial('id').primaryKey(),
+    name: text('name').notNull(),
+    status: text('status').$type<HhtPxRunStatus>().notNull().default('draft'),
+    currentStage: text('current_stage').$type<HhtPxStage>().notNull().default('geographies'),
+    configuration: jsonb('configuration').$type<Record<string, unknown>>().notNull().default({}),
+    progress: jsonb('progress').$type<Record<string, number>>().notNull().default({}),
+    error: text('error'),
+    createdAt: now(),
+    startedAt: timestamp('started_at', { withTimezone: true }),
+    updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
+    finishedAt: timestamp('finished_at', { withTimezone: true }),
+  },
+  (t) => ({
+    statusIdx: index('hht_px_pipeline_runs_status_idx').on(t.status, t.createdAt),
+  }),
+)
+
+export const hhtPxPipelineJobs = pgTable(
+  'hht_px_pipeline_jobs',
+  {
+    id: serial('id').primaryKey(),
+    runId: integer('run_id')
+      .notNull()
+      .references(() => hhtPxPipelineRuns.id, { onDelete: 'cascade' }),
+    stage: text('stage').$type<HhtPxStage>().notNull(),
+    provider: text('provider').notNull(),
+    target: text('target'),
+    parameters: jsonb('parameters').$type<Record<string, unknown>>().notNull().default({}),
+    requestKey: text('request_key').notNull(),
+    status: text('status').$type<HhtPxJobStatus>().notNull().default('pending'),
+    attempts: integer('attempts').notNull().default(0),
+    recordsCompleted: integer('records_completed').notNull().default(0),
+    estimatedUnits: doublePrecision('estimated_units'),
+    error: text('error'),
+    createdAt: now(),
+    updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
+    finishedAt: timestamp('finished_at', { withTimezone: true }),
+  },
+  (t) => ({
+    requestUq: uniqueIndex('hht_px_pipeline_jobs_request_uq').on(t.runId, t.requestKey),
+    statusIdx: index('hht_px_pipeline_jobs_status_idx').on(t.runId, t.status, t.stage),
+  }),
+)
+
+export const hhtPxSerpSnapshots = pgTable(
+  'hht_px_serp_snapshots',
+  {
+    id: serial('id').primaryKey(),
+    keywordId: integer('keyword_id')
+      .notNull()
+      .references(() => hhtPxKeywords.id, { onDelete: 'cascade' }),
+    jobId: integer('job_id').references(() => hhtPxPipelineJobs.id, { onDelete: 'set null' }),
+    databaseName: text('database_name').notNull().default('us'),
+    editorialDensity: doublePrecision('editorial_density'),
+    prospectableDensity: doublePrecision('prospectable_density'),
+    competitorCount: integer('competitor_count').notNull().default(0),
+    uniqueProspectDomains: integer('unique_prospect_domains').notNull().default(0),
+    keywordOpportunityScore: doublePrecision('keyword_opportunity_score'),
+    serpFeatures: text('serp_features'),
+    resultCount: integer('result_count').notNull().default(0),
+    retrievedAt: timestampCol('retrieved_at'),
+  },
+  (t) => ({
+    keywordDbUq: uniqueIndex('hht_px_serp_snapshots_keyword_db_uq').on(t.keywordId, t.databaseName),
+  }),
+)
+
+export const hhtPxSerpResults = pgTable(
+  'hht_px_serp_results',
+  {
+    id: serial('id').primaryKey(),
+    snapshotId: integer('snapshot_id')
+      .notNull()
+      .references(() => hhtPxSerpSnapshots.id, { onDelete: 'cascade' }),
+    position: integer('position').notNull(),
+    url: text('url').notNull(),
+    normalizedUrl: text('normalized_url').notNull(),
+    rootDomain: text('root_domain').notNull(),
+    subdomain: text('subdomain'),
+    title: text('title'),
+    snippet: text('snippet'),
+    serpFeatures: text('serp_features'),
+    pageType: text('page_type').$type<HhtPxPageType>().notNull(),
+    isProspectable: boolean('is_prospectable').notNull().default(false),
+    competitorStrength: text('competitor_strength').$type<HhtPxCompetitorStrength>().notNull().default('none'),
+    excludedByRule: boolean('excluded_by_rule').notNull().default(false),
+    classificationReason: text('classification_reason'),
+    manualOverride: boolean('manual_override').notNull().default(false),
+    createdAt: now(),
+    updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => ({
+    resultUq: uniqueIndex('hht_px_serp_results_uq').on(t.snapshotId, t.position, t.normalizedUrl),
+    domainIdx: index('hht_px_serp_results_domain_idx').on(t.rootDomain, t.isProspectable),
+  }),
+)
+
+export const hhtPxProspectDomains = pgTable(
+  'hht_px_prospect_domains',
+  {
+    id: serial('id').primaryKey(),
+    rootDomain: text('root_domain').notNull(),
+    domainType: text('domain_type').$type<HhtPxPageType>(),
+    competitorStrength: text('competitor_strength').$type<HhtPxCompetitorStrength>().notNull().default('none'),
+    isProspectable: boolean('is_prospectable').notNull().default(false),
+    pageCount: integer('page_count').notNull().default(0),
+    keywordCount: integer('keyword_count').notNull().default(0),
+    geographyCount: integer('geography_count').notNull().default(0),
+    clusterCount: integer('cluster_count').notNull().default(0),
+    strongestPageId: integer('strongest_page_id'),
+    bestPosition: integer('best_position'),
+    maxKeywordVolume: integer('max_keyword_volume'),
+    authorityScore: integer('authority_score'),
+    referringDomains: integer('referring_domains'),
+    backlinks: integer('backlinks'),
+    organicTraffic: integer('organic_traffic'),
+    rankingKeywords: integer('ranking_keywords'),
+    opportunityScore: doublePrecision('opportunity_score'),
+    outreachStatus: text('outreach_status').$type<HhtPxOutreachStatus>().notNull().default('not_contacted'),
+    notes: text('notes'),
+    enrichedAt: timestamp('enriched_at', { withTimezone: true }),
+    createdAt: now(),
+    updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => ({
+    domainUq: uniqueIndex('hht_px_prospect_domains_root_uq').on(t.rootDomain),
+    scoreIdx: index('hht_px_prospect_domains_score_idx').on(t.opportunityScore),
+  }),
+)
+
+export const hhtPxProspectPages = pgTable(
+  'hht_px_prospect_pages',
+  {
+    id: serial('id').primaryKey(),
+    domainId: integer('domain_id')
+      .notNull()
+      .references(() => hhtPxProspectDomains.id, { onDelete: 'cascade' }),
+    url: text('url').notNull(),
+    normalizedUrl: text('normalized_url').notNull(),
+    title: text('title'),
+    pageType: text('page_type').$type<HhtPxPageType>().notNull(),
+    isProspectable: boolean('is_prospectable').notNull().default(false),
+    competitorStrength: text('competitor_strength').$type<HhtPxCompetitorStrength>().notNull().default('none'),
+    matchedKeywordCount: integer('matched_keyword_count').notNull().default(0),
+    maxKeywordVolume: integer('max_keyword_volume'),
+    bestPosition: integer('best_position'),
+    avgPosition: doublePrecision('avg_position'),
+    estimatedNondupDemand: integer('estimated_nondup_demand'),
+    topicalFit: integer('topical_fit'),
+    linkFit: doublePrecision('link_fit'),
+    opportunityScore: doublePrecision('opportunity_score'),
+    suggestedHhtUrl: text('suggested_hht_url'),
+    whyLinkCategory: text('why_link_category').$type<HhtPxWhyLinkCategory>(),
+    whyLink: text('why_link'),
+    outreachStatus: text('outreach_status').$type<HhtPxOutreachStatus>().notNull().default('not_contacted'),
+    notes: text('notes'),
+    createdAt: now(),
+    updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => ({
+    urlUq: uniqueIndex('hht_px_prospect_pages_url_uq').on(t.normalizedUrl),
+    scoreIdx: index('hht_px_prospect_pages_score_idx').on(t.opportunityScore),
+    domainIdx: index('hht_px_prospect_pages_domain_idx').on(t.domainId, t.isProspectable),
+  }),
+)
+
+export const hhtPxPageKeywordMatches = pgTable(
+  'hht_px_page_keyword_matches',
+  {
+    id: serial('id').primaryKey(),
+    pageId: integer('page_id')
+      .notNull()
+      .references(() => hhtPxProspectPages.id, { onDelete: 'cascade' }),
+    keywordId: integer('keyword_id')
+      .notNull()
+      .references(() => hhtPxKeywords.id, { onDelete: 'cascade' }),
+    snapshotId: integer('snapshot_id').references(() => hhtPxSerpSnapshots.id, { onDelete: 'set null' }),
+    position: integer('position').notNull(),
+    volume: integer('volume'),
+    createdAt: now(),
+  },
+  (t) => ({
+    pageKeywordUq: uniqueIndex('hht_px_page_keyword_matches_uq').on(t.pageId, t.keywordId),
+    keywordIdx: index('hht_px_page_keyword_matches_keyword_idx').on(t.keywordId, t.position),
+  }),
+)
+
+export const hhtPxClusterYields = pgTable(
+  'hht_px_cluster_yields',
+  {
+    id: serial('id').primaryKey(),
+    cluster: text('cluster').$type<HhtPxCluster>().notNull(),
+    serpCount: integer('serp_count').notNull().default(0),
+    prospectablePages: integer('prospectable_pages').notNull().default(0),
+    avgEditorialDensity: doublePrecision('avg_editorial_density'),
+    avgProspectableDensity: doublePrecision('avg_prospectable_density'),
+    avgProspectsPerSerp: doublePrecision('avg_prospects_per_serp'),
+    qualityAdjustedPerSerp: doublePrecision('quality_adjusted_per_serp'),
+    updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => ({
+    clusterUq: uniqueIndex('hht_px_cluster_yields_cluster_uq').on(t.cluster),
+  }),
+)
+
+export const hhtPxDomainOverrides = pgTable(
+  'hht_px_domain_overrides',
+  {
+    id: serial('id').primaryKey(),
+    rootDomain: text('root_domain').notNull(),
+    pageType: text('page_type').$type<HhtPxPageType>(),
+    isProspectable: boolean('is_prospectable'),
+    competitorStrength: text('competitor_strength').$type<HhtPxCompetitorStrength>(),
+    notes: text('notes'),
+    createdAt: now(),
+    updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => ({
+    domainUq: uniqueIndex('hht_px_domain_overrides_root_uq').on(t.rootDomain),
+  }),
+)
+
+export type HhtPxGeography = typeof hhtPxGeographies.$inferSelect
+export type HhtPxKeyword = typeof hhtPxKeywords.$inferSelect
+export type HhtPxProspectPage = typeof hhtPxProspectPages.$inferSelect
+export type HhtPxProspectDomain = typeof hhtPxProspectDomains.$inferSelect

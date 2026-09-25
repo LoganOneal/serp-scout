@@ -53,7 +53,14 @@
     "miner:schema": "tsx --conditions=react-server packages/data/src/scripts/apply-opportunity-miner.mts",
     "miner:bootstrap": "tsx --conditions=react-server packages/data/src/scripts/bootstrap-opportunity-miner.mts",
     "hht:opp": "tsx --conditions=react-server packages/data/src/scripts/hht-opp.mts",
-    "hht:opp:schema": "tsx --conditions=react-server packages/data/src/scripts/apply-hht-opp.mts"
+    "hht:opp:schema": "tsx --conditions=react-server packages/data/src/scripts/apply-hht-opp.mts",
+    "hht:px": "tsx --conditions=react-server packages/data/src/scripts/hht-px.mts",
+    "hht:px:schema": "tsx --conditions=react-server packages/data/src/scripts/apply-hht-px.mts",
+    "attio:setup": "tsx --conditions=react-server packages/data/src/scripts/attio.mts setup",
+    "attio:sync": "tsx --conditions=react-server packages/data/src/scripts/attio.mts sync",
+    "attio:followups": "tsx --conditions=react-server packages/data/src/scripts/attio.mts followups",
+    "attio:outreach": "tsx --conditions=react-server packages/data/src/scripts/attio.mts outreach",
+    "attio:patch": "tsx --conditions=react-server packages/data/src/scripts/attio.mts patch"
   },
   "devDependencies": {
     "@types/node": "^22.10.5",
