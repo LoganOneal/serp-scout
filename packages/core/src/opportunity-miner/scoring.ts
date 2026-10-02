@@ -7,7 +7,7 @@ import {
   type ScoreWeights,
 } from './types.js'
 
-export interface ScoreInput {
+export interface OmScoreInput {
   adjustedVolume: number | null
   weightedCpc: number | null
   weightedKd: number | null
@@ -37,7 +37,7 @@ export interface ScoreInput {
  * Component scores are 0–100 and stored separately.
  * Total is a weighted blend, then garbage-multiplied. Never the only stored number.
  */
-export function scoreMarket(input: ScoreInput): MarketScoreBreakdown {
+export function scoreMarket(input: OmScoreInput): MarketScoreBreakdown {
   const weights = input.weights ?? DEFAULT_SCORE_WEIGHTS
   const demandScore = 100 * scale01(input.adjustedVolume, 250, 18_000)
   const commercialIntentScore =
@@ -125,7 +125,7 @@ export function scoreMarket(input: ScoreInput): MarketScoreBreakdown {
   }
 }
 
-function monetizationEvidence(input: ScoreInput): number {
+function monetizationEvidence(input: OmScoreInput): number {
   const persistent = scale01(input.persistentAdvertisers, 0, 6)
   const advertisers = scale01(input.uniqueAdvertisers, 0, 10)
   const pricing = scale01(input.observedPriceCount, 0, 4)

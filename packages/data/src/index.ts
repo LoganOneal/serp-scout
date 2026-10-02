@@ -305,6 +305,23 @@ export {
 } from './hht-px/dashboard.js'
 export { exportHhtPxCsv, updateHhtPxOutreach, type HhtPxExportKind } from './hht-px/export.js'
 export { seedHhtPxGeographies, seedHhtPxTemplates, generateHhtPxKeywordRows } from './hht-px/seed.js'
+export { insertHhtPxDiscoverySeeds, qualifyHhtPxPublishers } from './hht-px/qualify.js'
+export {
+  approveLeadReview,
+  buildApprovedCrmPayload,
+  getEngineReviewLead,
+  hashReviewSnapshot,
+  listEngineReviewLeads,
+  queueApprovedOpportunitiesForCrm,
+  queueApprovedOpportunityForCrm,
+  rejectLeadReview,
+  saveLeadReview,
+  type EngineReviewLead,
+  type EngineReviewLeadDetail,
+  type LeadReviewStatus,
+  type QueueResult,
+  type SaveLeadReviewInput,
+} from './hht-engine/review.js'
 export { AttioClient, AttioError, attioClientFromEnv } from './attio/client.js'
 export { setupAttioLists, plannedSetupReport } from './attio/setup.js'
 export { syncTargets, listSourceKeys } from './attio/sync.js'

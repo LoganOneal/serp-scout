@@ -1,0 +1,17 @@
+# HHT_TEMPLATE_PLACEHOLDER — replace all [[PLACEHOLDER ...]] copy before preflight.
+# Available variables: {{publisherName}}, {{contactName}}, {{articleTitle}}, {{articleUrl}},
+# {{rankingKeyword}}, {{serpPosition}}, {{city}}, {{state}}, {{targetHhtUrl}},
+# {{secondaryHhtUrl}}, {{insertionSuggestion}}, {{guestPostRequirements}}.
+# Empty fallback: every missing variable renders as an empty string.
+Subject: [[PLACEHOLDER insertion subject for {{publisherName}}]]
+
+[[PLACEHOLDER link-insertion email body.
+Contact: {{contactName}}
+Publisher: {{publisherName}}
+Article: {{articleTitle}} — {{articleUrl}}
+Ranking: {{rankingKeyword}} at {{serpPosition}}
+Location: {{city}}, {{state}}
+Primary HHT target: {{targetHhtUrl}}
+Secondary HHT target: {{secondaryHhtUrl}}
+Suggested section: {{insertionSuggestion}}
+Guest-post requirements, if any: {{guestPostRequirements}}]]

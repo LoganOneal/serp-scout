@@ -1,0 +1,71 @@
+seeds:
+  - hotels with hot tubs
+  - romantic hotels with hot tubs
+  - hotels with jacuzzi rooms
+
+geo_templates:
+  - hotels with hot tubs in {city}
+  - romantic hotels with hot tubs in {city} {state}
+
+competitors:
+  - tubhotels.com
+  - cozycozy.com
+
+block_lists:
+  jobs: [jobs, hiring, salary, career]
+  sales_repair: ["for sale", repair, installation, installers, "buy hot tub"]
+  parts: [parts, "filter cartridge", "replacement cover"]
+  brands: ["hot spring spas", "jacuzzi brand"]
+  adult: [xxx, porn, escort]
+  outside_geo: [uk, london, toronto, sydney]
+
+otas: [booking.com, expedia.com, hotels.com, tripadvisor.com, kayak.com, agoda.com]
+hotel_chains: [marriott.com, hilton.com, hyatt.com, ihg.com]
+forums: [reddit.com, pinterest.com, facebook.com, quora.com, x.com, twitter.com]
+marketplaces: [amazon.com, ebay.com]
+search_engines: [google.com, bing.com, duckduckgo.com]
+
+weights:
+  cluster_yield: 100
+  relevance: 40
+  footprint: 30
+  source_yield: 25
+  novelty: 20
+  cost: 10
+  volume: 1
+
+explore_share: 0.2
+low_yield_domain_threshold: 1
+max_serp_depth: 100
+band_2_min_new_domains: 1
+band_3_min_new_domains: 1
+expansion_depth_cap: 4
+daily_keyword_cap: 200
+relevance_low: 0.35
+relevance_high: 0.72
+near_duplicate_similarity: 0.92
+semrush_related_keywords: false
+low_credits_units: 500
+ranking_reverify_days: 14
+contact_cooldown_days: 90
+decline_cooldown_days: 180
+link_farm_outbound_links: 15
+gads_rate_limit_notify_hours: 6
+crm_outage_notify_minutes: 60
+reminder_hours: 24
+
+# Runtime limits. null means the account balance is the Semrush limit.
+batch_wall_clock_minutes: 20
+semrush_unit_cap: null
+google_ads_call_cap: 100
+google_ads_geo_target_id: 2840
+google_ads_language_id: 1000
+llm_task_export_cap: 100
+guest_post_topic_default_count: 3
+guest_post_topic_max_chars: 120
+guest_post_fit_line_max_chars: 240
+guest_post_subject_line_max_chars: 120
+
+# CRM delivery is intentionally disabled. Payloads accumulate in
+# hht_engine.crm_outbox until a later CRM integration phase.
+crm_enabled: false

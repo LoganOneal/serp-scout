@@ -51,6 +51,7 @@ export interface HhtPxPageFilters {
   competitor?: string
   outreach?: HhtPxOutreachStatus
   prospectableOnly?: boolean
+  lane?: 'primary' | 'paid_outreach' | 'needs_review' | 'earned_partnership' | 'excluded' | 'all'
   sort?: string
   direction?: 'asc' | 'desc'
 }
@@ -89,6 +90,9 @@ const PAGE_SORT = {
   position: hhtPxPageKeywordMatches.position,
   volume: matchVolume,
   keyword: hhtPxKeywords.keyword,
+  added: hhtPxProspectPages.createdAt,
+  editorial: hhtPxProspectPages.editorialScore,
+  feasibility: hhtPxProspectPages.feasibilityScore,
 }
 
 const DOMAIN_SORT = {
@@ -136,6 +140,7 @@ export function parseHhtPxPageFilters(params: Record<string, string | undefined>
     competitor: params['competitor'] || undefined,
     outreach: outreach && isHhtPxOutreachStatus(outreach) ? outreach : undefined,
     prospectableOnly: params['prospectable'] !== '0',
+    lane: pageLane(params['lane']),
     sort: params['sort'] && params['sort'] in PAGE_SORT ? params['sort'] : 'score',
     direction: params['direction'] === 'asc' ? 'asc' : 'desc',
   }
@@ -151,6 +156,13 @@ export function parseHhtPxDomainFilters(params: Record<string, string | undefine
     sort: params['sort'] && params['sort'] in DOMAIN_SORT ? params['sort'] : 'score',
     direction: params['direction'] === 'asc' ? 'asc' : 'desc',
   }
+}
+
+function pageLane(value: string | undefined): HhtPxPageFilters['lane'] {
+  if (value === 'all' || value === 'paid_outreach' || value === 'needs_review' || value === 'earned_partnership' || value === 'excluded' || value === 'primary') {
+    return value
+  }
+  return 'primary'
 }
 
 function num(value: string | undefined): number | undefined {
@@ -287,6 +299,11 @@ export async function listHhtPxPages(database: Database, filters: HhtPxPageFilte
   if (filters.competitor) where.push(eq(hhtPxProspectPages.competitorStrength, filters.competitor as 'none'))
   if (filters.outreach) where.push(eq(hhtPxProspectPages.outreachStatus, filters.outreach))
   if (filters.prospectableOnly) where.push(eq(hhtPxProspectPages.isProspectable, true))
+  if (filters.lane === 'paid_outreach' || filters.lane === 'needs_review' || filters.lane === 'earned_partnership' || filters.lane === 'excluded') {
+    where.push(eq(hhtPxProspectPages.publisherLane, filters.lane))
+  } else if (filters.lane !== 'all') {
+    where.push(sql`${hhtPxProspectPages.publisherLane} is null or ${hhtPxProspectPages.publisherLane} in ('paid_outreach', 'needs_review')`)
+  }
   const sort = sortCol(PAGE_SORT, filters.sort, 'score')
   const rows = await database
     .select({
@@ -314,6 +331,18 @@ export async function listHhtPxPages(database: Database, filters: HhtPxPageFilte
       outreachStatus: hhtPxProspectPages.outreachStatus,
       whyLink: hhtPxProspectPages.whyLink,
       isProspectable: hhtPxProspectPages.isProspectable,
+      addedAt: hhtPxProspectPages.createdAt,
+      lane: hhtPxProspectPages.publisherLane,
+      qualification: hhtPxProspectPages.qualification,
+      qualificationReason: hhtPxProspectPages.qualificationReason,
+      editorialScore: hhtPxProspectPages.editorialScore,
+      feasibilityScore: hhtPxProspectPages.feasibilityScore,
+      insertionLocation: hhtPxProspectPages.insertionLocation,
+      readerBenefit: hhtPxProspectPages.readerBenefit,
+      evidenceConfidence: hhtPxProspectPages.evidenceConfidence,
+      scoreDetail: hhtPxProspectPages.scoreDetail,
+      contactUrl: hhtPxProspectDomains.contactUrl,
+      publisherReason: hhtPxProspectDomains.publisherReason,
     })
     .from(hhtPxPageKeywordMatches)
     .innerJoin(hhtPxProspectPages, eq(hhtPxProspectPages.id, hhtPxPageKeywordMatches.pageId))

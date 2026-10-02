@@ -361,7 +361,7 @@ export const HHT_OPP_FIXTURE_CATALOG: Array<{ needles: string[]; hits: SearchHit
   },
 ]
 
-export function fixtureHitsForQuery(query: string, limit = HHT_OPP_DISCOVERY_DEFAULTS.hitsPerQuery): SearchHit[] {
+export function fixtureHitsForQuery(query: string, limit: number = HHT_OPP_DISCOVERY_DEFAULTS.hitsPerQuery): SearchHit[] {
   const lower = query.toLowerCase()
   const matched: SearchHit[] = []
   const seen = new Set<string>()
@@ -381,7 +381,7 @@ export class FixtureHhtOppSearchProvider implements SearchProvider {
   readonly id = 'hht-opp-fixture'
   readonly live = false
 
-  async search(query: string, limit = HHT_OPP_DISCOVERY_DEFAULTS.hitsPerQuery): Promise<SearchHit[]> {
+  async search(query: string, limit: number = HHT_OPP_DISCOVERY_DEFAULTS.hitsPerQuery): Promise<SearchHit[]> {
     return fixtureHitsForQuery(query, limit)
   }
   async searchSite(domain: string, query: string, limit?: number): Promise<SearchHit[]> {

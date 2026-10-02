@@ -64,10 +64,6 @@ export function encodeValue(type: AttioAttributeType | 'email' | 'name' | 'domai
       return { currency_value: Number(value), currency_code: 'USD' }
     case 'number':
       return Number(value)
-    case 'record-reference':
-    case 'record':
-      if (typeof value === 'string') return { target_object: 'people', target_record_id: value }
-      return value
     case 'domain':
       return String(value)
     case 'email':

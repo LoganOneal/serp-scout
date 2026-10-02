@@ -9,7 +9,7 @@ export const hhtOppDiscovery = task({
     logger.info('HHT Opportunity Engine discovery starting', { runId: payload.runId })
     try {
       const result = await executeHhtOppDiscoveryRun(db(), payload.runId)
-      logger.info('HHT Opportunity Engine discovery finished', result)
+      logger.info('HHT Opportunity Engine discovery finished', { ...result })
       return result
     } catch (error) {
       const message = error instanceof Error ? error.message : String(error)

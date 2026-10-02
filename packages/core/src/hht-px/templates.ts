@@ -558,6 +558,67 @@ const NATIONAL: HhtPxKeywordTemplateSeed[] = [
     'hot tub weekend getaway',
     'romantic hot tub getaway',
   ], false),
+  ...group('national_editorial', 'us_romantic_getaways', 'very_high', 'very_high', [
+    'best romantic getaways in the us',
+    'best romantic weekend getaways in the united states',
+    'best romantic weekend getaways in the us',
+  ], false),
+  ...group('national_editorial', 'us_couples_getaways', 'very_high', 'very_high', [
+    'best couples getaways in the us',
+    'best couples weekend getaways',
+    'best weekend getaways for couples',
+  ], false),
+  ...group('national_editorial', 'us_honeymoon', 'high', 'very_high', [
+    'best honeymoon destinations in the us',
+    'best honeymoon spots in the united states',
+    'best us honeymoon destinations',
+  ], false),
+  ...group('national_editorial', 'us_anniversary', 'high', 'very_high', [
+    'best anniversary getaways in the us',
+    'best anniversary trip ideas',
+    'best anniversary weekend getaways',
+  ], false),
+  ...group('national_editorial', 'us_babymoon', 'high', 'very_high', [
+    'best babymoon destinations',
+    'best babymoon hotels in the us',
+    'babymoon getaway ideas',
+  ], false),
+  ...group('national_editorial', 'us_spa_getaways', 'high', 'high', [
+    'best spa weekend getaways',
+    'best couples spa getaways',
+    'best romantic spa getaways',
+  ], false),
+  ...group('national_editorial', 'soaking_tubs_national', 'high', 'very_high', [
+    'hotels with soaking tubs',
+    'best hotels with soaking tubs',
+    'hotels with two person tubs',
+    'hotels with deep soaking tubs',
+  ], false),
+  ...group('national_editorial', 'fireplace_national', 'high', 'very_high', [
+    'hotels with fireplaces in the room',
+    'best hotels with fireplaces',
+    'romantic hotels with fireplaces',
+  ], false),
+  ...group('national_editorial', 'cabin_national', 'high', 'high', [
+    'best romantic cabins with hot tubs',
+    'romantic cabin getaways',
+    'best cabins for couples',
+  ], false),
+  ...group('national_editorial', 'proposal_national', 'high', 'very_high', [
+    'romantic proposal getaway ideas',
+    'best places for a proposal weekend',
+    'weekend getaway proposal ideas',
+  ], false),
+  ...group('national_editorial', 'bnb_national', 'high', 'very_high', [
+    'best romantic bed and breakfasts',
+    'best bed and breakfasts with hot tubs',
+    'most romantic bed and breakfasts',
+  ], false),
+  ...group('national_editorial', 'staycation_national', 'high', 'very_high', [
+    'best romantic staycations',
+    'best couples staycation ideas',
+    'romantic staycation ideas',
+  ], false),
 ]
 
 const NEAR: HhtPxKeywordTemplateSeed[] = group(
@@ -587,6 +648,22 @@ export const HHT_PX_KEYWORD_IDEA_SEEDS = [
   'honeymoon hotels',
   'unique hotels',
   'hotel suites',
+  'romantic weekend getaways',
+  'anniversary getaways',
+  'babymoon destinations',
+  'hotels with fireplaces',
+  'hotels with soaking tubs',
+  'cabins with hot tubs',
+  'romantic bed and breakfasts',
+  'adults only resorts',
+  'spa weekend getaways',
+  'winter romantic getaways',
+  'proposal getaway',
+  'romantic cabins',
+  'couples spa getaways',
+  'honeymoon destinations',
+  'weekend getaways for couples',
+  'best places for a romantic weekend',
 ] as const
 
 /** Deterministic master keyword library. Geographic templates still contain `[GEO]`. */

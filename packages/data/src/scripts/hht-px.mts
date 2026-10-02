@@ -33,6 +33,8 @@ import {
   previewHhtPxSerpCalls,
   prioritizeHhtPxKeywords,
   reclassifyHhtPxSerpResults,
+  insertHhtPxDiscoverySeeds,
+  qualifyHhtPxPublishers,
   seedHhtPxLibrary,
   type HhtPxExportKind,
   type HhtPxMcpDomainHarvest,
@@ -169,6 +171,14 @@ async function main(): Promise<void> {
     }
     case 'ideas': {
       console.log(JSON.stringify(await expandHhtPxKeywordIdeas(database), null, 2))
+      break
+    }
+    case 'discovery-seeds': {
+      console.log(JSON.stringify(await insertHhtPxDiscoverySeeds(database), null, 2))
+      break
+    }
+    case 'qualify': {
+      console.log(JSON.stringify(await qualifyHhtPxPublishers(database, { limit: Number(opt('limit') ?? 160) }), null, 2))
       break
     }
     case 'export': {

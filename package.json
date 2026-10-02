@@ -55,6 +55,8 @@
     "hht:opp": "tsx --conditions=react-server packages/data/src/scripts/hht-opp.mts",
     "hht:opp:schema": "tsx --conditions=react-server packages/data/src/scripts/apply-hht-opp.mts",
     "hht:px": "tsx --conditions=react-server packages/data/src/scripts/hht-px.mts",
+    "engine": "tsx --conditions=react-server packages/data/src/scripts/hht-engine.mts",
+    "hht:engine:sync-semrush": "tsx packages/data/src/scripts/hht-engine-sync-semrush.mts",
     "hht:px:schema": "tsx --conditions=react-server packages/data/src/scripts/apply-hht-px.mts",
     "attio:setup": "tsx --conditions=react-server packages/data/src/scripts/attio.mts setup",
     "attio:sync": "tsx --conditions=react-server packages/data/src/scripts/attio.mts sync",

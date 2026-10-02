@@ -9,7 +9,7 @@ export interface FeasibilityFlags {
   physicalOps: boolean
 }
 
-export interface FeasibilityResult {
+export interface OmFeasibilityResult {
   /** 1 = weekend utility … 5 = capital-intensive / regulated / marketplace. */
   complexity: number
   flags: FeasibilityFlags
@@ -20,7 +20,7 @@ export function estimateBuildFeasibility(args: {
   archetype: string | null
   industry: string | null
   monetization: string | null
-}): FeasibilityResult {
+}): OmFeasibilityResult {
   const blob = `${args.keywords.join(' ')} ${args.industry ?? ''} ${args.archetype ?? ''}`.toLowerCase()
   const flags: FeasibilityFlags = {
     regulated: /(bank|fintech|lending|insurance|pharmac|hipaa|fda)/.test(blob),

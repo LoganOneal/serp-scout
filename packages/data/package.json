@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.117.1",
+    "@huggingface/transformers": "^4.3.0",
     "@rnr/core": "workspace:*",
     "@rnr/supply-feed": "workspace:*",
     "@vercel/blob": "^2.6.1",

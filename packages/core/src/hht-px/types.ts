@@ -148,8 +148,26 @@ export const HHT_PX_LINKABILITY_SCORE: Record<HhtPxLinkability, number> = {
   low: 30,
 }
 
-export const HHT_PX_KEYWORD_SOURCES = ['template', 'google_keyword_ideas'] as const
+export const HHT_PX_KEYWORD_SOURCES = ['template', 'google_keyword_ideas', 'discovery_seed'] as const
 export type HhtPxKeywordSource = (typeof HHT_PX_KEYWORD_SOURCES)[number]
+
+/** Paid placement queue, earned tourism partnership, hard exclusion, or not yet inspected. */
+export const HHT_PX_PUBLISHER_LANES = ['paid_outreach', 'earned_partnership', 'excluded', 'needs_review'] as const
+export type HhtPxPublisherLane = (typeof HHT_PX_PUBLISHER_LANES)[number]
+
+export const HHT_PX_EVIDENCE_STATES = ['observed', 'inferred', 'unknown'] as const
+export type HhtPxEvidenceState = (typeof HHT_PX_EVIDENCE_STATES)[number]
+
+/** outreach_ready is the only status that enters the approach list. */
+export const HHT_PX_QUALIFICATIONS = ['outreach_ready', 'downgraded', 'excluded', 'needs_review', 'unreviewed'] as const
+export type HhtPxQualification = (typeof HHT_PX_QUALIFICATIONS)[number]
+
+export const HHT_PX_PUBLISHER_LANE_LABELS: Record<HhtPxPublisherLane, string> = {
+  paid_outreach: 'Paid outreach',
+  earned_partnership: 'Earned partnership',
+  excluded: 'Excluded',
+  needs_review: 'Needs review',
+}
 
 export const HHT_PX_SERP_STATUSES = [
   'unchecked',

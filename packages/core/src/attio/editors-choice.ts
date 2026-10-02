@@ -2,7 +2,7 @@ import { canonicalPageUrl, nameKey, normalizeEmail, officialCompanyDomain } from
 import { editorChoiceSourceKey, sourceRef } from './source-keys.js'
 import type { AttioSourceTarget } from './types.js'
 
-export const HHT_SITE_ORIGIN = 'https://hotelhottubs.com'
+const HHT_SITE_ORIGIN = 'https://hotelhottubs.com'
 
 export interface EditorsChoiceMembership {
   year?: number

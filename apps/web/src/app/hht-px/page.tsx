@@ -2,6 +2,7 @@ import Link from 'next/link'
 import {
   HHT_PX_CLUSTER_LABELS,
   HHT_PX_PAGE_TYPE_LABELS,
+  HHT_PX_PUBLISHER_LANE_LABELS,
   HHT_PX_STAGES,
   hhtPxArticleLabel,
   hhtPxBadgeGroup,
@@ -43,6 +44,13 @@ function pct(value: number | null | undefined): string {
 
 function score(value: number | null | undefined): string {
   return value == null ? NULL_DISPLAY : value.toFixed(1)
+}
+
+function addedOn(value: Date | string | null | undefined): string {
+  if (!value) return NULL_DISPLAY
+  const date = value instanceof Date ? value : new Date(value)
+  if (Number.isNaN(date.getTime())) return NULL_DISPLAY
+  return date.toISOString().slice(0, 10)
 }
 
 function flatten(params: SearchParams): Record<string, string | undefined> {
@@ -431,6 +439,17 @@ function Pages({
             <option value="0">All classified pages</option>
           </select>
         </label>
+        <label>
+          List
+          <select name="lane" defaultValue={params['lane'] ?? 'primary'}>
+            <option value="primary">Paid and needs review</option>
+            <option value="paid_outreach">Paid outreach</option>
+            <option value="needs_review">Needs review</option>
+            <option value="earned_partnership">Earned partnership</option>
+            <option value="excluded">Excluded</option>
+            <option value="all">All lanes</option>
+          </select>
+        </label>
         <button type="submit">Filter</button>
       </form>
       <ArticleHits
@@ -465,7 +484,7 @@ function ArticleHits({
       <div className="hht-bl-section-head">
         <div>
           <h2>{heading ?? 'Articles'}</h2>
-          <p>{description ?? 'One row per keyword and the editorial URL that ranks for it. Volume is US destination demand for that keyword, not a synonym sum.'}</p>
+          <p>{description ?? 'One row per keyword and the editorial URL that ranks for it. Added is the date the candidate first entered this list. Hotels, major publications, and tourism boards are kept off the paid list.'}</p>
         </div>
         {moreHref ? <Link href={moreHref}>View all</Link> : null}
       </div>
@@ -509,6 +528,12 @@ function ArticleHits({
                 )}
                 <th>Geo</th>
                 <th>Type</th>
+                {sortable ? (
+                  <SortHead view="pages" params={params} column="added">Added</SortHead>
+                ) : (
+                  <th>Added</th>
+                )}
+                <th>Lane</th>
               </tr>
             </thead>
             <tbody>
@@ -543,6 +568,8 @@ function ArticleHits({
                       {HHT_PX_PAGE_TYPE_LABELS[row.pageType]}
                     </span>
                   </td>
+                  <td>{addedOn(row.addedAt)}</td>
+                  <td>{row.lane ? HHT_PX_PUBLISHER_LANE_LABELS[row.lane] : 'Unreviewed'}</td>
                 </tr>
               ))}
             </tbody>

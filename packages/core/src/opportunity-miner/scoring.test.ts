@@ -4,10 +4,10 @@ import { extractConcepts } from './concepts.js'
 import { underwrite } from './economics.js'
 import { expansionPriorityScore } from './expansion.js'
 import { evaluateGarbage } from './garbage.js'
-import { inferBuyerType, inferWillingnessToPay, scoreMarket, type ScoreInput } from './scoring.js'
+import { inferBuyerType, inferWillingnessToPay, scoreMarket, type OmScoreInput } from './scoring.js'
 import { TARGET_CAC_SHARE } from './economics.js'
 
-function baseScore(over: Partial<ScoreInput> & Pick<ScoreInput, 'garbage'>): ScoreInput {
+function baseScore(over: Partial<OmScoreInput> & Pick<OmScoreInput, 'garbage'>): OmScoreInput {
   return {
     adjustedVolume: 10_000,
     weightedCpc: 3,

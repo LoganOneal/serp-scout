@@ -1,0 +1,20 @@
+# HHT_TEMPLATE_PLACEHOLDER — replace all [[PLACEHOLDER ...]] copy before preflight.
+# Core variables: {{publisherName}}, {{contactName}}, {{articleTitle}}, {{articleUrl}},
+# {{rankingKeyword}}, {{serpPosition}}, {{city}}, {{state}}, {{targetHhtUrl}},
+# {{secondaryHhtUrl}}, {{insertionSuggestion}}, {{guestPostRequirements}}.
+# Personalized guest-post variables: {{pitchTopics}}, {{fitLine}}, {{subjectLine}}.
+# Structured guideline variables: {{submissionMethod}}, {{submissionUrl}},
+# {{pitchTopicCount}}, {{pitchContentStage}}, {{requiredSubjectLineFormat}},
+# {{acceptedTopics}}, {{excludedTopics}}, {{wordCount}}, {{linkPolicy}},
+# {{samplesRequired}}, {{bioRequired}}, {{aiContentPolicy}}, {{paidOrSponsored}},
+# {{guidelineEvidence}}.
+# Empty fallback: every missing variable renders as an empty string. No subject is rendered.
+# The rendered body must remain under 1,000 characters.
+[[PLACEHOLDER guest-post contact-form body.
+{{contactName}} / {{publisherName}}
+{{articleTitle}} {{articleUrl}}
+{{rankingKeyword}} {{serpPosition}}
+{{city}} {{state}}
+{{targetHhtUrl}} {{secondaryHhtUrl}}
+{{insertionSuggestion}}
+{{guestPostRequirements}}]]

@@ -52,7 +52,7 @@ class SemrushHhtOppSearchProvider implements SearchProvider {
 
   constructor(private readonly client: SemrushClient) {}
 
-  async search(query: string, limit = HHT_OPP_DISCOVERY_DEFAULTS.hitsPerQuery): Promise<SearchHit[]> {
+  async search(query: string, limit: number = HHT_OPP_DISCOVERY_DEFAULTS.hitsPerQuery): Promise<SearchHit[]> {
     const phrase = semrushPhrase(query)
     if (!phrase) return []
     const rows = await this.client.keywordSerp(phrase, { database: 'us', limit })
@@ -86,7 +86,7 @@ class DataForSeoHhtOppSearchProvider implements SearchProvider {
 
   constructor(private readonly client: DataForSeoClient) {}
 
-  async search(query: string, limit = HHT_OPP_DISCOVERY_DEFAULTS.hitsPerQuery): Promise<SearchHit[]> {
+  async search(query: string, limit: number = HHT_OPP_DISCOVERY_DEFAULTS.hitsPerQuery): Promise<SearchHit[]> {
     const snapshot = await fetchOrganicSerp(this.client, {
       keyword: query,
       locationCode: US_LOCATION_CODE,
