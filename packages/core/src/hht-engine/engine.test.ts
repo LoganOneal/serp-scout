@@ -140,5 +140,6 @@ describe('filters and semrush notices', () => {
     expect(notice).toContain('Cursor MCP connector')
     expect(notice).toContain('Mac logged in and unlocked')
     expect(classifySemrushFailure('ERROR 132 :: NOT ENOUGH API UNITS')).toBe('exhausted')
+    expect(classifySemrushFailure('does not have enough API units')).toBe('exhausted')
   })
 })

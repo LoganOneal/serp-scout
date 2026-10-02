@@ -80,13 +80,8 @@ export class SemrushMcpClient {
       params: { name: 'execute_report', arguments: { report, params } },
     })
     const raw = toolText(message)
-    if (message?.result?.isError) throw new SemrushMcpError(raw || 'Semrush MCP tool error')
-    let payload: { data?: unknown; metadata?: { usage?: { api_units?: number } } } | null = null
-    try {
-      payload = JSON.parse(raw) as { data?: unknown; metadata?: { usage?: { api_units?: number } } }
-    } catch {
-      if (/ERROR\s+\d+/i.test(raw)) throw new SemrushMcpError(raw.slice(0, 400))
-    }
+    throwIfSemrushFailed(message, raw)
+    const payload = reportPayload(raw)
     return {
       data: payload?.data ?? raw,
       units: payload?.metadata?.usage?.api_units ?? null,
@@ -104,7 +99,7 @@ export class SemrushMcpClient {
       params: { name: tool, arguments: {} },
     })
     const raw = toolText(message)
-    if (message?.result?.isError) throw new SemrushMcpError(raw || 'Semrush MCP tool error')
+    throwIfSemrushFailed(message, raw)
     try {
       return JSON.parse(raw)
     } catch {
@@ -127,7 +122,7 @@ export class SemrushMcpClient {
     await this.rpc({ jsonrpc: '2.0', method: 'notifications/initialized' })
   }
 
-  private async rpc(body: Record<string, unknown>): Promise<{ result?: { content?: Array<{ text?: string }>; isError?: boolean } } | null> {
+  private async rpc(body: Record<string, unknown>): Promise<SemrushRpcMessage | null> {
     const headers: Record<string, string> = {
       'Content-Type': 'application/json',
       Accept: 'application/json, text/event-stream',
@@ -145,10 +140,40 @@ export class SemrushMcpClient {
     const jsonText = text.includes('\ndata:') || text.startsWith('data:')
       ? text.split('\n').filter((line) => line.startsWith('data:')).at(-1)!.slice(5).trim()
       : text
-    return JSON.parse(jsonText) as { result?: { content?: Array<{ text?: string }>; isError?: boolean } }
+    return JSON.parse(jsonText) as SemrushRpcMessage
   }
 }
 
-function toolText(message: { result?: { content?: Array<{ text?: string }> } } | null): string {
+interface SemrushRpcMessage {
+  error?: { message?: string }
+  result?: { content?: Array<{ text?: string }>; isError?: boolean }
+}
+
+interface SemrushReportPayload {
+  data?: unknown
+  metadata?: { usage?: { api_units?: number } }
+}
+
+function throwIfSemrushFailed(message: SemrushRpcMessage | null, raw: string): void {
+  if (message?.error?.message) throw new SemrushMcpError(message.error.message)
+  if (message?.result?.isError) throw new SemrushMcpError(raw || 'Semrush MCP tool error')
+}
+
+function reportPayload(raw: string): SemrushReportPayload | null {
+  if (!raw) return null
+  try {
+    const parsed = JSON.parse(raw) as SemrushReportPayload & { code?: string; message?: string }
+    if (typeof parsed.code === 'string' && typeof parsed.message === 'string' && !('data' in parsed)) {
+      throw new SemrushMcpError(parsed.message)
+    }
+    return parsed
+  } catch (error) {
+    if (error instanceof SemrushMcpError) throw error
+    if (/ERROR\s+\d+/i.test(raw)) throw new SemrushMcpError(raw.slice(0, 400))
+    return null
+  }
+}
+
+function toolText(message: SemrushRpcMessage | null): string {
   return message?.result?.content?.[0]?.text ?? ''
 }

@@ -28,7 +28,7 @@ export function parseOrganicSerp(data: unknown, offset = 0): SerpRow[] {
   return rows
 }
 
-/** Keyword column from a domain_organic export. SERP rows stay in parseOrganicSerp. */
+/** Keyword column from a resource_organic export. SERP rows stay in parseOrganicSerp. */
 export function parseRankedKeywords(data: unknown): string[] {
   if (Array.isArray(data)) {
     return data.flatMap((row) => {

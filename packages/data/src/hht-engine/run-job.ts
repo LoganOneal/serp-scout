@@ -233,8 +233,8 @@ async function expandSemrush(db: EngineDatabase, job: { id: number; payload: Rec
   if (!domain) return
   const source = job.payload['source'] === 'competitor_keyword' ? 'competitor_keyword' : 'publisher_keyword'
   const client = await semrush(db)
-  const result = await client.executeReport('domain_organic', { domain, database: 'us', display_limit: 20 })
-  await recordSemrushUnits(db, 'domain_organic', result.units, job.id)
+  const result = await client.executeReport('resource_organic', { target: domain, database: 'us', display_limit: 20 })
+  await recordSemrushUnits(db, 'resource_organic', result.units, job.id)
   const depth = source === 'publisher_keyword' ? 0 : 1
   for (const keyword of parseRankedKeywords(result.data)) {
     await insertKeyword(db, { keyword, sourceType: source, sourceDomain: domain, depth })

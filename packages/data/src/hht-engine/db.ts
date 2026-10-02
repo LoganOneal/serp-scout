@@ -7,8 +7,7 @@ export type EngineDatabase = ReturnType<typeof drizzle<typeof engineSchema>>
 let cached: { db: EngineDatabase; sql: postgres.Sql } | null = null
 
 export function getEngineDatabase(env: NodeJS.ProcessEnv = process.env): EngineDatabase {
-  const rawUrl = env['DATABASE_URL']?.trim()
-  if (!rawUrl) throw new Error('DATABASE_URL is not set')
+  const rawUrl = resolveEngineDatabaseUrl(env['DATABASE_URL'], null)
   const url = normalizePostgresUrl(rawUrl)
   if (!cached) {
     const sql = postgres(url, { max: 5 })
@@ -36,10 +35,32 @@ export async function closeEngineDatabase(): Promise<void> {
 }
 
 /**
+ * A Cloud Environment injects DATABASE_URL directly. A generated `.env` must
+ * not replace that value: an unquoted `#` in the password cuts the host off
+ * the file while the injected value is still complete.
+ *
  * Local passwords may contain URL-reserved characters. Preserve already
  * percent-encoded values and encode raw user-info characters before postgres-js
  * parses the connection string.
  */
+export function resolveEngineDatabaseUrl(injected: string | undefined, fileValue: string | null): string {
+  const fromEnv = injected?.trim()
+  if (postgresUrlHost(fromEnv)) return fromEnv!
+  const fromFile = fileValue?.trim()
+  if (postgresUrlHost(fromFile)) return fromFile!
+  throw new Error('DATABASE_URL is not set')
+}
+
+export function postgresUrlHost(raw: string | undefined | null): string | null {
+  if (!raw || !/^postgres(?:ql)?:\/\//i.test(raw)) return null
+  const at = raw.lastIndexOf('@')
+  if (at < 0) return null
+  const rest = raw.slice(at + 1)
+  const slash = rest.indexOf('/')
+  const hostPort = (slash === -1 ? rest : rest.slice(0, slash)).trim()
+  return hostPort || null
+}
+
 export function normalizePostgresUrl(raw: string): string {
   if (!/^postgres(?:ql)?:\/\//i.test(raw)) return raw
   const schemeEnd = raw.indexOf('://') + 3

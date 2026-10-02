@@ -2,7 +2,13 @@ export type SemrushCallClass = 'ok' | 'auth' | 'exhausted' | 'rate_limit' | 'ret
 
 export function classifySemrushFailure(message: string): SemrushCallClass {
   const text = message.toLowerCase()
-  if (text.includes('error 132') || text.includes('not enough api units') || text.includes('zero balance')) {
+  if (
+    text.includes('error 132') ||
+    text.includes('not enough api units') ||
+    text.includes('enough api units') ||
+    text.includes('no_api_units') ||
+    text.includes('zero balance')
+  ) {
     return 'exhausted'
   }
   if (text.includes('401') || text.includes('unauthorized') || text.includes('invalid_grant') || text.includes('auth')) {
@@ -25,6 +31,6 @@ export function semrushReplacementNotice(input: {
     `Paused at: ${input.pausedAt}.`,
     `Credits used by this account: ${input.unitsUsed}.`,
     `Queued Semrush jobs waiting: ${input.queuedJobs}.`,
-    'Scraping, drafting, and Supabase outbox stages are still running.',
+    'The run is paused until Semrush is working again. Queued Semrush jobs stay in place.',
   ].join(' ')
 }
