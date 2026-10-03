@@ -1417,6 +1417,8 @@ export async function seedFrontier(db: EngineDatabase): Promise<void> {
       })
     }
   }
+  // A drained queue has no SERP left to settle, so the saturation check also runs here.
+  if (state.semrush !== 'EXHAUSTED' && state.semrush !== 'AUTH_FAILURE') await reseedIfSaturated(db)
 }
 
 export async function remindIfDue(db: EngineDatabase): Promise<void> {

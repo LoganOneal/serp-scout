@@ -11,6 +11,7 @@ import {
   completeJob,
   enqueueJob,
   failJob,
+  loadCredential,
   setGadsState,
   setSemrushState,
 } from './jobs.js'
@@ -82,7 +83,10 @@ export async function runBatch(
         break
       }
       const job = await claimNextJob(db, owner)
-      if (!job) break
+      if (!job) {
+        if (await semrushPaused(db)) status = 'semrush_paused'
+        break
+      }
       await heartbeatRunLock(db, owner)
       try {
         await runEngineJob(db, job)
@@ -206,6 +210,81 @@ export async function releaseRunLock(db: EngineDatabase, owner: string): Promise
     DELETE FROM hht_engine.run_locks
      WHERE name = 'hourly-engine' AND owner = ${owner}
   `)
+}
+
+async function semrushPaused(db: EngineDatabase): Promise<boolean> {
+  const [state] = await db.select().from(hhtEngineSystemState).where(eq(hhtEngineSystemState.id, 1))
+  return state?.semrushState === 'AUTH_FAILURE' || state?.semrushState === 'EXHAUSTED'
+}
+
+export interface EngineStatus {
+  shouldRun: boolean
+  reason: string
+  semrushState: string
+  semrushPausedAt: string | null
+  newerSemrushSync: boolean
+  gadsState: string
+  cheapJobsReady: number
+  semrushJobsReady: number
+  blockedOnSemrush: number
+  waitingOnLlm: number
+  lockHeld: boolean
+}
+
+/**
+ * Reads only the database and vault so a scheduled run can exit before any
+ * paid call when there is nothing it could do.
+ */
+export async function engineStatus(db: EngineDatabase): Promise<EngineStatus> {
+  const [state] = await db.select().from(hhtEngineSystemState).where(eq(hhtEngineSystemState.id, 1))
+  const semrushState = state?.semrushState ?? 'RUNNING'
+  const pausedAt = state?.semrushPausedAt ?? null
+  const credential = await loadCredential(db)
+  const newerSemrushSync = Boolean(
+    pausedAt && credential?.cursorUpdatedAtMs && credential.cursorUpdatedAtMs > pausedAt.getTime(),
+  )
+  const counts = await db.execute<{ cheap: string; semrush: string; blocked: string; llm: string; locked: string }>(sql`
+    SELECT
+      count(*) FILTER (WHERE status = 'pending' AND run_after <= now()
+        AND type NOT IN ('FETCH_SERP_BAND', 'EXPAND_KEYWORDS_SEMRUSH', 'FETCH_DOMAIN_METRICS', 'REVERIFY_RANKING'))::text AS cheap,
+      count(*) FILTER (WHERE status = 'pending' AND run_after <= now()
+        AND type IN ('FETCH_SERP_BAND', 'EXPAND_KEYWORDS_SEMRUSH', 'FETCH_DOMAIN_METRICS', 'REVERIFY_RANKING'))::text AS semrush,
+      count(*) FILTER (WHERE status = 'blocked_on_semrush')::text AS blocked,
+      count(*) FILTER (WHERE status = 'WAITING_ON_LLM')::text AS llm,
+      (SELECT count(*) FROM hht_engine.run_locks
+        WHERE name = 'hourly-engine' AND heartbeat_at >= now() - interval '30 minutes')::text AS locked
+    FROM hht_engine.jobs
+  `)
+  const row = (counts as unknown as Array<{ cheap: string; semrush: string; blocked: string; llm: string; locked: string }>)[0]
+  const cheapJobsReady = Number(row?.cheap ?? 0)
+  const lockHeld = Number(row?.locked ?? 0) > 0
+  const paused = semrushState === 'AUTH_FAILURE' || semrushState === 'EXHAUSTED'
+  let shouldRun = true
+  let reason = 'semrush_running'
+  if (lockHeld) {
+    shouldRun = false
+    reason = 'another_batch_running'
+  } else if (paused && newerSemrushSync) {
+    reason = 'semrush_resynced'
+  } else if (paused && cheapJobsReady > 0) {
+    reason = 'non_semrush_work_ready'
+  } else if (paused) {
+    shouldRun = false
+    reason = `semrush_${semrushState.toLowerCase()}_waiting_for_sync`
+  }
+  return {
+    shouldRun,
+    reason,
+    semrushState,
+    semrushPausedAt: pausedAt?.toISOString() ?? null,
+    newerSemrushSync,
+    gadsState: state?.gadsState ?? 'GADS_RUNNING',
+    cheapJobsReady,
+    semrushJobsReady: Number(row?.semrush ?? 0),
+    blockedOnSemrush: Number(row?.blocked ?? 0),
+    waitingOnLlm: Number(row?.llm ?? 0),
+    lockHeld,
+  }
 }
 
 async function semrushUnits(db: EngineDatabase): Promise<number> {

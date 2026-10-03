@@ -4,7 +4,7 @@ import { resolve } from 'node:path'
 import { config as loadDotenv } from 'dotenv'
 import { closeEngineDatabase, executeEngineSql } from '../hht-engine/db.js'
 import { engineDb } from '../hht-engine/jobs.js'
-import { runBatch } from '../hht-engine/batch.js'
+import { engineStatus, runBatch } from '../hht-engine/batch.js'
 import { ingestLlmAnswers } from '../hht-engine/llm-tasks.js'
 import { runGoogleDesktopOAuth, GOOGLE_ADS_SCOPE } from '../hht-engine/oauth.js'
 import { runPreflight } from '../hht-engine/preflight.js'
@@ -82,6 +82,8 @@ try {
       ['--import', 'tsx', 'packages/data/src/scripts/hht-engine-install-semrush-sync.mts'],
       { stdio: 'inherit', env: process.env },
     )
+  } else if (command === 'status') {
+    console.log(JSON.stringify(await engineStatus(db), null, 2))
   } else if (command === 'run-batch') {
     console.log(JSON.stringify(await runBatch(db), null, 2))
   } else if (command === 'ingest-llm') {
@@ -103,7 +105,7 @@ try {
     }
     if (!result.passed) process.exitCode = 1
   } else {
-    console.error('Usage: pnpm engine <migrate|secrets:load|auth:google-ads|sync:semrush|sync:install|preflight|run-batch|ingest-llm|run-all>')
+    console.error('Usage: pnpm engine <migrate|secrets:load|auth:google-ads|sync:semrush|sync:install|preflight|status|run-batch|ingest-llm|run-all>')
     process.exitCode = 1
   }
 } finally {
