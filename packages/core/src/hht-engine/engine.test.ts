@@ -80,7 +80,21 @@ describe('serp bands', () => {
     const band = bandForDepth(20)
     expect(band).toEqual(SERP_BANDS[1])
     expect(phraseOrganicParams('hotels with hot tubs', band!).display_offset).toBe(20)
-    expect(phraseOrganicParams('hotels with hot tubs', band!).display_limit).toBe(30)
+    expect(phraseOrganicParams('hotels with hot tubs', band!).display_limit).toBe(50)
+  })
+
+  it('sends the last position as display_limit so band 3 is a valid request', () => {
+    const params = phraseOrganicParams('hotels with hot tubs', bandForDepth(50)!)
+    expect(params.display_offset).toBe(50)
+    expect(params.display_limit).toBe(100)
+  })
+
+  it('resumes inside a band that stopped short', () => {
+    const band = bandForDepth(30)!
+    expect(band.band).toBe(2)
+    expect(phraseOrganicParams('hotels with hot tubs', band).display_offset).toBe(30)
+    expect(phraseOrganicParams('hotels with hot tubs', band).display_limit).toBe(50)
+    expect(bandForDepth(100)).toBeNull()
   })
 })
 
@@ -141,5 +155,15 @@ describe('filters and semrush notices', () => {
     expect(notice).toContain('Mac logged in and unlocked')
     expect(classifySemrushFailure('ERROR 132 :: NOT ENOUGH API UNITS')).toBe('exhausted')
     expect(classifySemrushFailure('does not have enough API units')).toBe('exhausted')
+  })
+
+  it('reads Semrush error codes and ignores the random trace id', () => {
+    const offset = '{"code":"internal","message":"get phrase_organic: 400 ERROR 605 :: Invalid display_offset parameter, must be a positive integer number and less then display_limit or it should be skipped\\n","retryable":false,"trace_id":"a07401e59a6f669af0704490326d0be8"}'
+    expect(classifySemrushFailure(offset)).toBe('invalid')
+    expect(classifySemrushFailure('{"code":"internal","message":"get phrase_organic: ERROR 50 :: NOTHING FOUND","trace_id":"52c8324b2892b732c13319320f273153"}')).toBe('empty')
+    expect(classifySemrushFailure('{"code":"internal","message":"record on line 20: wrong number of fields","trace_id":"4010401040104010401040104010aaaa"}')).toBe('retry')
+    expect(classifySemrushFailure('Semrush MCP HTTP 401: unauthorized')).toBe('auth')
+    expect(classifySemrushFailure('Semrush token refresh HTTP 400: {"error":"invalid_grant"}')).toBe('auth')
+    expect(classifySemrushFailure('Semrush MCP HTTP 429: slow down')).toBe('rate_limit')
   })
 })

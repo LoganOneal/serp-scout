@@ -9,12 +9,13 @@ import {
   blockJob,
   claimNextJob,
   completeJob,
+  enqueueJob,
   failJob,
   setGadsState,
   setSemrushState,
 } from './jobs.js'
 import { exportPendingLlmTasks, LlmTaskPendingError } from './llm-tasks.js'
-import { remindIfDue, runEngineJob, seedFrontier, sendNotification, sweepStaleJobs } from './run-job.js'
+import { remindIfDue, runEngineJob, seedFrontier, semrushAuthFailing, sendNotification, sweepStaleJobs } from './run-job.js'
 import {
   hhtEngineGoogleAdsUsage,
   hhtEngineJobs,
@@ -61,6 +62,10 @@ export async function runBatch(
   try {
     await sweepStaleJobs(db)
     await seedFrontier(db)
+    const [state] = await db.select().from(hhtEngineSystemState).where(eq(hhtEngineSystemState.id, 1))
+    if (state?.semrushState === 'AUTH_FAILURE' || state?.semrushState === 'EXHAUSTED') {
+      await enqueueJob(db, { type: 'CHECK_SEMRUSH_HEALTH', idempotencyKey: `semrush-health:${runId}`, payload: {} })
+    }
     while (true) {
       const used = await semrushUnits(db) - baselineSemrush
       const gads = await googleAdsCalls(db) - baselineGads
@@ -89,10 +94,20 @@ export async function runBatch(
           continue
         }
         const message = error instanceof Error ? error.message : String(error)
+        if (error instanceof SemrushMcpError && error.kind === 'invalid') {
+          await failJob(db, job.id, message, job.maxAttempts, job.maxAttempts)
+          continue
+        }
         if (error instanceof SemrushMcpError && (error.kind === 'auth' || error.kind === 'exhausted')) {
+          const [before] = await db.select().from(hhtEngineSystemState).where(eq(hhtEngineSystemState.id, 1))
+          const alreadyPaused = before?.semrushState === 'AUTH_FAILURE' || before?.semrushState === 'EXHAUSTED'
+          if (error.kind === 'auth' && !alreadyPaused && !(await semrushAuthFailing(db))) {
+            await failJob(db, job.id, message, job.attempts, job.maxAttempts)
+            continue
+          }
           const nextState = error.kind === 'auth' ? 'AUTH_FAILURE' : 'EXHAUSTED'
           const changed = await setSemrushState(db, nextState)
-          await blockJob(db, job.id, 'blocked_on_semrush')
+          await blockJob(db, job.id, 'blocked_on_semrush', message)
           if (changed) {
             const [state] = await db.select().from(hhtEngineSystemState).where(eq(hhtEngineSystemState.id, 1))
             const waiting = await db.select().from(hhtEngineJobs).where(eq(hhtEngineJobs.status, 'blocked_on_semrush'))

@@ -329,7 +329,22 @@ async function fetchSerp(db: EngineDatabase, job: { id: number; payload: Record<
   while (true) {
     const band = bandForDepth(scanned)
     if (!band || band.positionEnd > config.engine.maxSerpDepth) break
-    const result = await client.executeReport('phrase_organic', phraseOrganicParams(keyword.keyword, band))
+    let result: Awaited<ReturnType<SemrushMcpClient['executeReport']>>
+    try {
+      result = await client.executeReport('phrase_organic', phraseOrganicParams(keyword.keyword, band))
+    } catch (error) {
+      if (!(error instanceof SemrushMcpError) || error.kind !== 'empty') throw error
+      scanned = config.engine.maxSerpDepth
+      await db.update(hhtEngineKeywords).set({
+        status: 'ACTIVE',
+        maxSerpPositionScanned: scanned,
+        uniqueDomainsSeen: seen,
+        newDomainsDiscovered: articles,
+        insertionCandidates: insertions,
+        lastSerpScanAt: new Date(),
+      }).where(eq(hhtEngineKeywords.id, keywordId))
+      break
+    }
     await recordSemrushUnits(db, 'phrase_organic', result.units, job.id)
     const [scan] = await db.insert(hhtEngineSerpScans).values({
       keywordId,
@@ -1789,6 +1804,17 @@ async function inventory(db: EngineDatabase): Promise<HhtInventoryPage[]> {
     verifiedStayCount: row.verifiedStayCount,
     title: row.title,
   }))
+}
+
+/** A single report error can look like an auth failure; the account pauses only if a report listing also fails auth. */
+export async function semrushAuthFailing(db: EngineDatabase): Promise<boolean> {
+  try {
+    const client = await semrush(db)
+    await client.listReports('domain_overview')
+    return false
+  } catch (error) {
+    return error instanceof SemrushMcpError && error.kind === 'auth'
+  }
 }
 
 async function semrush(db: EngineDatabase): Promise<SemrushMcpClient> {

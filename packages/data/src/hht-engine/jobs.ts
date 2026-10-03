@@ -75,10 +75,15 @@ export async function blockJob(
   db: EngineDatabase,
   id: number,
   status: 'blocked_on_semrush' | 'blocked_on_gads' | 'WAITING_ON_LLM',
+  lastError: string | null = null,
 ): Promise<void> {
   await db.execute(sql`
     UPDATE hht_engine.jobs
-       SET status = ${status}, locked_by = null, heartbeat_at = null, updated_at = now()
+       SET status = ${status},
+           last_error = coalesce(${lastError?.slice(0, 500) ?? null}, last_error),
+           locked_by = null,
+           heartbeat_at = null,
+           updated_at = now()
      WHERE id = ${id}
   `)
 }

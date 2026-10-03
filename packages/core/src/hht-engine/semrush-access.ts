@@ -1,9 +1,18 @@
-export type SemrushCallClass = 'ok' | 'auth' | 'exhausted' | 'rate_limit' | 'retry'
+export type SemrushCallClass = 'ok' | 'auth' | 'exhausted' | 'rate_limit' | 'empty' | 'invalid' | 'retry'
 
+/**
+ * Semrush errors carry a random hex trace_id. Matching digits or words against
+ * the raw text let a trace id containing "401" pause the account, so the id is
+ * removed and only whole words and Semrush ERROR codes count.
+ */
 export function classifySemrushFailure(message: string): SemrushCallClass {
-  const text = message.toLowerCase()
+  const text = message
+    .replace(/"trace_id"\s*:\s*"[^"]*"/gi, '')
+    .replace(/\b[0-9a-f]{16,}\b/gi, '')
+    .toLowerCase()
+  const code = /\berror\s+(\d+)\s*::/.exec(text)?.[1]
   if (
-    text.includes('error 132') ||
+    code === '132' ||
     text.includes('not enough api units') ||
     text.includes('enough api units') ||
     text.includes('no_api_units') ||
@@ -11,10 +20,15 @@ export function classifySemrushFailure(message: string): SemrushCallClass {
   ) {
     return 'exhausted'
   }
-  if (text.includes('401') || text.includes('unauthorized') || text.includes('invalid_grant') || text.includes('auth')) {
+  if (code === '50' || text.includes('nothing found')) return 'empty'
+  if (
+    /\bhttp (401|403)\b/.test(text) ||
+    /\b(unauthori[sz]ed|invalid_grant|invalid_token|forbidden|no_subscription)\b/.test(text)
+  ) {
     return 'auth'
   }
-  if (text.includes('429') || text.includes('rate limit') || text.includes('too many requests')) return 'rate_limit'
+  if (/\bhttp 429\b/.test(text) || text.includes('rate limit') || text.includes('too many requests')) return 'rate_limit'
+  if (code) return 'invalid'
   return 'retry'
 }
 
