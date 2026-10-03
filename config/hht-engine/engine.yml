@@ -10,6 +10,8 @@ geo_templates:
 competitors:
   - tubhotels.com
   - cozycozy.com
+  - tubstays.com
+  - roomswithtubs.com
 
 block_lists:
   jobs: [jobs, hiring, salary, career]
@@ -19,9 +21,9 @@ block_lists:
   adult: [xxx, porn, escort]
   outside_geo: [uk, london, toronto, sydney]
 
-otas: [booking.com, expedia.com, hotels.com, tripadvisor.com, kayak.com, agoda.com]
+otas: [booking.com, expedia.com, hotels.com, tripadvisor.com, kayak.com, agoda.com, orbitz.com, travelocity.com, priceline.com, hotwire.com, trivago.com]
 hotel_chains: [marriott.com, hilton.com, hyatt.com, ihg.com]
-forums: [reddit.com, pinterest.com, facebook.com, quora.com, x.com, twitter.com]
+forums: [reddit.com, pinterest.com, facebook.com, quora.com, x.com, twitter.com, instagram.com, tiktok.com, youtube.com, linkedin.com]
 marketplaces: [amazon.com, ebay.com]
 search_engines: [google.com, bing.com, duckduckgo.com]
 
@@ -44,6 +46,8 @@ daily_keyword_cap: 200
 relevance_low: 0.35
 relevance_high: 0.72
 near_duplicate_similarity: 0.92
+serp_overlap_saturated: 0.5
+neighborhood_similarity: 0.72
 semrush_related_keywords: false
 low_credits_units: 500
 ranking_reverify_days: 14

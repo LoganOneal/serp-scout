@@ -11,6 +11,7 @@ import { relevanceGate } from './relevance.js'
 import { renderTemplate, geographicKeywords } from './render.js'
 import { pickFrontierKeyword } from './schedule.js'
 import { classifyByRules, DEFAULT_SITE_RULES } from './sites.js'
+import { scorePageSignals, serpLeadDecision, triageSerpUrl } from './serp-targets.js'
 import { parseOrganicSerp, parseRankedKeywords } from './serp-table.js'
 import { classifyHhtUrl, parseSitemapUrls, verifiedStayCountFromHtml } from './sitemap.js'
 import { DEFAULT_BLOCK_LISTS } from './relevance.js'
@@ -181,5 +182,82 @@ describe('routing helpers', () => {
     const serp = parseOrganicSerp('Domain;Url;Position\nexample.com;https://example.com/tubs;21', 20)
     expect(serp).toEqual([{ position: 21, domain: 'example.com', url: 'https://example.com/tubs' }])
     expect(parseRankedKeywords('Keyword;Position;Url\nhotels with hot tubs in austin;4;https://blog.example/austin')).toEqual(['hotels with hot tubs in austin'])
+  })
+})
+
+describe('serp page quality', () => {
+  const rules = {
+    ...DEFAULT_SITE_RULES,
+    otas: [...DEFAULT_SITE_RULES.otas, 'travelocity.com'],
+    competitors: ['tubstays.com'],
+  }
+
+  it('keeps obvious articles and sends a root-level post slug to the page fetch', () => {
+    const story = triageSerpUrl({
+      url: 'https://www.cntraveler.com/story/best-hotels-with-hot-tubs',
+      rootDomain: 'cntraveler.com',
+      rules,
+    })
+    expect(story.quality).toBe('article')
+    expect(serpLeadDecision({ position: 5, quality: story.quality, affiliate: false, siteType: story.siteType, stage: 'url' }).lane).toBe('both')
+    expect(serpLeadDecision({ position: 40, quality: 'article', affiliate: false, siteType: 'editorial_blog', stage: 'url' }).lane).toBe('guest_post')
+    expect(triageSerpUrl({
+      url: 'https://imfixintoblog.com/romantic-inns-western-nc/',
+      rootDomain: 'imfixintoblog.com',
+      rules,
+    }).quality).toBe('unsure')
+  })
+
+  it('drops commercial urls, tags tourism, and lets an affiliate listicle be an insertion below position 10', () => {
+    expect(triageSerpUrl({
+      url: 'https://www.travelocity.com/hotels-with-hot-tubs',
+      rootDomain: 'travelocity.com',
+      rules,
+    }).quality).toBe('commercial')
+    expect(triageSerpUrl({
+      url: 'https://www.theburgundyhotel.com/',
+      rootDomain: 'theburgundyhotel.com',
+      rules,
+    }).quality).toBe('commercial')
+    expect(triageSerpUrl({
+      url: 'https://www.visitnc.com/romantic',
+      rootDomain: 'visitnc.com',
+      rules,
+    }).quality).toBe('tourism')
+    expect(serpLeadDecision({
+      position: 40,
+      quality: 'article',
+      affiliate: true,
+      siteType: 'editorial_blog',
+      stage: 'page',
+    }).lane).toBe('both')
+    expect(serpLeadDecision({
+      position: 4,
+      quality: 'tourism',
+      affiliate: false,
+      siteType: null,
+      stage: 'url',
+    }).lane).toBe('tourism')
+  })
+
+  it('lets JSON-LD settle the page and treats affiliate links as an article boost', () => {
+    const empty = {
+      schemaTypes: [],
+      ogType: null,
+      publishedTime: null,
+      hasAuthor: false,
+      wordCount: 0,
+      outboundLinks: 0,
+      outboundHotelOrOta: 0,
+      hasBookingWidget: false,
+      hasAffiliate: false,
+      hasWriteForUs: false,
+    }
+    expect(scorePageSignals({ ...empty, schemaTypes: ['BlogPosting'] }).quality).toBe('article')
+    expect(scorePageSignals({ ...empty, schemaTypes: ['Hotel'] }).quality).toBe('commercial')
+    expect(scorePageSignals(empty).quality).toBe('unsure')
+    const listicle = scorePageSignals({ ...empty, schemaTypes: ['BlogPosting'], hasAffiliate: true, outboundHotelOrOta: 4, outboundLinks: 12 })
+    expect(listicle.quality).toBe('article')
+    expect(listicle.affiliate).toBe(true)
   })
 })

@@ -57,6 +57,8 @@ export const hhtEngineKeywords = hhtEngineSchema.table('keywords', {
   marginalOpportunityYield: doublePrecision('marginal_opportunity_yield'),
   consecutiveLowYieldBands: integer('consecutive_low_yield_bands').notNull().default(0),
   lastSerpScanAt: ts('last_serp_scan_at'),
+  serpOverlap: doublePrecision('serp_overlap'),
+  neighborhood: text('neighborhood'),
   status: text('status').notNull().default('NEW'),
   createdAt: ts('created_at').notNull().defaultNow(),
 }, (table) => [
@@ -421,6 +423,28 @@ export const hhtEngineEmbeddings = hhtEngineSchema.table('embeddings', {
   updatedAt: ts('updated_at').notNull().defaultNow(),
 }, (table) => [
   uniqueIndex('hht_engine_embeddings_entity_idx').on(table.entityType, table.entityKey, table.model),
+])
+
+export const hhtEngineFrontierLog = hhtEngineSchema.table('frontier_log', {
+  id: serial('id').primaryKey(),
+  eventType: text('event_type').notNull(),
+  keywordId: integer('keyword_id'),
+  url: text('url'),
+  rootDomain: text('root_domain'),
+  stage: text('stage'),
+  quality: text('quality'),
+  lane: text('lane'),
+  affiliate: boolean('affiliate'),
+  score: doublePrecision('score'),
+  reasons: jsonb('reasons').$type<string[]>(),
+  pitchableDomains: integer('pitchable_domains'),
+  overlap: doublePrecision('overlap'),
+  neighborhood: text('neighborhood'),
+  candidatesAdded: integer('candidates_added'),
+  detail: jsonb('detail').$type<Record<string, unknown>>(),
+  createdAt: ts('created_at').notNull().defaultNow(),
+}, (table) => [
+  index('hht_engine_frontier_log_event_idx').on(table.eventType, table.createdAt),
 ])
 
 export const hhtEngineGoogleAdsUsage = hhtEngineSchema.table('google_ads_usage', {

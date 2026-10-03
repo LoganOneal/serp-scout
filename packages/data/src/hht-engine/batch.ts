@@ -26,7 +26,7 @@ import { SemrushMcpError } from './semrush-mcp.js'
 
 export interface BatchResult {
   runId: string
-  status: 'success' | 'locked' | 'wall_clock_limit' | 'semrush_unit_cap' | 'google_ads_call_cap' | 'failed'
+  status: 'success' | 'locked' | 'wall_clock_limit' | 'semrush_unit_cap' | 'semrush_paused' | 'google_ads_call_cap' | 'failed'
   jobsCompleted: number
   semrushUnits: number
   googleAdsCalls: number

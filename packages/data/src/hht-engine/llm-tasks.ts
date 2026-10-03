@@ -11,6 +11,7 @@ export type EngineLlmTaskType =
   | 'contextual_fit'
   | 'insertion_suggestion'
   | 'target_page_match'
+  | 'page_quality'
 
 export class LlmTaskPendingError extends Error {
   constructor(readonly taskId: number) {
@@ -97,6 +98,9 @@ export const LLM_SCHEMAS: Record<EngineLlmTaskType, Record<string, unknown>> = {
     target_hht_url: { type: 'string' },
     secondary_hht_url: { type: ['string', 'null'] },
     reason: { type: 'string' },
+  }),
+  page_quality: objectSchema({
+    label: { type: 'string', enum: ['article', 'commercial', 'tourism'] },
   }),
 }
 

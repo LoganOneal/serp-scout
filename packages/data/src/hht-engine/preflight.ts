@@ -24,7 +24,7 @@ export interface PreflightResult {
 
 const EXPECTED_TABLES = [
   'contacts', 'contact_domains', 'crm_events', 'crm_outbox', 'domains', 'drafts',
-  'embeddings', 'google_ads_usage', 'hht_pages', 'jobs', 'keyword_relationships',
+  'embeddings', 'frontier_log', 'google_ads_usage', 'hht_pages', 'jobs', 'keyword_relationships',
   'keywords', 'lead_review_events', 'lead_reviews', 'llm_tasks', 'notifications', 'opportunities', 'opportunity_pages',
   'page_rankings', 'publisher_pages', 'publisher_research', 'responses', 'run_locks',
   'runs', 'semrush_usage', 'serp_results', 'serp_scans', 'system_state',

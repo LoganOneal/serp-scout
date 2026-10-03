@@ -35,11 +35,17 @@ export async function claimNextJob(db: EngineDatabase, workerId: string): Promis
            attempts = attempts + 1,
            updated_at = now()
      WHERE id = (
-       SELECT id FROM hht_engine.jobs
-        WHERE status = 'pending' AND run_after <= now()
-        ORDER BY id
+       SELECT j.id FROM hht_engine.jobs j
+        WHERE j.status = 'pending' AND j.run_after <= now()
+        ORDER BY
+          CASE WHEN j.type IN ('FETCH_SERP_BAND', 'EXPAND_KEYWORDS_SEMRUSH', 'FETCH_DOMAIN_METRICS', 'REVERIFY_RANKING') THEN 1 ELSE 0 END,
+          CASE WHEN j.type = 'FETCH_SERP_BAND' THEN COALESCE((
+            SELECT -k.priority_score FROM hht_engine.keywords k
+             WHERE k.id = NULLIF(j.payload->>'keywordId', '')::integer
+          ), 0) ELSE 0 END,
+          j.id
         LIMIT 1
-        FOR UPDATE SKIP LOCKED
+        FOR UPDATE OF j SKIP LOCKED
      )
        AND status = 'pending'
     RETURNING id

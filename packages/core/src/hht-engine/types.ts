@@ -29,6 +29,9 @@ export type EngineKeywordSource =
   | 'llm_generated'
   | 'manual'
   | 'seed'
+  | 'serp_title'
+  | 'geo_template'
+  | 'related_term'
 
 export type OpportunityType = 'guest_post' | 'link_insertion'
 

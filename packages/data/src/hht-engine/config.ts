@@ -13,6 +13,8 @@ export interface EngineFileConfig {
   expansionDepthCap: number
   dailyKeywordCap: number
   nearDuplicateSimilarity: number
+  serpOverlapSaturated: number
+  neighborhoodSimilarity: number
   semrushRelatedKeywords: boolean
   gadsRateLimitNotifyHours: number
   crmOutageNotifyMinutes: number
@@ -82,6 +84,8 @@ export function loadEngineConfig(path = process.env['HHT_ENGINE_CONFIG'] || 'con
     expansionDepthCap: numberOr(raw['expansion_depth_cap'], 4),
     dailyKeywordCap: numberOr(raw['daily_keyword_cap'], 200),
     nearDuplicateSimilarity: numberOr(raw['near_duplicate_similarity'], 0.92),
+    serpOverlapSaturated: numberOr(raw['serp_overlap_saturated'], 0.5),
+    neighborhoodSimilarity: numberOr(raw['neighborhood_similarity'], 0.72),
     semrushRelatedKeywords: raw['semrush_related_keywords'] === true,
     gadsRateLimitNotifyHours: numberOr(raw['gads_rate_limit_notify_hours'], 6),
     crmOutageNotifyMinutes: numberOr(raw['crm_outage_notify_minutes'], 60),
@@ -112,6 +116,12 @@ export function validateEngineConfig(config: EngineFileConfig): string[] {
   if (config.engine.llmRelevanceHigh > 1) errors.push('relevance_high must be <= 1')
   if (config.nearDuplicateSimilarity <= config.engine.llmRelevanceHigh || config.nearDuplicateSimilarity > 1) {
     errors.push('near_duplicate_similarity must be above relevance_high and <= 1')
+  }
+  if (config.serpOverlapSaturated <= 0 || config.serpOverlapSaturated >= 1) {
+    errors.push('serp_overlap_saturated must be between 0 and 1')
+  }
+  if (config.neighborhoodSimilarity <= 0 || config.neighborhoodSimilarity >= config.nearDuplicateSimilarity) {
+    errors.push('neighborhood_similarity must be above 0 and below near_duplicate_similarity')
   }
   if (config.engine.exploreShare < 0 || config.engine.exploreShare > 1) errors.push('explore_share must be between 0 and 1')
   if (config.engine.maxSerpDepth < 20 || config.engine.maxSerpDepth > 100) errors.push('max_serp_depth must be between 20 and 100')

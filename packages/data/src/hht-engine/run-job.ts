@@ -12,7 +12,6 @@ import {
   editorialPage,
   extractContactForms,
   extractEmails,
-  geographicKeywords,
   groundStructuredGuestPostGuidelines,
   guestPostGuidelineReviewReasons,
   guestPostIsPrimary,
@@ -21,9 +20,10 @@ import {
   insertionKey,
   insertionLeadStatus,
   judgeGuestPostPages,
-  lexicalRejectReason,
+  frontierCandidates,
+  keywordOnTopic,
   matchHhtTarget,
-  nextKeywordStatus,
+  neighborhoodLabel,
   normalizeContactEmail,
   normalizeFrontierKeyword,
   notificationForGads,
@@ -32,18 +32,21 @@ import {
   parseRankedKeywords,
   parseSitemapUrls,
   phraseOrganicParams,
-  pickFrontierKeyword,
   priorityScore,
   publisherExternalId,
   registrableDomain,
   renderTemplate,
+  scorePageSignals,
   semrushReplacementNotice,
+  serpLeadDecision,
   siteTypeNeedsGuestPost,
   structuredGuidelinesFromAnswer,
+  triageSerpUrl,
   type GuestPostStatus,
   type HhtInventoryPage,
-  type KeywordStatus,
   type LeadStatus,
+  type PageQuality,
+  type SerpLeadDecision,
   type SiteType,
 } from '@rnr/core'
 import { loadEngineConfig } from './config.js'
@@ -51,8 +54,9 @@ import type { EngineDatabase } from './db.js'
 import { GadsError, generateIdeas, pingGoogleAds } from './gads-client.js'
 import { sendGmailNotification } from './gmail.js'
 import { googleAdsEnv, googleServiceAccountCredentials } from './provider-secrets.js'
-import { cachedEmbedding, cosineSimilarity, maxCachedSimilarity } from './embeddings.js'
+import { cachedEmbedding, EMBEDDING_MODEL, cosineSimilarity } from './embeddings.js'
 import { requireLlmAnswer } from './llm-tasks.js'
+import { parsePageSignals, type ParsedPage } from './page-signals.js'
 import {
   enqueueJob,
   loadCredential,
@@ -67,6 +71,7 @@ import {
   hhtEngineCrmEvents,
   hhtEngineDomains,
   hhtEngineDrafts,
+  hhtEngineFrontierLog,
   hhtEngineGoogleAdsUsage,
   hhtEngineHhtPages,
   hhtEngineJobs,
@@ -99,6 +104,11 @@ const SITE_TYPES = new Set<string>([
 
 const OPEN_LEAD_STATUSES = ['DISCOVERED', 'QUALIFIED', 'CONTACT_ENRICHED', 'DRAFT_READY', 'HELD', 'READY_FOR_OUTREACH']
 
+/** Seeds, Google Ads ideas, and keywords minted from a fetched SERP. City templates from the sitemap and competitor rankings do not buy SERPs on their own. */
+const SERP_DISCOVERY_SOURCES = new Set([
+  'seed', 'manual', 'google_keyword_idea', 'serp_title', 'geo_template', 'related_term',
+])
+
 export async function runEngineJob(db: EngineDatabase, job: { id: number; type: string; payload: Record<string, unknown> }): Promise<void> {
   const state = await currentState(db)
   if (SEMRUSH_JOBS.has(job.type) && (state.semrush === 'EXHAUSTED' || state.semrush === 'AUTH_FAILURE')) {
@@ -121,6 +131,8 @@ export async function runEngineJob(db: EngineDatabase, job: { id: number; type: 
       return fetchSerp(db, job)
     case 'PROCESS_SERP_RESULTS':
       return processSerp(db, job.payload)
+    case 'CLASSIFY_SERP_PAGE':
+      return classifySerpPage(db, job)
     case 'CLASSIFY_DOMAIN':
       return classifyDomain(db, job)
     case 'FETCH_DOMAIN_METRICS':
@@ -165,7 +177,6 @@ async function syncPages(db: EngineDatabase): Promise<void> {
   const res = await fetch('https://www.hotelhottubs.com/sitemap.xml')
   if (!res.ok) throw new Error(`HHT sitemap HTTP ${res.status}`)
   const pages = parseSitemapUrls(await res.text())
-  const config = loadEngineConfig()
   const existingPages = new Map(
     (await db.select().from(hhtEngineHhtPages)).map((page) => [page.url, page]),
   )
@@ -191,11 +202,6 @@ async function syncPages(db: EngineDatabase): Promise<void> {
         lastSyncedAt: new Date(),
       },
     })
-    if (page.pageType === 'city' && page.city && page.state) {
-      for (const keyword of geographicKeywords(page.city, page.state, config.geoTemplates)) {
-        await insertKeyword(db, { keyword, sourceType: 'geographic_expansion', city: page.city, state: page.state, depth: 0 })
-      }
-    }
   }
 }
 
@@ -248,186 +254,469 @@ async function gateKeyword(
   const config = loadEngineConfig()
   const id = Number(job.payload['keywordId'])
   const [keyword] = await db.select().from(hhtEngineKeywords).where(eq(hhtEngineKeywords.id, id))
-  if (!keyword || keyword.status === 'REJECTED_IRRELEVANT') return
-  const pages = await db.select().from(hhtEngineHhtPages)
-  const blocked = lexicalRejectReason(keyword.keyword, config.blockLists)
+  if (!keyword || keyword.status === 'REJECTED_IRRELEVANT' || keyword.status === 'SATURATED') return
+  const topic = keywordOnTopic(keyword.keyword, config.blockLists)
   const volumeKnown = keyword.avgMonthlySearches !== null || keyword.volumeHigh !== null
   const volumeHigh = keyword.volumeIsRange ? keyword.volumeHigh : keyword.avgMonthlySearches
-  if (blocked || (volumeKnown && (volumeHigh ?? 0) <= 0)) {
-    await db.update(hhtEngineKeywords).set({ status: 'REJECTED_IRRELEVANT', relevanceMethod: 'deterministic' }).where(eq(hhtEngineKeywords.id, id))
+  const discovery = SERP_DISCOVERY_SOURCES.has(keyword.sourceType)
+  if (!discovery || !topic.ok || (volumeKnown && (volumeHigh ?? 0) <= 0)) {
+    await db.update(hhtEngineKeywords).set({
+      status: 'REJECTED_IRRELEVANT',
+      relevanceMethod: topic.ok ? 'zero_volume' : topic.reason,
+    }).where(eq(hhtEngineKeywords.id, id))
     return
   }
-  const vector = await cachedEmbedding(db, 'keyword', String(keyword.id), keyword.keyword)
-  const nearSimilarity = await maxCachedSimilarity(db, 'keyword', String(keyword.id), vector)
-  if (nearSimilarity >= config.nearDuplicateSimilarity) {
-    await db.update(hhtEngineKeywords).set({ status: 'REJECTED_IRRELEVANT', relevanceMethod: 'deterministic' }).where(eq(hhtEngineKeywords.id, id))
+  const neighbor = await nearestFetchedKeyword(db, keyword.id, keyword.keyword)
+  if (neighbor && neighbor.similarity >= config.nearDuplicateSimilarity) {
+    await db.update(hhtEngineKeywords).set({
+      status: 'REJECTED_IRRELEVANT',
+      relevanceMethod: 'near_duplicate',
+      relevanceScore: neighbor.similarity,
+    }).where(eq(hhtEngineKeywords.id, id))
     return
   }
-  const referenceVectors: number[][] = []
-  for (const seed of config.seeds) {
-    referenceVectors.push(await cachedEmbedding(db, 'seed', normalizeFrontierKeyword(seed), seed))
+  if (neighbor && neighbor.neighborhood === 'saturated' && neighbor.similarity >= config.neighborhoodSimilarity) {
+    await db.update(hhtEngineKeywords).set({
+      status: 'SATURATED',
+      neighborhood: 'saturated',
+      relevanceMethod: 'neighborhood_saturated',
+      relevanceScore: neighbor.similarity,
+    }).where(eq(hhtEngineKeywords.id, id))
+    return
   }
-  for (const page of pages) {
-    const text = page.title ?? page.url
-    referenceVectors.push(await cachedEmbedding(db, 'hht_page', String(page.id), text))
-  }
-  const similarity = referenceVectors.reduce(
-    (best, reference) => Math.max(best, cosineSimilarity(vector, reference)),
-    0,
-  )
-  let status: KeywordStatus
-  let method: 'deterministic' | 'llm' = 'deterministic'
-  if (similarity >= config.engine.llmRelevanceHigh) {
-    status = 'QUEUED'
-  } else if (similarity < config.engine.llmRelevanceLow) {
-    status = 'REJECTED_IRRELEVANT'
-  } else {
-    method = 'llm'
-    const answer = await requireLlmAnswer({
-      db,
-      job,
-      taskType: 'keyword_relevance',
-      entityType: 'keyword',
-      entityId: String(keyword.id),
-      taskInput: {
-        keyword: keyword.keyword,
-        question: 'Would a page ranking for this query plausibly mention hotels, hot tubs, jacuzzi rooms, romantic or couples stays, or lodging in a destination?',
-      },
-    })
-    status = answer['decision'] === 'accept' ? 'QUEUED' : 'REJECTED_IRRELEVANT'
-  }
-  const cityPage = pages.find((page) => page.pageType === 'city' && page.city && keyword.keyword.toLowerCase().includes(page.city.toLowerCase()))
-  const score = priorityScore({
-    clusterYield: 0,
-    relevanceScore: similarity,
-    verifiedStayCount: cityPage?.verifiedStayCount ?? 0,
-    sourceYield: 0,
-    novel: keyword.maxSerpPositionScanned === 0,
-    estimatedUnits: 200,
-    avgMonthlySearches: keyword.avgMonthlySearches,
-    volumeLow: keyword.volumeLow,
-    volumeHigh: keyword.volumeHigh,
-    volumeIsRange: keyword.volumeIsRange,
-    explore: keyword.sourceType === 'publisher_keyword',
-  }, config.engine)
-  const depth = keyword.sourceType === 'publisher_keyword' && similarity < config.engine.llmRelevanceHigh
-    ? config.expansionDepthCap
-    : keyword.expansionDepth
   await db.update(hhtEngineKeywords).set({
-    status,
-    relevanceScore: similarity,
-    relevanceMethod: method,
-    priorityScore: cityPage ? score : score * 0.5,
+    status: 'QUEUED',
+    relevanceMethod: topic.reason,
     normalizedKeyword: normalizeFrontierKeyword(keyword.keyword),
-    expansionDepth: depth,
   }).where(eq(hhtEngineKeywords.id, id))
-  if (status === 'QUEUED') {
-    await enqueueJob(db, { type: 'FETCH_SERP_BAND', idempotencyKey: `serp:${id}:1`, payload: { keywordId: id } })
-  }
+  await enqueueJob(db, { type: 'FETCH_SERP_BAND', idempotencyKey: `serp:${id}:1`, payload: { keywordId: id } })
 }
 
 async function fetchSerp(db: EngineDatabase, job: { id: number; payload: Record<string, unknown> }): Promise<void> {
   const config = loadEngineConfig()
   const keywordId = Number(job.payload['keywordId'])
   const [keyword] = await db.select().from(hhtEngineKeywords).where(eq(hhtEngineKeywords.id, keywordId))
-  if (!keyword) return
-  const rescan = job.payload['rescan'] === true
-  const band = rescan ? SERP_BANDS[0] : bandForDepth(keyword.maxSerpPositionScanned)
-  if (!band || band.positionEnd > config.engine.maxSerpDepth) return
+  if (!keyword || keyword.status === 'REJECTED_IRRELEVANT' || keyword.status === 'SATURATED') return
+  if (!SERP_DISCOVERY_SOURCES.has(keyword.sourceType)) {
+    await db.update(hhtEngineKeywords).set({ status: 'REJECTED_IRRELEVANT', relevanceMethod: 'deterministic' }).where(eq(hhtEngineKeywords.id, keywordId))
+    return
+  }
+  const neighbor = keyword.maxSerpPositionScanned > 0 ? null : await nearestFetchedKeyword(db, keyword.id, keyword.keyword)
+  if (neighbor && neighbor.similarity >= config.nearDuplicateSimilarity) {
+    await db.update(hhtEngineKeywords).set({
+      status: 'REJECTED_IRRELEVANT',
+      relevanceMethod: 'near_duplicate',
+      relevanceScore: neighbor.similarity,
+    }).where(eq(hhtEngineKeywords.id, keywordId))
+    return
+  }
+  if (neighbor && neighbor.neighborhood === 'saturated' && neighbor.similarity >= config.neighborhoodSimilarity) {
+    await db.update(hhtEngineKeywords).set({
+      status: 'SATURATED',
+      neighborhood: 'saturated',
+      relevanceMethod: 'neighborhood_saturated',
+      relevanceScore: neighbor.similarity,
+    }).where(eq(hhtEngineKeywords.id, keywordId))
+    return
+  }
   const client = await semrush(db)
-  const result = await client.executeReport('phrase_organic', phraseOrganicParams(keyword.keyword, band))
-  await recordSemrushUnits(db, 'phrase_organic', result.units, job.id)
-  const [scan] = await db.insert(hhtEngineSerpScans).values({
-    keywordId,
-    band: band.band,
-    displayOffset: band.displayOffset,
-    displayLimit: band.displayLimit,
-    unitsSpent: result.units,
-  }).returning()
-  if (!scan) return
-  const rows = parseOrganicSerp(result.data, band.displayOffset)
-  const seen = new Set<string>()
-  for (const row of rows) {
-    const root = registrableDomain(row.domain)?.domain ?? row.domain
-    seen.add(root)
-    await db.insert(hhtEngineSerpResults).values({
+  let scanned = keyword.maxSerpPositionScanned
+  let articles = 0
+  let insertions = 0
+  let seen = keyword.uniqueDomainsSeen
+  const titles: string[] = []
+  const articleUrls: string[] = []
+  while (true) {
+    const band = bandForDepth(scanned)
+    if (!band || band.positionEnd > config.engine.maxSerpDepth) break
+    const result = await client.executeReport('phrase_organic', phraseOrganicParams(keyword.keyword, band))
+    await recordSemrushUnits(db, 'phrase_organic', result.units, job.id)
+    const [scan] = await db.insert(hhtEngineSerpScans).values({
       keywordId,
-      scanId: scan.id,
-      url: row.url,
-      canonicalUrl: row.url,
-      rootDomain: root,
-      position: row.position,
       band: band.band,
-    })
+      displayOffset: band.displayOffset,
+      displayLimit: band.displayLimit,
+      unitsSpent: result.units,
+    }).returning()
+    if (!scan) break
+    const rows = parseOrganicSerp(result.data, band.displayOffset)
+    let bandArticles = 0
+    for (const row of rows) {
+      const root = registrableDomain(row.domain)?.domain ?? row.domain
+      seen += 1
+      await db.insert(hhtEngineSerpResults).values({
+        keywordId,
+        scanId: scan.id,
+        url: row.url,
+        canonicalUrl: row.url,
+        rootDomain: root,
+        position: row.position,
+        band: band.band,
+      })
+      const observed = await recordSerpLead(db, {
+        keywordId,
+        rootDomain: root,
+        url: row.url,
+        position: row.position,
+        keyword: keyword.keyword,
+      })
+      if (observed.saved) bandArticles += 1
+      if (observed.affiliate) insertions += 1
+      titles.push(...observed.titles)
+      if (observed.articleUrl) articleUrls.push(observed.articleUrl)
+    }
+    articles += bandArticles
+    scanned = band.positionEnd
+    await db.update(hhtEngineSerpScans).set({ newQualifiedDomains: bandArticles }).where(eq(hhtEngineSerpScans.id, scan.id))
+    await db.update(hhtEngineKeywords).set({
+      status: 'ACTIVE',
+      maxSerpPositionScanned: scanned,
+      uniqueDomainsSeen: seen,
+      newDomainsDiscovered: articles,
+      insertionCandidates: insertions,
+      lastSerpScanAt: new Date(),
+    }).where(eq(hhtEngineKeywords.id, keywordId))
   }
-  const freshDomains = [...seen].filter((domain) => {
-    const ruled = classifyByRules(domain, config.siteRules)
-    return ruled === null || siteTypeNeedsGuestPost(ruled)
+  await settleFrontier(db, {
+    keywordId,
+    keyword: keyword.keyword,
+    depth: keyword.expansionDepth,
+    parentYield: articles,
+    titles,
+    articleUrls,
   })
-  const units = result.units || rows.length * 10 || 1
-  const next = rescan ? null : nextKeywordStatus({
-    status: asKeywordStatus(keyword.status),
-    consecutiveLowYieldBands: keyword.consecutiveLowYieldBands,
-    band: { newQualifiedDomains: freshDomains.length, reachedMaxDepth: band.positionEnd >= config.engine.maxSerpDepth },
-    lowYieldThreshold: config.engine.lowYieldDomainThreshold,
-  })
-  await db.update(hhtEngineSerpScans).set({ newQualifiedDomains: freshDomains.length }).where(eq(hhtEngineSerpScans.id, scan.id))
-  await db.update(hhtEngineKeywords).set({
-    status: next?.status ?? keyword.status,
-    consecutiveLowYieldBands: next?.consecutiveLowYieldBands ?? keyword.consecutiveLowYieldBands,
-    maxSerpPositionScanned: Math.max(keyword.maxSerpPositionScanned, band.positionEnd),
-    uniqueDomainsSeen: keyword.uniqueDomainsSeen + seen.size,
-    newDomainsDiscovered: freshDomains.length,
-    marginalDomainYield: freshDomains.length / units,
-    lastSerpScanAt: new Date(),
-  }).where(eq(hhtEngineKeywords.id, keywordId))
-  await enqueueJob(db, {
-    type: 'PROCESS_SERP_RESULTS',
-    idempotencyKey: `process:${scan.id}`,
-    payload: { scanId: scan.id, keywordId, keyword: keyword.keyword },
-  })
-  if (!rescan && freshDomains.length >= config.engine.lowYieldDomainThreshold && keyword.expansionDepth < config.expansionDepthCap) {
-    await enqueueJob(db, {
-      type: 'GADS_GENERATE_IDEAS',
-      idempotencyKey: `ideas:keyword:${keywordId}`,
-      payload: { seedType: 'keyword', seed: keyword.keyword, depth: keyword.expansionDepth + 1, sourceKeywordId: keywordId },
-    })
-  }
 }
 
 async function processSerp(db: EngineDatabase, payload: Record<string, unknown>): Promise<void> {
   const scanId = Number(payload['scanId'])
-  const keyword = String(payload['keyword'] ?? '')
+  const keywordText = String(payload['keyword'] ?? '')
   const rows = await db.select().from(hhtEngineSerpResults).where(eq(hhtEngineSerpResults.scanId, scanId))
+  const titles: string[] = []
+  const articleUrls: string[] = []
+  let articles = 0
   for (const row of rows) {
-    await db.insert(hhtEngineDomains).values({ rootDomain: row.rootDomain }).onConflictDoUpdate({
-      target: hhtEngineDomains.rootDomain,
-      set: { lastSeenAt: new Date() },
-    })
-    await enqueueJob(db, {
-      type: 'CLASSIFY_DOMAIN',
-      idempotencyKey: `classify:${row.rootDomain}:${dayBucket(180)}`,
-      payload: { rootDomain: row.rootDomain, sampleUrl: row.url },
-    })
-    await db.insert(hhtEnginePublisherPages).values({
-      canonicalUrl: row.canonicalUrl,
-      rootDomain: row.rootDomain,
-    }).onConflictDoNothing()
-    const [page] = await db.select().from(hhtEnginePublisherPages).where(eq(hhtEnginePublisherPages.canonicalUrl, row.canonicalUrl))
-    if (!page) continue
-    await db.insert(hhtEnginePageRankings).values({
-      pageId: page.id,
+    const observed = await recordSerpLead(db, {
       keywordId: row.keywordId,
-      keyword,
+      rootDomain: row.rootDomain,
+      url: row.canonicalUrl,
       position: row.position,
+      keyword: keywordText || row.url,
     })
-    if (row.position <= 10 && row.band === 1) {
-      await enqueueJob(db, {
-        type: 'QUALIFY_INSERTION',
-        idempotencyKey: `insert:${page.id}:${row.keywordId}`,
-        payload: { pageId: page.id, keywordId: row.keywordId, position: row.position, keyword },
+    if (observed.saved) articles += 1
+    titles.push(...observed.titles)
+    if (observed.articleUrl) articleUrls.push(observed.articleUrl)
+  }
+  const keywordId = rows[0]?.keywordId
+  if (!keywordId) return
+  const [keyword] = await db.select().from(hhtEngineKeywords).where(eq(hhtEngineKeywords.id, keywordId))
+  if (!keyword) return
+  await settleFrontier(db, {
+    keywordId,
+    keyword: keyword.keyword,
+    depth: keyword.expansionDepth,
+    parentYield: Math.max(articles, keyword.newDomainsDiscovered),
+    titles,
+    articleUrls,
+  })
+}
+
+interface SerpObservation {
+  saved: boolean
+  affiliate: boolean
+  titles: string[]
+  articleUrl: string | null
+}
+
+async function recordSerpLead(
+  db: EngineDatabase,
+  input: { keywordId: number; rootDomain: string; url: string; position: number; keyword: string },
+): Promise<SerpObservation> {
+  const config = loadEngineConfig()
+  const triage = triageSerpUrl({ url: input.url, rootDomain: input.rootDomain, rules: config.siteRules })
+  if (triage.quality !== 'unsure') {
+    const decision = serpLeadDecision({
+      position: input.position,
+      quality: triage.quality,
+      affiliate: false,
+      siteType: triage.siteType,
+      stage: 'url',
+    })
+    const saved = await saveSerpLead(db, input, decision, null)
+    return observed(saved, false, triage.quality === 'article' ? input.url : null)
+  }
+  const [cachedDomain] = await db.select().from(hhtEngineDomains).where(eq(hhtEngineDomains.rootDomain, input.rootDomain))
+  if (cachedDomain?.primaryTopic === 'commercial') {
+    await logClassification(db, input, {
+      stage: 'cache',
+      quality: 'commercial',
+      lane: 'skip',
+      affiliate: false,
+      score: null,
+      reasons: ['cache:commercial'],
+    })
+    return observed(false, false, null)
+  }
+  const [cachedPage] = await db.select().from(hhtEnginePublisherPages).where(eq(hhtEnginePublisherPages.canonicalUrl, input.url))
+  const cachedQuality = cachedPageQuality(cachedPage?.pageType)
+  if (cachedQuality) {
+    const decision = serpLeadDecision({
+      position: input.position,
+      quality: cachedQuality,
+      affiliate: false,
+      siteType: cachedDomain?.siteType && cachedDomain.siteType !== 'unknown' ? asSiteType(cachedDomain.siteType) : triage.siteType,
+      stage: 'cache',
+    })
+    const saved = await saveSerpLead(db, input, decision, null)
+    return observed(saved, false, cachedQuality === 'article' ? input.url : null, cachedPage?.title ? [cachedPage.title] : [])
+  }
+  const html = await fetchHtml(input.url)
+  if (!html) {
+    if (cachedDomain?.primaryTopic === 'article') {
+      const decision = serpLeadDecision({
+        position: input.position,
+        quality: 'article',
+        affiliate: false,
+        siteType: 'editorial_blog',
+        stage: 'domain',
       })
+      const saved = await saveSerpLead(db, input, decision, null)
+      return observed(saved, false, input.url)
     }
+    await logClassification(db, input, {
+      stage: 'fetch',
+      quality: 'unreachable',
+      lane: 'skip',
+      affiliate: false,
+      score: null,
+      reasons: ['fetch:unreachable'],
+    })
+    return observed(false, false, null)
+  }
+  const parsed = parsePageSignals(html, input.url)
+  const scored = scorePageSignals(parsed.signals)
+  const quality = scored.quality === 'unsure' && cachedDomain?.primaryTopic === 'article' ? 'article' : scored.quality
+  if (quality === 'unsure') {
+    await logClassification(db, input, {
+      stage: 'page',
+      quality: 'unsure',
+      lane: 'skip',
+      affiliate: scored.affiliate,
+      score: scored.score,
+      reasons: ['page:unsure'],
+    })
+    await enqueuePageQuality(db, input, parsed)
+    return observed(false, false, null)
+  }
+  const lodging = parsed.signals.schemaTypes.some((type) => ['Hotel', 'LodgingBusiness', 'Resort', 'Motel', 'BedAndBreakfast'].includes(type))
+  const stage = cachedDomain?.primaryTopic === 'article' && scored.quality === 'unsure' ? 'domain' : 'page'
+  const decision = serpLeadDecision({
+    position: input.position,
+    quality,
+    affiliate: scored.affiliate,
+    siteType: quality === 'article' ? 'editorial_blog' : lodging ? 'hotel_property' : triage.siteType,
+    stage,
+  })
+  const saved = await saveSerpLead(db, input, decision, scored.score, parsed.title)
+  const titles = quality === 'article' ? [parsed.title, parsed.h1, ...parsed.headings] : []
+  return observed(saved, scored.affiliate, quality === 'article' ? input.url : null, titles)
+}
+
+function observed(saved: boolean, affiliate: boolean, articleUrl: string | null, titles: string[] = []): SerpObservation {
+  return {
+    saved,
+    affiliate,
+    articleUrl,
+    titles: titles.map((title) => title.replace(/\s+/g, ' ').trim()).filter((title) => title.length >= 8),
+  }
+}
+
+async function classifySerpPage(
+  db: EngineDatabase,
+  job: { id: number; payload: Record<string, unknown> },
+): Promise<void> {
+  const url = String(job.payload['url'] ?? '')
+  const rootDomain = String(job.payload['rootDomain'] ?? '')
+  if (!url || !rootDomain) return
+  const answer = await requireLlmAnswer({
+    db,
+    job,
+    taskType: 'page_quality',
+    entityType: 'serp_page',
+    entityId: url,
+    taskInput: {
+      url,
+      title: String(job.payload['title'] ?? ''),
+      h1: String(job.payload['h1'] ?? ''),
+      meta_description: String(job.payload['metaDescription'] ?? ''),
+      excerpt: String(job.payload['excerpt'] ?? ''),
+      schema_types: Array.isArray(job.payload['schemaTypes']) ? job.payload['schemaTypes'] : [],
+      outbound_link_count: Number(job.payload['outboundLinkCount'] ?? 0),
+    },
+  })
+  const label = String(answer['label'] ?? '')
+  const quality: PageQuality = label === 'article' || label === 'commercial' || label === 'tourism' ? label : 'unsure'
+  const keywordId = Number(job.payload['keywordId'] ?? 0)
+  const keyword = String(job.payload['keyword'] ?? '')
+  await saveSerpLead(db, {
+    keywordId,
+    rootDomain,
+    url,
+    position: Number(job.payload['position'] ?? 0),
+    keyword,
+  }, serpLeadDecision({
+    position: Number(job.payload['position'] ?? 0),
+    quality,
+    affiliate: job.payload['affiliate'] === true,
+    siteType: quality === 'article' ? 'editorial_blog' : null,
+    stage: 'model',
+  }), null, String(job.payload['title'] ?? ''))
+  if (quality === 'article' && keywordId) {
+    await settleFrontier(db, {
+      keywordId,
+      keyword,
+      depth: 1,
+      parentYield: 1,
+      titles: [String(job.payload['title'] ?? ''), String(job.payload['h1'] ?? '')],
+      articleUrls: [url],
+    })
+  }
+}
+
+async function saveSerpLead(
+  db: EngineDatabase,
+  input: { keywordId: number; rootDomain: string; url: string; position: number; keyword: string },
+  decision: SerpLeadDecision,
+  score: number | null,
+  title: string | null = null,
+): Promise<boolean> {
+  const quality = decision.reasons.find((reason) => reason.includes(':'))?.split(':')[1] ?? null
+  await logClassification(db, input, {
+    stage: decision.reasons[0]?.split(':')[0] ?? 'rule',
+    quality: quality ?? 'unsure',
+    lane: decision.lane,
+    affiliate: decision.affiliate,
+    score,
+    reasons: decision.reasons,
+  })
+  await db.insert(hhtEngineDomains).values({
+    rootDomain: input.rootDomain,
+    siteType: decision.siteType ?? 'unknown',
+    primaryTopic: quality,
+  }).onConflictDoUpdate({
+    target: hhtEngineDomains.rootDomain,
+    set: {
+      lastSeenAt: new Date(),
+      ...(decision.siteType ? { siteType: decision.siteType } : {}),
+      ...(quality ? { primaryTopic: quality } : {}),
+    },
+  })
+  if (decision.lane === 'skip') return false
+  await db.insert(hhtEnginePublisherPages).values({
+    canonicalUrl: input.url,
+    rootDomain: input.rootDomain,
+    pageType: quality,
+    title,
+  }).onConflictDoUpdate({
+    target: hhtEnginePublisherPages.canonicalUrl,
+    set: {
+      pageType: quality,
+      rootDomain: input.rootDomain,
+      ...(title ? { title } : {}),
+    },
+  })
+  const filterStatus = decision.lane === 'tourism' ? 'REVIEW' : 'PASS'
+  const shared = {
+    bestKeyword: input.keyword,
+    bestPosition: input.position,
+    sourceKeyword: input.keyword,
+    filterStatus,
+    filterReasons: decision.reasons,
+    matchConfidence: decision.affiliate ? 0.95 : 0.5,
+    publisherExternalId: publisherExternalId(input.rootDomain),
+  }
+  if (decision.lane === 'both') {
+    const key = insertionKey(input.rootDomain, input.url)
+    await db.insert(hhtEngineOpportunities).values({
+      canonicalKey: key,
+      externalId: opportunityExternalId(key),
+      rootDomain: input.rootDomain,
+      type: 'link_insertion',
+      status: 'QUALIFIED',
+      primaryThread: false,
+      ...shared,
+    }).onConflictDoNothing()
+  }
+  const guestKey = guestPostKey(input.rootDomain)
+  await db.insert(hhtEngineOpportunities).values({
+    canonicalKey: guestKey,
+    externalId: opportunityExternalId(guestKey),
+    rootDomain: input.rootDomain,
+    type: 'guest_post',
+    status: 'QUALIFIED',
+    primaryThread: true,
+    ...shared,
+  }).onConflictDoNothing()
+  return true
+}
+
+async function enqueuePageQuality(
+  db: EngineDatabase,
+  input: { keywordId: number; rootDomain: string; url: string; position: number; keyword: string },
+  parsed: ParsedPage | null,
+): Promise<void> {
+  const id = createHash('sha256').update(input.url).digest('hex').slice(0, 24)
+  await enqueueJob(db, {
+    type: 'CLASSIFY_SERP_PAGE',
+    idempotencyKey: `page-quality:${id}`,
+    payload: {
+      ...input,
+      title: parsed?.title ?? '',
+      h1: parsed?.h1 ?? '',
+      metaDescription: parsed?.metaDescription ?? '',
+      excerpt: parsed?.excerpt ?? '',
+      schemaTypes: parsed?.signals.schemaTypes ?? [],
+      outboundLinkCount: parsed?.signals.outboundLinks ?? 0,
+      affiliate: parsed?.signals.hasAffiliate ?? false,
+    },
+  })
+}
+
+function cachedPageQuality(value: string | null | undefined): PageQuality | null {
+  if (value === 'article' || value === 'commercial' || value === 'tourism') return value
+  return null
+}
+
+async function fetchHtml(url: string): Promise<string> {
+  try {
+    const res = await fetch(url, {
+      redirect: 'follow',
+      signal: AbortSignal.timeout(12_000),
+      headers: { 'user-agent': 'SERPScout/1.0' },
+    })
+    if (!res.ok) return ''
+    const type = res.headers.get('content-type') ?? ''
+    if (type && !/html|xml/i.test(type)) return ''
+    const reader = res.body?.getReader()
+    if (!reader) return (await res.text()).slice(0, 150_000)
+    const chunks: Uint8Array[] = []
+    let size = 0
+    while (size < 150_000) {
+      const next = await reader.read()
+      if (next.done) break
+      chunks.push(next.value)
+      size += next.value.byteLength
+    }
+    await reader.cancel()
+    const bytes = new Uint8Array(size)
+    let offset = 0
+    for (const chunk of chunks) {
+      bytes.set(chunk.subarray(0, Math.max(0, 150_000 - offset)), offset)
+      offset += chunk.byteLength
+      if (offset >= 150_000) break
+    }
+    return new TextDecoder().decode(bytes.subarray(0, 150_000))
+  } catch {
+    return ''
   }
 }
 
@@ -1113,79 +1402,6 @@ export async function seedFrontier(db: EngineDatabase): Promise<void> {
       })
     }
   }
-  if (state.gads !== 'GADS_AUTH_FAILURE') {
-    await enqueueJob(db, {
-      type: 'GADS_GENERATE_IDEAS',
-      idempotencyKey: 'ideas:site:hotelhottubs.com',
-      payload: { seedType: 'site', seed: 'hotelhottubs.com', depth: 1 },
-    })
-  }
-  const research = await db.select().from(hhtEnginePublisherResearch)
-  for (const row of research) {
-    if (cacheFresh(row.checkedAt, new Date(), 60)) continue
-    await enqueueJob(db, {
-      type: 'CHECK_GUEST_POST_POLICY',
-      idempotencyKey: `guest:${row.rootDomain}:${dayBucket(60)}`,
-      payload: { rootDomain: row.rootDomain },
-    })
-    if (state.semrush === 'RUNNING' || state.semrush === 'LOW_CREDITS') {
-      await enqueueJob(db, {
-        type: 'FETCH_DOMAIN_METRICS',
-        idempotencyKey: `authority:${row.rootDomain}:${dayBucket(60)}`,
-        payload: { rootDomain: row.rootDomain },
-      })
-    }
-  }
-  if (state.semrush === 'RUNNING' || state.semrush === 'LOW_CREDITS') {
-    for (const domain of config.competitors) {
-      await enqueueJob(db, {
-        type: 'EXPAND_KEYWORDS_SEMRUSH',
-        idempotencyKey: `expand:competitor:${domain}`,
-        payload: { domain, source: 'competitor_keyword' },
-      })
-    }
-    await enqueueNextSerp(db)
-  }
-}
-
-async function enqueueNextSerp(db: EngineDatabase): Promise<void> {
-  const config = loadEngineConfig()
-  const rows = await db.select().from(hhtEngineKeywords)
-  const now = new Date()
-  const actionable = rows.flatMap((row) => {
-    if (row.status === 'REJECTED_IRRELEVANT' || row.status === 'NEW') return []
-    const next = bandForDepth(row.maxSerpPositionScanned)
-    const threshold = next?.band === 2
-      ? config.band2MinNewDomains
-      : next?.band === 3
-        ? config.band3MinNewDomains
-        : 0
-    const earned = next !== null && (next.band === 1 || row.newDomainsDiscovered >= threshold)
-    if (earned && next && next.positionEnd <= config.engine.maxSerpDepth) {
-      return [{ row, band: next.band, rescan: false }]
-    }
-    const staleDays = row.status === 'SATURATED' || row.status === 'LOW_YIELD' ? 180 : 30
-    if (row.maxSerpPositionScanned > 0 && !cacheFresh(row.lastSerpScanAt, now, staleDays)) {
-      return [{ row, band: 1 as const, rescan: true }]
-    }
-    return []
-  })
-  const picked = pickFrontierKeyword(actionable.map((item) => ({
-    id: item.row.id,
-    priorityScore: item.row.priorityScore,
-    cluster: item.row.semanticCluster,
-    city: item.row.geoCity,
-    sourceType: item.row.sourceType,
-    scanned: item.row.maxSerpPositionScanned > 0 && !item.rescan,
-  })), config.engine.exploreShare, rows.length)
-  const match = actionable.find((item) => item.row.id === picked?.id)
-  if (!match) return
-  const day = now.toISOString().slice(0, 10)
-  await enqueueJob(db, {
-    type: 'FETCH_SERP_BAND',
-    idempotencyKey: match.rescan ? `rescan:${match.row.id}:1:${day}` : `serp:${match.row.id}:${match.band}`,
-    payload: { keywordId: match.row.id, rescan: match.rescan },
-  })
 }
 
 export async function remindIfDue(db: EngineDatabase): Promise<void> {
@@ -1299,6 +1515,212 @@ async function notifyCrmOutage(db: EngineDatabase): Promise<void> {
   )
 }
 
+async function nearestFetchedKeyword(
+  db: EngineDatabase,
+  keywordId: number,
+  text: string,
+): Promise<{ similarity: number; neighborhood: string | null } | null> {
+  const embedding = await cachedEmbedding(db, 'frontier_keyword', String(keywordId), normalizeFrontierKeyword(text) || text)
+  const serialized = `[${embedding.join(',')}]`
+  const rows = await db.execute<{ neighborhood: string | null; similarity: number | null }>(sql`
+    SELECT k.neighborhood,
+           (1 - (e.embedding <=> ${serialized}::vector))::double precision AS similarity
+      FROM hht_engine.embeddings e
+      JOIN hht_engine.keywords k ON k.id::text = e.entity_key
+     WHERE e.entity_type = 'frontier_keyword'
+       AND e.model = ${EMBEDDING_MODEL}
+       AND k.max_serp_position_scanned > 0
+       AND k.id <> ${keywordId}
+     ORDER BY e.embedding <=> ${serialized}::vector
+     LIMIT 1
+  `)
+  const row = (rows as unknown as Array<{ neighborhood: string | null; similarity: number | null }>)[0]
+  if (!row || row.similarity == null) return null
+  return { neighborhood: row.neighborhood, similarity: Number(row.similarity) }
+}
+
+async function settleFrontier(
+  db: EngineDatabase,
+  input: {
+    keywordId: number
+    keyword: string
+    depth: number
+    parentYield: number
+    titles: string[]
+    articleUrls: string[]
+  },
+): Promise<void> {
+  const config = loadEngineConfig()
+  const [keyword] = await db.select().from(hhtEngineKeywords).where(eq(hhtEngineKeywords.id, input.keywordId))
+  if (!keyword) return
+  if (keyword.maxSerpPositionScanned <= 0 && input.articleUrls.length === 0 && input.titles.length === 0) return
+  const overlap = await maxSerpOverlap(db, input.keywordId)
+  const pitchable = Math.max(keyword.newDomainsDiscovered, input.parentYield)
+  const neighborhood = neighborhoodLabel(overlap, pitchable, config.serpOverlapSaturated)
+  const previousNeighborhood = keyword.neighborhood
+  await db.update(hhtEngineKeywords).set({
+    serpOverlap: overlap,
+    neighborhood,
+  }).where(eq(hhtEngineKeywords.id, input.keywordId))
+  const embedding = await cachedEmbedding(
+    db,
+    'frontier_keyword',
+    String(input.keywordId),
+    normalizeFrontierKeyword(input.keyword) || input.keyword,
+  )
+  const serialized = `[${embedding.join(',')}]`
+  if (neighborhood === 'saturated' && previousNeighborhood !== 'saturated') {
+    await db.execute(sql`
+      UPDATE hht_engine.keywords k
+         SET status = 'SATURATED',
+             neighborhood = 'saturated',
+             relevance_method = 'neighborhood_saturated',
+             priority_score = k.priority_score - 1000
+        FROM hht_engine.embeddings e
+       WHERE e.entity_type = 'frontier_keyword'
+         AND e.model = ${EMBEDDING_MODEL}
+         AND e.entity_key = k.id::text
+         AND k.status IN ('NEW', 'QUEUED')
+         AND k.max_serp_position_scanned = 0
+         AND k.id <> ${input.keywordId}
+         AND (1 - (e.embedding <=> ${serialized}::vector)) >= ${config.neighborhoodSimilarity}
+    `)
+  } else if (neighborhood === 'productive' && previousNeighborhood !== 'productive') {
+    await db.execute(sql`
+      UPDATE hht_engine.keywords k
+         SET priority_score = k.priority_score + ${pitchable * config.engine.priorityWeights.clusterYield}
+        FROM hht_engine.embeddings e
+       WHERE e.entity_type = 'frontier_keyword'
+         AND e.model = ${EMBEDDING_MODEL}
+         AND e.entity_key = k.id::text
+         AND k.status IN ('NEW', 'QUEUED')
+         AND k.id <> ${input.keywordId}
+         AND (1 - (e.embedding <=> ${serialized}::vector)) >= ${config.neighborhoodSimilarity}
+    `)
+  }
+  const pages = await db.select().from(hhtEngineHhtPages)
+  const candidates = frontierCandidates({
+    keyword: input.keyword,
+    templates: config.geoTemplates,
+    cities: pages.filter((page) => page.city).map((page) => ({ city: page.city ?? '', state: page.state })),
+    titles: input.titles,
+    urls: input.articleUrls,
+    lists: config.blockLists,
+  })
+  let added = 0
+  for (const candidate of candidates) {
+    const inserted = await insertKeyword(db, {
+      keyword: candidate.keyword,
+      sourceType: candidate.sourceType,
+      sourceKeywordId: input.keywordId,
+      city: candidate.city,
+      state: candidate.state,
+      depth: input.depth + 1,
+      parentYield: pitchable,
+    })
+    if (inserted) added += 1
+  }
+  const reseeded = await reseedIfSaturated(db)
+  await db.insert(hhtEngineFrontierLog).values({
+    eventType: 'yield',
+    keywordId: input.keywordId,
+    pitchableDomains: pitchable,
+    overlap,
+    neighborhood,
+    candidatesAdded: added,
+    detail: {
+      overlapThreshold: config.serpOverlapSaturated,
+      neighborhoodSimilarity: config.neighborhoodSimilarity,
+      nearDuplicateSimilarity: config.nearDuplicateSimilarity,
+      reseeded,
+      insertionCandidates: keyword.insertionCandidates,
+    },
+  })
+}
+
+async function maxSerpOverlap(db: EngineDatabase, keywordId: number): Promise<number> {
+  const rows = await db.execute<{ overlap: number | null }>(sql`
+    WITH mine AS (
+      SELECT DISTINCT canonical_url
+        FROM hht_engine.serp_results
+       WHERE keyword_id = ${keywordId}
+    ),
+    scored AS (
+      SELECT count(DISTINCT r.canonical_url) FILTER (
+               WHERE r.canonical_url IN (SELECT canonical_url FROM mine)
+             ) AS hits,
+             count(DISTINCT r.canonical_url) AS other_n
+        FROM hht_engine.serp_results r
+       WHERE r.keyword_id <> ${keywordId}
+       GROUP BY r.keyword_id
+    )
+    SELECT COALESCE(MAX(
+      CASE
+        WHEN (SELECT count(*) FROM mine) = 0 OR hits = 0 THEN 0
+        ELSE hits::double precision / ((SELECT count(*) FROM mine) + other_n - hits)
+      END
+    ), 0)::double precision AS overlap
+      FROM scored
+  `)
+  return Number((rows as unknown as Array<{ overlap: number | null }>)[0]?.overlap ?? 0)
+}
+
+async function reseedIfSaturated(db: EngineDatabase): Promise<number> {
+  const state = await currentState(db)
+  if (state.gads === 'GADS_AUTH_FAILURE') return 0
+  const open = await db.execute<{ count: string }>(sql`
+    SELECT count(*)::text AS count
+      FROM hht_engine.keywords
+     WHERE status IN ('NEW', 'QUEUED')
+       AND source_type IN ('seed', 'manual', 'google_keyword_idea', 'serp_title', 'geo_template', 'related_term')
+  `)
+  if (Number((open as unknown as Array<{ count: string }>)[0]?.count ?? 0) > 0) return 0
+  const seeds = await db.execute<{ id: number; keyword: string; expansion_depth: number; normalized_keyword: string }>(sql`
+    SELECT k.id, k.keyword, k.expansion_depth, k.normalized_keyword
+      FROM hht_engine.keywords k
+     WHERE k.max_serp_position_scanned > 0
+       AND NOT EXISTS (
+         SELECT 1 FROM hht_engine.jobs j
+          WHERE j.idempotency_key = 'ideas:yield:' || k.normalized_keyword
+       )
+     ORDER BY (k.new_domains_discovered + k.insertion_candidates) DESC, k.id
+     LIMIT 3
+  `)
+  const rows = seeds as unknown as Array<{ id: number; keyword: string; expansion_depth: number; normalized_keyword: string }>
+  for (const seed of rows) {
+    await enqueueJob(db, {
+      type: 'GADS_GENERATE_IDEAS',
+      idempotencyKey: `ideas:yield:${seed.normalized_keyword}`,
+      payload: {
+        seedType: 'keyword',
+        seed: seed.keyword,
+        depth: seed.expansion_depth + 1,
+        sourceKeywordId: seed.id,
+      },
+    })
+  }
+  return rows.length
+}
+
+async function logClassification(
+  db: EngineDatabase,
+  input: { keywordId: number; url: string; rootDomain: string },
+  fields: { stage: string; quality: string; lane: string; affiliate: boolean; score: number | null; reasons: string[] },
+): Promise<void> {
+  await db.insert(hhtEngineFrontierLog).values({
+    eventType: 'classification',
+    keywordId: input.keywordId,
+    url: input.url,
+    rootDomain: input.rootDomain,
+    stage: fields.stage,
+    quality: fields.quality,
+    lane: fields.lane,
+    affiliate: fields.affiliate,
+    score: fields.score,
+    reasons: fields.reasons,
+  })
+}
+
 async function insertKeyword(db: EngineDatabase, input: {
   keyword: string
   sourceType: string
@@ -1307,18 +1729,20 @@ async function insertKeyword(db: EngineDatabase, input: {
   city?: string | null
   state?: string | null
   depth: number
+  parentYield?: number
   metrics?: { avgMonthlySearches: number | null; volumeLow: number | null; volumeHigh: number | null; volumeIsRange: boolean }
-}): Promise<void> {
+}): Promise<boolean> {
   const config = loadEngineConfig()
   const normalized = normalizeFrontierKeyword(input.keyword)
-  if (!normalized || input.depth > config.expansionDepthCap) return
-  if (input.sourceType !== 'seed' && input.sourceType !== 'manual') {
+  if (!normalized) return false
+  if (!SERP_DISCOVERY_SOURCES.has(input.sourceType)) {
+    if (input.depth > config.expansionDepthCap) return false
     const counted = await db.execute<{ count: string }>(sql`
       SELECT count(*)::text AS count FROM hht_engine.keywords
        WHERE created_at > now() - interval '1 day' AND source_type NOT IN ('seed', 'manual')
     `)
     const count = Number((counted as unknown as Array<{ count: string }>)[0]?.count ?? 0)
-    if (count >= config.dailyKeywordCap) return
+    if (count >= config.dailyKeywordCap) return false
   }
   const [row] = await db.insert(hhtEngineKeywords).values({
     keyword: input.keyword,
@@ -1335,12 +1759,12 @@ async function insertKeyword(db: EngineDatabase, input: {
     volumeSource: input.metrics ? 'google_ads' : null,
     expansionDepth: input.depth,
     priorityScore: priorityScore({
-      clusterYield: 0,
-      relevanceScore: 0.5,
+      clusterYield: input.parentYield ?? 0,
+      relevanceScore: 1,
       verifiedStayCount: 0,
-      sourceYield: 0,
+      sourceYield: input.parentYield ?? 0,
       novel: true,
-      estimatedUnits: 200,
+      estimatedUnits: 1000,
       avgMonthlySearches: input.metrics?.avgMonthlySearches ?? null,
       volumeLow: input.metrics?.volumeLow ?? null,
       volumeHigh: input.metrics?.volumeHigh ?? null,
@@ -1349,7 +1773,9 @@ async function insertKeyword(db: EngineDatabase, input: {
     }),
     status: 'NEW',
   }).onConflictDoNothing().returning()
-  if (row) await enqueueJob(db, { type: 'GATE_KEYWORDS', idempotencyKey: `gate:${row.id}`, payload: { keywordId: row.id } })
+  if (!row) return false
+  await enqueueJob(db, { type: 'GATE_KEYWORDS', idempotencyKey: `gate:${row.id}`, payload: { keywordId: row.id } })
+  return true
 }
 
 async function inventory(db: EngineDatabase): Promise<HhtInventoryPage[]> {
@@ -1772,14 +2198,6 @@ function asSiteType(value: string | null | undefined): SiteType {
 function asGuestPost(value: string | null): GuestPostStatus | null {
   if (value === 'ACCEPTS' || value === 'LIKELY_ACCEPTS' || value === 'UNKNOWN' || value === 'LIKELY_REJECTS' || value === 'DOES_NOT_ACCEPT') return value
   return null
-}
-
-function asKeywordStatus(value: string): KeywordStatus {
-  if (
-    value === 'NEW' || value === 'QUEUED' || value === 'ACTIVE' || value === 'LOW_YIELD_AT_CURRENT_DEPTH' ||
-    value === 'SATURATED' || value === 'LOW_YIELD' || value === 'REJECTED_IRRELEVANT'
-  ) return value
-  return 'ACTIVE'
 }
 
 function isLeadStatus(value: string): value is LeadStatus {

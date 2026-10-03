@@ -32,6 +32,7 @@ try {
       '0040_hht_engine_notification_vault.sql',
       '0041_hht_guest_post_personalization.sql',
       '0042_hht_lead_review.sql',
+      '0043_hht_engine_frontier_log.sql',
     ]) {
       await executeEngineSql(readFileSync(resolve('packages/data/drizzle', filename), 'utf8'))
       console.log(`Applied ${filename}.`)
