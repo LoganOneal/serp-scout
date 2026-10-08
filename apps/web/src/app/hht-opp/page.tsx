@@ -13,16 +13,15 @@ import {
 import {
   FILTER_ENUMS,
   db,
-  hhtOppOutcomeStats,
   hhtOppStats,
   listDiscoveryRuns,
-  listHhtOppAuthors,
+  listGuestKeywords,
   listHhtOppOpportunities,
-  listHhtOppRecommendations,
   listStaleHhtOppOpportunities,
   parseDiscoveryRunNotes,
   queryOr,
   strategyYield,
+  type GuestKeywordRow,
   type HhtOppDashboardView,
   type HhtOppFilters,
 } from '@rnr/data'
@@ -32,27 +31,22 @@ import {
   discoverHhtOppMentionsAction,
   enrichHhtOppQualifiedAction,
   enrichHhtOppSelectedAction,
-  expandHhtOppAuthorsAction,
   expandHhtOppGraphAction,
-  generateHhtOppDraftAction,
-  generateHhtOppRecommendationsAction,
+  expandHhtOppKeywordIdeasAction,
   mineHhtOppCompetitorsAction,
   mineHhtOppDirectoriesAction,
   refreshStaleHhtOppAction,
   researchHhtOppSeedsAction,
   scanHhtOppBrokenLinksAction,
-  setHhtOppRecommendationAction,
   startHhtOppDiscoveryAction,
 } from './actions'
 
 export const dynamic = 'force-dynamic'
 
 const VIEWS: Array<{ id: HhtOppDashboardView; label: string }> = [
-  { id: 'opportunities', label: 'Opportunities' },
-  { id: 'strategies', label: 'Strategies' },
+  { id: 'opportunities', label: 'Blogs' },
+  { id: 'strategies', label: 'Searches' },
   { id: 'queries', label: 'Query templates' },
-  { id: 'outcomes', label: 'Outcomes' },
-  { id: 'learning', label: 'Learning' },
 ]
 
 type SearchParams = Record<string, string | string[] | undefined>
@@ -97,7 +91,7 @@ function parseFilters(params: SearchParams): HhtOppFilters {
     contacted: contacted === 'yes' || contacted === 'no' ? contacted : undefined,
     sort: ['score', 'authority', 'traffic', 'referring', 'outbound', 'price', 'checked'].includes(sort ?? '')
       ? (sort as HhtOppFilters['sort'])
-      : 'score',
+      : 'checked',
     direction: direction === 'asc' || direction === 'desc' ? direction : 'desc',
   }
 }
@@ -105,10 +99,6 @@ function parseFilters(params: SearchParams): HhtOppFilters {
 function label(value: string | null | undefined): string {
   if (!value) return NULL_DISPLAY
   return HHT_OPP_TYPE_LABELS[value as HhtOppType] ?? value.replaceAll('_', ' ')
-}
-
-function score(value: number | null | undefined): string {
-  return value == null ? NULL_DISPLAY : value.toFixed(1)
 }
 
 function date(value: Date | null | undefined): string {
@@ -130,7 +120,7 @@ export default async function HhtOppPage({ searchParams }: { searchParams: Promi
   const message = one(params['message'])
   const messageTone = one(params['tone']) === 'error' ? 'stopbox' : 'okbox'
 
-  const [stats, rows, strategies, runs, outcomes, recommendations, authors, stale] = await Promise.all([
+  const [stats, rows, keywords, strategies, runs, stale] = await Promise.all([
     queryOr('hhtOppStats', () => hhtOppStats(db()), {
       domains: 0,
       opportunities: 0,
@@ -140,11 +130,9 @@ export default async function HhtOppPage({ searchParams }: { searchParams: Promi
       drafts: 0,
     }),
     queryOr('listHhtOppOpportunities', () => listHhtOppOpportunities(db(), filters), []),
+    queryOr('listGuestKeywords', () => listGuestKeywords(db()), []),
     queryOr('strategyYield', () => strategyYield(db()), []),
     queryOr('listDiscoveryRuns', () => listDiscoveryRuns(db()), []),
-    queryOr('hhtOppOutcomeStats', () => hhtOppOutcomeStats(db()), { byType: [], byStrategy: [] }),
-    queryOr('listHhtOppRecommendations', () => listHhtOppRecommendations(db()), []),
-    queryOr('listHhtOppAuthors', () => listHhtOppAuthors(db()), []),
     queryOr('listStaleHhtOppOpportunities', () => listStaleHhtOppOpportunities(db()), []),
   ])
 
@@ -156,7 +144,7 @@ export default async function HhtOppPage({ searchParams }: { searchParams: Promi
         <div>
           <h1 className="page-title">Opportunity Engine</h1>
           <p className="page-desc">
-            Highest-value feasible ways for HotelHotTubs.com to earn relevant referring domains. Evidence over volume. No outreach is sent automatically.
+            Finds travel blogs that might be worth pitching, and pulls new keyword ideas from the Google Ads Keyword Ideas endpoint.
           </p>
         </div>
       </header>
@@ -186,10 +174,7 @@ export default async function HhtOppPage({ searchParams }: { searchParams: Promi
         <section className="hht-bl-summary hotel-bl-summary" aria-label="Opportunity summary">
           <Metric label="Domains" value={stats.domains} />
           <Metric label="Opportunities" value={stats.opportunities} />
-          <Metric label="PASS" value={stats.pass} />
-          <Metric label="REVIEW" value={stats.review} />
-          <Metric label="FAIL" value={stats.fail} />
-          <Metric label="Drafts" value={stats.drafts} />
+          <Metric label="Keywords" value={keywords.length} />
         </section>
 
         {view === 'opportunities' ? (
@@ -213,6 +198,8 @@ export default async function HhtOppPage({ searchParams }: { searchParams: Promi
             </section>
 
             <DiscoveryForm />
+
+            <KeywordIdeas keywords={keywords} />
 
             <div className="hht-opp-toolbar">
               <form action={enrichHhtOppSelectedAction}>
@@ -240,7 +227,6 @@ export default async function HhtOppPage({ searchParams }: { searchParams: Promi
                       <th>Site</th>
                       <th>Opportunity type</th>
                       <th>Status</th>
-                      <th className="num">Overall</th>
                       <th className="num">Authority</th>
                       <th className="num">Organic traffic</th>
                       <th className="num">Referring domains</th>
@@ -249,11 +235,8 @@ export default async function HhtOppPage({ searchParams }: { searchParams: Promi
                       <th className="num">Avg outbound</th>
                       <th>Link type</th>
                       <th>Price</th>
-                      <th>Eligibility</th>
                       <th>Requirements</th>
-                      <th>Contact</th>
                       <th>Last checked</th>
-                      <th>Draft</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -277,9 +260,6 @@ export default async function HhtOppPage({ searchParams }: { searchParams: Promi
                         <td>
                           <span className={`badge ${tone(row.status)}`}>{row.status}</span>
                         </td>
-                        <td className={row.overallScore != null && row.overallScore >= 70 ? 'num hht-bl-score-strong' : 'num'}>
-                          {score(row.overallScore)}
-                        </td>
                         <td className="num">{num(row.authorityScore)}</td>
                         <td className="num">{num(row.organicTraffic)}</td>
                         <td className="num">{num(row.referringDomains)}</td>
@@ -300,9 +280,6 @@ export default async function HhtOppPage({ searchParams }: { searchParams: Promi
                           {row.priceLabel}
                           {row.priceStatus === 'QUOTE_REQUIRED' ? <div className="hht-bl-subcell">No public price</div> : null}
                         </td>
-                        <td>
-                          <span className={`badge ${tone(row.eligibility)}`}>{row.eligibility}</span>
-                        </td>
                         <td className="hht-bl-long-cell">
                           {row.requirementsSummary.length === 0
                             ? NULL_DISPLAY
@@ -310,16 +287,7 @@ export default async function HhtOppPage({ searchParams }: { searchParams: Promi
                                 <div key={line}>{line}</div>
                               ))}
                         </td>
-                        <td className="hht-bl-cell-wrap">{row.contact ?? NULL_DISPLAY}</td>
                         <td>{date(row.lastCheckedAt)}</td>
-                        <td>
-                          <form action={generateHhtOppDraftAction}>
-                            <input type="hidden" name="opportunityId" value={row.id} />
-                            <button className="tiny primary" type="submit">
-                              {row.hasDraft ? 'Regenerate' : 'Generate draft'}
-                            </button>
-                          </form>
-                        </td>
                       </tr>
                     ))}
                   </tbody>
@@ -331,8 +299,6 @@ export default async function HhtOppPage({ searchParams }: { searchParams: Promi
 
         {view === 'strategies' ? <Strategies rows={strategies} runs={runs} stale={stale.length} /> : null}
         {view === 'queries' ? <QueryTemplates /> : null}
-        {view === 'outcomes' ? <Outcomes stats={outcomes} /> : null}
-        {view === 'learning' ? <Learning recommendations={recommendations} authors={authors} /> : null}
       </main>
     </div>
   )
@@ -386,28 +352,6 @@ function Filters({ filters }: { filters: HhtOppFilters }) {
         <input type="number" name="minReferring" min="0" defaultValue={filters.minReferringDomains} />
       </label>
       <label>
-        <span>Eligibility</span>
-        <select name="eligibility" defaultValue={filters.eligibility ?? ''}>
-          <option value="">All</option>
-          {FILTER_ENUMS.eligibility.map((value) => (
-            <option key={value} value={value}>
-              {value}
-            </option>
-          ))}
-        </select>
-      </label>
-      <label>
-        <span>SEO risk</span>
-        <select name="seoRisk" defaultValue={filters.seoRisk ?? ''}>
-          <option value="">All</option>
-          {FILTER_ENUMS.risks.map((value) => (
-            <option key={value} value={value}>
-              {value}
-            </option>
-          ))}
-        </select>
-      </label>
-      <label>
         <span>Strategy</span>
         <select name="strategy" defaultValue={filters.strategy ?? ''}>
           <option value="">All</option>
@@ -419,10 +363,6 @@ function Filters({ filters }: { filters: HhtOppFilters }) {
         </select>
       </label>
       <label>
-        <span>Min score</span>
-        <input type="number" name="minScore" min="0" max="100" defaultValue={filters.minScore} />
-      </label>
-      <label>
         <span>Contacted</span>
         <select name="contacted" defaultValue={filters.contacted ?? ''}>
           <option value="">All</option>
@@ -432,8 +372,7 @@ function Filters({ filters }: { filters: HhtOppFilters }) {
       </label>
       <label>
         <span>Sort</span>
-        <select name="sort" defaultValue={filters.sort ?? 'score'}>
-          <option value="score">Overall score</option>
+        <select name="sort" defaultValue={filters.sort === 'score' ? 'checked' : filters.sort ?? 'checked'}>
           <option value="authority">Authority Score</option>
           <option value="traffic">Organic traffic</option>
           <option value="referring">Referring domains</option>
@@ -468,6 +407,50 @@ function Filters({ filters }: { filters: HhtOppFilters }) {
         <Link href="/hht-opp">Clear</Link>
       </div>
     </form>
+  )
+}
+
+function KeywordIdeas({ keywords }: { keywords: GuestKeywordRow[] }) {
+  return (
+    <section className="hotel-bl-import-card hht-opp-seed-card" aria-labelledby="hht-opp-ideas-heading">
+      <div>
+        <h2 id="hht-opp-ideas-heading">Google Ads keyword ideas</h2>
+        <p>
+          One call to KeywordPlanIdeaService.GenerateKeywordIdeas. New travel phrases are stored here so the next search can look for blogs.
+        </p>
+      </div>
+      <form action={expandHhtOppKeywordIdeasAction}>
+        <button className="primary" type="submit">
+          Find keyword ideas
+        </button>
+      </form>
+      {keywords.length === 0 ? (
+        <p className="muted">No keywords stored yet. Finding ideas seeds the travel guest-post phrases, then asks Google Ads for more.</p>
+      ) : (
+        <div className="hht-bl-table-wrap">
+          <table className="hht-bl-table">
+            <thead>
+              <tr>
+                <th>Keyword</th>
+                <th>Source</th>
+                <th>Status</th>
+                <th className="num">New blogs</th>
+              </tr>
+            </thead>
+            <tbody>
+              {keywords.map((row) => (
+                <tr key={row.id}>
+                  <td>{row.keyword}</td>
+                  <td>{row.sourceType.replaceAll('_', ' ')}</td>
+                  <td>{row.status.replaceAll('_', ' ')}</td>
+                  <td className="num">{num(row.newDomains)}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
+    </section>
   )
 }
 
@@ -710,154 +693,5 @@ function PhaseActions({ stale }: { stale: number }) {
         </form>
       </div>
     </section>
-  )
-}
-
-function Outcomes({
-  stats,
-}: {
-  stats: {
-    byType: Array<{ key: string; sent: number; replies: number; acquired: number; avgCost: number | null; replyRate: number; acquireRate: number }>
-    byStrategy: Array<{ key: string; sent: number; replies: number; acquired: number; avgCost: number | null; replyRate: number; acquireRate: number }>
-  }
-}) {
-  const tables = [
-    { title: 'By opportunity type', rows: stats.byType },
-    { title: 'By discovery strategy', rows: stats.byStrategy },
-  ]
-  return (
-    <section className="hht-bl-section">
-      <div className="hht-bl-section-head">
-        <div>
-          <h2>Outreach outcomes</h2>
-          <p>Recorded from the detail page. This app never sends mail. Null cost stays blank, never $0.</p>
-        </div>
-      </div>
-      {tables.map((table) => (
-        <div key={table.title} className="hht-bl-table-wrap">
-          <h3>{table.title}</h3>
-          {table.rows.length === 0 ? (
-            <div className="hht-bl-empty">No outreach events yet.</div>
-          ) : (
-            <table className="hht-bl-table">
-              <thead>
-                <tr>
-                  <th>Slice</th>
-                  <th className="num">Sent</th>
-                  <th className="num">Replies</th>
-                  <th className="num">Reply rate</th>
-                  <th className="num">Links</th>
-                  <th className="num">Acquire rate</th>
-                  <th className="num">Avg cost</th>
-                </tr>
-              </thead>
-              <tbody>
-                {table.rows.map((row) => (
-                  <tr key={row.key}>
-                    <td>{row.key.replaceAll('_', ' ')}</td>
-                    <td className="num">{num(row.sent)}</td>
-                    <td className="num">{num(row.replies)}</td>
-                    <td className="num">{(row.replyRate * 100).toFixed(1)}%</td>
-                    <td className="num">{num(row.acquired)}</td>
-                    <td className="num">{(row.acquireRate * 100).toFixed(1)}%</td>
-                    <td className="num">{row.avgCost == null ? NULL_DISPLAY : `$${row.avgCost.toFixed(0)}`}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          )}
-        </div>
-      ))}
-    </section>
-  )
-}
-
-function Learning({
-  recommendations,
-  authors,
-}: {
-  recommendations: Array<{ id: number; summary: string; rationale: string; status: string; evidence: Record<string, number | string> }>
-  authors: Array<{ id: number; name: string; sourceUrl: string; publications: Array<{ domain: string; url: string | null }> }>
-}) {
-  return (
-    <>
-      <section className="hht-bl-section">
-        <div className="hht-bl-section-head">
-          <div>
-            <h2>Strategy recommendations</h2>
-            <p>Human approval only. The engine never removes a strategy on its own.</p>
-          </div>
-          <form action={generateHhtOppRecommendationsAction}>
-            <button className="primary" type="submit">
-              Analyze yield
-            </button>
-          </form>
-        </div>
-        {recommendations.length === 0 ? (
-          <div className="hht-bl-empty">No recommendations yet. Analyze yield after a few discovery runs or outreach events.</div>
-        ) : (
-          <div className="hht-bl-table-wrap">
-            <table className="hht-bl-table">
-              <thead>
-                <tr>
-                  <th>Recommendation</th>
-                  <th>Status</th>
-                  <th></th>
-                </tr>
-              </thead>
-              <tbody>
-                {recommendations.map((row) => (
-                  <tr key={row.id}>
-                    <td>
-                      <strong>{row.summary}</strong>
-                      <div className="hht-bl-subcell">{row.rationale}</div>
-                    </td>
-                    <td>
-                      <span className={`badge ${tone(row.status === 'approved' ? 'PASS' : row.status === 'dismissed' ? 'FAIL' : 'REVIEW')}`}>
-                        {row.status}
-                      </span>
-                    </td>
-                    <td>
-                      <form action={setHhtOppRecommendationAction} className="hht-opp-rec-actions">
-                        <input type="hidden" name="id" value={row.id} />
-                        <button type="submit" name="status" value="approved">
-                          Approve
-                        </button>
-                        <button type="submit" name="status" value="dismissed">
-                          Dismiss
-                        </button>
-                      </form>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        )}
-      </section>
-      <section className="hht-bl-section">
-        <div className="hht-bl-section-head">
-          <div>
-            <h2>Author graph</h2>
-            <p>Writers extracted from crawled pages. Expansion searches for other publications they appear on.</p>
-          </div>
-          <form action={expandHhtOppAuthorsAction}>
-            <button type="submit">Expand authors</button>
-          </form>
-        </div>
-        {authors.length === 0 ? (
-          <div className="hht-bl-empty">No authors extracted yet. Research a few publisher pages first.</div>
-        ) : (
-          <ul>
-            {authors.map((author) => (
-              <li key={author.id}>
-                {author.name} · {author.publications.map((pub) => pub.domain).join(', ') || 'no other publications yet'}
-                <div className="muted">{author.sourceUrl}</div>
-              </li>
-            ))}
-          </ul>
-        )}
-      </section>
-    </>
   )
 }

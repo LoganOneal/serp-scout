@@ -4338,6 +4338,66 @@ export const hhtOppSearchQueries = pgTable(
   }),
 )
 
+export const hhtOppGuestKeywords = pgTable(
+  'hht_opp_guest_keywords',
+  {
+    id: serial('id').primaryKey(),
+    keyword: text('keyword').notNull(),
+    normalizedKeyword: text('normalized_keyword').notNull(),
+    sourceType: text('source_type').notNull().default('seed'),
+    status: text('status').notNull().default('NEW'),
+    skipReason: text('skip_reason'),
+    neighborhood: text('neighborhood'),
+    serpOverlap: doublePrecision('serp_overlap'),
+    newDomains: integer('new_domains').notNull().default(0),
+    unitsSpent: integer('units_spent'),
+    fetchedAt: timestamp('fetched_at', { withTimezone: true }),
+    ideasExpandedAt: timestamp('ideas_expanded_at', { withTimezone: true }),
+    createdAt: now(),
+  },
+  (t) => ({
+    normalizedUq: uniqueIndex('hht_opp_guest_keywords_normalized_uq').on(t.normalizedKeyword),
+    statusIdx: index('hht_opp_guest_keywords_status_idx').on(t.status, t.createdAt),
+  }),
+)
+
+export const hhtOppGuestSerpResults = pgTable(
+  'hht_opp_guest_serp_results',
+  {
+    id: serial('id').primaryKey(),
+    keywordId: integer('keyword_id')
+      .notNull()
+      .references(() => hhtOppGuestKeywords.id, { onDelete: 'cascade' }),
+    position: integer('position').notNull(),
+    url: text('url').notNull(),
+    domain: text('domain').notNull(),
+  },
+  (t) => ({
+    keywordUrlUq: uniqueIndex('hht_opp_guest_serp_results_uq').on(t.keywordId, t.url),
+  }),
+)
+
+export const hhtOppGuestEvaluations = pgTable(
+  'hht_opp_guest_evaluations',
+  {
+    id: serial('id').primaryKey(),
+    rootDomain: text('root_domain').notNull(),
+    verdict: text('verdict').notNull(),
+    pitchUrl: text('pitch_url'),
+    quote: text('quote'),
+    contactMethod: text('contact_method'),
+    contactValue: text('contact_value'),
+    pitchSubject: text('pitch_subject'),
+    pitchAngle: text('pitch_angle'),
+    pitchBody: text('pitch_body'),
+    pitchDraftedAt: timestamp('pitch_drafted_at', { withTimezone: true }),
+    evaluatedAt: timestamp('evaluated_at', { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => ({
+    domainUq: uniqueIndex('hht_opp_guest_evaluations_domain_uq').on(t.rootDomain),
+  }),
+)
+
 export const hhtOppDomains = pgTable(
   'hht_opp_domains',
   {

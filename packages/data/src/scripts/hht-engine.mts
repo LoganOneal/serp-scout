@@ -7,6 +7,7 @@ import { engineDb } from '../hht-engine/jobs.js'
 import { engineStatus, runBatch } from '../hht-engine/batch.js'
 import { ingestLlmAnswers } from '../hht-engine/llm-tasks.js'
 import { runGoogleDesktopOAuth, GOOGLE_ADS_SCOPE } from '../hht-engine/oauth.js'
+import { evaluateGuestPostPitchCalls } from '../hht-engine/pitch-call.js'
 import { runPreflight } from '../hht-engine/preflight.js'
 import {
   ENGINE_VAULT_SECRETS,
@@ -33,6 +34,7 @@ try {
       '0041_hht_guest_post_personalization.sql',
       '0042_hht_lead_review.sql',
       '0043_hht_engine_frontier_log.sql',
+      '0044_hht_engine_pitch_call.sql',
     ]) {
       await executeEngineSql(readFileSync(resolve('packages/data/drizzle', filename), 'utf8'))
       console.log(`Applied ${filename}.`)
@@ -98,6 +100,9 @@ try {
       const second = await runBatch(db)
       console.log(JSON.stringify({ stage: 'second_batch', ...second }, null, 2))
     }
+  } else if (command === 'pitch-call') {
+    const result = await evaluateGuestPostPitchCalls(db)
+    console.log(JSON.stringify(result, null, 2))
   } else if (command === 'preflight') {
     const result = await runPreflight(db)
     for (const item of result.checks) {
@@ -105,7 +110,7 @@ try {
     }
     if (!result.passed) process.exitCode = 1
   } else {
-    console.error('Usage: pnpm engine <migrate|secrets:load|auth:google-ads|sync:semrush|sync:install|preflight|status|run-batch|ingest-llm|run-all>')
+    console.error('Usage: pnpm engine <migrate|secrets:load|auth:google-ads|sync:semrush|sync:install|preflight|status|run-batch|ingest-llm|run-all|pitch-call>')
     process.exitCode = 1
   }
 } finally {

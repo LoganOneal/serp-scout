@@ -133,6 +133,10 @@ export const hhtEngineDomains = hhtEngineSchema.table('domains', {
   contactStatus: text('contact_status'),
   blocked: boolean('blocked').notNull().default(false),
   manualNotes: text('manual_notes'),
+  pitchCall: text('pitch_call'),
+  pitchCallUrl: text('pitch_call_url'),
+  pitchCallQuote: text('pitch_call_quote'),
+  pitchCallAt: ts('pitch_call_at'),
   firstDiscoveredAt: ts('first_discovered_at').notNull().defaultNow(),
   lastSeenAt: ts('last_seen_at').notNull().defaultNow(),
 }, (table) => [uniqueIndex('hht_engine_domains_root_idx').on(table.rootDomain)])

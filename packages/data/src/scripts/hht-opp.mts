@@ -9,7 +9,6 @@
 import 'dotenv/config'
 import { expandQueryTemplates } from '@rnr/core'
 import { closeDb, db } from '../db.js'
-import { generateHhtOppDraft } from '../hht-opp/drafts.js'
 import {
   executeHhtOppDiscoveryRun,
   isHhtOppSearchStrategy,
@@ -26,11 +25,13 @@ import { discoverHhtOppMentions } from '../hht-opp/mentions.js'
 import { hhtOppOutcomeStats } from '../hht-opp/outcomes.js'
 import { listDiscoveryRuns, listHhtOppOpportunities, strategyYield } from '../hht-opp/queries.js'
 import { refreshStaleHhtOppOpportunities } from '../hht-opp/refresh.js'
+import { readFileSync } from 'node:fs'
+import { researchGuestPostUrls, scaleGuestPostDiscovery } from '../hht-opp/guest-scale.js'
+import { expandGuestKeywordIdeas, runGuestPostFrontier } from '../hht-opp/guest-frontier.js'
 import { researchHhtOppSeeds } from '../hht-opp/research.js'
 
 const argv = process.argv.slice(2)
 const command = argv[0] ?? 'help'
-const positional = argv.filter((a) => !a.startsWith('--')).slice(1)
 const flag = (n: string): boolean => argv.includes(`--${n}`)
 const opt = (n: string): string | undefined => argv.find((a) => a.startsWith(`--${n}=`))?.slice(n.length + 3)
 
@@ -99,13 +100,6 @@ async function main(): Promise<void> {
       console.log(JSON.stringify(await enrichHhtOppDomains(database, ids), null, 2))
       break
     }
-    case 'draft': {
-      const id = Number(opt('id') ?? positional[0])
-      if (!Number.isInteger(id) || id <= 0) throw new Error('Pass --id=N')
-      const draft = await generateHhtOppDraft(database, id, (opt('tone') as 'default') ?? 'default')
-      console.log(`#${draft.id} ${draft.subject}\n\n${draft.body}`)
-      break
-    }
     case 'list': {
       const rows = await listHhtOppOpportunities(database, { sort: 'score' })
       if (flag('json')) {
@@ -168,6 +162,52 @@ async function main(): Promise<void> {
       console.log(JSON.stringify(await hhtOppOutcomeStats(database), null, 2))
       break
     }
+    case 'guest-research': {
+      const file = opt('urls-file')
+      if (!file) throw new Error('Pass --urls-file=path')
+      const urls = readFileSync(file, 'utf8').split('\n')
+      console.log(
+        JSON.stringify(
+          await researchGuestPostUrls(database, urls, { domainLimit: Number(opt('domains') ?? 40) }),
+          null,
+          2,
+        ),
+      )
+      break
+    }
+    case 'keyword-ideas': {
+      console.log(JSON.stringify(await expandGuestKeywordIdeas(database, { ideaLimit: Number(opt('ideas') ?? 20) }), null, 2))
+      break
+    }
+    case 'guest-frontier': {
+      const maxRaw = opt('max')
+      const maxKeywords = maxRaw == null ? null : Number(maxRaw)
+      console.log(
+        JSON.stringify(
+          await runGuestPostFrontier(database, {
+            maxKeywords: maxKeywords != null && Number.isFinite(maxKeywords) ? maxKeywords : null,
+            ideaLimit: Number(opt('ideas') ?? 20),
+          }),
+          null,
+          2,
+        ),
+      )
+      break
+    }
+    case 'guest-scale': {
+      console.log(
+        JSON.stringify(
+          await scaleGuestPostDiscovery(database, {
+            serpDepth: Number(opt('serp') ?? 100),
+            domainLimit: Number(opt('domains') ?? 50),
+            ideaLimit: Number(opt('ideas') ?? 8),
+          }),
+          null,
+          2,
+        ),
+      )
+      break
+    }
     case 'queries': {
       const templates = expandQueryTemplates()
       console.log(`${templates.length} query templates`)
@@ -183,9 +223,11 @@ async function main(): Promise<void> {
   pnpm hht:opp runs
   pnpm hht:opp list
   pnpm hht:opp enrich --all-qualified
-  pnpm hht:opp draft --id=1
   pnpm hht:opp strategies
   pnpm hht:opp queries
+  pnpm hht:opp guest-scale [--serp=100] [--domains=50] [--ideas=8]
+  pnpm hht:opp keyword-ideas [--ideas=20]
+  pnpm hht:opp guest-frontier [--max=10] [--ideas=20]
   pnpm hht:opp competitors [--seeds=a.com,b.com]
   pnpm hht:opp mentions [--fixture]
   pnpm hht:opp broken

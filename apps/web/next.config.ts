@@ -71,7 +71,11 @@ const config = (phase: string): NextConfig => ({
    * page never has to render.
    */
   async redirects() {
-    return [{ source: '/', destination: '/scout', permanent: false }]
+    return [
+      { source: '/', destination: '/scout', permanent: false },
+      { source: '/hht-engine', destination: '/hht-opp', permanent: false },
+      { source: '/hht-engine/:path*', destination: '/hht-opp', permanent: false },
+    ]
   },
   experimental: {
     serverActions: { bodySizeLimit: '10mb' },

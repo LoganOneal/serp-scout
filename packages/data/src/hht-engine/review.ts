@@ -36,6 +36,9 @@ export interface EngineReviewLead {
   subject: string
   body: string
   updatedAt: Date
+  pitchCall: string | null
+  pitchCallUrl: string | null
+  pitchCallQuote: string | null
 }
 
 export interface EngineReviewLeadDetail extends EngineReviewLead {
@@ -107,6 +110,9 @@ export async function listEngineReviewLeads(
         subject: row.review?.subject ?? row.draft?.subject ?? '',
         body: row.review?.body ?? row.draft?.body ?? '',
         updatedAt: row.review?.updatedAt ?? row.draft?.createdAt ?? row.opportunity.discoveredAt,
+        pitchCall: row.opportunity.type === 'guest_post' ? row.domain?.pitchCall ?? null : null,
+        pitchCallUrl: row.opportunity.type === 'guest_post' ? row.domain?.pitchCallUrl ?? null : null,
+        pitchCallQuote: row.opportunity.type === 'guest_post' ? row.domain?.pitchCallQuote ?? null : null,
       }
     })
     .filter((lead) => options.status === undefined || options.status === 'ALL' || lead.reviewStatus === options.status)
@@ -180,6 +186,9 @@ export async function getEngineReviewLead(
     subject,
     body,
     updatedAt: row.review?.updatedAt ?? row.draft?.createdAt ?? row.opportunity.discoveredAt,
+    pitchCall: row.opportunity.type === 'guest_post' ? row.domain?.pitchCall ?? null : null,
+    pitchCallUrl: row.opportunity.type === 'guest_post' ? row.domain?.pitchCallUrl ?? null : null,
+    pitchCallQuote: row.opportunity.type === 'guest_post' ? row.domain?.pitchCallQuote ?? null : null,
     opportunity: row.opportunity,
     publisher: row.domain ?? null,
     research: research ?? null,

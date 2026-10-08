@@ -17,6 +17,8 @@ import type { Database } from '../db.js'
 import {
   hhtOppContacts,
   hhtOppCrawledPages,
+  hhtOppGuestEvaluations,
+  hhtOppGuestKeywords,
   hhtOppDiscoveryRuns,
   hhtOppDomains,
   hhtOppDrafts,
@@ -81,6 +83,10 @@ export interface HhtOppListRow {
   eligibility: HhtOppEligibility
   requirementsSummary: string[]
   contact: string | null
+  contactMethod: 'email' | 'form' | null
+  contactValue: string | null
+  pitchCall: string | null
+  hasPitchDraft: boolean
   lastCheckedAt: Date | null
   hasDraft: boolean
   seoRisk: HhtOppSeoRisk
@@ -100,17 +106,12 @@ function latestMetric(metric: string) {
   )`
 }
 
-function primaryContactSql() {
-  return sql<string | null>`(
-    select coalesce(c.email, c.form_url)
-      from ${hhtOppContacts} c
-     where c.opportunity_id = ${hhtOppOpportunities.id}
-     order by
-       case c.status when 'VERIFIED_PUBLIC' then 0 when 'INFERRED' then 1 else 2 end,
-       (c.email is not null) desc,
-       c.id
-     limit 1
-  )`
+function pursueContactValueSql() {
+  return sql<string | null>`case when ${hhtOppGuestEvaluations.verdict} = 'PURSUE' then ${hhtOppGuestEvaluations.contactValue} else null end`
+}
+
+function pursueContactMethodSql() {
+  return sql<'email' | 'form' | null>`case when ${hhtOppGuestEvaluations.verdict} = 'PURSUE' then ${hhtOppGuestEvaluations.contactMethod} else null end`
 }
 
 function conditions(filters: HhtOppFilters): SQL[] {
@@ -143,7 +144,11 @@ function conditions(filters: HhtOppFilters): SQL[] {
   return out
 }
 
-export async function listHhtOppOpportunities(db: Database, filters: HhtOppFilters = {}): Promise<HhtOppListRow[]> {
+export async function listHhtOppOpportunities(
+  db: Database,
+  filters: HhtOppFilters = {},
+  limit = 1000,
+): Promise<HhtOppListRow[]> {
   const where = conditions(filters)
   const sort = filters.sort ?? 'score'
   const direction = filters.direction === 'asc' ? asc : desc
@@ -185,14 +190,19 @@ export async function listHhtOppOpportunities(db: Database, filters: HhtOppFilte
       referringDomains: latestMetric('referring_domains'),
       inboundLinks: latestMetric('backlinks'),
       inboundOutboundRatio: latestMetric('inbound_outbound_ratio'),
-      contact: primaryContactSql(),
+      contact: pursueContactValueSql(),
+      contactMethod: pursueContactMethodSql(),
+      contactValue: pursueContactValueSql(),
+      pitchCall: hhtOppGuestEvaluations.verdict,
+      hasPitchDraft: sql<boolean>`(${hhtOppGuestEvaluations.verdict} = 'PURSUE' and ${hhtOppGuestEvaluations.pitchBody} is not null)`,
       draftCount: sql<number>`(select count(*)::int from ${hhtOppDrafts} d where d.opportunity_id = ${hhtOppOpportunities.id})`,
     })
     .from(hhtOppOpportunities)
     .innerJoin(hhtOppDomains, eq(hhtOppDomains.id, hhtOppOpportunities.domainId))
+    .leftJoin(hhtOppGuestEvaluations, eq(hhtOppGuestEvaluations.rootDomain, hhtOppDomains.rootDomain))
     .where(where.length ? and(...where) : undefined)
     .orderBy(direction(sortExpr), desc(hhtOppOpportunities.id))
-    .limit(1000)
+    .limit(limit)
 
   return rows.map((row) => ({
     id: row.id,
@@ -223,6 +233,10 @@ export async function listHhtOppOpportunities(db: Database, filters: HhtOppFilte
     eligibility: row.eligibility,
     requirementsSummary: row.requirementsSummary,
     contact: row.contact,
+    contactMethod: row.contactMethod === 'email' || row.contactMethod === 'form' ? row.contactMethod : null,
+    contactValue: row.contactValue,
+    pitchCall: row.pitchCall,
+    hasPitchDraft: Boolean(row.hasPitchDraft),
     lastCheckedAt: row.lastCheckedAt,
     hasDraft: row.draftCount > 0,
     seoRisk: row.seoRisk,
@@ -328,7 +342,18 @@ export async function getHhtOppDetail(db: Database, id: number) {
   ])
 
   const metrics = await latestSeoMetrics(db, domain.id)
-  return { opportunity, domain, requirements, sources, pricing, contacts, drafts, pages, outreach, metrics }
+  return {
+    opportunity,
+    domain,
+    requirements,
+    sources,
+    pricing,
+    contacts,
+    drafts,
+    pages,
+    outreach,
+    metrics,
+  }
 }
 
 export async function updateHhtOppStatus(db: Database, id: number, status: HhtOppStatus): Promise<void> {
@@ -342,6 +367,32 @@ export async function updateHhtOppStatus(db: Database, id: number, status: HhtOp
       updatedAt: new Date(),
     })
     .where(eq(hhtOppOpportunities.id, id))
+}
+
+export interface GuestKeywordRow {
+  id: number
+  keyword: string
+  sourceType: string
+  status: string
+  newDomains: number
+  fetchedAt: Date | null
+  ideasExpandedAt: Date | null
+}
+
+export async function listGuestKeywords(db: Database, limit = 200): Promise<GuestKeywordRow[]> {
+  return db
+    .select({
+      id: hhtOppGuestKeywords.id,
+      keyword: hhtOppGuestKeywords.keyword,
+      sourceType: hhtOppGuestKeywords.sourceType,
+      status: hhtOppGuestKeywords.status,
+      newDomains: hhtOppGuestKeywords.newDomains,
+      fetchedAt: hhtOppGuestKeywords.fetchedAt,
+      ideasExpandedAt: hhtOppGuestKeywords.ideasExpandedAt,
+    })
+    .from(hhtOppGuestKeywords)
+    .orderBy(desc(hhtOppGuestKeywords.id))
+    .limit(limit)
 }
 
 export async function listDiscoveryQueries(db: Database) {

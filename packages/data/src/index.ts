@@ -222,11 +222,14 @@ export {
   updateHhtOppStatus,
   listDiscoveryQueries,
   listDiscoveryRuns,
+  listGuestKeywords,
   FILTER_ENUMS,
+  type GuestKeywordRow,
   type HhtOppDashboardView,
   type HhtOppFilters,
   type HhtOppListRow,
 } from './hht-opp/queries.js'
+export { expandGuestKeywordIdeas } from './hht-opp/guest-frontier.js'
 export { generateHhtOppDraft, type DraftTone } from './hht-opp/drafts.js'
 export { enrichHhtOppDomains, enrichQualifiedHhtOppDomains } from './hht-opp/enrich.js'
 export {

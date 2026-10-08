@@ -17,8 +17,8 @@ import {
   executeHhtOppDiscoveryRun,
   expandHhtOppAuthors,
   expandHhtOppGraph,
+  expandGuestKeywordIdeas,
   failHhtOppDiscoveryRun,
-  generateHhtOppDraft,
   generateHhtOppRecommendations,
   isHhtOppSearchStrategy,
   mineHhtOppCompetitors,
@@ -31,7 +31,6 @@ import {
   scanHhtOppBrokenLinks,
   setHhtOppRecommendationStatus,
   updateHhtOppStatus,
-  type DraftTone,
 } from '@rnr/data'
 
 function messageUrl(path: string, message: string, tone: 'success' | 'error' = 'success'): string {
@@ -72,19 +71,17 @@ export async function researchHhtOppSeedsAction(formData: FormData): Promise<nev
   }
 }
 
-export async function generateHhtOppDraftAction(formData: FormData): Promise<never> {
-  const opportunityId = Number(formData.get('opportunityId'))
-  const tone = String(formData.get('tone') ?? 'default') as DraftTone
-  if (!Number.isInteger(opportunityId) || opportunityId <= 0) {
-    redirect(messageUrl('/hht-opp', 'Missing opportunity.', 'error'))
-  }
+export async function expandHhtOppKeywordIdeasAction(): Promise<never> {
   try {
-    const draft = await generateHhtOppDraft(db(), opportunityId, tone)
+    const result = await expandGuestKeywordIdeas(db(), { ideaLimit: 20 })
     revalidatePath('/hht-opp')
-    revalidatePath(`/hht-opp/${opportunityId}`)
-    redirect(messageUrl(`/hht-opp/${opportunityId}`, `Draft #${draft.id} ready for human approval. Nothing was sent.`))
+    const summary = result.seed
+      ? `Google Ads keyword ideas from “${result.seed}”: ${result.added} new phrase${result.added === 1 ? '' : 's'}.`
+      : 'No seed phrase is waiting for keyword ideas.'
+    redirect(messageUrl('/hht-opp', result.error ? `${summary} ${result.error}` : summary, result.error ? 'error' : 'success'))
   } catch (error) {
-    redirect(messageUrl(`/hht-opp/${opportunityId}`, error instanceof Error ? error.message : 'Draft failed.', 'error'))
+    if (isRedirectError(error)) throw error
+    redirect(messageUrl('/hht-opp', error instanceof Error ? error.message : 'Keyword ideas failed.', 'error'))
   }
 }
 

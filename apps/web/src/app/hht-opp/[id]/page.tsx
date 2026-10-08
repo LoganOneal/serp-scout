@@ -4,7 +4,7 @@ import { HHT_OPP_STATUSES, HHT_OPP_TYPE_LABELS, formatPrice, type HhtOppType } f
 import { db, getHhtOppDetail, queryOr, suggestHhtAssets } from '@rnr/data'
 import { HhtSectionTabs } from '@/components/hht/HhtSectionTabs'
 import { NULL_DISPLAY, num } from '@/lib/format'
-import { generateHhtOppDraftAction, recordHhtOppOutreachAction, updateHhtOppStatusAction } from '../actions'
+import { updateHhtOppStatusAction } from '../actions'
 
 export const dynamic = 'force-dynamic'
 
@@ -41,7 +41,7 @@ export default async function HhtOppDetailPage({
   const sp = await searchParams
   const message = Array.isArray(sp['message']) ? sp['message'][0] : sp['message']
   const messageTone = (Array.isArray(sp['tone']) ? sp['tone'][0] : sp['tone']) === 'error' ? 'stopbox' : 'okbox'
-  const { opportunity, domain, requirements, sources, pricing, contacts, drafts, pages, outreach, metrics } = detail
+  const { opportunity, domain, requirements, sources, pricing, contacts, pages, metrics } = detail
   const assets = await queryOr(
     'suggestHhtAssets',
     () =>
@@ -85,9 +85,6 @@ export default async function HhtOppDetailPage({
 
       <main className="hht-bl-view hht-opp-detail">
         <section className="hht-bl-summary hotel-bl-summary">
-          <Fact label="Overall" value={opportunity.overallScore == null ? NULL_DISPLAY : opportunity.overallScore.toFixed(1)} />
-          <Fact label="Feasibility" value={opportunity.feasibilityScore == null ? NULL_DISPLAY : opportunity.feasibilityScore.toFixed(1)} />
-          <Fact label="SEO value" value={opportunity.seoValueScore == null ? NULL_DISPLAY : opportunity.seoValueScore.toFixed(1)} />
           <Fact label="Authority Score" value={num(metrics['authority_score'] ?? null)} />
           <Fact label="Referring domains" value={num(metrics['referring_domains'] ?? null)} />
           <Fact label="Inbound links" value={num(metrics['backlinks'] ?? null)} />
@@ -100,23 +97,12 @@ export default async function HhtOppDetailPage({
         <div className="hht-opp-detail-grid">
           <article className="hotel-bl-detail-card">
             <h2>Overview</h2>
-            <p>{opportunity.whyItMatters ?? 'No thesis stored.'}</p>
             <dl>
               <div>
                 <dt>Status</dt>
                 <dd>
                   <span className={`badge ${tone(opportunity.status)}`}>{opportunity.status}</span>
                 </dd>
-              </div>
-              <div>
-                <dt>Eligibility</dt>
-                <dd>
-                  <span className={`badge ${tone(opportunity.eligibility)}`}>{opportunity.eligibility}</span> · {opportunity.eligibilityReason}
-                </dd>
-              </div>
-              <div>
-                <dt>Pitch angle</dt>
-                <dd>{opportunity.pitchAngle ?? NULL_DISPLAY}</dd>
               </div>
               <div>
                 <dt>Discovered by</dt>
@@ -143,18 +129,6 @@ export default async function HhtOppDetailPage({
               </label>
               <button type="submit">Update status</button>
             </form>
-          </article>
-
-          <article className="hotel-bl-detail-card">
-            <h2>Eligibility</h2>
-            <p>
-              <strong>{opportunity.eligibility}</strong> ({opportunity.eligibilityConfidence} confidence)
-            </p>
-            <p>{opportunity.eligibilityReason}</p>
-            {opportunity.eligibilityExcerpt ? <blockquote>{opportunity.eligibilityExcerpt}</blockquote> : <p>No explicit eligibility excerpt — this cannot be a PASS.</p>}
-            <p className="muted">
-              Source: {opportunity.eligibilitySourceUrl ?? NULL_DISPLAY} · checked {date(opportunity.eligibilityCheckedAt)}
-            </p>
           </article>
 
           <article className="hotel-bl-detail-card">
@@ -355,12 +329,22 @@ export default async function HhtOppDetailPage({
           <article className="hotel-bl-detail-card">
             <h2>Contacts</h2>
             {contacts.length === 0 ? (
-              <p>No public contact extracted. Default outreach only to VERIFIED_PUBLIC addresses.</p>
+              <p>No public email or form stored for this page.</p>
             ) : (
               <ul>
                 {contacts.map((row) => (
                   <li key={row.id}>
-                    {row.email ?? row.formUrl ?? NULL_DISPLAY} · {row.status}
+                    {row.email ? 'Email' : row.formUrl ? 'Contact form' : 'Contact'}
+                    {' · '}
+                    {row.email ? (
+                      <a href={`mailto:${row.email}`}>{row.email}</a>
+                    ) : row.formUrl ? (
+                      <a href={row.formUrl} target="_blank" rel="noreferrer">{row.formUrl}</a>
+                    ) : (
+                      NULL_DISPLAY
+                    )}
+                    {' · '}
+                    {row.status}
                     <div className="muted">{row.sourceUrl}</div>
                   </li>
                 ))}
@@ -383,117 +367,6 @@ export default async function HhtOppDetailPage({
           </ul>
         </article>
 
-        <article className="hotel-bl-detail-card">
-          <h2>Outreach outcomes</h2>
-          <p>Log what happened after a human sent a pitch. This form does not send email.</p>
-          <form action={recordHhtOppOutreachAction} className="hht-opp-outreach-form">
-            <input type="hidden" name="opportunityId" value={opportunity.id} />
-            <label>
-              <span>Date sent</span>
-              <input type="date" name="dateSent" />
-            </label>
-            <label>
-              <span>Channel</span>
-              <input name="channel" defaultValue="email" />
-            </label>
-            <label>
-              <span>Quoted price</span>
-              <input type="number" name="priceQuoted" min="0" step="1" />
-            </label>
-            <label>
-              <span>Final cost</span>
-              <input type="number" name="finalCost" min="0" step="1" />
-            </label>
-            <label>
-              <span>Link URL</span>
-              <input name="linkUrl" />
-            </label>
-            <label>
-              <span>Target HHT URL</span>
-              <input name="targetHhtUrl" />
-            </label>
-            <label className="hotel-bl-check">
-              <input type="checkbox" name="reply" value="1" />
-              <span>Reply</span>
-            </label>
-            <label className="hotel-bl-check">
-              <input type="checkbox" name="positiveReply" value="1" />
-              <span>Positive reply</span>
-            </label>
-            <label className="hotel-bl-check">
-              <input type="checkbox" name="linkAcquired" value="1" />
-              <span>Link acquired</span>
-            </label>
-            <label>
-              <span>Notes</span>
-              <input name="notes" />
-            </label>
-            <button className="primary" type="submit">
-              Save outcome
-            </button>
-          </form>
-          {outreach.length === 0 ? (
-            <p>No outreach events recorded.</p>
-          ) : (
-            <ul>
-              {outreach.map((row) => (
-                <li key={row.id}>
-                  {date(row.dateSent)} · {row.channel ?? '—'}
-                  {row.reply ? ' · reply' : ''}
-                  {row.linkAcquired ? ' · link acquired' : ''}
-                  {row.finalCost != null ? ` · $${row.finalCost}` : ''}
-                  {row.notes ? ` · ${row.notes}` : ''}
-                </li>
-              ))}
-            </ul>
-          )}
-        </article>
-
-        <article className="hotel-bl-detail-card">
-          <h2>Drafts</h2>
-          <p>Human approval only. Nothing here sends mail.</p>
-          <form action={generateHhtOppDraftAction} className="hht-opp-draft-actions">
-            <input type="hidden" name="opportunityId" value={opportunity.id} />
-            <button className="primary" type="submit" name="tone" value="default">
-              Generate draft
-            </button>
-            <button type="submit" name="tone" value="shorter">
-              Shorter
-            </button>
-            <button type="submit" name="tone" value="more_editorial">
-              More editorial
-            </button>
-            <button type="submit" name="tone" value="more_casual">
-              More casual
-            </button>
-            <button type="submit" name="tone" value="more_data">
-              More data-driven
-            </button>
-            <button type="submit" name="tone" value="new_angle">
-              New angle
-            </button>
-          </form>
-          {drafts.length === 0 ? (
-            <p>No drafts yet.</p>
-          ) : (
-            drafts.map((draft) => (
-              <section key={draft.id} className="hht-opp-draft">
-                <h3>
-                  {draft.subject} <span className="muted">{date(draft.createdAt)} · {draft.tone} · {draft.status}</span>
-                </h3>
-                {draft.pitchAngle ? <p className="muted">{draft.pitchAngle}</p> : null}
-                <pre>{draft.body}</pre>
-                {draft.articleIdeas.length > 0 ? (
-                  <ul>
-                    {draft.articleIdeas.map((idea) => (
-                      <li key={idea}>{idea}</li>
-                    ))}
-                  </ul>
-                ) : null}
-              </section>
-            ))
-          )}
-        </article>
       </main>
     </div>
   )
