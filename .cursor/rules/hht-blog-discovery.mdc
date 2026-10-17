@@ -1,0 +1,15 @@
+---
+description: HotelHotTubs blog and link-insertion discovery. Use when finding guest-post blogs, write-for-us pages, or hot-tub ranking pages to pitch.
+alwaysApply: false
+globs: apps/web/src/app/hht-opp/**,packages/**/hht-opp/**,.agents/skills/hht-blog-discovery/**
+---
+
+# HHT blog discovery
+
+Before any HotelHotTubs opportunity discovery, read and follow `.agents/skills/hht-blog-discovery/SKILL.md`. The seed list is `.agents/skills/hht-blog-discovery/blog_discovery_seed_queries.csv`.
+
+- Run priority 1 queries before priority 2. Top 100 US organic results per query, via the Semrush MCP connector, in batches of about 15.
+- Dedupe by registrable domain. Never re-triage a domain already in the CRM, leads table, or skipped list.
+- `guest_post` goes through guest-post feasibility. `link_insertion` is stored as a ranking-page lead, not a guest-post target.
+- Email kai@useterrace.ai when a batch finishes.
+- Stop after the first priority-1 batch and wait for an explicit go-ahead. Do not fall back to the 100-result frontier.

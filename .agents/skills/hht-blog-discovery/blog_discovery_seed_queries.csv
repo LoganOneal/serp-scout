@@ -1,0 +1,98 @@
+id,query,bucket,priority,lead_type
+1,couples travel write for us,topic_wfu,1,guest_post
+2,romantic getaways write for us,topic_wfu,1,guest_post
+3,weekend getaways write for us,topic_wfu,1,guest_post
+4,anniversary trips write for us,topic_wfu,1,guest_post
+5,babymoon travel write for us,topic_wfu,2,guest_post
+6,girls trip write for us,topic_wfu,2,guest_post
+7,staycation write for us,topic_wfu,2,guest_post
+8,city break write for us,topic_wfu,2,guest_post
+9,road trip write for us,topic_wfu,2,guest_post
+10,ski and winter travel write for us,topic_wfu,2,guest_post
+11,mountain cabin travel write for us,topic_wfu,2,guest_post
+12,beach vacation write for us,topic_wfu,2,guest_post
+13,boutique hotel write for us,topic_wfu,1,guest_post
+14,hotel review write for us,topic_wfu,1,guest_post
+15,romantic hotel write for us,topic_wfu,1,guest_post
+16,spa travel write for us,topic_wfu,1,guest_post
+17,wellness travel write for us,topic_wfu,1,guest_post
+18,relaxation retreat write for us,topic_wfu,2,guest_post
+19,solo female travel write for us,topic_wfu,2,guest_post
+20,budget travel write for us,topic_wfu,2,guest_post
+21,foodie travel write for us,topic_wfu,2,guest_post
+22,food and travel write for us,topic_wfu,2,guest_post
+23,travel tips write for us,topic_wfu,2,guest_post
+24,bucket list travel write for us,topic_wfu,2,guest_post
+25,adventure travel write for us,topic_wfu,2,guest_post
+26,USA travel write for us,topic_wfu,2,guest_post
+27,national parks write for us,topic_wfu,2,guest_post
+28,road trips USA write for us,topic_wfu,2,guest_post
+29,small town travel write for us,topic_wfu,2,guest_post
+30,couples weekend write for us,topic_wfu,2,guest_post
+31,romantic travel write for us,topic_wfu,2,guest_post
+32,hotel travel write for us,topic_wfu,2,guest_post
+33,vacation planning write for us,topic_wfu,2,guest_post
+34,US city guide write for us,topic_wfu,2,guest_post
+35,lifestyle and travel write for us,topic_wfu,2,guest_post
+36,travel and wellness write for us,topic_wfu,2,guest_post
+37,travel guest post guidelines,footprint,1,guest_post
+38,travel contributor guidelines,footprint,1,guest_post
+39,travel become a contributor,footprint,1,guest_post
+40,travel submit a guest post,footprint,2,guest_post
+41,travel we accept guest posts,footprint,1,guest_post
+42,travel accepting guest posts,footprint,2,guest_post
+43,travel guest contributors,footprint,2,guest_post
+44,travel guest author,footprint,2,guest_post
+45,travel contribute to our blog,footprint,2,guest_post
+46,travel contribute an article,footprint,2,guest_post
+47,travel pitch us,footprint,2,guest_post
+48,travel submit your story,footprint,2,guest_post
+49,travel guest blogger wanted,footprint,2,guest_post
+50,travel write for our travel blog,footprint,2,guest_post
+51,travel guest post opportunities,footprint,2,guest_post
+52,"intitle:""write for us"" couples travel",operator,2,guest_post
+53,"intitle:""write for us"" romantic getaways",operator,2,guest_post
+54,"intitle:""guest post"" romantic getaways",operator,2,guest_post
+55,"intitle:""contributor guidelines"" travel",operator,2,guest_post
+56,"intitle:""become a contributor"" travel",operator,2,guest_post
+57,inurl:write-for-us travel,operator,2,guest_post
+58,inurl:guest-post travel,operator,2,guest_post
+59,inurl:contribute travel,operator,2,guest_post
+60,inurl:submit travel blog,operator,2,guest_post
+61,"""write for us"" hotels",operator,2,guest_post
+62,"""write for us"" ""weekend getaways""",operator,2,guest_post
+63,"intext:""guest post"" ""weekend getaways""",operator,2,guest_post
+64,California travel blog write for us,geo,2,guest_post
+65,Texas travel blog write for us,geo,2,guest_post
+66,Florida travel blog write for us,geo,2,guest_post
+67,New York travel blog write for us,geo,2,guest_post
+68,Colorado travel blog write for us,geo,2,guest_post
+69,Pacific Northwest travel blog write for us,geo,2,guest_post
+70,New England travel blog write for us,geo,2,guest_post
+71,Southwest travel blog write for us,geo,2,guest_post
+72,Midwest travel blog write for us,geo,2,guest_post
+73,Hawaii travel blog write for us,geo,2,guest_post
+74,Tennessee travel blog write for us,geo,2,guest_post
+75,Smoky Mountains travel blog write for us,geo,2,guest_post
+76,Carolinas travel blog write for us,geo,2,guest_post
+77,Georgia travel blog write for us,geo,2,guest_post
+78,Michigan travel blog write for us,geo,2,guest_post
+79,Utah travel blog write for us,geo,2,guest_post
+80,Virginia travel blog write for us,geo,2,guest_post
+81,Chicago travel blog write for us,geo,1,guest_post
+82,Atlanta travel blog write for us,geo,1,guest_post
+83,Los Angeles travel blog write for us,geo,1,guest_post
+84,Arizona travel blog write for us,geo,2,guest_post
+85,Pennsylvania travel blog write for us,geo,2,guest_post
+86,best hotels with hot tubs in room,link_insertion,1,link_insertion
+87,romantic hotels with private jacuzzi,link_insertion,1,link_insertion
+88,hotels with private hot tubs,link_insertion,1,link_insertion
+89,romantic getaways with hot tub,link_insertion,1,link_insertion
+90,cabins with hot tubs,link_insertion,1,link_insertion
+91,weekend getaways with hot tub,link_insertion,1,link_insertion
+92,best hotels with jacuzzi in room,link_insertion,1,link_insertion
+93,hotels with hot tub in room USA,link_insertion,1,link_insertion
+94,romantic hotels with hot tub,link_insertion,1,link_insertion
+95,best hot tub cabins,link_insertion,1,link_insertion
+96,couples getaway hot tub suite,link_insertion,1,link_insertion
+97,hotel rooms with private hot tub,link_insertion,1,link_insertion
