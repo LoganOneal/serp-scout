@@ -1,0 +1,7413 @@
+[
+  {
+    "stage": "ld_keywords",
+    "type": "phrase_fullsearch",
+    "params": {
+      "phrase": "backlinks",
+      "database": "us",
+      "display_limit": 250,
+      "display_sort": "volume_desc",
+      "export_columns": [
+        "keyword",
+        "volume",
+        "cpc",
+        "keyword_difficulty",
+        "trend"
+      ]
+    }
+  },
+  {
+    "stage": "ld_keywords",
+    "type": "phrase_related",
+    "params": {
+      "phrase": "backlinks",
+      "database": "us",
+      "display_limit": 100,
+      "display_sort": "volume_desc",
+      "export_columns": [
+        "keyword",
+        "volume",
+        "cpc",
+        "keyword_difficulty",
+        "trend"
+      ]
+    }
+  },
+  {
+    "stage": "ld_keywords",
+    "type": "phrase_questions",
+    "params": {
+      "phrase": "backlinks",
+      "database": "us",
+      "display_limit": 100,
+      "display_sort": "volume_desc",
+      "export_columns": [
+        "keyword",
+        "volume",
+        "cpc",
+        "keyword_difficulty",
+        "trend"
+      ]
+    }
+  },
+  {
+    "stage": "ld_keywords",
+    "type": "phrase_fullsearch",
+    "params": {
+      "phrase": "link building",
+      "database": "us",
+      "display_limit": 250,
+      "display_sort": "volume_desc",
+      "export_columns": [
+        "keyword",
+        "volume",
+        "cpc",
+        "keyword_difficulty",
+        "trend"
+      ]
+    }
+  },
+  {
+    "stage": "ld_keywords",
+    "type": "phrase_related",
+    "params": {
+      "phrase": "link building",
+      "database": "us",
+      "display_limit": 100,
+      "display_sort": "volume_desc",
+      "export_columns": [
+        "keyword",
+        "volume",
+        "cpc",
+        "keyword_difficulty",
+        "trend"
+      ]
+    }
+  },
+  {
+    "stage": "ld_keywords",
+    "type": "phrase_questions",
+    "params": {
+      "phrase": "link building",
+      "database": "us",
+      "display_limit": 100,
+      "display_sort": "volume_desc",
+      "export_columns": [
+        "keyword",
+        "volume",
+        "cpc",
+        "keyword_difficulty",
+        "trend"
+      ]
+    }
+  },
+  {
+    "stage": "ld_keywords",
+    "type": "phrase_fullsearch",
+    "params": {
+      "phrase": "buy backlinks",
+      "database": "us",
+      "display_limit": 250,
+      "display_sort": "volume_desc",
+      "export_columns": [
+        "keyword",
+        "volume",
+        "cpc",
+        "keyword_difficulty",
+        "trend"
+      ]
+    }
+  },
+  {
+    "stage": "ld_keywords",
+    "type": "phrase_related",
+    "params": {
+      "phrase": "buy backlinks",
+      "database": "us",
+      "display_limit": 100,
+      "display_sort": "volume_desc",
+      "export_columns": [
+        "keyword",
+        "volume",
+        "cpc",
+        "keyword_difficulty",
+        "trend"
+      ]
+    }
+  },
+  {
+    "stage": "ld_keywords",
+    "type": "phrase_questions",
+    "params": {
+      "phrase": "buy backlinks",
+      "database": "us",
+      "display_limit": 100,
+      "display_sort": "volume_desc",
+      "export_columns": [
+        "keyword",
+        "volume",
+        "cpc",
+        "keyword_difficulty",
+        "trend"
+      ]
+    }
+  },
+  {
+    "stage": "ld_keywords",
+    "type": "phrase_fullsearch",
+    "params": {
+      "phrase": "guest post",
+      "database": "us",
+      "display_limit": 250,
+      "display_sort": "volume_desc",
+      "export_columns": [
+        "keyword",
+        "volume",
+        "cpc",
+        "keyword_difficulty",
+        "trend"
+      ]
+    }
+  },
+  {
+    "stage": "ld_keywords",
+    "type": "phrase_related",
+    "params": {
+      "phrase": "guest post",
+      "database": "us",
+      "display_limit": 100,
+      "display_sort": "volume_desc",
+      "export_columns": [
+        "keyword",
+        "volume",
+        "cpc",
+        "keyword_difficulty",
+        "trend"
+      ]
+    }
+  },
+  {
+    "stage": "ld_keywords",
+    "type": "phrase_questions",
+    "params": {
+      "phrase": "guest post",
+      "database": "us",
+      "display_limit": 100,
+      "display_sort": "volume_desc",
+      "export_columns": [
+        "keyword",
+        "volume",
+        "cpc",
+        "keyword_difficulty",
+        "trend"
+      ]
+    }
+  },
+  {
+    "stage": "ld_keywords",
+    "type": "phrase_fullsearch",
+    "params": {
+      "phrase": "link exchange",
+      "database": "us",
+      "display_limit": 250,
+      "display_sort": "volume_desc",
+      "export_columns": [
+        "keyword",
+        "volume",
+        "cpc",
+        "keyword_difficulty",
+        "trend"
+      ]
+    }
+  },
+  {
+    "stage": "ld_keywords",
+    "type": "phrase_related",
+    "params": {
+      "phrase": "link exchange",
+      "database": "us",
+      "display_limit": 100,
+      "display_sort": "volume_desc",
+      "export_columns": [
+        "keyword",
+        "volume",
+        "cpc",
+        "keyword_difficulty",
+        "trend"
+      ]
+    }
+  },
+  {
+    "stage": "ld_keywords",
+    "type": "phrase_questions",
+    "params": {
+      "phrase": "link exchange",
+      "database": "us",
+      "display_limit": 100,
+      "display_sort": "volume_desc",
+      "export_columns": [
+        "keyword",
+        "volume",
+        "cpc",
+        "keyword_difficulty",
+        "trend"
+      ]
+    }
+  },
+  {
+    "stage": "ld_keywords",
+    "type": "phrase_fullsearch",
+    "params": {
+      "phrase": "pbn",
+      "database": "us",
+      "display_limit": 250,
+      "display_sort": "volume_desc",
+      "export_columns": [
+        "keyword",
+        "volume",
+        "cpc",
+        "keyword_difficulty",
+        "trend"
+      ]
+    }
+  },
+  {
+    "stage": "ld_keywords",
+    "type": "phrase_related",
+    "params": {
+      "phrase": "pbn",
+      "database": "us",
+      "display_limit": 100,
+      "display_sort": "volume_desc",
+      "export_columns": [
+        "keyword",
+        "volume",
+        "cpc",
+        "keyword_difficulty",
+        "trend"
+      ]
+    }
+  },
+  {
+    "stage": "ld_keywords",
+    "type": "phrase_questions",
+    "params": {
+      "phrase": "pbn",
+      "database": "us",
+      "display_limit": 100,
+      "display_sort": "volume_desc",
+      "export_columns": [
+        "keyword",
+        "volume",
+        "cpc",
+        "keyword_difficulty",
+        "trend"
+      ]
+    }
+  },
+  {
+    "stage": "ld_keywords",
+    "type": "phrase_fullsearch",
+    "params": {
+      "phrase": "parasite seo",
+      "database": "us",
+      "display_limit": 250,
+      "display_sort": "volume_desc",
+      "export_columns": [
+        "keyword",
+        "volume",
+        "cpc",
+        "keyword_difficulty",
+        "trend"
+      ]
+    }
+  },
+  {
+    "stage": "ld_keywords",
+    "type": "phrase_related",
+    "params": {
+      "phrase": "parasite seo",
+      "database": "us",
+      "display_limit": 100,
+      "display_sort": "volume_desc",
+      "export_columns": [
+        "keyword",
+        "volume",
+        "cpc",
+        "keyword_difficulty",
+        "trend"
+      ]
+    }
+  },
+  {
+    "stage": "ld_keywords",
+    "type": "phrase_questions",
+    "params": {
+      "phrase": "parasite seo",
+      "database": "us",
+      "display_limit": 100,
+      "display_sort": "volume_desc",
+      "export_columns": [
+        "keyword",
+        "volume",
+        "cpc",
+        "keyword_difficulty",
+        "trend"
+      ]
+    }
+  },
+  {
+    "stage": "ld_keywords",
+    "type": "phrase_fullsearch",
+    "params": {
+      "phrase": "site reputation abuse",
+      "database": "us",
+      "display_limit": 250,
+      "display_sort": "volume_desc",
+      "export_columns": [
+        "keyword",
+        "volume",
+        "cpc",
+        "keyword_difficulty",
+        "trend"
+      ]
+    }
+  },
+  {
+    "stage": "ld_keywords",
+    "type": "phrase_related",
+    "params": {
+      "phrase": "site reputation abuse",
+      "database": "us",
+      "display_limit": 100,
+      "display_sort": "volume_desc",
+      "export_columns": [
+        "keyword",
+        "volume",
+        "cpc",
+        "keyword_difficulty",
+        "trend"
+      ]
+    }
+  },
+  {
+    "stage": "ld_keywords",
+    "type": "phrase_questions",
+    "params": {
+      "phrase": "site reputation abuse",
+      "database": "us",
+      "display_limit": 100,
+      "display_sort": "volume_desc",
+      "export_columns": [
+        "keyword",
+        "volume",
+        "cpc",
+        "keyword_difficulty",
+        "trend"
+      ]
+    }
+  },
+  {
+    "stage": "ld_keywords",
+    "type": "phrase_fullsearch",
+    "params": {
+      "phrase": "reddit seo",
+      "database": "us",
+      "display_limit": 250,
+      "display_sort": "volume_desc",
+      "export_columns": [
+        "keyword",
+        "volume",
+        "cpc",
+        "keyword_difficulty",
+        "trend"
+      ]
+    }
+  },
+  {
+    "stage": "ld_keywords",
+    "type": "phrase_related",
+    "params": {
+      "phrase": "reddit seo",
+      "database": "us",
+      "display_limit": 100,
+      "display_sort": "volume_desc",
+      "export_columns": [
+        "keyword",
+        "volume",
+        "cpc",
+        "keyword_difficulty",
+        "trend"
+      ]
+    }
+  },
+  {
+    "stage": "ld_keywords",
+    "type": "phrase_questions",
+    "params": {
+      "phrase": "reddit seo",
+      "database": "us",
+      "display_limit": 100,
+      "display_sort": "volume_desc",
+      "export_columns": [
+        "keyword",
+        "volume",
+        "cpc",
+        "keyword_difficulty",
+        "trend"
+      ]
+    }
+  },
+  {
+    "stage": "ld_keywords",
+    "type": "phrase_fullsearch",
+    "params": {
+      "phrase": "sponsored post",
+      "database": "us",
+      "display_limit": 250,
+      "display_sort": "volume_desc",
+      "export_columns": [
+        "keyword",
+        "volume",
+        "cpc",
+        "keyword_difficulty",
+        "trend"
+      ]
+    }
+  },
+  {
+    "stage": "ld_keywords",
+    "type": "phrase_related",
+    "params": {
+      "phrase": "sponsored post",
+      "database": "us",
+      "display_limit": 100,
+      "display_sort": "volume_desc",
+      "export_columns": [
+        "keyword",
+        "volume",
+        "cpc",
+        "keyword_difficulty",
+        "trend"
+      ]
+    }
+  },
+  {
+    "stage": "ld_keywords",
+    "type": "phrase_questions",
+    "params": {
+      "phrase": "sponsored post",
+      "database": "us",
+      "display_limit": 100,
+      "display_sort": "volume_desc",
+      "export_columns": [
+        "keyword",
+        "volume",
+        "cpc",
+        "keyword_difficulty",
+        "trend"
+      ]
+    }
+  },
+  {
+    "stage": "ld_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "buy backlinks",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "link building service",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "backlink exchange",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "pbn links",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "parasite seo",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "parasite seo tool",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_targets",
+    "type": "resource_organic",
+    "params": {
+      "target": "linkbuilder.io",
+      "database": "us",
+      "display_limit": 300,
+      "display_sort": "traffic_desc",
+      "display_filter": [
+        {
+          "field": "position",
+          "operation": "less_than",
+          "sign": "+",
+          "value": 21
+        }
+      ],
+      "export_columns": [
+        "keyword",
+        "position",
+        "volume",
+        "cpc",
+        "keyword_difficulty",
+        "trend",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_targets",
+    "type": "resource_organic",
+    "params": {
+      "target": "sparktraffic.com",
+      "database": "us",
+      "display_limit": 300,
+      "display_sort": "traffic_desc",
+      "display_filter": [
+        {
+          "field": "position",
+          "operation": "less_than",
+          "sign": "+",
+          "value": 21
+        }
+      ],
+      "export_columns": [
+        "keyword",
+        "position",
+        "volume",
+        "cpc",
+        "keyword_difficulty",
+        "trend",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_targets",
+    "type": "resource_organic",
+    "params": {
+      "target": "flyingvgroup.com",
+      "database": "us",
+      "display_limit": 300,
+      "display_sort": "traffic_desc",
+      "display_filter": [
+        {
+          "field": "position",
+          "operation": "less_than",
+          "sign": "+",
+          "value": 21
+        }
+      ],
+      "export_columns": [
+        "keyword",
+        "position",
+        "volume",
+        "cpc",
+        "keyword_difficulty",
+        "trend",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_targets",
+    "type": "resource_organic",
+    "params": {
+      "target": "pageonepower.com",
+      "database": "us",
+      "display_limit": 300,
+      "display_sort": "traffic_desc",
+      "display_filter": [
+        {
+          "field": "position",
+          "operation": "less_than",
+          "sign": "+",
+          "value": 21
+        }
+      ],
+      "export_columns": [
+        "keyword",
+        "position",
+        "volume",
+        "cpc",
+        "keyword_difficulty",
+        "trend",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_targets",
+    "type": "resource_organic",
+    "params": {
+      "target": "seolix.com",
+      "database": "us",
+      "display_limit": 300,
+      "display_sort": "traffic_desc",
+      "display_filter": [
+        {
+          "field": "position",
+          "operation": "less_than",
+          "sign": "+",
+          "value": 21
+        }
+      ],
+      "export_columns": [
+        "keyword",
+        "position",
+        "volume",
+        "cpc",
+        "keyword_difficulty",
+        "trend",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_targets",
+    "type": "resource_organic",
+    "params": {
+      "target": "arvow.com",
+      "database": "us",
+      "display_limit": 300,
+      "display_sort": "traffic_desc",
+      "display_filter": [
+        {
+          "field": "position",
+          "operation": "less_than",
+          "sign": "+",
+          "value": 21
+        }
+      ],
+      "export_columns": [
+        "keyword",
+        "position",
+        "volume",
+        "cpc",
+        "keyword_difficulty",
+        "trend",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_targets",
+    "type": "resource_organic",
+    "params": {
+      "target": "ranklytics.ai",
+      "database": "us",
+      "display_limit": 300,
+      "display_sort": "traffic_desc",
+      "display_filter": [
+        {
+          "field": "position",
+          "operation": "less_than",
+          "sign": "+",
+          "value": 21
+        }
+      ],
+      "export_columns": [
+        "keyword",
+        "position",
+        "volume",
+        "cpc",
+        "keyword_difficulty",
+        "trend",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_targets",
+    "type": "resource_organic",
+    "params": {
+      "target": "linkrocket.ai",
+      "database": "us",
+      "display_limit": 300,
+      "display_sort": "traffic_desc",
+      "display_filter": [
+        {
+          "field": "position",
+          "operation": "less_than",
+          "sign": "+",
+          "value": 21
+        }
+      ],
+      "export_columns": [
+        "keyword",
+        "position",
+        "volume",
+        "cpc",
+        "keyword_difficulty",
+        "trend",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_targets",
+    "type": "resource_organic",
+    "params": {
+      "target": "sirlinksalot.co",
+      "database": "us",
+      "display_limit": 300,
+      "display_sort": "traffic_desc",
+      "display_filter": [
+        {
+          "field": "position",
+          "operation": "less_than",
+          "sign": "+",
+          "value": 21
+        }
+      ],
+      "export_columns": [
+        "keyword",
+        "position",
+        "volume",
+        "cpc",
+        "keyword_difficulty",
+        "trend",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_targets",
+    "type": "resource_organic",
+    "params": {
+      "target": "vettted.com",
+      "database": "us",
+      "display_limit": 300,
+      "display_sort": "traffic_desc",
+      "display_filter": [
+        {
+          "field": "position",
+          "operation": "less_than",
+          "sign": "+",
+          "value": 21
+        }
+      ],
+      "export_columns": [
+        "keyword",
+        "position",
+        "volume",
+        "cpc",
+        "keyword_difficulty",
+        "trend",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_targets",
+    "type": "resource_organic",
+    "params": {
+      "target": "parasiteseo.com",
+      "database": "us",
+      "display_limit": 300,
+      "display_sort": "traffic_desc",
+      "display_filter": [
+        {
+          "field": "position",
+          "operation": "less_than",
+          "sign": "+",
+          "value": 21
+        }
+      ],
+      "export_columns": [
+        "keyword",
+        "position",
+        "volume",
+        "cpc",
+        "keyword_difficulty",
+        "trend",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_targets",
+    "type": "resource_organic",
+    "params": {
+      "target": "https://legiit.com/categories/seo/backlinks",
+      "database": "us",
+      "display_limit": 300,
+      "display_sort": "traffic_desc",
+      "display_filter": [
+        {
+          "field": "position",
+          "operation": "less_than",
+          "sign": "+",
+          "value": 21
+        }
+      ],
+      "export_columns": [
+        "keyword",
+        "position",
+        "volume",
+        "cpc",
+        "keyword_difficulty",
+        "trend",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_targets",
+    "type": "resource_organic",
+    "params": {
+      "target": "https://legiit.com/categories/seo/pbn-links",
+      "database": "us",
+      "display_limit": 300,
+      "display_sort": "traffic_desc",
+      "display_filter": [
+        {
+          "field": "position",
+          "operation": "less_than",
+          "sign": "+",
+          "value": 21
+        }
+      ],
+      "export_columns": [
+        "keyword",
+        "position",
+        "volume",
+        "cpc",
+        "keyword_difficulty",
+        "trend",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_targets",
+    "type": "resource_organic",
+    "params": {
+      "target": "https://www.reddit.com/r/SEO/comments/1flc576/where_can_i_buy_backlinks/",
+      "database": "us",
+      "display_limit": 300,
+      "display_sort": "traffic_desc",
+      "display_filter": [
+        {
+          "field": "position",
+          "operation": "less_than",
+          "sign": "+",
+          "value": 21
+        }
+      ],
+      "export_columns": [
+        "keyword",
+        "position",
+        "volume",
+        "cpc",
+        "keyword_difficulty",
+        "trend",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_targets",
+    "type": "resource_organic",
+    "params": {
+      "target": "https://www.reddit.com/r/backlinkXchange/",
+      "database": "us",
+      "display_limit": 300,
+      "display_sort": "traffic_desc",
+      "display_filter": [
+        {
+          "field": "position",
+          "operation": "less_than",
+          "sign": "+",
+          "value": 21
+        }
+      ],
+      "export_columns": [
+        "keyword",
+        "position",
+        "volume",
+        "cpc",
+        "keyword_difficulty",
+        "trend",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "seo",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "backlink checker",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "sponsored",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "building link",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "big stan",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "big mouth and",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "what is seo",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "big head and",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "big five sporting goods",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "big cheese",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "big sur campground",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "big sky big sky montana",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "uploadarticle guest posting",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "characters of big hero 6",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "big night italian movie",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "big ed",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "verified backlinks",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "uploadarticleguestposting .com",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "link building services",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "big on sex",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "backlinks checker",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "big of love",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "big bang theory big bang theory big bang theory",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "big fluffy dogs",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "cat the big",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "the big island hawaii",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "technical seo services",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "the big apple",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "big thicket",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "big greek cafe silver spring maryland",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "menards big rapids",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "big big tits tube",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "backlinks",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "big truck tacos",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "big kahuna's in destin",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "big jones",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "what are backlinks",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "link building",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "best ai tool directories for backlinks",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "ashley productions big hardcover blank book",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "whats seo",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "big island map",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "little big",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "what does seo stand for",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "backlinks check",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "seo definition",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "how does seo work",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "big play",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "inurl:guest",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "amika big hit volumizing shampoo",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "japanese big tits",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "free seo audit",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "b2b seo agency",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "best keywords for packaging company seo texas",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "how to get backlinks",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "big nate comics",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "big wong",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "what is an seo",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "providence news",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "what is a backlink",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "link building company",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "link building agency",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "back links",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "free backlink checker",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "attorney seo",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "seo rank",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "big fish riverfront",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "stuart bloom on big bang theory",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "big bus tours new york new york ny",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "big four ice caves",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "providence ri news",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "pornsite guest posts",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "rhode island business news today",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "check backlinks",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "rhode island news",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "local seo expert",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "seo website",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "big punisher",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "ahrefs backlink checker",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "link building service",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "big sur state park",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "find backlinks",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "big scary",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "seo backlinks",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "b.i.g girlfriend",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "guest post on porn site",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "backlink",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "local taco",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "big fish 2003 movie",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "what are seo keywords",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "backlink checker free",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "website seo",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "big island hotels",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "automation template sites backlink sources",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "the summit at big bend",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "what is seo mean",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "check backlink",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "big dog shirts",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "where to watch big time rush",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "enterprise seo services",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "ranking in seo",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "mister big fish",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "seo audit services",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "big hero 6 the series",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "nanny mcphee and the big bang",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "pbn",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "seo link building services",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "list of free saas directories for backlinks 2026",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "what does seo mean",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "quality backlinks",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "big bats",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "check backlink checker",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "how to build backlinks",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "backlinks seo",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "local news ri",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "search backlinks",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "the dude big lebowski",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "sponsored content",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "big best in games",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "redheads with big titties",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "find backlinks search console",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "free backlink analysis tool without registration",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "rhode island newspaper",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "backlink audit",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "backlink analyzer",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "check website backlinks",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "how to create backlinks",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "high quality backlinks",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "niche edits",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "building links",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "website backlink checker",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "backlink generator",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "crecso guest posting services",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "notorious b.i.g.",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "backlinking",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "link building packages",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "white hat link building",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "white label link building",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "backlink analysis tool",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "what is backlinks",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "backlink monitoring",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "seo company texas",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "backlinks in seo",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "backlink services",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "building seo",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "backlinking strategies",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "check backlinks free",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "how to check backlinks",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "actor lee seo jin",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "rank seo",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "link building tools",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "backlinks for seo",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "sponsored meaning",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "backlink gap analysis",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "what is link building",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "guest posting opportunities healthcare clinic",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "saas automation blog guest post guidelines",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "contract seo link building jobs",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "backlinks indexing tool online free",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "free backlinks",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "multilingual seo services",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "link building seo",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "link building strategies",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "what is backlinking",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "llm seo tool",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "blog submission sites",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "backlinks meaning",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "seo reseller services",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "best link building tools",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "guest posting",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "seo audit free",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "guest posting services",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "free backlink checker tools",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "buy backlinks",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "backlink checkers",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "types of backlinks",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "big lots furniture clearance",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "san antonio seo company",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "seo reseller",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "backlink analysis",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "big ben tower",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "myrtle beach inurl:news",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "guest posting service",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "backlinks service",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "backlink checker tool",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "competitor backlink checker",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "link building software",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "check my backlinks",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "utm link builder",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "get backlinks",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "backlinks checker free",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "backlinks monitor",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "dental seo expert",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "parasite seo 2025 2026 what platforms still work strategy guide",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "seo link building",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "backlink search",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "what are backlinks for seo",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "google backlink checker",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "white label seo reports",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "seo backlink checker",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "boise seo company",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "manual link building service",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "ranking seo",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "providence journal news",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "check site backlinks",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "free backlink checker tool",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "links building",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "saas link building agency",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "backlinks example",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "how to get backlinks to your website",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "seo description examples",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "reddit seo",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "backlink quality checker",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "guest blogging",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "seo reseller program",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "link and build",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "local seo consultant",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "white label link building services",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "best free backlink checker",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "white label seo audit",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "what is link building in seo",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "competitor backlink analysis",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "seo resellers",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "seo project management software",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "guest post services",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "track backlinks",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "seo backlink",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "guest post pitch examples",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "backlink cheker",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "seo links",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "wix seo expert",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "local link building",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "niche edit",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "ecommerce link building",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "header tags seo",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "backlink management tool",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "seo reseller packages",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "backlink report",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "what is backlinks in seo",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "backlink api",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "backlinko",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "what is backlink",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "seo ranking factor",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "abguestpost",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "guest post outreach",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "buy guest posts",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "providence business news",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "backlinks checken",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "backlink types",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "what are seo backlinks",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "free backlinks checker",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "what is back linking",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "dryer vent cleaning seo services",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "multilingual seo agency",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "backlink strategies",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "backlink finder",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "local news rhode island",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "quality backlink",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "backlinks guide",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "backlinks search",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "backlink building",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "backlinks monitoring",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "backlinks report",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "backlinking strategy",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "buy seo backlinks",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "toxic backlink checker",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "build link",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "ecommerce seo experts",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "link building for seo",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "backlink tracking",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "backlink strategy",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "small business seo packages",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "buy pbn links",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "citation for seo",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "link building companies",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "saas link building services",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "outsource link building",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "backlink tracker",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "backlinks site",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "backlink profile",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "google link builder",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "seo link building tools",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "link building agencies",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "monitoring backlinks",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "link seo",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "competitive seo",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "best link building services",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "link bulding",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "affordable seo firm",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "seo audit example",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "guestpostlinks - link building agency",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "wikipedia links",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "backlink example",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "seo local citations",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "seo automated reporting",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "what is a backlink profile",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "seo rankings",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "buy backlinks for seo",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "backlink management",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "link outreach",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "automated seo reports",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "find competitor backlinks",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "seo digital marketing agency",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "backlinks api",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "best backlink checker tool",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "buy links seo",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "backlink monitoring tool",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "backlinks tracker",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "seo html",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "guest post service",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "high authority guest posts",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "building links for seo",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "what are backlinks on a website",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "more about pbn links",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "comed pay bill online as guest without signing in",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "local seo reseller",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "buying links",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "freelance seo consultant",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "seo enterprise tools",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "ahrefs free backlink checker",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "link building tool",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "big omega",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "backlink competitor analysis",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "backlinks free",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "how do backlinks work",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "backlinks analysis tool",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "check for backlinks",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "guest post marketplace",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "backlinks management",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "backlink checker tools",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "local seo citations",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "high da pbn links",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "backlink monitor",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "moz backlink checker",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "backlink exchange",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "back links seo",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "google backlinks",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "how to build links",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "building backlinks",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "seo backlink service",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "backlinks analyzer",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "how many backlinks do i need",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "local seo white label",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "best backlinks",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "seo descriptions",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "local citations seo",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "seo and ppc agency",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "best llm seo trackers",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "instagram sponsored posts",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "chiropractic seo company",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "backlink building service",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "backlink data",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "saas link building",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "big poe",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "local seo specialist",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "seo competition",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "building link app",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "define backlinks",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "prov news",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "how to check competitor backlinks",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "backlink check",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "ahref backlink",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "haro link building",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "what is a backlink in seo",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "index backlinks rapid url indexer",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "bigcommerce seo experts",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "ranking by seo",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "link building strategy",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "seo link building company",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "local seo link building",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "parasite seo",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "buy guest post",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "backlinks finder",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "best backlink checker",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "how to build internal links for seo",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "local seo vs traditional seo link building google maps optimization",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "night link building specialist jobs",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "parasite seo what platforms still work strategy guide",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "does jvseoagency.es have a blog",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "do follow backlink checker",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "seo link building service",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "backlinks websites",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "blogger outreach service",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "backlink analysis tool free",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "link building case study",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "seo header",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "backlink software",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "disavow backlinks",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "link building tips",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "guest posts style posts",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "how to do link building",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "link building strategies for seo",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "check backlink of website",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "high traffic niche edit links",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "checking backlinks",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "monitor backlinks",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "projo news",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "llm seo rank tracking software",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "seo backlink software",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  },
+  {
+    "stage": "ld_cluster_serps",
+    "type": "phrase_organic",
+    "params": {
+      "phrase": "link building firm",
+      "database": "us",
+      "display_offset": 0,
+      "display_limit": 10,
+      "positions_type": "organic",
+      "export_columns": [
+        "position",
+        "domain",
+        "url"
+      ]
+    }
+  }
+]

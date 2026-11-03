@@ -5,6 +5,13 @@
  *   pnpm hht:opp discover --limit=4 --domains=6
  *   pnpm hht:opp enrich --all-qualified
  *   pnpm hht:opp queries
+ *
+ * Handoff to the guest-post-pitches skill:
+ *   pnpm hht:opp archive                          snapshot every hht_opp_* table to exports/archive
+ *   pnpm hht:opp export-backlog [--tiers=A,B,C] [--size=50] [--dry-run]
+ *   pnpm hht:opp guest-frontier --max=15 --no-expand   one batch of seed queries, no auto keyword ideas
+ *   pnpm hht:opp export-leads [--limit=50] [--link-limit=50] [--size=25] [--dry-run]
+ *   pnpm hht:opp reset-exhausted                   requeue queries marked exhausted without a fetch
  */
 import 'dotenv/config'
 import { expandQueryTemplates } from '@rnr/core'
@@ -27,7 +34,8 @@ import { listDiscoveryRuns, listHhtOppOpportunities, strategyYield } from '../hh
 import { refreshStaleHhtOppOpportunities } from '../hht-opp/refresh.js'
 import { readFileSync } from 'node:fs'
 import { researchGuestPostUrls, scaleGuestPostDiscovery } from '../hht-opp/guest-scale.js'
-import { expandGuestKeywordIdeas, runGuestPostFrontier } from '../hht-opp/guest-frontier.js'
+import { expandGuestKeywordIdeas, resetUnfetchedExhausted, runGuestPostFrontier } from '../hht-opp/guest-frontier.js'
+import { archiveHhtOpp, exportLegacyBacklog, exportSerpLeads, type LegacyTier } from '../hht-opp/handoff.js'
 import { researchHhtOppSeeds } from '../hht-opp/research.js'
 
 const argv = process.argv.slice(2)
@@ -187,6 +195,48 @@ async function main(): Promise<void> {
           await runGuestPostFrontier(database, {
             maxKeywords: maxKeywords != null && Number.isFinite(maxKeywords) ? maxKeywords : null,
             ideaLimit: Number(opt('ideas') ?? 20),
+            expand: !flag('no-expand'),
+          }),
+          null,
+          2,
+        ),
+      )
+      break
+    }
+    case 'reset-exhausted': {
+      console.log(JSON.stringify({ reset: await resetUnfetchedExhausted(database) }, null, 2))
+      break
+    }
+    case 'archive': {
+      console.log(JSON.stringify(await archiveHhtOpp(database), null, 2))
+      break
+    }
+    case 'export-leads': {
+      console.log(
+        JSON.stringify(
+          await exportSerpLeads(database, {
+            limit: Number(opt('limit') ?? 50),
+            linkLimit: Number(opt('link-limit') ?? 50),
+            fileSize: opt('size') ? Number(opt('size')) : undefined,
+            dryRun: flag('dry-run'),
+          }),
+          null,
+          2,
+        ),
+      )
+      break
+    }
+    case 'export-backlog': {
+      const tiers = (opt('tiers') ?? 'A')
+        .split(',')
+        .map((tier) => tier.trim().toUpperCase())
+        .filter((tier): tier is LegacyTier => tier === 'A' || tier === 'B' || tier === 'C')
+      console.log(
+        JSON.stringify(
+          await exportLegacyBacklog(database, {
+            tiers,
+            fileSize: Number(opt('size') ?? 50),
+            dryRun: flag('dry-run'),
           }),
           null,
           2,

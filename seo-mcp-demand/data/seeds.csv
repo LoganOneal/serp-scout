@@ -1,0 +1,253 @@
+task_id,seed_keyword,pattern
+kw_volume,free keyword search volume checker,free_checker
+kw_volume,free keyword search volume tool,free_tool
+kw_volume,check keyword search volume,check
+kw_volume,keyword search volume checker,checker
+kw_volume,how to check keyword search volume,how_to
+kw_volume,keyword search volume api,api
+kw_volume,keyword search volume mcp,mcp
+kw_volume,keyword search volume,core
+kw_ideas,free keyword research checker,free_checker
+kw_ideas,free keyword research tool,free_tool
+kw_ideas,check keyword research,check
+kw_ideas,keyword research checker,checker
+kw_ideas,how to check keyword research,how_to
+kw_ideas,keyword research api,api
+kw_ideas,keyword research mcp,mcp
+kw_ideas,keyword research,core
+kw_difficulty,free keyword difficulty checker,free_checker
+kw_difficulty,free keyword difficulty tool,free_tool
+kw_difficulty,check keyword difficulty,check
+kw_difficulty,keyword difficulty checker,checker
+kw_difficulty,how to check keyword difficulty,how_to
+kw_difficulty,keyword difficulty api,api
+kw_difficulty,keyword difficulty mcp,mcp
+kw_difficulty,keyword difficulty,core
+serp_results,free google serp checker,free_checker
+serp_results,free google serp tool,free_tool
+serp_results,check google serp,check
+serp_results,google serp checker,checker
+serp_results,how to check google serp,how_to
+serp_results,google serp api,api
+serp_results,google serp mcp,mcp
+serp_results,google serp,core
+rank_position,free keyword rank checker,free_checker
+rank_position,free keyword rank tool,free_tool
+rank_position,check keyword rank,check
+rank_position,keyword rank checker,checker
+rank_position,how to check keyword rank,how_to
+rank_position,keyword rank api,api
+rank_position,keyword rank mcp,mcp
+rank_position,keyword rank,core
+serp_aio,free google ai overview checker,free_checker
+serp_aio,free google ai overview tool,free_tool
+serp_aio,check google ai overview,check
+serp_aio,google ai overview checker,checker
+serp_aio,how to check google ai overview,how_to
+serp_aio,google ai overview api,api
+serp_aio,google ai overview mcp,mcp
+serp_aio,google ai overview,core
+gsc_drop,free organic traffic drop checker,free_checker
+gsc_drop,free organic traffic drop tool,free_tool
+gsc_drop,check organic traffic drop,check
+gsc_drop,organic traffic drop checker,checker
+gsc_drop,how to check organic traffic drop,how_to
+gsc_drop,organic traffic drop api,api
+gsc_drop,organic traffic drop mcp,mcp
+gsc_drop,organic traffic drop,core
+gsc_top,free google search console analytics checker,free_checker
+gsc_top,free google search console analytics tool,free_tool
+gsc_top,check google search console analytics,check
+gsc_top,google search console analytics checker,checker
+gsc_top,how to check google search console analytics,how_to
+gsc_top,google search console analytics api,api
+gsc_top,google search console analytics mcp,mcp
+gsc_top,google search console analytics,core
+gsc_opportunity,free striking distance keywords checker,free_checker
+gsc_opportunity,free striking distance keywords tool,free_tool
+gsc_opportunity,check striking distance keywords,check
+gsc_opportunity,striking distance keywords checker,checker
+gsc_opportunity,how to check striking distance keywords,how_to
+gsc_opportunity,striking distance keywords api,api
+gsc_opportunity,striking distance keywords mcp,mcp
+gsc_opportunity,striking distance keywords,core
+index_status,free google index checker,free_checker
+index_status,free google index tool,free_tool
+index_status,check google index,check
+index_status,google index checker,checker
+index_status,how to check google index,how_to
+index_status,google index api,api
+index_status,google index mcp,mcp
+index_status,google index,core
+index_submit,free google indexing checker,free_checker
+index_submit,free google indexing tool,free_tool
+index_submit,check google indexing,check
+index_submit,google indexing checker,checker
+index_submit,how to check google indexing,how_to
+index_submit,google indexing api,api
+index_submit,google indexing mcp,mcp
+index_submit,google indexing,core
+index_diagnose,free page not indexed checker,free_checker
+index_diagnose,free page not indexed tool,free_tool
+index_diagnose,check page not indexed,check
+index_diagnose,page not indexed checker,checker
+index_diagnose,how to check page not indexed,how_to
+index_diagnose,page not indexed api,api
+index_diagnose,page not indexed mcp,mcp
+index_diagnose,page not indexed,core
+audit_site,free seo audit checker,free_checker
+audit_site,free seo audit tool,free_tool
+audit_site,check seo audit,check
+audit_site,seo audit checker,checker
+audit_site,how to check seo audit,how_to
+audit_site,seo audit api,api
+audit_site,seo audit mcp,mcp
+audit_site,seo audit,core
+audit_speed,free website speed checker,free_checker
+audit_speed,free website speed tool,free_tool
+audit_speed,check website speed,check
+audit_speed,website speed checker,checker
+audit_speed,how to check website speed,how_to
+audit_speed,website speed api,api
+audit_speed,website speed mcp,mcp
+audit_speed,website speed,core
+audit_links,free broken link checker,free_checker
+audit_links,free broken link tool,free_tool
+audit_links,check broken link,check
+audit_links,broken link checker,checker
+audit_links,how to check broken link,how_to
+audit_links,broken link api,api
+audit_links,broken link mcp,mcp
+audit_links,broken link,core
+audit_schema,free schema markup checker,free_checker
+audit_schema,free schema markup tool,free_tool
+audit_schema,check schema markup,check
+audit_schema,schema markup checker,checker
+audit_schema,how to check schema markup,how_to
+audit_schema,schema markup api,api
+audit_schema,schema markup mcp,mcp
+audit_schema,schema markup,core
+links_profile,free backlink checker,free_checker
+links_profile,free backlink tool,free_tool
+links_profile,check backlink,check
+links_profile,backlink checker,checker
+links_profile,how to check backlink,how_to
+links_profile,backlink api,api
+links_profile,backlink mcp,mcp
+links_profile,backlink,core
+links_gap,free backlink gap checker,free_checker
+links_gap,free backlink gap tool,free_tool
+links_gap,check backlink gap,check
+links_gap,backlink gap checker,checker
+links_gap,how to check backlink gap,how_to
+links_gap,backlink gap api,api
+links_gap,backlink gap mcp,mcp
+links_gap,backlink gap,core
+links_lost,free lost backlinks checker,free_checker
+links_lost,free lost backlinks tool,free_tool
+links_lost,check lost backlinks,check
+links_lost,lost backlinks checker,checker
+links_lost,how to check lost backlinks,how_to
+links_lost,lost backlinks api,api
+links_lost,lost backlinks mcp,mcp
+links_lost,lost backlinks,core
+comp_keywords,free competitor keywords checker,free_checker
+comp_keywords,free competitor keywords tool,free_tool
+comp_keywords,check competitor keywords,check
+comp_keywords,competitor keywords checker,checker
+comp_keywords,how to check competitor keywords,how_to
+comp_keywords,competitor keywords api,api
+comp_keywords,competitor keywords mcp,mcp
+comp_keywords,competitor keywords,core
+comp_traffic,free website traffic checker,free_checker
+comp_traffic,free website traffic tool,free_tool
+comp_traffic,check website traffic,check
+comp_traffic,website traffic checker,checker
+comp_traffic,how to check website traffic,how_to
+comp_traffic,website traffic api,api
+comp_traffic,website traffic mcp,mcp
+comp_traffic,website traffic,core
+comp_gap,free keyword gap checker,free_checker
+comp_gap,free keyword gap tool,free_tool
+comp_gap,check keyword gap,check
+comp_gap,keyword gap checker,checker
+comp_gap,how to check keyword gap,how_to
+comp_gap,keyword gap api,api
+comp_gap,keyword gap mcp,mcp
+comp_gap,keyword gap,core
+ai_mentions,free ai visibility checker,free_checker
+ai_mentions,free ai visibility tool,free_tool
+ai_mentions,check ai visibility,check
+ai_mentions,ai visibility checker,checker
+ai_mentions,how to check ai visibility,how_to
+ai_mentions,ai visibility api,api
+ai_mentions,ai visibility mcp,mcp
+ai_mentions,ai visibility,core
+ai_citations,free ai overview citations checker,free_checker
+ai_citations,free ai overview citations tool,free_tool
+ai_citations,check ai overview citations,check
+ai_citations,ai overview citations checker,checker
+ai_citations,how to check ai overview citations,how_to
+ai_citations,ai overview citations api,api
+ai_citations,ai overview citations mcp,mcp
+ai_citations,ai overview citations,core
+local_rank,free google maps rank checker,free_checker
+local_rank,free google maps rank tool,free_tool
+local_rank,check google maps rank,check
+local_rank,google maps rank checker,checker
+local_rank,how to check google maps rank,how_to
+local_rank,google maps rank api,api
+local_rank,google maps rank mcp,mcp
+local_rank,google maps rank,core
+local_reviews,free google business reviews checker,free_checker
+local_reviews,free google business reviews tool,free_tool
+local_reviews,check google business reviews,check
+local_reviews,google business reviews checker,checker
+local_reviews,how to check google business reviews,how_to
+local_reviews,google business reviews api,api
+local_reviews,google business reviews mcp,mcp
+local_reviews,google business reviews,core
+local_audit,free google business profile audit checker,free_checker
+local_audit,free google business profile audit tool,free_tool
+local_audit,check google business profile audit,check
+local_audit,google business profile audit checker,checker
+local_audit,how to check google business profile audit,how_to
+local_audit,google business profile audit api,api
+local_audit,google business profile audit mcp,mcp
+local_audit,google business profile audit,core
+content_brief,free seo content brief checker,free_checker
+content_brief,free seo content brief tool,free_tool
+content_brief,check seo content brief,check
+content_brief,seo content brief checker,checker
+content_brief,how to check seo content brief,how_to
+content_brief,seo content brief api,api
+content_brief,seo content brief mcp,mcp
+content_brief,seo content brief,core
+content_onpage,free on page seo checker,free_checker
+content_onpage,free on page seo tool,free_tool
+content_onpage,check on page seo,check
+content_onpage,on page seo checker,checker
+content_onpage,how to check on page seo,how_to
+content_onpage,on page seo api,api
+content_onpage,on page seo mcp,mcp
+content_onpage,on page seo,core
+content_cannibal,free keyword cannibalization checker,free_checker
+content_cannibal,free keyword cannibalization tool,free_tool
+content_cannibal,check keyword cannibalization,check
+content_cannibal,keyword cannibalization checker,checker
+content_cannibal,how to check keyword cannibalization,how_to
+content_cannibal,keyword cannibalization api,api
+content_cannibal,keyword cannibalization mcp,mcp
+content_cannibal,keyword cannibalization,core
+index_diagnose,crawled currently not indexed,problem
+index_status,crawled currently not indexed,problem
+index_diagnose,discovered currently not indexed,problem
+index_status,discovered currently not indexed,problem
+index_diagnose,page indexed without content,problem
+index_diagnose,duplicate without user-selected canonical,problem
+index_diagnose,excluded by noindex tag,problem
+index_diagnose,soft 404,problem
+index_diagnose,why is my page not on google,problem
+index_status,why is my page not on google,problem
+gsc_drop,website traffic dropped,problem
+gsc_drop,google core update,problem

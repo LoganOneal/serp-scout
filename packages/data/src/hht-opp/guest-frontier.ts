@@ -53,12 +53,15 @@ export async function runGuestPostFrontier(
   options: {
     maxKeywords?: number | null
     ideaLimit?: number
+    /** When false, stop at the end of the queue instead of adding Google Ads keyword ideas. */
+    expand?: boolean
     log?: (message: string) => void
   } = {},
 ): Promise<GuestFrontierResult> {
   const log = options.log ?? ((message: string) => console.log(message))
   const ideaLimit = options.ideaLimit ?? 20
   const maxKeywords = options.maxKeywords ?? null
+  const expand = options.expand ?? true
   const result: GuestFrontierResult = {
     stop: 'no_new_keywords',
     keywordsFetched: 0,
@@ -71,12 +74,18 @@ export async function runGuestPostFrontier(
 
   await ensureGuestFrontierSchema(db)
   await seedGuestKeywords(db)
+  const reset = await resetUnfetchedExhausted(db)
+  if (reset > 0) log(`Reset ${reset} queries marked exhausted without a stored SERP fetch.`)
 
   const serp = await connectSemrush(log)
   try {
     while (maxKeywords == null || result.keywordsFetched < maxKeywords) {
       const chosen = await takeNextKeyword(db, result, log)
       if (!chosen) {
+        if (!expand) {
+          result.stop = 'no_new_keywords'
+          return result
+        }
         const expanded = await expandKeywords(db, ideaLimit, log)
         if (expanded.stop) {
           result.stop = expanded.stop
@@ -181,8 +190,13 @@ async function takeNextKeyword(
   log: (message: string) => void,
 ): Promise<{ id: number; keyword: string } | null> {
   const state = await loadFrontier(db)
-  const pending = state.keywords.filter((row) => row.status === 'NEW')
+  // Curated seed queries (with a priority) run first, lowest priority number first,
+  // and always run: the similarity skip only applies to generated keyword ideas.
+  const pending = state.keywords
+    .filter((row) => row.status === 'NEW')
+    .sort((a, b) => (a.priority ?? Number.MAX_SAFE_INTEGER) - (b.priority ?? Number.MAX_SAFE_INTEGER) || a.id - b.id)
   for (const row of pending) {
+    if (row.priority != null) return { id: row.id, keyword: row.keyword }
     const decision = guestKeywordFetchDecision(row.keyword, state.fetched)
     if (decision.fetch) return { id: row.id, keyword: row.keyword }
     await db.update(hhtOppGuestKeywords).set({
@@ -269,18 +283,29 @@ async function recordSerp(
   const domains = uniqueDomains(rows)
   const newDomains = domains.filter((domain) => state.firstKeyword.get(domain.root) === keywordId).length
   const neighborhood = guestSerpNeighborhood(overlap, newDomains)
+  // EXHAUSTED only after a fetch that returned results but no new blogs.
+  // NO_DATA means Semrush has no stored SERP for the phrase (usually zero volume).
+  // A failed fetch never reaches this function, so it cannot mark a query exhausted.
+  const status = rows.length === 0
+    ? 'NO_DATA'
+    : newDomains === 0
+      ? 'EXHAUSTED'
+      : neighborhood === 'saturated' ? 'SATURATED' : 'FETCHED'
+  const now = new Date()
   await db.update(hhtOppGuestKeywords).set({
-    status: neighborhood === 'saturated' ? 'SATURATED' : 'FETCHED',
+    status,
     neighborhood,
     serpOverlap: overlap,
     newDomains,
-    fetchedAt: new Date(),
+    resultsSeen: rows.length,
+    fetchedAt: now,
+    lastRunAt: now,
   }).where(eq(hhtOppGuestKeywords.id, keywordId))
   return { overlap, neighborhood, newDomains }
 }
 
 async function loadFrontier(db: Database): Promise<{
-  keywords: Array<{ id: number; keyword: string; status: string; neighborhood: Neighborhood | null }>
+  keywords: Array<{ id: number; keyword: string; status: string; neighborhood: Neighborhood | null; priority: number | null }>
   fetched: Array<{ keyword: string; neighborhood: Neighborhood | null }>
   overlaps: Map<number, number>
   firstKeyword: Map<string, number>
@@ -297,7 +322,7 @@ async function loadFrontier(db: Database): Promise<{
     if (root && !firstKeyword.has(root)) firstKeyword.set(root, row.keywordId)
   }
   const fetched = keywords
-    .filter((row) => row.status === 'FETCHED' || row.status === 'SATURATED')
+    .filter((row) => row.status === 'FETCHED' || row.status === 'SATURATED' || row.status === 'EXHAUSTED')
     .map((row) => ({ keyword: row.keyword, neighborhood: asNeighborhood(row.neighborhood) }))
   const overlaps = new Map<number, number>()
   for (const [id, keys] of byKeyword) {
@@ -310,11 +335,29 @@ async function loadFrontier(db: Database): Promise<{
       keyword: row.keyword,
       status: row.status,
       neighborhood: asNeighborhood(row.neighborhood),
+      priority: row.priority,
     })),
     fetched,
     overlaps,
     firstKeyword,
   }
+}
+
+/**
+ * Queries were once marked lowercase "exhausted" without any SERP being stored
+ * (fetched_at null, results_seen 0). Put them back in the queue.
+ */
+export async function resetUnfetchedExhausted(db: Database): Promise<number> {
+  const rows = await db.update(hhtOppGuestKeywords).set({
+    status: 'NEW',
+    newDomains: 0,
+    resultsSeen: 0,
+    lastRunAt: null,
+  }).where(and(
+    sql`lower(${hhtOppGuestKeywords.status}) = 'exhausted'`,
+    sql`${hhtOppGuestKeywords.fetchedAt} is null`,
+  )).returning({ id: hhtOppGuestKeywords.id })
+  return rows.length
 }
 
 async function seedGuestKeywords(db: Database): Promise<void> {

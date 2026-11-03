@@ -95,6 +95,17 @@ pnpm attio:followups --dry-run
 pnpm attio:outreach --dry-run
 ```
 
+Guest-post discovery tracks SERP fetching separately from website evaluation.
+After applying `packages/data/drizzle/0049_hht_opp_guest_keyword_coverage.sql`,
+`hht_opp_guest_keyword_coverage` is the completion check: every stored result
+must have a disposition in `hht_opp_guest_serp_reviews`. Known domains and
+explicit exclusions are accounted for without re-triage; missing reviews and
+unresolved sites keep a keyword `PENDING`. Preserve an unresolved prior
+disposition when a domain appears again; its presence in the CRM alone does
+not resolve it. A fetched SERP or an export reaching
+a particular lead count never makes a keyword complete. Export every viable
+prospect, using file chunks only for packaging, not as a discovery cap.
+
 ### Everything runs for $0 by default
 
 `LIVE_CALLS_ENABLED` must be the **exact string** `true` to spend money. Anything

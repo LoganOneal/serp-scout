@@ -20,7 +20,7 @@ export function classifySemrushFailure(message: string): SemrushCallClass {
   ) {
     return 'exhausted'
   }
-  if (code === '50' || text.includes('nothing found')) return 'empty'
+  if (code === '50' || text.includes('nothing found') || text.includes('no data found')) return 'empty'
   if (
     /\bhttp (401|403)\b/.test(text) ||
     /\b(unauthori[sz]ed|invalid_grant|invalid_token|forbidden|no_subscription)\b/.test(text)

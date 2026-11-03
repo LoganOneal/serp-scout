@@ -1,0 +1,191 @@
+task_id,parent_topic,keywords,keyword_count,allocation,volume_us,volume_scored,volume_global,traffic_potential,rollup_method
+index_diagnose,404 soft,soft 404,1,1.0,880.0,487.0,,,max_per_parent_topic_equal_task_allocation
+links_profile,ahref backlink,ahrefs backlink checker,1,1.0,8100.0,2133.0,,,max_per_parent_topic_equal_task_allocation
+content_cannibal,ahref cannibalization,ahrefs cannibalization,1,1.0,1300.0,143.0,,,max_per_parent_topic_equal_task_allocation
+comp_gap,ahref content gap,ahrefs content gap,1,1.0,4400.0,102.5,,,max_per_parent_topic_equal_task_allocation
+ai_citations,ai api citation overview,ai overview citations api,1,1.0,0.0,0.0,,,max_per_parent_topic_equal_task_allocation
+ai_mentions,ai api visibility,ai visibility api,1,1.0,20.0,10.0,,,max_per_parent_topic_equal_task_allocation
+ai_mentions,ai brand visibility,ai brand visibility tool,1,1.0,1900.0,513.0,,,max_per_parent_topic_equal_task_allocation
+ai_citations,ai citation mcp overview,ai overview citations mcp,1,1.0,0.0,0.0,,,max_per_parent_topic_equal_task_allocation
+ai_citations,ai citation overview,ai overview citations|ai overview citations checker|check ai overview citations|free ai overview citations checker|free ai overview citations tool|how to check ai overview citations,6,1.0,30.0,7.0,,,max_per_parent_topic_equal_task_allocation
+serp_aio,ai mcp overview,google ai overview mcp,1,1.0,0.0,0.0,,,max_per_parent_topic_equal_task_allocation
+ai_mentions,ai mcp visibility,ai visibility mcp,1,1.0,0.0,0.0,,,max_per_parent_topic_equal_task_allocation
+serp_aio,ai overview,ai overview|check google ai overview|free google ai overview checker|free google ai overview tool|google ai overview|google ai overview checker|how to check google ai overview,7,1.0,49500.0,29370.0,,,max_per_parent_topic_equal_task_allocation
+ai_mentions,ai search tracker,ai search tracker,1,1.0,1300.0,446.0,,,max_per_parent_topic_equal_task_allocation
+ai_mentions,ai search visibility,ai search visibility|ai search visibility tool,2,1.0,1900.0,1286.0,,,max_per_parent_topic_equal_task_allocation
+ai_mentions,ai searchability,ai searchability,1,1.0,12100.0,9075.0,,,max_per_parent_topic_equal_task_allocation
+ai_mentions,ai tracker visibility,ai visibility tracker,1,1.0,1300.0,897.0,,,max_per_parent_topic_equal_task_allocation
+ai_mentions,ai visibility,ai visibility|ai visibility checker|ai visibility tool|check ai visibility|free ai visibility checker|free ai visibility tool|how to check ai visibility,7,1.0,3600.0,3144.0,,,max_per_parent_topic_equal_task_allocation
+gsc_drop,algorithm update,google algorithm update,1,1.0,5400.0,2088.0,,,max_per_parent_topic_equal_task_allocation
+links_gap,analysi backlink gap,backlink gap analysis,1,1.0,880.0,739.0,,,max_per_parent_topic_equal_task_allocation
+comp_keywords,analysi competitor,seo competitor analysis,1,1.0,6600.0,1716.0,,,max_per_parent_topic_equal_task_allocation
+comp_gap,analysi content gap,content gap analysis,1,1.0,2400.0,648.0,,,max_per_parent_topic_equal_task_allocation
+gsc_top,analytic api console search,google search console analytics api,1,1.0,0.0,0.0,,,max_per_parent_topic_equal_task_allocation
+gsc_top,analytic console mcp search,google search console analytics mcp,1,1.0,0.0,0.0,,,max_per_parent_topic_equal_task_allocation
+gsc_top,analytic console search,check google search console analytics|free google search console analytics checker|free google search console analytics tool|google search console analytics checker|how to check google search console analytics,5,1.0,0.0,0.0,,,max_per_parent_topic_equal_task_allocation
+audit_site,api audit,seo audit api,1,1.0,260.0,51.0,,,max_per_parent_topic_equal_task_allocation
+local_audit,api audit business profile,google business profile audit api,1,1.0,0.0,0.0,,,max_per_parent_topic_equal_task_allocation
+links_profile,api backlink,backlink api,1,1.0,1300.0,464.0,,,max_per_parent_topic_equal_task_allocation
+links_gap,api backlink gap,backlink gap api,1,1.0,0.0,0.0,,,max_per_parent_topic_equal_task_allocation
+links_lost,api backlink lost,lost backlinks api,1,1.0,10.0,7.0,,,max_per_parent_topic_equal_task_allocation
+content_brief,api brief content,seo content brief api,1,1.0,0.0,0.0,,,max_per_parent_topic_equal_task_allocation
+audit_links,api broken link,broken link api,1,1.0,0.0,0.0,,,max_per_parent_topic_equal_task_allocation
+local_reviews,api business review,google business reviews api,1,1.0,20.0,3.0,,,max_per_parent_topic_equal_task_allocation
+content_cannibal,api cannibalization keyword,keyword cannibalization api,1,1.0,0.0,0.0,,,max_per_parent_topic_equal_task_allocation
+comp_keywords,api competitor keyword,competitor keywords api,1,1.0,0.0,0.0,,,max_per_parent_topic_equal_task_allocation
+kw_difficulty,api difficulty keyword,keyword difficulty api,1,1.0,20.0,7.0,,,max_per_parent_topic_equal_task_allocation
+gsc_opportunity,api distance keyword striking,striking distance keywords api,1,1.0,0.0,0.0,,,max_per_parent_topic_equal_task_allocation
+gsc_drop,api drop organic traffic,organic traffic drop api,1,1.0,0.0,0.0,,,max_per_parent_topic_equal_task_allocation
+comp_gap,api gap keyword,keyword gap api,1,1.0,0.0,0.0,,,max_per_parent_topic_equal_task_allocation
+index_status,api index,google index api,1,1.0,70.0,20.0,,,max_per_parent_topic_equal_task_allocation
+index_diagnose,api indexed not page,page not indexed api,1,1.0,0.0,0.0,,,max_per_parent_topic_equal_task_allocation
+index_status,api indexing,google indexing api,1,0.5,195.0,140.5,,,max_per_parent_topic_equal_task_allocation
+index_submit,api indexing,google indexing api,1,0.5,195.0,140.5,,,max_per_parent_topic_equal_task_allocation
+rank_position,api keyword rank,keyword rank api,1,1.0,40.0,13.0,,,max_per_parent_topic_equal_task_allocation
+kw_ideas,api keyword research,keyword research api,1,1.0,140.0,55.0,,,max_per_parent_topic_equal_task_allocation
+kw_volume,api keyword search volume,keyword search volume api,1,1.0,50.0,7.0,,,max_per_parent_topic_equal_task_allocation
+local_rank,api map rank,google maps rank api,1,1.0,0.0,0.0,,,max_per_parent_topic_equal_task_allocation
+audit_schema,api markup schema,schema markup api,1,1.0,0.0,0.0,,,max_per_parent_topic_equal_task_allocation
+content_onpage,api page,on page seo api,1,1.0,0.0,0.0,,,max_per_parent_topic_equal_task_allocation
+rank_position,api rank tracker,google rank tracker api|rank tracker api,2,1.0,880.0,598.0,,,max_per_parent_topic_equal_task_allocation
+rank_position,api rank tracker with,best rank tracker with api,1,1.0,480.0,166.0,,,max_per_parent_topic_equal_task_allocation
+rank_position,api rank tracking,rank tracking api,1,1.0,1000.0,560.0,,,max_per_parent_topic_equal_task_allocation
+rank_position,api ranking,ranking api,1,1.0,480.0,365.0,,,max_per_parent_topic_equal_task_allocation
+serp_results,api serp,google serp api|serp api,2,1.0,5400.0,3564.0,,,max_per_parent_topic_equal_task_allocation
+audit_speed,api speed,website speed api,1,1.0,0.0,0.0,,,max_per_parent_topic_equal_task_allocation
+comp_traffic,api traffic,website traffic api,1,1.0,50.0,32.0,,,max_per_parent_topic_equal_task_allocation
+links_profile,are backlink what,what are backlinks,1,1.0,8100.0,4671.0,,,max_per_parent_topic_equal_task_allocation
+index_status,ask index,ask google to index site,1,1.0,260.0,46.0,,,max_per_parent_topic_equal_task_allocation
+audit_site,audit,free seo audit checker|free seo audit tool|how to check seo audit|seo audit|seo audit checker|website audit,6,1.0,22200.0,7018.0,,,max_per_parent_topic_equal_task_allocation
+local_audit,audit business,google my business audit|google my business audit tool,2,1.0,320.0,147.0,,,max_per_parent_topic_equal_task_allocation
+local_audit,audit business local think,think local seo google my business audits,1,1.0,880.0,76.0,,,max_per_parent_topic_equal_task_allocation
+local_audit,audit business mcp profile,google business profile audit mcp,1,1.0,0.0,0.0,,,max_per_parent_topic_equal_task_allocation
+local_audit,audit business profile,check google business profile audit|free google business profile audit checker|free google business profile audit tool|google business profile audit|google business profile audit checker|how to check google business profile audit,6,1.0,210.0,154.0,,,max_per_parent_topic_equal_task_allocation
+local_audit,audit gmb,gmb audit|gmb audit tool,2,1.0,260.0,69.0,,,max_per_parent_topic_equal_task_allocation
+local_audit,audit local,free local seo audit,1,1.0,590.0,179.0,,,max_per_parent_topic_equal_task_allocation
+audit_site,audit mcp,seo audit mcp,1,1.0,0.0,0.0,,,max_per_parent_topic_equal_task_allocation
+links_profile,backlink,backlink|backlink checker|backlinks|backlinks check|backlinks checker|backlinks seo|check backlink|check backlinks|free backlink checker|free backlink tool|seo backlink|seo backlinks,12,1.0,60500.0,44568.0,,,max_per_parent_topic_equal_task_allocation
+links_profile,backlink building,backlink building,1,1.0,4400.0,425.0,,,max_per_parent_topic_equal_task_allocation
+links_gap,backlink gap,backlink gap|backlink gap checker|check backlink gap|free backlink gap checker|free backlink gap tool|how to check backlink gap,6,1.0,140.0,55.0,,,max_per_parent_topic_equal_task_allocation
+links_gap,backlink gap mcp,backlink gap mcp,1,1.0,0.0,0.0,,,max_per_parent_topic_equal_task_allocation
+links_lost,backlink lost,check lost backlinks|free lost backlinks checker|free lost backlinks tool|how to check lost backlinks|lost backlinks,5,1.0,110.0,22.0,,,max_per_parent_topic_equal_task_allocation
+links_lost,backlink lost mcp,lost backlinks mcp,1,1.0,0.0,0.0,,,max_per_parent_topic_equal_task_allocation
+links_profile,backlink mcp,backlink mcp,1,1.0,0.0,0.0,,,max_per_parent_topic_equal_task_allocation
+links_profile,backlink verified,verified backlinks,1,1.0,12100.0,8268.0,,,max_per_parent_topic_equal_task_allocation
+links_profile,backlinking,backlinking,1,1.0,5400.0,864.0,,,max_per_parent_topic_equal_task_allocation
+content_brief,brief content,check seo content brief|content briefs|free seo content brief checker|free seo content brief tool|how to check seo content brief|seo content brief|seo content brief checker,7,1.0,1000.0,380.0,,,max_per_parent_topic_equal_task_allocation
+content_brief,brief content example,content brief example|seo content brief example,2,1.0,590.0,147.0,,,max_per_parent_topic_equal_task_allocation
+content_brief,brief content mcp,seo content brief mcp,1,1.0,0.0,0.0,,,max_per_parent_topic_equal_task_allocation
+content_brief,brief content template,seo content brief template,1,1.0,590.0,120.0,,,max_per_parent_topic_equal_task_allocation
+content_brief,brief content template writing,content writing brief template,1,1.0,590.0,171.0,,,max_per_parent_topic_equal_task_allocation
+content_brief,brief content write,how to write a content brief,1,1.0,480.0,130.0,,,max_per_parent_topic_equal_task_allocation
+content_brief,brief it make,make it brief,1,1.0,320.0,219.0,,,max_per_parent_topic_equal_task_allocation
+content_brief,briefing generate,generate briefing.,1,1.0,390.0,390.0,,,max_per_parent_topic_equal_task_allocation
+audit_links,broken link,broken link|broken link checker|broken links|check broken link|free broken link checker|free broken link tool|how to check broken link,7,1.0,8100.0,2127.0,,,max_per_parent_topic_equal_task_allocation
+audit_links,broken link mcp,broken link mcp,1,1.0,0.0,0.0,,,max_per_parent_topic_equal_task_allocation
+local_audit,business checklist optimization,google my business optimization checklist,1,1.0,260.0,129.0,,,max_per_parent_topic_equal_task_allocation
+local_audit,business checklist optimization profile,google business profile optimization checklist,1,1.0,210.0,85.0,,,max_per_parent_topic_equal_task_allocation
+local_reviews,business mcp review,google business reviews mcp,1,1.0,0.0,0.0,,,max_per_parent_topic_equal_task_allocation
+local_reviews,business review,check google business reviews|free google business reviews checker|free google business reviews tool|google business reviews|google business reviews checker|how to check google business reviews,6,1.0,5400.0,2808.0,,,max_per_parent_topic_equal_task_allocation
+index_diagnose,by claude conversation engine inadvertently indexed link search shared were,claude shared conversation links were inadvertently indexed by search engines,1,0.5,650.0,216.5,,,max_per_parent_topic_equal_task_allocation
+index_status,by claude conversation engine inadvertently indexed link search shared were,claude shared conversation links were inadvertently indexed by search engines,1,0.5,650.0,216.5,,,max_per_parent_topic_equal_task_allocation
+index_diagnose,by excluded noindex tag,excluded by noindex tag,1,1.0,90.0,15.0,,,max_per_parent_topic_equal_task_allocation
+content_cannibal,cannibalisation,cannibalisation,1,1.0,720.0,434.0,,,max_per_parent_topic_equal_task_allocation
+content_cannibal,cannibalisation content,content cannibalisation,1,1.0,1000.0,63.0,,,max_per_parent_topic_equal_task_allocation
+content_cannibal,cannibalization,cannibalization in seo|cannibalization seo|seo cannibalization,3,1.0,1600.0,635.0,,,max_per_parent_topic_equal_task_allocation
+content_cannibal,cannibalization fix keyword,how to fix keyword cannibalization,1,1.0,720.0,161.0,,,max_per_parent_topic_equal_task_allocation
+content_cannibal,cannibalization keyword,check keyword cannibalization|free keyword cannibalization checker|free keyword cannibalization tool|how to check keyword cannibalization|keyword cannibalization|keyword cannibalization checker,6,1.0,6600.0,1122.0,,,max_per_parent_topic_equal_task_allocation
+content_cannibal,cannibalization keyword mcp,keyword cannibalization mcp,1,1.0,0.0,0.0,,,max_per_parent_topic_equal_task_allocation
+content_cannibal,cannibalization keyword what,what is keyword cannibalization,1,1.0,1900.0,861.0,,,max_per_parent_topic_equal_task_allocation
+index_diagnose,canonical,canonical seo|seo canonical,2,1.0,2900.0,425.0,,,max_per_parent_topic_equal_task_allocation
+index_diagnose,canonical engineer frontend web,web frontend engineer canonical,1,1.0,1900.0,1900.0,,,max_per_parent_topic_equal_task_allocation
+index_diagnose,canonical link,canonical link,1,1.0,1300.0,511.0,,,max_per_parent_topic_equal_task_allocation
+index_diagnose,canonical redirect,canonical redirect,1,1.0,2400.0,992.0,,,max_per_parent_topic_equal_task_allocation
+index_diagnose,canonical tag,canonical tag|canonical tags,2,1.0,4400.0,2625.0,,,max_per_parent_topic_equal_task_allocation
+index_diagnose,canonical url,canonical url,1,1.0,4400.0,2493.0,,,max_per_parent_topic_equal_task_allocation
+index_diagnose,canonicalization url,url canonicalization,1,1.0,1600.0,704.0,,,max_per_parent_topic_equal_task_allocation
+serp_results,com serp,serp com,1,1.0,1300.0,113.0,,,max_per_parent_topic_equal_task_allocation
+comp_keywords,competitor keyword,check competitor keywords|competitor keywords|free competitor keywords checker|free competitor keywords tool|how to check competitor keywords,5,1.0,1600.0,458.0,,,max_per_parent_topic_equal_task_allocation
+comp_keywords,competitor keyword mcp,competitor keywords mcp,1,1.0,0.0,0.0,,,max_per_parent_topic_equal_task_allocation
+index_status,console indexing request search,google search console request indexing,1,1.0,320.0,212.0,,,max_per_parent_topic_equal_task_allocation
+index_diagnose,content indexed page without,page indexed without content,1,1.0,20.0,2.0,,,max_per_parent_topic_equal_task_allocation
+gsc_drop,core update,google core update,1,1.0,2400.0,1696.0,,,max_per_parent_topic_equal_task_allocation
+index_diagnose,crawled currently indexed not,crawled currently not indexed,1,0.5,240.0,36.0,,,max_per_parent_topic_equal_task_allocation
+index_status,crawled currently indexed not,crawled currently not indexed,1,0.5,240.0,36.0,,,max_per_parent_topic_equal_task_allocation
+index_diagnose,currently discovered fix indexed not,discovered - currently not indexed how to fix,1,0.5,130.0,43.5,,,max_per_parent_topic_equal_task_allocation
+index_status,currently discovered fix indexed not,discovered - currently not indexed how to fix,1,0.5,130.0,43.5,,,max_per_parent_topic_equal_task_allocation
+index_diagnose,currently discovered indexed not,discovered currently not indexed,1,0.5,160.0,51.0,,,max_per_parent_topic_equal_task_allocation
+index_status,currently discovered indexed not,discovered currently not indexed,1,0.5,160.0,51.0,,,max_per_parent_topic_equal_task_allocation
+kw_difficulty,difficulty keyword,check keyword difficulty|free keyword difficulty checker|free keyword difficulty tool|how to check keyword difficulty|keyword difficulty|keyword difficulty checker|keyword difficulty tool,7,1.0,6600.0,1584.0,,,max_per_parent_topic_equal_task_allocation
+kw_difficulty,difficulty keyword mcp,keyword difficulty mcp,1,1.0,0.0,0.0,,,max_per_parent_topic_equal_task_allocation
+gsc_opportunity,discover distance keyword learn striking,discover-learn striking distance keywords,1,1.0,50.0,41.0,,,max_per_parent_topic_equal_task_allocation
+gsc_opportunity,distance keyword mcp striking,striking distance keywords mcp,1,1.0,0.0,0.0,,,max_per_parent_topic_equal_task_allocation
+gsc_opportunity,distance keyword striking,check striking distance keywords|free striking distance keywords checker|free striking distance keywords tool|how to check striking distance keywords|striking distance keywords|striking distance keywords checker,6,1.0,1300.0,113.0,,,max_per_parent_topic_equal_task_allocation
+gsc_opportunity,distance strategy striking,striking distance strategy,1,1.0,40.0,35.0,,,max_per_parent_topic_equal_task_allocation
+index_status,do indexing,how to do google indexing,1,1.0,720.0,245.0,,,max_per_parent_topic_equal_task_allocation
+gsc_drop,drop mcp organic traffic,organic traffic drop mcp,1,1.0,0.0,0.0,,,max_per_parent_topic_equal_task_allocation
+gsc_drop,drop organic traffic,check organic traffic drop|free organic traffic drop checker|free organic traffic drop tool|how to check organic traffic drop|organic traffic drop|organic traffic drop checker,6,1.0,30.0,8.0,,,max_per_parent_topic_equal_task_allocation
+gsc_drop,dropped traffic,website traffic dropped,1,1.0,20.0,8.0,,,max_per_parent_topic_equal_task_allocation
+kw_ideas,explorer keyword,keyword explorer,1,1.0,9900.0,1551.0,,,max_per_parent_topic_equal_task_allocation
+index_diagnose,follow noindex,noindex follow,1,1.0,1000.0,100.0,,,max_per_parent_topic_equal_task_allocation
+comp_gap,gap keyword,check keyword gap|free keyword gap checker|free keyword gap tool|how to check keyword gap|keyword gap|keyword gap checker|keyword gaps,7,1.0,2400.0,232.0,,,max_per_parent_topic_equal_task_allocation
+comp_gap,gap keyword mcp,keyword gap mcp,1,1.0,0.0,0.0,,,max_per_parent_topic_equal_task_allocation
+kw_ideas,generator keyword,keyword generator,1,1.0,12100.0,2097.0,,,max_per_parent_topic_equal_task_allocation
+index_status,get indexed,get indexed,1,1.0,1300.0,212.0,,,max_per_parent_topic_equal_task_allocation
+local_audit,gmb,gmb tools,1,1.0,170.0,52.0,,,max_per_parent_topic_equal_task_allocation
+audit_speed,gtmetrix,gtmetrix,1,1.0,8100.0,1228.5,,,max_per_parent_topic_equal_task_allocation
+index_status,index,check google index|free google index checker|google index|google index checker|how to check google index|index a website|index site|index your site,8,1.0,1900.0,1254.0,,,max_per_parent_topic_equal_task_allocation
+index_status,index mcp,google index mcp,1,1.0,0.0,0.0,,,max_per_parent_topic_equal_task_allocation
+index_status,indexation,google indexation,1,1.0,590.0,236.0,,,max_per_parent_topic_equal_task_allocation
+index_diagnose,indexed mcp not page,page not indexed mcp,1,1.0,0.0,0.0,,,max_per_parent_topic_equal_task_allocation
+index_diagnose,indexed not page,check page not indexed|free page not indexed checker|free page not indexed tool|how to check page not indexed|page not indexed|page not indexed checker,6,1.0,20.0,8.0,,,max_per_parent_topic_equal_task_allocation
+index_submit,indexing,free google indexing checker|free google indexing tool|google indexing|google indexing checker|how to check google indexing,5,1.0,1600.0,1163.0,,,max_per_parent_topic_equal_task_allocation
+index_submit,indexing mcp,google indexing mcp,1,1.0,0.0,0.0,,,max_per_parent_topic_equal_task_allocation
+index_status,indexing request,google request indexing,1,1.0,320.0,202.0,,,max_per_parent_topic_equal_task_allocation
+audit_speed,insight page speed,page speed insights,1,1.0,8100.0,1242.0,,,max_per_parent_topic_equal_task_allocation
+audit_speed,insight pagespeed,google pagespeed insights|pagespeed insights,2,1.0,22200.0,5667.0,,,max_per_parent_topic_equal_task_allocation
+rank_position,keyword mcp rank,keyword rank mcp,1,1.0,0.0,0.0,,,max_per_parent_topic_equal_task_allocation
+kw_volume,keyword mcp search volume,keyword search volume mcp,1,1.0,0.0,0.0,,,max_per_parent_topic_equal_task_allocation
+rank_position,keyword rank,check keyword rank|free keyword rank checker|how to check keyword rank|keyword rank checker,4,1.0,12100.0,2178.0,,,max_per_parent_topic_equal_task_allocation
+rank_position,keyword ranking,keyword ranking,1,1.0,5400.0,594.0,,,max_per_parent_topic_equal_task_allocation
+kw_ideas,keyword research,and keyword research|check keyword research|free keyword research checker|free keyword research tool|how to check keyword research|keyword research and|keyword research checker,7,1.0,12100.0,5485.0,,,max_per_parent_topic_equal_task_allocation
+kw_volume,keyword search volume,check keyword search volume|free keyword search volume tool|keyword search volume|keyword search volume checker,4,1.0,3600.0,2376.0,,,max_per_parent_topic_equal_task_allocation
+audit_links,link,link check|link checker|link checker tool,3,1.0,33100.0,23501.0,,,max_per_parent_topic_equal_task_allocation
+ai_mentions,llm visibility,llm visibility tool,1,1.0,1600.0,523.0,,,max_per_parent_topic_equal_task_allocation
+local_rank,local rank tracker,local rank tracker,1,1.0,5400.0,1206.0,,,max_per_parent_topic_equal_task_allocation
+serp_results,local serp,local serp checker,1,1.0,2900.0,986.0,,,max_per_parent_topic_equal_task_allocation
+local_rank,map mcp rank,google maps rank mcp,1,1.0,0.0,0.0,,,max_per_parent_topic_equal_task_allocation
+local_rank,map rank,check google maps rank|free google maps rank checker|free google maps rank tool|google maps rank|google maps rank checker|how to check google maps rank,6,1.0,880.0,505.0,,,max_per_parent_topic_equal_task_allocation
+audit_schema,markup mcp schema,schema markup mcp,1,1.0,0.0,0.0,,,max_per_parent_topic_equal_task_allocation
+audit_schema,markup schema,check schema markup|free schema markup checker|free schema markup tool|how to check schema markup|schema markup|schema markup checker,6,1.0,8100.0,1539.0,,,max_per_parent_topic_equal_task_allocation
+audit_schema,markup schema validator,schema markup validator,1,1.0,3600.0,2916.0,,,max_per_parent_topic_equal_task_allocation
+content_onpage,mcp page,on page seo mcp,1,1.0,0.0,0.0,,,max_per_parent_topic_equal_task_allocation
+serp_results,mcp serp,google serp mcp,1,1.0,0.0,0.0,,,max_per_parent_topic_equal_task_allocation
+audit_speed,mcp speed,website speed mcp,1,1.0,0.0,0.0,,,max_per_parent_topic_equal_task_allocation
+comp_traffic,mcp traffic,website traffic mcp,1,1.0,0.0,0.0,,,max_per_parent_topic_equal_task_allocation
+serp_results,metric serp,serp metrics,1,1.0,2400.0,176.0,,,max_per_parent_topic_equal_task_allocation
+index_diagnose,nofollow noindex,nofollow noindex|noindex nofollow,2,1.0,1000.0,193.0,,,max_per_parent_topic_equal_task_allocation
+index_diagnose,noindex,noindex,1,1.0,880.0,188.0,,,max_per_parent_topic_equal_task_allocation
+index_diagnose,noindex tag,noindex tag,1,1.0,880.0,276.0,,,max_per_parent_topic_equal_task_allocation
+index_diagnose,not page why,why is my page not on google,1,0.5,0.0,0.0,,,max_per_parent_topic_equal_task_allocation
+index_status,not page why,why is my page not on google,1,0.5,0.0,0.0,,,max_per_parent_topic_equal_task_allocation
+content_onpage,page,check on page seo|free on page seo checker|free on page seo tool|how to check on page seo|on page seo|on page seo checker,6,1.0,12100.0,5001.0,,,max_per_parent_topic_equal_task_allocation
+audit_speed,page speed,page speed,1,1.0,8100.0,7074.0,,,max_per_parent_topic_equal_task_allocation
+rank_position,rank,google rank checker|rank checker|seo rank,3,1.0,8100.0,3348.0,,,max_per_parent_topic_equal_task_allocation
+rank_position,rank tracker,rank tracker,1,1.0,8100.0,1890.0,,,max_per_parent_topic_equal_task_allocation
+rank_position,ranking,google ranking|ranking website|seo ranking|website ranking|website ranking checker,5,1.0,8100.0,3132.0,,,max_per_parent_topic_equal_task_allocation
+audit_schema,result rich test,google rich results test|rich results test,2,1.0,6600.0,4374.0,,,max_per_parent_topic_equal_task_allocation
+audit_schema,schema,schema checker,1,1.0,3600.0,2064.0,,,max_per_parent_topic_equal_task_allocation
+audit_schema,schema validator,schema validator,1,1.0,6600.0,5104.0,,,max_per_parent_topic_equal_task_allocation
+audit_site,seo check,seo check,1,1.0,8100.0,2916.0,,,max_per_parent_topic_equal_task_allocation
+audit_site,seo checker,seo checker,1,0.5,7400.0,2861.5,,,max_per_parent_topic_equal_task_allocation
+content_onpage,seo checker,seo checker,1,0.5,7400.0,2861.5,,,max_per_parent_topic_equal_task_allocation
+serp_results,serp,check google serp|free google serp checker|free google serp tool|free serp|google serp|google serp checker|google serps|how to check google serp|serp|serp checker|serp google|serp seo|serp tool,13,1.0,18100.0,9774.0,,,max_per_parent_topic_equal_task_allocation
+serp_results,serp tracker,serp tracker,1,1.0,2900.0,1112.0,,,max_per_parent_topic_equal_task_allocation
+serp_results,serp visibility,serp visibility,1,1.0,2400.0,552.0,,,max_per_parent_topic_equal_task_allocation
+audit_speed,speed,check website speed|free website speed tool|how to check website speed|website speed|website speed checker,5,1.0,4400.0,2273.0,,,max_per_parent_topic_equal_task_allocation
+audit_speed,speed test,site speed test|website speed test,2,1.0,12100.0,4356.0,,,max_per_parent_topic_equal_task_allocation
+comp_keywords,spyfu,spyfu,1,1.0,8100.0,1674.0,,,max_per_parent_topic_equal_task_allocation
+comp_traffic,traffic,check a site traffic|check traffic on website|check website traffic|free website traffic checker|free website traffic tool|how to check website traffic|site traffic checker|traffic checker|website traffic|website traffic checker,10,1.0,22200.0,6956.0,,,max_per_parent_topic_equal_task_allocation
+comp_traffic,traffic web,web traffic,1,1.0,8100.0,1809.0,,,max_per_parent_topic_equal_task_allocation
+kw_ideas,ubersuggest,ubersuggest,1,1.0,18100.0,3047.0,,,max_per_parent_topic_equal_task_allocation

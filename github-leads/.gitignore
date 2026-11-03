@@ -1,0 +1,9 @@
+.venv/
+__pycache__/
+.pytest_cache/
+.env
+leads.db
+leads.db-wal
+leads.db-shm
+leads.csv
+repos.csv

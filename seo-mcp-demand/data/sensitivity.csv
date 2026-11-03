@@ -1,0 +1,14 @@
+scenario,weights,top_five,changed
+baseline,"{'tool_page_traffic': 0.4, 'keyword_volume_rollup': 0.3, 'mcp_usage_signal': 0.2, 'trend_growth': 0.1}",audit_site|kw_ideas|serp_results|links_profile|audit_speed,False
+tool_page_traffic -0.1; keyword_volume_rollup +0.1,"{'tool_page_traffic': 0.30000000000000004, 'keyword_volume_rollup': 0.4, 'mcp_usage_signal': 0.2, 'trend_growth': 0.1}",audit_site|kw_ideas|serp_results|links_profile|gsc_drop,True
+tool_page_traffic -0.1; mcp_usage_signal +0.1,"{'tool_page_traffic': 0.30000000000000004, 'keyword_volume_rollup': 0.3, 'mcp_usage_signal': 0.30000000000000004, 'trend_growth': 0.1}",audit_site|kw_ideas|links_profile|ai_mentions|audit_speed,True
+tool_page_traffic -0.1; trend_growth +0.1,"{'tool_page_traffic': 0.30000000000000004, 'keyword_volume_rollup': 0.3, 'mcp_usage_signal': 0.2, 'trend_growth': 0.2}",kw_ideas|audit_site|links_profile|ai_mentions|index_status,True
+keyword_volume_rollup -0.1; tool_page_traffic +0.1,"{'tool_page_traffic': 0.5, 'keyword_volume_rollup': 0.19999999999999998, 'mcp_usage_signal': 0.2, 'trend_growth': 0.1}",audit_site|kw_ideas|serp_results|links_profile|audit_speed,False
+keyword_volume_rollup -0.1; mcp_usage_signal +0.1,"{'tool_page_traffic': 0.4, 'keyword_volume_rollup': 0.19999999999999998, 'mcp_usage_signal': 0.30000000000000004, 'trend_growth': 0.1}",audit_site|kw_ideas|links_profile|audit_speed|ai_mentions,True
+keyword_volume_rollup -0.1; trend_growth +0.1,"{'tool_page_traffic': 0.4, 'keyword_volume_rollup': 0.19999999999999998, 'mcp_usage_signal': 0.2, 'trend_growth': 0.2}",kw_ideas|audit_site|links_profile|ai_mentions|index_status,True
+mcp_usage_signal -0.1; tool_page_traffic +0.1,"{'tool_page_traffic': 0.5, 'keyword_volume_rollup': 0.3, 'mcp_usage_signal': 0.1, 'trend_growth': 0.1}",audit_site|kw_ideas|serp_results|links_profile|rank_position,True
+mcp_usage_signal -0.1; keyword_volume_rollup +0.1,"{'tool_page_traffic': 0.4, 'keyword_volume_rollup': 0.4, 'mcp_usage_signal': 0.1, 'trend_growth': 0.1}",audit_site|kw_ideas|serp_results|links_profile|rank_position,True
+mcp_usage_signal -0.1; trend_growth +0.1,"{'tool_page_traffic': 0.4, 'keyword_volume_rollup': 0.3, 'mcp_usage_signal': 0.1, 'trend_growth': 0.2}",kw_ideas|audit_site|links_profile|index_status|serp_results,True
+trend_growth -0.1; tool_page_traffic +0.1,"{'tool_page_traffic': 0.5, 'keyword_volume_rollup': 0.3, 'mcp_usage_signal': 0.2, 'trend_growth': 0.0}",audit_site|kw_ideas|serp_results|rank_position|gsc_drop,True
+trend_growth -0.1; keyword_volume_rollup +0.1,"{'tool_page_traffic': 0.4, 'keyword_volume_rollup': 0.4, 'mcp_usage_signal': 0.2, 'trend_growth': 0.0}",audit_site|kw_ideas|serp_results|gsc_drop|links_profile,True
+trend_growth -0.1; mcp_usage_signal +0.1,"{'tool_page_traffic': 0.4, 'keyword_volume_rollup': 0.3, 'mcp_usage_signal': 0.30000000000000004, 'trend_growth': 0.0}",audit_site|kw_ideas|serp_results|audit_speed|gsc_drop,True

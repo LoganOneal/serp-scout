@@ -1,0 +1,17 @@
+id	product	cluster	task_id	intent	seed_keywords	fit
+36	Link Network	Autopilot link building	ln_autopilot	Wants links built without doing outreach	backlinks on autopilot, automated link building, link building automation, ai link building, link building software, link building tool, link building without outreach	Strong
+37	Link Network	Link building subscription	ln_subscription	Wants a monthly link service with a fixed price	monthly link building, link building subscription, link building service, link building packages, seo link building service	Strong
+38	Link Network	Cheap backlinks	ln_cheap	Price-sensitive buyer	cheap backlinks, buy cheap backlinks, affordable backlinks, affordable link building, cheap link building, low cost backlinks	Strong on price
+39	Link Network	Link exchange network	ln_exchange	Wants to trade links with relevant sites	link exchange, backlink exchange, link swap, link exchange network, link exchange platform, guest post exchange, link sharing network	Strong
+40	Link Network	Contextual backlinks	ln_contextual	Wants in-content links from related articles	contextual backlinks, niche edits, link insertion, in-content links, relevant backlinks, editorial backlinks	Strong
+41	Link Network	PBN	ln_pbn	Wants PBN links, or a safer alternative	pbn links, pbn backlinks, buy pbn links, private blog network, pbn alternative, pbn vs guest posts, is pbn safe	Weak: page says No PBNs
+42	Link Network	Backlink indexing	ln_indexing	Wants built links to get indexed	backlink indexer, index backlinks, backlink indexing service, link indexer, get backlinks indexed	Strong
+43	Link Network	Platform plugin	ln_platform	Wants link building inside their CMS	wordpress backlink plugin, seo plugin backlinks, nextjs seo, link building wordpress, backlinks plugin	Strong
+44	Parasite SEO	Parasite opportunity finder	ps_find	Wants high-authority pages ranking for money keywords	parasite seo, parasite seo opportunities, parasite seo sites, parasite seo tool, parasite seo keywords, find parasite seo	Strong (today's product)
+45	Parasite SEO	Parasite platforms	ps_platforms	Wants to know which third-party sites to publish on	parasite seo platforms, best parasite seo sites, high authority sites to post on, medium seo, linkedin articles seo, quora seo	Strong
+46	Parasite SEO	Weak SERP analysis	ps_weak_serp	Wants keywords where forums and UGC rank	weak serps, low competition keywords, reddit in serps, forum results google, ugc in serps, serp analysis	Strong
+47	Parasite SEO	Reddit and forum SEO	ps_reddit	Wants to rank through Reddit threads	reddit seo, rank on reddit, reddit threads ranking on google, reddit marketing seo, forum seo	Strong
+48	Parasite SEO	Barnacle SEO (local)	ps_barnacle	Wants local rankings through directories and Yelp pages	barnacle seo, local directories ranking, yelp seo, directory listings seo	Medium
+49	Parasite SEO	Sponsored posts on high-authority publishers	ps_publishers	Wants placements on news and magazine sites that rank	sponsored posts on news sites, press release seo, publish on high da sites, sponsored content seo	Medium (future automation)
+50	Parasite SEO	Parasite automation	ps_automation	Wants parasite pages created and published for them	parasite seo automation, parasite seo service, automated parasite seo, parasite seo software	Future
+51	Parasite SEO	Policy and risk	ps_risk	Wants to know if it still works or is penalized	site reputation abuse, parasite seo penalty, is parasite seo dead, google site reputation abuse policy	Medium

@@ -1,0 +1,63 @@
+source,url,text,task_ids,evidence
+claude:seo-search,https://claude.com/marketplace/connectors/google-drive,Google Drive,,cache/907ca06d9a959a9d2427c6adb52b44c65da909f0aac7bc4399b776d03084f8cb.json
+claude:seo-search,https://claude.com/marketplace/connectors/gmail,Gmail,,cache/907ca06d9a959a9d2427c6adb52b44c65da909f0aac7bc4399b776d03084f8cb.json
+claude:seo-search,https://claude.com/marketplace/connectors/google-calendar,Google Calendar,,cache/907ca06d9a959a9d2427c6adb52b44c65da909f0aac7bc4399b776d03084f8cb.json
+claude:seo-search,https://claude.com/marketplace/connectors/canva,Canva,,cache/907ca06d9a959a9d2427c6adb52b44c65da909f0aac7bc4399b776d03084f8cb.json
+claude:seo-search,https://claude.com/marketplace/connectors/microsoft-365,Microsoft 365,,cache/907ca06d9a959a9d2427c6adb52b44c65da909f0aac7bc4399b776d03084f8cb.json
+claude:seo-search,https://claude.com/marketplace/connectors/notion,Notion,,cache/907ca06d9a959a9d2427c6adb52b44c65da909f0aac7bc4399b776d03084f8cb.json
+claude:seo-search,https://claude.com/marketplace/connectors/figma,Figma,,cache/907ca06d9a959a9d2427c6adb52b44c65da909f0aac7bc4399b776d03084f8cb.json
+claude:seo-search,https://claude.com/marketplace/connectors/slack,Slack,,cache/907ca06d9a959a9d2427c6adb52b44c65da909f0aac7bc4399b776d03084f8cb.json
+claude:seo-search,https://claude.com/marketplace/connectors/atlassian,Atlassian MCP,,cache/907ca06d9a959a9d2427c6adb52b44c65da909f0aac7bc4399b776d03084f8cb.json
+claude:seo-search,https://claude.com/marketplace/connectors/hubspot,HubSpot,,cache/907ca06d9a959a9d2427c6adb52b44c65da909f0aac7bc4399b776d03084f8cb.json
+claude:seo-search,https://claude.com/marketplace/connectors/linear,Linear,,cache/907ca06d9a959a9d2427c6adb52b44c65da909f0aac7bc4399b776d03084f8cb.json
+claude:seo-search,https://claude.com/marketplace/connectors/monday,monday.com,,cache/907ca06d9a959a9d2427c6adb52b44c65da909f0aac7bc4399b776d03084f8cb.json
+claude:seo-search,https://claude.com/marketplace/connectors/nsdap-archiv-der-spiegel,NSDAP Archiv - DER SPIEGEL,,cache/907ca06d9a959a9d2427c6adb52b44c65da909f0aac7bc4399b776d03084f8cb.json
+claude:seo-search,https://claude.com/marketplace/connectors/ai-producer-by-opusclip,AI Producer by OpusClip,,cache/907ca06d9a959a9d2427c6adb52b44c65da909f0aac7bc4399b776d03084f8cb.json
+claude:seo-search,https://claude.com/marketplace/connectors/zillow,Zillow,,cache/907ca06d9a959a9d2427c6adb52b44c65da909f0aac7bc4399b776d03084f8cb.json
+claude:seo-search,https://claude.com/marketplace/connectors/tomorrow-io-weather-mcp-app,Tomorrow.io Weather MCP App,,cache/907ca06d9a959a9d2427c6adb52b44c65da909f0aac7bc4399b776d03084f8cb.json
+claude:seo-search,https://claude.com/marketplace/connectors/intuit-developer,Intuit Developer,,cache/907ca06d9a959a9d2427c6adb52b44c65da909f0aac7bc4399b776d03084f8cb.json
+claude:seo-search,https://claude.com/marketplace/connectors/clio,Clio,,cache/907ca06d9a959a9d2427c6adb52b44c65da909f0aac7bc4399b776d03084f8cb.json
+claude:seo-search,https://claude.com/marketplace/connectors/j-p-morgan-asset-management-55ip,J.P. Morgan Asset Management (55ip),,cache/907ca06d9a959a9d2427c6adb52b44c65da909f0aac7bc4399b776d03084f8cb.json
+claude:seo-search,https://claude.com/marketplace/connectors/lois,LOIS,,cache/907ca06d9a959a9d2427c6adb52b44c65da909f0aac7bc4399b776d03084f8cb.json
+claude:seo-search,https://claude.com/marketplace/connectors/military-and-veteran-family-assistant,Military and Veteran Family Assistant,,cache/907ca06d9a959a9d2427c6adb52b44c65da909f0aac7bc4399b776d03084f8cb.json
+claude:seo-search,https://claude.com/marketplace/connectors/linkedin-hiring-pro,LinkedIn Hiring Pro,,cache/907ca06d9a959a9d2427c6adb52b44c65da909f0aac7bc4399b776d03084f8cb.json
+claude:seo-search,https://claude.com/marketplace/connectors/nevis,Nevis,,cache/907ca06d9a959a9d2427c6adb52b44c65da909f0aac7bc4399b776d03084f8cb.json
+claude:seo-search,https://claude.com/marketplace/connectors/aptus-ai-nextos,Aptus.AI - NextOS,,cache/907ca06d9a959a9d2427c6adb52b44c65da909f0aac7bc4399b776d03084f8cb.json
+claude:seo-search,https://claude.com/marketplace/connectors/ukg-bryte,UKG Bryte,,cache/907ca06d9a959a9d2427c6adb52b44c65da909f0aac7bc4399b776d03084f8cb.json
+claude:seo-search,https://claude.com/marketplace/connectors/franklin-templeton-funds-and-insights,Franklin Templeton Funds and Insights,,cache/907ca06d9a959a9d2427c6adb52b44c65da909f0aac7bc4399b776d03084f8cb.json
+claude:seo-search,https://claude.com/marketplace/connectors/finny,FINNY,,cache/907ca06d9a959a9d2427c6adb52b44c65da909f0aac7bc4399b776d03084f8cb.json
+claude:seo-search,https://claude.com/marketplace/connectors/invesco-for-advisors,Invesco for Advisors,,cache/907ca06d9a959a9d2427c6adb52b44c65da909f0aac7bc4399b776d03084f8cb.json
+claude:seo-search,https://claude.com/marketplace/connectors/schwab-advisor-services,Schwab Advisor Services,,cache/907ca06d9a959a9d2427c6adb52b44c65da909f0aac7bc4399b776d03084f8cb.json
+claude:seo-search,https://claude.com/marketplace/connectors/asana,Asana,,cache/907ca06d9a959a9d2427c6adb52b44c65da909f0aac7bc4399b776d03084f8cb.json
+claude:seo-search,https://claude.com/marketplace/connectors/box,Box,,cache/907ca06d9a959a9d2427c6adb52b44c65da909f0aac7bc4399b776d03084f8cb.json
+claude:seo-search,https://claude.com/marketplace/connectors/supabase,Supabase,,cache/907ca06d9a959a9d2427c6adb52b44c65da909f0aac7bc4399b776d03084f8cb.json
+claude:seo-search,https://claude.com/marketplace/connectors/onchaindiligence,OnChainDiligence,,cache/907ca06d9a959a9d2427c6adb52b44c65da909f0aac7bc4399b776d03084f8cb.json
+claude:seo-search,https://claude.com/marketplace/connectors/shopify,Shopify,,cache/907ca06d9a959a9d2427c6adb52b44c65da909f0aac7bc4399b776d03084f8cb.json
+claude:seo-search,https://claude.com/marketplace/connectors/vercel,Vercel,,cache/907ca06d9a959a9d2427c6adb52b44c65da909f0aac7bc4399b776d03084f8cb.json
+claude:seo-search,https://claude.com/marketplace/connectors/zoom-for-claude,Zoom for Claude,,cache/907ca06d9a959a9d2427c6adb52b44c65da909f0aac7bc4399b776d03084f8cb.json
+claude:seo-search,https://claude.com/marketplace/connectors/granola,Granola,,cache/907ca06d9a959a9d2427c6adb52b44c65da909f0aac7bc4399b776d03084f8cb.json
+claude:seo-search,https://claude.com/marketplace/connectors/adobe-creativity,Adobe,,cache/907ca06d9a959a9d2427c6adb52b44c65da909f0aac7bc4399b776d03084f8cb.json
+glama:seo,https://glama.ai/mcp/servers/moonbirdai/puppeteer-plus-martech-mcp/tools/audit-seo,Puppeteer+ MarTech,,cache/0c5ac8254830d2319e49dd434abd9ddf36fbf9e093b5b2722e2082c601f4be5d.json
+glama:seo,https://glama.ai/mcp/servers/ZionHopkins/asset-factory-mcp/tools/seo_check,Launch Engine,,cache/0c5ac8254830d2319e49dd434abd9ddf36fbf9e093b5b2722e2082c601f4be5d.json
+glama:seo,https://glama.ai/mcp/servers/tonypepperwidow123-blip/mcp/tools/wordpress_set_seo_meta,WordPress MCP Server,,cache/0c5ac8254830d2319e49dd434abd9ddf36fbf9e093b5b2722e2082c601f4be5d.json
+glama:seo,https://glama.ai/mcp/servers/ibrahimhajjaj/seo-console-mcp/tools/seo_audit,seo-console-mcp,,cache/0c5ac8254830d2319e49dd434abd9ddf36fbf9e093b5b2722e2082c601f4be5d.json
+glama:seo,https://glama.ai/mcp/servers/mouhabmzibra-rgb/mcp-seo-backlinks,seo-backlinks,links_profile,cache/0c5ac8254830d2319e49dd434abd9ddf36fbf9e093b5b2722e2082c601f4be5d.json
+glama:seo,https://glama.ai/mcp/servers/Mehmoodqureshi/seo-tools-mcp,seo-mcp,,cache/0c5ac8254830d2319e49dd434abd9ddf36fbf9e093b5b2722e2082c601f4be5d.json
+glama:seo,https://glama.ai/mcp/servers/g-battaglia/mcp-seo,mcp-seo,,cache/0c5ac8254830d2319e49dd434abd9ddf36fbf9e093b5b2722e2082c601f4be5d.json
+glama:seo,https://glama.ai/mcp/servers/AI-BuildInfra/SEO-intentrank,SEO-IntentRank,,cache/0c5ac8254830d2319e49dd434abd9ddf36fbf9e093b5b2722e2082c601f4be5d.json
+glama:seo,https://glama.ai/mcp/servers/fastmcp-me/seo-mcp,SEO MCP,,cache/0c5ac8254830d2319e49dd434abd9ddf36fbf9e093b5b2722e2082c601f4be5d.json
+glama:seo,https://glama.ai/mcp/servers/pradilla/seo-mcp,SEO MCP,,cache/0c5ac8254830d2319e49dd434abd9ddf36fbf9e093b5b2722e2082c601f4be5d.json
+glama:seo,https://glama.ai/mcp/servers/CaffNoir59/codex-seo,codex-seo,,cache/0c5ac8254830d2319e49dd434abd9ddf36fbf9e093b5b2722e2082c601f4be5d.json
+glama:seo,https://glama.ai/mcp/servers/ezbiz-services/mcp-seo-marketing,SEO Marketing,,cache/0c5ac8254830d2319e49dd434abd9ddf36fbf9e093b5b2722e2082c601f4be5d.json
+glama:seo,https://glama.ai/mcp/servers/ahmadaimee/seo-agent,seo-agent,,cache/0c5ac8254830d2319e49dd434abd9ddf36fbf9e093b5b2722e2082c601f4be5d.json
+glama:seo,https://glama.ai/mcp/servers/glivera/seo-audit-mcp-server,Accrue SEO,,cache/0c5ac8254830d2319e49dd434abd9ddf36fbf9e093b5b2722e2082c601f4be5d.json
+glama:seo,https://glama.ai/mcp/servers/patchwindow/seo-mcp,seo-mcp,,cache/0c5ac8254830d2319e49dd434abd9ddf36fbf9e093b5b2722e2082c601f4be5d.json
+glama:seo,https://glama.ai/mcp/servers/heiner-io/mcp-seo-geo-werkzeuge,seo-geo,,cache/0c5ac8254830d2319e49dd434abd9ddf36fbf9e093b5b2722e2082c601f4be5d.json
+glama:seo,https://glama.ai/mcp/servers/cygnixlabs-cmd/cygnix-seo-mcp,cygnix-seo,,cache/0c5ac8254830d2319e49dd434abd9ddf36fbf9e093b5b2722e2082c601f4be5d.json
+glama:seo,https://glama.ai/mcp/servers/m4mansoor/seo-agent,SEO Agent,,cache/0c5ac8254830d2319e49dd434abd9ddf36fbf9e093b5b2722e2082c601f4be5d.json
+glama:seo,https://glama.ai/mcp/servers/Br0ski777/seo-analyzer-x402,seo-analyzer,,cache/0c5ac8254830d2319e49dd434abd9ddf36fbf9e093b5b2722e2082c601f4be5d.json
+glama:seo,https://glama.ai/mcp/servers/vipulawl/mcp-backlink-for-seo,Backlink SEO,links_profile,cache/0c5ac8254830d2319e49dd434abd9ddf36fbf9e093b5b2722e2082c601f4be5d.json
+glama:seo,https://glama.ai/mcp/servers/raxocode/seo-notary,SEO Notary,,cache/0c5ac8254830d2319e49dd434abd9ddf36fbf9e093b5b2722e2082c601f4be5d.json
+glama:seo,https://glama.ai/mcp/servers/gotchseo/seo-researcher,SEO Researcher,,cache/0c5ac8254830d2319e49dd434abd9ddf36fbf9e093b5b2722e2082c601f4be5d.json
+glama:seo,https://glama.ai/mcp/servers/AutomateLab-tech/ai-seo-mcp,automatelab-ai-seo,,cache/0c5ac8254830d2319e49dd434abd9ddf36fbf9e093b5b2722e2082c601f4be5d.json
+glama:seo,https://glama.ai/mcp/servers/hna2810/seo-crawler-mcp,seo-crawler-mcp,,cache/0c5ac8254830d2319e49dd434abd9ddf36fbf9e093b5b2722e2082c601f4be5d.json

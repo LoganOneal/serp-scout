@@ -4384,6 +4384,46 @@ export const hhtOppGuestSerpResults = pgTable(
   }),
 )
 
+export const hhtOppGuestSerpReviews = pgTable(
+  'hht_opp_guest_serp_reviews',
+  {
+    serpResultId: integer('serp_result_id')
+      .primaryKey()
+      .references(() => hhtOppGuestSerpResults.id, { onDelete: 'cascade' }),
+    rootDomain: text('root_domain').notNull(),
+    decision: text('decision').$type<'KNOWN' | 'SKIP' | 'PURSUE' | 'UNRESOLVED'>().notNull(),
+    reason: text('reason').notNull(),
+    sourceUrl: text('source_url').notNull(),
+    evaluatedAt: timestamp('evaluated_at', { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => ({
+    domainIdx: index('hht_opp_guest_serp_reviews_domain_idx').on(t.rootDomain),
+  }),
+)
+
+/** Every domain handed to the guest-post-pitches skill, so exports stay incremental. */
+export const hhtOppLeadExports = pgTable(
+  'hht_opp_lead_exports',
+  {
+    id: serial('id').primaryKey(),
+    rootDomain: text('root_domain').notNull(),
+    leadType: text('lead_type').notNull().default('guest_post'),
+    batchId: text('batch_id').notNull(),
+    fileName: text('file_name').notNull(),
+    opportunityUrl: text('opportunity_url'),
+    sourceQuery: text('source_query'),
+    bucket: text('bucket'),
+    keywordId: integer('keyword_id').references(() => hhtOppGuestKeywords.id, { onDelete: 'set null' }),
+    score: doublePrecision('score'),
+    exportedAt: timestamp('exported_at', { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => ({
+    domainTypeUq: uniqueIndex('hht_opp_lead_exports_root_domain_lead_type_key').on(t.rootDomain, t.leadType),
+    batchIdx: index('hht_opp_lead_exports_batch_idx').on(t.batchId),
+    keywordIdx: index('hht_opp_lead_exports_keyword_idx').on(t.keywordId),
+  }),
+)
+
 export const hhtOppGuestEvaluations = pgTable(
   'hht_opp_guest_evaluations',
   {

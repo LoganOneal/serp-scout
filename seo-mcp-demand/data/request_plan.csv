@@ -1,0 +1,6 @@
+stage,request_upper_bound,detail
+seed_metrics_us,252,One US keyword report per seed; cached before expansion
+related_expansions,252,"At most 10 related terms per seed, metrics included where supported"
+serp_discovery,90,"Core, checker and free-tool seeds; up to 20 results each"
+tool_page_traffic,150,"Only SERP-discovered, reviewed free tools; shared URLs fetched once"
+global_and_24_month_history,unconfirmed,Report support/catalog required; not included in confirmed call estimate

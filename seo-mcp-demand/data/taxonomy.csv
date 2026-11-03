@@ -1,0 +1,31 @@
+cluster,task_id,task,notes
+Keyword research,kw_volume,What is the search volume for this keyword?,US and global demand
+Keyword research,kw_ideas,Which keywords should I target for this topic?,Related and matching terms
+Keyword research,kw_difficulty,How hard is it to rank for this keyword?,Provider-specific difficulty
+SERP / rank,serp_results,What ranks for this keyword right now?,Location and device matter
+SERP / rank,rank_position,Where does my site rank for this keyword?,Exact positions and historical tracking
+SERP / rank,serp_aio,What does the AI Overview say for this keyword?,"Overview content, not brand citation share"
+GSC performance,gsc_drop,Why did my organic traffic drop?,Private Search Console diagnostics
+GSC performance,gsc_top,Which queries and pages bring me search traffic?,Private query and page performance
+GSC performance,gsc_opportunity,Which keywords in positions 8 to 20 can I improve?,Private performance joined to page content
+Indexing,index_status,Is this page indexed by Google?,Exact owned-URL inspection versus public inference
+Indexing,index_submit,Submit these URLs for indexing.,Google Indexing API restricted to eligible content; no guarantee
+Indexing,index_diagnose,Why is this page not indexed?,URL inspection and crawl diagnostics
+Technical audit,audit_site,Find the technical SEO problems on my site.,Crawl-based site audit
+Technical audit,audit_speed,Why is this page slow or failing Core Web Vitals?,Field data distinct from local Lighthouse
+Technical audit,audit_links,Find broken links on my site.,Local crawling is a strong substitute
+Technical audit,audit_schema,Is my structured data valid for rich results?,Validation distinct from generating JSON-LD
+Backlinks,links_profile,Who links to this website?,Proprietary external link index
+Backlinks,links_gap,Who links to my competitors but not me?,Compare referring domains
+Backlinks,links_lost,Which backlinks did my site lose?,Historical link index
+Competitor,comp_keywords,Which keywords send traffic to my competitor?,Public estimated ranking dataset
+Competitor,comp_traffic,How much search traffic does my competitor get?,"Organic estimates, not measured analytics"
+Competitor,comp_gap,Which keywords do competitors rank for that I miss?,Cross-domain ranking comparison
+AI visibility,ai_mentions,Is my brand mentioned in ChatGPT and Perplexity?,Prompt sampling and reproducibility limits
+AI visibility,ai_citations,Which sites are cited in AI Overviews for my topic?,Citation extraction distinct from overview content
+Local,local_rank,Where does my business rank on Google Maps?,Geo-grid rather than one organic position
+Local,local_reviews,What are customers saying in my Google Business Profile reviews?,Owned account versus public review discovery
+Local,local_audit,What should I fix in my Google Business Profile?,Owned profile diagnostics and updates
+Content,content_brief,Create a search-informed content brief for this keyword.,SERP evidence versus generic text generation
+Content,content_onpage,How can I optimize this page for its target keyword?,Remote evidence must beat reading local HTML
+Content,content_cannibal,Are my pages competing for the same keyword?,Combine query/page history and site content

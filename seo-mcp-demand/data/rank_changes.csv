@@ -1,0 +1,31 @@
+task_id,task,rank_before,rank_after,rank_change,score_before,score_after,explanation
+audit_site,Find the technical SEO problems on my site.,2,1,1,0.5952927002714653,0.6237384532047959,
+kw_ideas,Which keywords should I target for this topic?,1,2,-1,0.6056204056006849,0.6049708877136765,
+serp_results,What ranks for this keyword right now?,11,3,8,0.44107522088836887,0.5340976664009361,"keyword volume 39,000 -> 16,277 (score contribution +0.045); fit 0.77 -> 0.87 (Claude directory gap set to 5)"
+links_profile,Who links to this website?,5,4,1,0.4992839458189014,0.5323825761564037,
+audit_speed,Why is this page slow or failing Core Web Vitals?,9,5,4,0.4603871238602318,0.50704076881393,"keyword volume 63,000 -> 21,840 (score contribution +0.043); Smithery signal (now log-scaled, capped) 78.7 -> 4.5 (score contribution +0.033)"
+gsc_drop,Why did my organic traffic drop?,22,6,16,0.3467214413382869,0.505707556791303,"keyword volume 30.0 -> 3,800 (score contribution +0.153); Smithery signal (now log-scaled, capped) 54.2 -> 1.2 (score contribution -0.027); fit 0.83 -> 0.93 (Claude directory gap set to 5)"
+ai_mentions,Is my brand mentioned in ChatGPT and Perplexity?,12,7,5,0.43988376656725736,0.4959995877403506,"keyword volume 47,820 -> 15,894 (score contribution +0.040); Smithery signal (now log-scaled, capped) 34.3 -> 3.3 (score contribution +0.033)"
+rank_position,Where does my site rank for this keyword?,6,8,-2,0.4787284915517907,0.49540995543634236,
+index_status,Is this page indexed by Google?,7,9,-2,0.4701817312868207,0.4789639288428159,
+kw_volume,What is the search volume for this keyword?,8,10,-2,0.4663884916931609,0.46763422162280643,
+serp_aio,What does the AI Overview say for this keyword?,16,11,5,0.4084388744463122,0.4519473653594748,"keyword volume 49,540 -> 29,370 (score contribution +0.056)"
+comp_keywords,Which keywords send traffic to my competitor?,15,12,3,0.416897404892237,0.4283849085523981,own score changed little; other tasks moved past it
+local_rank,Where does my business rank on Google Maps?,14,13,1,0.4171760851123831,0.42826199580333446,
+comp_traffic,How much search traffic does my competitor get?,17,14,3,0.39528244538008694,0.4076198604049733,"keyword volume 30,350 -> 8,797 (score contribution +0.033)"
+content_onpage,How can I optimize this page for its target keyword?,13,15,-2,0.4197301296442901,0.4060058160399183,
+audit_schema,Is my structured data valid for rich results?,23,16,7,0.3464491050241459,0.38580316419119304,"keyword volume 36,600 -> 15,997 (score contribution +0.046); Smithery signal (now log-scaled, capped) 70.2 -> 3.7 (score contribution +0.025)"
+content_cannibal,Are my pages competing for the same keyword?,20,17,3,0.35899352372238175,0.37481188912604546,own score changed little; other tasks moved past it
+local_reviews,What are customers saying in my Google Business Profile reviews?,21,18,3,0.35266145273869953,0.374624292472934,"keyword volume 5,420 -> 2,811 (score contribution +0.038)"
+comp_gap,Which keywords do competitors rank for that I miss?,19,19,0,0.3633445466182386,0.354023098361043,
+audit_links,Find broken links on my site.,25,20,5,0.320919651866477,0.35110657431153397,"keyword volume 41,200 -> 25,628 (score contribution +0.056)"
+kw_difficulty,How hard is it to rank for this keyword?,24,21,3,0.3430025320279615,0.3466478862138656,own score changed little; other tasks moved past it
+local_audit,What should I fix in my Google Business Profile?,26,22,4,0.306843243314183,0.3287310814226931,own score changed little; other tasks moved past it
+content_brief,Create a search-informed content brief for this keyword.,28,23,5,0.2708604056060905,0.2877298270735021,"keyword volume 4,280 -> 1,557 (score contribution +0.027)"
+index_diagnose,Why is this page not indexed?,18,24,-6,0.3747024306202514,0.2776836297764215,"free-tool page traffic 117,519 -> 0.0 (score contribution -0.362); keyword volume 20.0 -> 11,266 (score contribution +0.191); keyword trend 0.0 -> 0.9 (score contribution +0.027); fit 0.87 -> 0.97 (Claude directory gap set to 5)"
+links_gap,Who links to my competitors but not me?,29,25,4,0.25572363503303397,0.26240389495849725,own score changed little; other tasks moved past it
+ai_citations,Which sites are cited in AI Overviews for my topic?,27,26,1,0.2730452307769411,0.2595284674843763,
+index_submit,Submit these URLs for indexing.,10,27,-17,0.4436204620064912,0.20088595973217957,"free-tool page traffic 117,519 -> 0.0 (score contribution -0.362); keyword volume 1,795 -> 1,304 (score contribution +0.040); fit 0.80 -> 0.90 (Claude directory gap set to 5)"
+gsc_opportunity,Which keywords in positions 8 to 20 can I improve?,4,28,-24,0.5184539583484336,0.1944630329012151,"free-tool page traffic 117,519 -> 0.0 (score contribution -0.362); Smithery signal (now log-scaled, capped) 54.2 -> 1.2 (score contribution -0.027); fit 0.87 -> 0.97 (Claude directory gap set to 5)"
+links_lost,Which backlinks did my site lose?,30,29,1,0.08525858567545128,0.07087826452038304,
+gsc_top,Which queries and pages bring me search traffic?,3,30,-27,0.558629547269317,0.05060758057322101,"free-tool page traffic 117,519 -> 0.0 (score contribution -0.362); keyword volume 368,140 -> 0.0 (score contribution -0.266); Smithery signal (now log-scaled, capped) 54.2 -> 1.2 (score contribution -0.027); fit 0.77 -> 0.87 (Claude directory gap set to 5)"

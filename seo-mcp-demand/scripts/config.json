@@ -1,0 +1,29 @@
+{
+  "market": "US plus global",
+  "weights": {
+    "tool_page_traffic": 0.4,
+    "keyword_volume_rollup": 0.3,
+    "mcp_usage_signal": 0.2,
+    "trend_growth": 0.1
+  },
+  "first_party_weights": {
+    "tool_page_traffic": 0.25,
+    "keyword_volume_rollup": 0.2,
+    "mcp_usage_signal": 0.15,
+    "trend_growth": 0.1,
+    "first_party_calls": 0.3
+  },
+  "fit_dimensions": ["web_search_gap", "account_or_action", "recurrence", "in_workflow", "directory_gap", "willingness_to_pay"],
+  "keyword_market_for_score": "volume_scored",
+  "mcp_usage_metric": "smithery_useCount_unspecified_window",
+  "sensitivity_delta": 0.1,
+  "paid_cash_cap_usd": 0,
+  "existing_semrush_credits_authorized": true,
+  "seed_count": 240,
+  "expansions_per_seed": 10,
+  "serp_queries_per_task": 3,
+  "serp_result_limit": 20,
+  "tool_pages_per_task": 5,
+  "max_semrush_requests_per_run": 900,
+  "missing_policy": "leave final score blank unless every demand component is observed"
+}
