@@ -49,6 +49,7 @@ FORM = {
 class FakeApi(BaseHTTPRequestHandler):
     queue: list = []
     reports: list = []
+    pushes: list = []
 
     def log_message(self, *args):
         pass
@@ -65,6 +66,12 @@ class FakeApi(BaseHTTPRequestHandler):
         if self.headers.get("authorization") != "Bearer test-secret":
             return self.reply(401, {"error": "Unauthorized"})
         raw = self.rfile.read(int(self.headers.get("content-length") or 0))
+        if self.path == "/api/generator/forms":
+            body = json.loads(raw)
+            FakeApi.pushes.append(body)
+            return self.reply(200, {"notification": "sent", "results": [
+                {"index": i, "ok": True, "outcome": "created", "form_id": f"id-{i}", "domain": f["domain"]}
+                for i, f in enumerate(body["forms"])]})
         if self.path == "/api/generator/forms/claim":
             return self.reply(200, {"form": FakeApi.queue.pop(0) if FakeApi.queue else None})
         if self.path.endswith("/outcome"):
@@ -217,6 +224,26 @@ class ApiTests(unittest.TestCase):
         code, out = run_api("pending")
         self.assertEqual(code, 4)
         self.assertIn("SUBMIT WAS CLICKED", out)
+
+    def test_push_validates_then_posts_once(self):
+        FakeApi.pushes.clear()
+        draft = {"campaign_id": "c", "domain": "a.com", "form_url": "https://a.com/contact", "persona": "claire",
+                 "fields": [{"label": "Message", "answer": "Hi; there", "required": True, "max_chars": 50}]}
+        bad = TMP / "bad.json"
+        bad.write_text(json.dumps([{**draft, "fields": [{"label": "Message", "answer": "Shelby says hi", "required": True}]}]))
+        code, out = run_api("push", str(bad))
+        self.assertEqual(code, 1)
+        self.assertIn("mentions Shelby", out)
+        self.assertEqual(FakeApi.pushes, [])
+        good = TMP / "good.json"
+        good.write_text(json.dumps([draft]))
+        code, out = run_api("push", str(good))
+        self.assertEqual(code, 0, out)
+        self.assertEqual(FakeApi.pushes[0]["mode"], "create")
+        self.assertIn("created 1, skipped 0", out)
+        with self.assertRaises(SystemExit):
+            run_api("push", str(good))
+        self.assertEqual(len(FakeApi.pushes), 1)
 
 
 @unittest.skipUnless(Path("/Applications/Google Chrome.app").exists(), "needs Google Chrome")
