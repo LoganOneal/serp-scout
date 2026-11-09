@@ -45,6 +45,8 @@ EXPORTS = Path(os.environ.get("HHT_EXPORTS", REPO / "exports/guest-post-outreach
 MASTER = Path(os.environ.get("HHT_MASTER", EXPORTS / "Guest Post Master Tracker.xlsx"))
 ORIGINAL = Path("/Users/kaisulkin/Downloads/Guest Post Master Tracker.xlsx")
 EXCLUSIONS_CSV = REPO / "exports/handoff/exclusions/guest-post-master-tracker.csv"
+# Read by `pnpm hht:opp keyword-yields` to rank keyword templates on current tracker results.
+VERDICTS_CSV = REPO / "exports/handoff/exclusions/tracker-verdicts.csv"
 PART_A = (
     "domain verdict skip_code review_reason region_check supplied_urls "
     "supplied_url_result pitch_url url_corrected submission_mechanism "
@@ -152,6 +154,34 @@ def exclusions():
         for d in domains:
             w.writerow([d, "Guest Post Master Tracker"])
     print(f"wrote {len(domains)} tracked domains to {EXCLUSIONS_CSV}")
+    # Master rows first; then verdicts from batches evaluated but not yet committed to the
+    # master (their tracker-rows.json), so keyword yields count every evaluated domain.
+    seen, uncommitted = {}, 0
+    for row in records(load_workbook(MASTER, read_only=True)["Untitled"]):
+        try:
+            seen.setdefault(normalize(row.get("site")), (row, "master"))
+        except ValueError:
+            continue
+    for path in sorted(EXPORTS.glob("*/tracker-rows.json")):
+        try:
+            rows = read_json(path).get("main") or []
+        except (ValueError, OSError):
+            continue
+        for row in rows:
+            try:
+                domain = normalize(row.get("site"))
+            except ValueError:
+                continue
+            if domain not in seen:
+                seen[domain] = (row, path.parent.name)
+                uncommitted += 1
+    with VERDICTS_CSV.open("w", newline="") as handle:
+        w = csv.writer(handle)
+        w.writerow(["domain", "verdict", "source_query", "outreach_email_id", "origin"])
+        for domain, (row, origin) in sorted(seen.items()):
+            w.writerow([domain, row.get("verdict") or "", row.get("source_query") or "",
+                        row.get("outreach_email_id") or "", origin])
+    print(f"wrote {len(seen)} verdicts to {VERDICTS_CSV} ({uncommitted} from batches not yet in the master)")
 
 
 # ---- prepare -------------------------------------------------------------------

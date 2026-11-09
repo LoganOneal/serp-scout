@@ -43,6 +43,63 @@ def fiction_note_error(body):
     return None
 
 
+# Sender inbox per draft (outreach docs/sender-assignment.md). Writing samples or Claire's
+# name require Claire's inbox; Shelby's name requires Shelby's; everything else goes to the
+# attached inbox with the most room this week, so both inboxes fill evenly.
+_CLAIRE_ONLY = re.compile(r"castlesandturrets\.com|10000birds\.com|hotelhottubs\.com/blog|\bClaire\b", re.I)
+_SHELBY_ONLY = re.compile(r"\bShelby\b", re.I)
+
+
+def campaign_inboxes(credential):
+    """{campaign_id: [active inbox dicts]} from the read-only campaigns route."""
+    r = requests.get(BASE + "/api/generator/campaigns?include=paused", timeout=30,
+                     headers={"Authorization": "Bearer " + credential})
+    if r.status_code != 200:
+        sys.exit(f"Campaign lookup failed (HTTP {r.status_code}); push nothing and report the blocker.")
+    body = r.json()
+    campaigns = body.get("campaigns", body) if isinstance(body, dict) else body
+    return {c["id"]: [i for i in (c.get("inboxes") or []) if i.get("active")] for c in campaigns}
+
+
+def _persona_inbox(options, name):
+    return next((i for i in options if str(i.get("persona", "")).lower().startswith(name)), None)
+
+
+def assign_senders(payload, inboxes):
+    """Set draft["sender"] (inbox email) on every draft; returns an error string or None."""
+    room = {}
+    for options in inboxes.values():
+        for inbox in options:
+            room.setdefault(inbox["email"].lower(), [
+                (inbox.get("week") or {}).get("available", 0), (inbox.get("today") or {}).get("available", 0)])
+    for p in payload:
+        domain = p["contact"]["attributes"]["domain"]
+        options = inboxes.get(p["campaign_id"]) or []
+        if not options:
+            return f"{domain}: campaign has no active inbox attached."
+        text = f"{p.get('subject', '')}\n{p.get('body', '')}"
+        claire, shelby = _CLAIRE_ONLY.search(text), _SHELBY_ONLY.search(text)
+        if claire and shelby:
+            return f"{domain}: body names both Claire and Shelby; fix the persona before pushing."
+        if p.get("sender"):
+            chosen = next((i for i in options if i["email"].lower() == p["sender"].lower()
+                           or i["id"] == p["sender"]), None)
+            if not chosen:
+                return f"{domain}: sender {p['sender']} is not an active inbox on this campaign."
+        elif claire or shelby:
+            chosen = _persona_inbox(options, "claire" if claire else "shelby")
+            if not chosen:
+                return f"{domain}: needs {'Claire' if claire else 'Shelby'}'s inbox, which is not on this campaign."
+        else:
+            chosen = max(options, key=lambda i: (*room[i["email"].lower()], i["email"].lower()))
+        if claire and _persona_inbox([chosen], "claire") is None:
+            return f"{domain}: links writing samples or names Claire, so it must send from Claire's inbox."
+        p["sender"] = chosen["email"]
+        room[chosen["email"].lower()][0] -= 1
+        room[chosen["email"].lower()][1] -= 1
+    return None
+
+
 SECRET_FILE = os.environ.get(
     "GENERATOR_SECRET_FILE",
     "/Users/kaisulkin/.copilot/session-state/29cffd99-5ecb-4d22-951b-24dc5eae350f/files/generator-secret")
@@ -83,6 +140,11 @@ def main(batch_dir=None):
         if "@" not in p["contact"]["email"]:
             sys.exit(f"{p['contact']['attributes']['domain']}: unreadable recipient.")
     credential = token()
+    sender_error = assign_senders(payload, campaign_inboxes(credential))
+    if sender_error:
+        sys.exit(sender_error)
+    raw = (json.dumps(payload, indent=2) + "\n").encode()
+    (batch / "outreach-payload.json").write_bytes(raw)
     attempt = {"attempted_at": datetime.now(timezone.utc).isoformat(), "method": "POST",
                "url": BASE + "/api/generator/drafts", "mode": "create array", "count": len(payload),
                "domains_by_index": domains, "payload_sha256": hashlib.sha256(raw).hexdigest(),

@@ -131,10 +131,11 @@ describe('template ranking', () => {
       limit: 10,
       perTemplate: 10,
     })
+    // Both live templates are under-sampled, so exploration takes them in turn.
     expect(ranking.candidates.map((row) => row.keyword)).toEqual([
       'things to do in austin',
-      'things to do in tulsa',
       'weekend in boston',
+      'things to do in tulsa',
       'weekend in tulsa',
     ])
     expect(ranking.skipped).toMatchObject({ known: 1, retiredTemplate: 3, nearDuplicate: 1 })
@@ -158,5 +159,27 @@ describe('template ranking', () => {
     for (const row of ranking.candidates) counts.set(row.templateId, (counts.get(row.templateId) ?? 0) + 1)
     expect([...counts.values()]).toEqual([2, 2, 2])
     expect(ranking.skipped.perTemplateCap).toBeGreaterThan(0)
+  })
+
+  it('reserves a share of each refill for templates without enough fetches yet', () => {
+    const stats = guestTemplateStats(
+      Array.from({ length: 12 }, (_, i) => ({ keyword: `things to do in town ${'abcdefghijkl'[i]}`, fetched: true, newDomains: 20, pitchable: 2 })),
+      { templates, baseline: { perNewDomain: 0.04, perKeyword: 0.5 } },
+    )
+    const ranking = rankGuestTemplateCandidates({
+      templates,
+      entities: Array.from({ length: 12 }, (_, i) => city(`City ${'ABCDEFGHIJKL'[i]}`)),
+      stats,
+      known: [],
+      fetched: [],
+      limit: 10,
+      perTemplate: 10,
+    })
+    const ids = ranking.candidates.map((row) => row.templateId)
+    expect(ids).toHaveLength(10)
+    const explored = ids.filter((id) => id !== 'travel.things-to-do')
+    expect(explored.length).toBe(3)
+    // Interleaved, not all at the end of the refill.
+    expect(ids.slice(0, 5).some((id) => id !== 'travel.things-to-do')).toBe(true)
   })
 })

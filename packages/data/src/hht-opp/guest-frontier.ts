@@ -31,7 +31,7 @@ import {
   hhtOppGuestKeywords,
   hhtOppGuestSerpResults,
 } from '../schema.js'
-import { retireGuestTemplateKeywords } from './guest-templates.js'
+import { enqueueGuestTemplates, GUEST_TEMPLATE_SOURCE, retireGuestTemplateKeywords } from './guest-templates.js'
 
 export type GuestFrontierStop = 'gads_error' | 'no_new_keywords' | 'max_keywords'
 
@@ -46,6 +46,8 @@ export interface GuestFrontierPlan {
   stop: GuestFrontierStop
   keywordsSkipped: number
   error: string | null
+  /** Template top-up before planning (`--refill`): NEW templates before it, how many were added. */
+  refill?: { before: number; queued: number; error: string | null }
   requests: GuestSerpRequest[]
 }
 
@@ -102,6 +104,11 @@ export async function planGuestPostFrontier(
     ideaLimit?: number
     /** When false, stop at the end of the queue instead of adding Google Ads keyword ideas. */
     expand?: boolean
+    /**
+     * Keep at least this many yield-ranked template keywords queued: when fewer are NEW,
+     * enqueue enough to reach it first (Google Ads volume check, free). 0 disables.
+     */
+    refillTemplates?: number
     log?: (message: string) => void
   },
 ): Promise<GuestFrontierPlan> {
@@ -117,6 +124,17 @@ export async function planGuestPostFrontier(
     requests: [],
   }
   await prepareFrontier(db, log)
+  if (options.refillTemplates && options.refillTemplates > 0) {
+    const queued = (await loadFrontier(db)).keywords
+      .filter((row) => row.status === 'NEW' && row.sourceType === GUEST_TEMPLATE_SOURCE).length
+    if (queued < options.refillTemplates) {
+      const refill = await enqueueGuestTemplates(db, { limit: options.refillTemplates - queued, log })
+      plan.refill = { before: queued, queued: refill.queued.length, error: refill.error }
+      if (refill.error) log(`Template refill: ${refill.error}`)
+    } else {
+      plan.refill = { before: queued, queued: 0, error: null }
+    }
+  }
 
   const planned = new Set<number>()
   while (plan.requests.length < options.maxKeywords) {
@@ -225,9 +243,13 @@ async function takeNextKeyword(
   const fetched = [...state.fetched, ...planning.plannedKeywords.map((keyword) => ({ keyword, neighborhood: null }))]
   // Curated seed queries (with a priority) run first, lowest priority number first,
   // and always run: the similarity skip only applies to generated keyword ideas.
+  // Template keywords come next, in the yield-ranked order they were queued, ahead of
+  // unranked Google Ads keyword ideas.
+  const tier = (row: { sourceType: string | null }) => (row.sourceType === GUEST_TEMPLATE_SOURCE ? 0 : 1)
   const pending = state.keywords
     .filter((row) => row.status === 'NEW' && !planning.exclude.has(row.id) && !isLegacyGuestDiscoveryKeyword(row.keyword))
-    .sort((a, b) => (a.priority ?? Number.MAX_SAFE_INTEGER) - (b.priority ?? Number.MAX_SAFE_INTEGER) || a.id - b.id)
+    .sort((a, b) => (a.priority ?? Number.MAX_SAFE_INTEGER) - (b.priority ?? Number.MAX_SAFE_INTEGER)
+      || tier(a) - tier(b) || a.id - b.id)
   for (const row of pending) {
     if (row.priority != null) return { id: row.id, keyword: row.keyword }
     // Spread one plan across topics; the deferred keyword stays NEW for the next plan.
@@ -342,7 +364,7 @@ async function recordSerp(
 }
 
 async function loadFrontier(db: Database): Promise<{
-  keywords: Array<{ id: number; keyword: string; status: string; neighborhood: Neighborhood | null; priority: number | null }>
+  keywords: Array<{ id: number; keyword: string; status: string; neighborhood: Neighborhood | null; priority: number | null; sourceType: string | null }>
   fetched: Array<{ keyword: string; neighborhood: Neighborhood | null }>
   overlaps: Map<number, number>
   firstKeyword: Map<string, number>
@@ -373,6 +395,7 @@ async function loadFrontier(db: Database): Promise<{
       status: row.status,
       neighborhood: asNeighborhood(row.neighborhood),
       priority: row.priority,
+      sourceType: row.sourceType,
     })),
     fetched,
     overlaps,

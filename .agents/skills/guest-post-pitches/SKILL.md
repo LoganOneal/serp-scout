@@ -222,16 +222,28 @@ Whenever new leads are obtained from Semrush with the repo's `hht-opp` CLI, run
 them through this skill immediately afterwards, with no separate request needed.
 Discovery does no LLM triage of its own: this skill decides every verdict.
 
-1. Before exporting, refresh the tracker exclusions so the CLI never re-exports
-   evaluated sites: `python3 scripts/run_tools.py exclusions`.
+1. Before planning, refresh the tracker exclusions and verdicts, then rebuild the
+   keyword yields so keyword choice learns from every evaluated batch:
+   `python3 scripts/run_tools.py exclusions` (writes the exclusions CSV and
+   `exports/handoff/exclusions/tracker-verdicts.csv`, including batches not yet in
+   the master), then `pnpm hht:opp keyword-yields` (writes
+   `exports/guest-post-outreach/keyword-yields-<date>.csv`, which `guest-templates`
+   and the template retire rule read).
 2. Discovery batch. Semrush is reached only through the Semrush MCP tools in this
    session, never the repo API key or engine login (Kai, 2026-11-08):
-   `pnpm hht:opp guest-frontier --plan --max=15 --no-expand` writes
-   `exports/guest-frontier/serp-plan-*.json`; pull each request with
+   `pnpm hht:opp guest-frontier --plan --max=15 --no-expand --refill` writes
+   `exports/guest-frontier/serp-plan-*.json`. `--refill` first tops the queue up to
+   30 yield-ranked template keywords (free Google Ads volume check; about 30% of each
+   top-up tests templates with under 10 fetches, the rest goes to the best yields;
+   templates under 0.3 pitchable per keyword after 10 fetches retire automatically).
+   Template keywords run before leftover Google Ads keyword ideas. Kai does not need
+   to choose keywords. If the plan comes back empty or `refill.error` is set (Google
+   Ads down), say so in the report and plan from what is queued. Pull each request with
    `execute_report(report, params)` exactly as listed and save
    `{"<keyword>": {"data": <data>, "units": <metadata.usage.api_units>}}`
    (report units per call). If credits run out (`no_api_units`), stop pulling and tell
-   Kai; ingest what was pulled. Then `pnpm hht:opp guest-frontier --serp-from=<file>`,
+   Kai in one line that Semrush needs a top-up; ingest what was pulled. Low credits are
+   routine: mention them only when a pull fails for lack of units. Then `pnpm hht:opp guest-frontier --serp-from=<file>`,
    then `pnpm hht:opp export-leads`. That writes `exports/handoff/hht-guest-serp-<date>-*.csv`
    and `hht-link-insertion-<date>-*.csv`.
 3. Immediately run `python3 scripts/run_tools.py prepare <the new guest CSVs> --run-id HHT-<label>-<date>`.

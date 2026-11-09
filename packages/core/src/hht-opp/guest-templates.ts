@@ -75,6 +75,8 @@ export const GUEST_TEMPLATES: readonly GuestTemplate[] = [
 /** Plan section 3.1: retire a template below 0.3 pitchable per keyword after 10 fetches. */
 export const GUEST_TEMPLATE_RETIRE_BELOW = 0.3
 export const GUEST_TEMPLATE_RETIRE_AFTER = 10
+/** Share of each template refill reserved for templates with fewer than RETIRE_AFTER fetches. */
+export const GUEST_TEMPLATE_EXPLORE_SHARE = 0.3
 /** Pseudo-fetches at the global yield that a template's prior starts from. */
 export const GUEST_TEMPLATE_PRIOR_SMOOTHING = 3
 /** SERP baseline from the tracker: about 3.6% of new domains end up pitchable. */
@@ -437,16 +439,59 @@ export function rankGuestTemplateCandidates(input: {
   all.sort((a, b) => b.score - a.score || a.keyword.localeCompare(b.keyword))
   const cap = input.perTemplate ?? Math.max(3, Math.ceil(input.limit / 5))
   const perTemplate = new Map<string, number>()
-  const candidates: GuestTemplateCandidate[] = []
+
+  // Exploration: a template with fewer fetches than the retire threshold has no
+  // reliable yield yet, so its prior sits at the baseline and pure score order would
+  // never test it. Reserve a share of every refill for those templates, one keyword
+  // per template in turn (best-scoring first), until each has enough fetches to be
+  // kept on its own yield or retired.
+  const undersampled = (templateId: string) => (input.stats.get(templateId)?.fetches ?? 0) < GUEST_TEMPLATE_RETIRE_AFTER
+  const exploreSlots = Math.min(Math.ceil(input.limit * GUEST_TEMPLATE_EXPLORE_SHARE), input.limit)
+  const explore: GuestTemplateCandidate[] = []
+  const exploreQueues = new Map<string, GuestTemplateCandidate[]>()
   for (const candidate of all) {
-    if (candidates.length >= input.limit) break
+    if (!undersampled(candidate.templateId)) continue
+    exploreQueues.set(candidate.templateId, [...(exploreQueues.get(candidate.templateId) ?? []), candidate])
+  }
+  const needed = (templateId: string) => GUEST_TEMPLATE_RETIRE_AFTER - (input.stats.get(templateId)?.fetches ?? 0)
+  while (explore.length < exploreSlots && [...exploreQueues.values()].some((queue) => queue.length > 0)) {
+    for (const [templateId, queue] of exploreQueues) {
+      if (explore.length >= exploreSlots) break
+      const used = perTemplate.get(templateId) ?? 0
+      const next = queue.shift()
+      if (!next) continue
+      if (used >= Math.min(cap, needed(templateId))) {
+        queue.length = 0
+        continue
+      }
+      perTemplate.set(templateId, used + 1)
+      explore.push(next)
+    }
+  }
+  const chosen = new Set(explore)
+
+  const exploit: GuestTemplateCandidate[] = []
+  for (const candidate of all) {
+    if (exploit.length + explore.length >= input.limit) break
+    if (chosen.has(candidate)) continue
     const used = perTemplate.get(candidate.templateId) ?? 0
     if (used >= cap) {
       skipped.perTemplateCap += 1
       continue
     }
     perTemplate.set(candidate.templateId, used + 1)
-    candidates.push(candidate)
+    exploit.push(candidate)
+  }
+
+  // Interleave so each discovery batch (taken in queue order) tests some new templates.
+  const candidates: GuestTemplateCandidate[] = []
+  const every = explore.length > 0 ? Math.max(1, Math.round((exploit.length + explore.length) / explore.length)) : 0
+  while (exploit.length > 0 || explore.length > 0) {
+    if (explore.length > 0 && (exploit.length === 0 || (every > 0 && (candidates.length + 1) % every === 0))) {
+      candidates.push(explore.shift()!)
+    } else {
+      candidates.push(exploit.shift()!)
+    }
   }
   return { candidates, skipped }
 }

@@ -13,6 +13,62 @@ import run_tools as tools
 import lane_status
 
 
+def _inbox(email, persona, week):
+    return {"id": email.split("@")[0], "email": email, "persona": persona, "active": True,
+            "week": {"available": week}, "today": {"available": 0}}
+
+
+INBOXES = {push_drafts.CAMPAIGN: [_inbox("claire@hotelhottubs.com", "Claire Bennett", 5),
+                                  _inbox("shelby@hotelhottubs.com", "Shelby Thompson", 5)]}
+
+
+def _draft(body, sender=None, domain="a.example"):
+    d = {"campaign_id": push_drafts.CAMPAIGN, "contact": {"attributes": {"domain": domain}},
+         "subject": "Idea", "body": body}
+    if sender:
+        d["sender"] = sender
+    return d
+
+
+class SenderAssignmentTest(unittest.TestCase):
+    def test_balances_unnamed_drafts_across_inboxes(self):
+        drafts = [_draft("Hi,\n\nIdea.", domain=f"{i}.example") for i in range(4)]
+        self.assertIsNone(push_drafts.assign_senders(drafts, INBOXES))
+        senders = [d["sender"] for d in drafts]
+        self.assertEqual(sorted(senders).count("claire@hotelhottubs.com"), 2)
+
+    def test_prefers_inbox_with_more_room(self):
+        inboxes = {push_drafts.CAMPAIGN: [_inbox("claire@hotelhottubs.com", "Claire Bennett", 1),
+                                          _inbox("shelby@hotelhottubs.com", "Shelby Thompson", 9)]}
+        drafts = [_draft("Idea", domain=f"{i}.example") for i in range(3)]
+        push_drafts.assign_senders(drafts, inboxes)
+        self.assertEqual({d["sender"] for d in drafts}, {"shelby@hotelhottubs.com"})
+
+    def test_clips_and_claire_name_force_claire(self):
+        for body in ("See https://castlesandturrets.com/x", "I'm Claire Bennett.", "hotelhottubs.com/blog/hot-springs"):
+            drafts = [_draft(body)]
+            inboxes = {push_drafts.CAMPAIGN: [_inbox("claire@hotelhottubs.com", "Claire Bennett", 0),
+                                              _inbox("shelby@hotelhottubs.com", "Shelby Thompson", 99)]}
+            self.assertIsNone(push_drafts.assign_senders(drafts, inboxes))
+            self.assertEqual(drafts[0]["sender"], "claire@hotelhottubs.com")
+
+    def test_shelby_name_forces_shelby(self):
+        drafts = [_draft("I'm Shelby, co-founder.")]
+        push_drafts.assign_senders(drafts, INBOXES)
+        self.assertEqual(drafts[0]["sender"], "shelby@hotelhottubs.com")
+
+    def test_clip_draft_with_shelby_sender_is_rejected(self):
+        error = push_drafts.assign_senders([_draft("10000birds.com/x", sender="shelby@hotelhottubs.com")], INBOXES)
+        self.assertIn("Claire's inbox", error)
+
+    def test_unattached_sender_and_missing_inboxes_rejected(self):
+        self.assertIn("not an active inbox", push_drafts.assign_senders([_draft("x", sender="z@y.com")], INBOXES))
+        self.assertIn("no active inbox", push_drafts.assign_senders([_draft("x")], {}))
+
+    def test_both_personas_rejected(self):
+        self.assertIn("both", push_drafts.assign_senders([_draft("Claire and Shelby")], INBOXES))
+
+
 class ConsolidatedRoutingTest(unittest.TestCase):
     def setUp(self):
         self.tmp = tempfile.TemporaryDirectory()
@@ -87,6 +143,7 @@ class ConsolidatedRoutingTest(unittest.TestCase):
 
     def route(self, response=None):
         with patch.object(push_drafts, "token", return_value="offline-test"), patch.object(
+                push_drafts, "campaign_inboxes", return_value=INBOXES), patch.object(
                 push_drafts.requests, "post", side_effect=response or self.response) as post, contextlib.redirect_stdout(io.StringIO()):
             routing.main(self.run)
             return post
@@ -98,6 +155,7 @@ class ConsolidatedRoutingTest(unittest.TestCase):
         self.assertEqual(len(post.call_args.kwargs["json"]), 3)
         self.assertEqual({p["contact"]["attributes"]["batch"] for p in post.call_args.kwargs["json"]},
                          {"run-B01", "run-B02"})
+        self.assertTrue(all(p["sender"].endswith("@hotelhottubs.com") for p in post.call_args.kwargs["json"]))
         result = tools.read_json(self.run / "outreach-consolidated-result.json")
         self.assertEqual(result["requests"][0]["notification"], "failed")
         self.assertEqual(result["created"], 3)

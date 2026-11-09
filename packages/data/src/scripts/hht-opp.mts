@@ -9,7 +9,8 @@
  * Handoff to the guest-post-pitches skill:
  *   pnpm hht:opp archive                          snapshot every hht_opp_* table to exports/archive
  *   pnpm hht:opp export-backlog [--tiers=A,B,C] [--size=50] [--dry-run]
- *   pnpm hht:opp guest-frontier --plan --max=15 [--no-expand] [--out=plan.json]
+ *   pnpm hht:opp guest-frontier --plan --max=15 [--no-expand] [--refill[=30]] [--out=plan.json]
+ *       --refill keeps at least 30 yield-ranked template keywords queued (free Google Ads volume check).
  *       pick the next 15 queued keywords (seeds, then guest-templates and keyword ideas) and write
  *       exports/guest-frontier/serp-plan-*.json. No Semrush call.
  *   pnpm hht:opp guest-frontier --serp-from=serps.json
@@ -22,6 +23,9 @@
  *       "display_limit": 100, "positions_type": "organic", "export_columns": ["position", "domain", "url"]})
  *   and stores the returned data and its api units under the keyword. Keyword ideas stay on Google Ads (free).
  *   pnpm hht:opp export-leads [--keyword-ids=1,2] [--limit=50] [--link-limit=50] [--size=25] [--dry-run]
+ *   pnpm hht:opp keyword-yields [--dry-run]
+ *       rebuild exports/guest-post-outreach/keyword-yields-<date>.csv from the tracker verdicts
+ *       (run_tools.py exclusions writes them) so guest-templates ranks on current yields.
  *   pnpm hht:opp reset-exhausted                   requeue queries marked exhausted without a fetch
  *   pnpm hht:opp guest-templates [--limit=25] [--buckets=travel,wellness] [--per-template=N] [--json]
  *                                                  preview template × place keywords (no API calls, no writes)
@@ -61,6 +65,7 @@ import { enqueueGuestTemplates, previewGuestTemplates } from '../hht-opp/guest-t
 import { GUEST_BUCKET_IDS, type GuestBucketId } from '@rnr/core'
 import { archiveHhtOpp, exportLegacyBacklog, exportSerpLeads, type LegacyTier } from '../hht-opp/handoff.js'
 import { researchHhtOppSeeds } from '../hht-opp/research.js'
+import { writeKeywordYields } from '../hht-opp/keyword-yields.js'
 
 const REPO_ROOT = fileURLToPath(new URL('../../../../', import.meta.url))
 const argv = process.argv.slice(2)
@@ -227,6 +232,7 @@ async function main(): Promise<void> {
         maxKeywords,
         ideaLimit: Number(opt('ideas') ?? 20),
         expand: !flag('no-expand'),
+        refillTemplates: opt('refill') ? Number(opt('refill')) : flag('refill') ? 30 : 0,
       })
       const out = resolve(opt('out') ?? join(REPO_ROOT, 'exports/guest-frontier', `serp-plan-${plan.createdAt.replace(/[:.]/g, '-')}.json`))
       mkdirSync(dirname(out), { recursive: true })
@@ -275,6 +281,15 @@ async function main(): Promise<void> {
       for (const row of preview.candidates) {
         console.log(`${row.score.toFixed(3)}  ${row.prior.toFixed(2)} × ${row.entity.weight.toFixed(2)} × ${row.novelty.toFixed(2)}  ${row.keyword}  [${row.templateId}]`)
       }
+      break
+    }
+    case 'keyword-yields': {
+      console.log(JSON.stringify(await writeKeywordYields(database, {
+        repoRoot: REPO_ROOT,
+        trackerCsv: opt('tracker'),
+        out: opt('out'),
+        dryRun: flag('dry-run'),
+      }), null, 2))
       break
     }
     case 'reset-exhausted': {
@@ -337,8 +352,9 @@ async function main(): Promise<void> {
   pnpm hht:opp strategies
   pnpm hht:opp queries
   pnpm hht:opp keyword-ideas [--ideas=20]
-  pnpm hht:opp guest-frontier --plan [--max=15] [--ideas=20] [--no-expand] [--out=plan.json]
+  pnpm hht:opp guest-frontier --plan [--max=15] [--ideas=20] [--no-expand] [--refill[=30]] [--out=plan.json]
   pnpm hht:opp guest-frontier --serp-from=serps.json
+  pnpm hht:opp keyword-yields [--tracker=tracker-verdicts.csv] [--out=file.csv] [--dry-run]
   pnpm hht:opp guest-templates [--limit=25] [--buckets=travel,romance,weddings,wellness,lifestyle] [--per-template=N] [--metros=300] [--yields=path.csv] [--json]
   pnpm hht:opp guest-templates --enqueue [--limit=25]
   pnpm hht:opp competitors [--seeds=a.com,b.com]
