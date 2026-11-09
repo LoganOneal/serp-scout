@@ -250,10 +250,16 @@ async function takeNextKeyword(
     .filter((row) => row.status === 'NEW' && !planning.exclude.has(row.id) && !isLegacyGuestDiscoveryKeyword(row.keyword))
     .sort((a, b) => (a.priority ?? Number.MAX_SAFE_INTEGER) - (b.priority ?? Number.MAX_SAFE_INTEGER)
       || tier(a) - tier(b) || a.id - b.id)
+  let deferredTemplate: { id: number; keyword: string } | null = null
   for (const row of pending) {
     if (row.priority != null) return { id: row.id, keyword: row.keyword }
+    // A yield-ranked template keyword deferred for spread still beats an unranked idea.
+    if (deferredTemplate && tier(row) > 0) return deferredTemplate
     // Spread one plan across topics; the deferred keyword stays NEW for the next plan.
-    if (deferForPlanSpread(row.keyword, planning.plannedKeywords)) continue
+    if (deferForPlanSpread(row.keyword, planning.plannedKeywords)) {
+      if (tier(row) === 0) deferredTemplate ??= { id: row.id, keyword: row.keyword }
+      continue
+    }
     const decision = guestKeywordFetchDecision(row.keyword, fetched)
     if (decision.fetch) return { id: row.id, keyword: row.keyword }
     await db.update(hhtOppGuestKeywords).set({
@@ -263,7 +269,7 @@ async function takeNextKeyword(
     result.keywordsSkipped += 1
     log(`Skip “${row.keyword}” (${decision.reason}, like “${decision.matched}”, ${decision.similarity.toFixed(2)})`)
   }
-  return null
+  return deferredTemplate
 }
 
 async function expandKeywords(

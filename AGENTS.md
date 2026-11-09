@@ -11,5 +11,8 @@ separately. Follow the skill's "Chained after hht-opp discovery" section:
 - Refresh tracker exclusions before exporting (`run_tools.py exclusions`).
 - Evaluate only `guest_post` leads; link-insertion leads stay as link-insertion leads.
 - Create step 1 outreach drafts automatically under the skill's rules; never send.
-- After each discovery batch and its evaluation, pause with one combined report
-  and wait for Kai before running the next discovery batch.
+- Do not pause between discovery batches (Kai, 2026-11-09). After each batch and
+  its evaluation, post a short progress update and start the next batch. Keep
+  going until Semrush units run out (`no_api_units`) or something genuinely needs
+  Kai (disk full, Google Ads or outreach auth down, a decision only Kai can make),
+  then give one combined report covering every batch.

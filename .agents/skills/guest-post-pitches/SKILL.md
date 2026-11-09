@@ -259,10 +259,14 @@ Discovery does no LLM triage of its own: this skill decides every verdict.
    notifications. Wait until every lane is ready, then upload the whole discovery
    run with `python3 scripts/push_run_drafts.py <run dir>`, at most 100 drafts per
    request. Normally this is one request and one owner notification. Drafts are never sent.
-5. After reconciling the consolidated upload, commit each batch with `run_tools.py commit`, then pause and give Kai one
-   combined report: discovery yield (queries run, results, new domains, junk,
-   link-insertion leads) plus the guest-post results (verdict counts, drafts
-   created, holds, decisions needed). Wait for Kai before the next discovery batch.
+5. After reconciling the consolidated upload, commit each batch with `run_tools.py commit`
+   (verdict-only batches included, so the master always has every evaluated domain),
+   post a short progress update, and start the next discovery batch at step 1 without
+   waiting (Kai, 2026-11-09). Stop only when Semrush units run out or something needs
+   Kai (disk full, Google Ads or outreach auth down, a decision only Kai can make).
+   Then give one combined report across all batches: discovery yield (queries run,
+   results, new domains, junk, link-insertion leads, units used) plus the guest-post
+   results (verdict counts, drafts created per inbox, holds, decisions needed).
 
 ## Run setup, lanes and commit (bundled scripts)
 
