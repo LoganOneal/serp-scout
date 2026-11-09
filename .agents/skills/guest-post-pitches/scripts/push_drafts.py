@@ -18,7 +18,15 @@ import requests
 
 
 BASE = "https://outreach-ten-plum.vercel.app"
-CAMPAIGN = "8cc518fd-9635-41fe-a3a9-fc4e2e4f2a20"
+CAMPAIGN = "8cc518fd-9635-41fe-a3a9-fc4e2e4f2a20"  # guest post outreach
+# Experiment lane (SKILL.md "Experiment lane"): its own campaign so results stay separate.
+EXPERIMENT_SOURCE = "hht-exp-noinvite"
+EXPERIMENT_CAMPAIGN = "d39441ed-9da2-4098-a87f-6a22af45ace0"  # EXPERIMENT: add-to-article
+
+
+def expected_campaign(draft):
+    source = ((draft.get("contact") or {}).get("attributes") or {}).get("source")
+    return EXPERIMENT_CAMPAIGN if source == EXPERIMENT_SOURCE else CAMPAIGN
 # The one allowed fictional-experience note: exact text, last line of the body (Kai, 2026-11-09).
 FICTION_NOTE = "Note: The personal travel experiences described in this email are fictional."
 _FICTION_WORDS = re.compile(r"\b(fictional|fictitious|made up|invented)\b", re.I)
@@ -66,7 +74,7 @@ def main(batch_dir=None):
     if len(set(domains)) != len(domains) or len(set(emails)) != len(emails):
         sys.exit("Duplicate domain or email in payload.")
     for p in payload:
-        if p.get("campaign_id") != CAMPAIGN or p.get("step_number") != 1:
+        if p.get("campaign_id") != expected_campaign(p) or p.get("step_number") != 1:
             sys.exit(f"{p['contact']['attributes']['domain']}: wrong campaign or step.")
         if not p.get("subject") or not p.get("body") or not p.get("reviewer_note"):
             sys.exit(f"{p['contact']['attributes']['domain']}: subject, body and reviewer_note are required.")

@@ -46,7 +46,7 @@ def collect(run):
                     or row.get("outreach_email_id")):
                 raise ValueError(f"{domain}: ineligible staged draft.")
             note = draft.get("reviewer_note")
-            if (draft.get("campaign_id") != push_drafts.CAMPAIGN or draft.get("step_number") != 1
+            if (draft.get("campaign_id") != push_drafts.expected_campaign(draft) or draft.get("step_number") != 1
                     or "@" not in email or not isinstance(note, str) or not 0 < len(note.strip()) <= 4000
                     or note != row["requirements_note"] or not draft.get("subject") or not draft.get("body")
                     or push_drafts.fiction_note_error(draft["body"])

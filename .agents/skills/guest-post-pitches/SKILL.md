@@ -205,6 +205,17 @@ per call, and its rate limit (about 20 calls per minute) is shared by every lane
   with `websearch_log.py add <domain> <same-domain URLs...> [--site-operator-failed]`.
 - Never treat a search result snippet as evidence. Fetch and read the page.
 
+## Experiment lane: no-invitation publications (Kai, 2026-11-09)
+
+A scoped experiment, not a standing channel. Spec and decision rule: `docs/plan-guest-post-scale.md` section 3.5.
+- After each batch's Haiku merge, run the channel pass over that batch's `SKIP_NO_INVITATION` sites. Use the saved page text with `references/channel-rules.txt`; this costs no Semrush units.
+- Draft only the channels Kai has kept open. On 2026-11-09 that is `add_to_article` only. Freelance and expert-source sizing was too thin.
+- Cap: at most 15 experiment emails a week, never more than about 10% of that week's guest-post drafts, and at most 45 in total until Kai reviews results. Count what is already in `exports/guest-post-outreach/EXP-noinvite-results.csv` before drafting more.
+- Push to the separate outreach campaign "EXPERIMENT: add-to-article" (`d39441ed-9da2-4098-a87f-6a22af45ace0`), never the guest-post campaign; `push_drafts.py` enforces this by source.
+- Tag every payload `contact.attributes.source = "hht-exp-noinvite"` and `attributes.channel = <channel>`. Start each reviewer_note with "EXPERIMENT (<channel>, not a guest post)."
+- Tracker rows use `verdict = EXPERIMENT` and `code = EXP_<CHANNEL>`. Append one row per pushed email to `EXP-noinvite-results.csv`.
+- Never use paid or sponsored routes. Report experiment counts separately from guest-post counts in the combined report.
+
 ## Chained after hht-opp discovery (Kai, 2026-10-24)
 
 Whenever new leads are obtained from Semrush with the repo's `hht-opp` CLI, run

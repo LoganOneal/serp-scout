@@ -42,6 +42,7 @@ every check (tracker verdict PURSUE).
 | D5 | Evaluating new sites | Deciding pitchable or not | Decided Haiku. Now making it the skill's standard step (`classify_batch.py`, SKILL.md chain) | Claude | In progress |
 | D6 | Routing new pitchable sites | Same buckets as B1 to B11 | Automatic once D5 is settled | Claude | Uses the existing skill today |
 | D7 | Kitchens | Second vertical | Needs site, brand and persona from Kai, then a 30-keyword pilot (section 7) | Kai, then Claude | Waiting |
+| D8 | Experiment: no-invitation publications | Active sites that don't invite guest posts (54% of evaluated leads) pitched another way: freelance pitch, add-to-article, expert source. Sponsored/paid excluded | Scoped pilot started 2026-11-09 (section 3.5): cap 15 emails/week, max 45 total, tracked as its own category | Claude runs, Kai reviews weekly | Started |
 
 ### Terms
 
@@ -196,6 +197,41 @@ all PURSUE sites. Keep full 1–100 pulls. A shallower slice would roughly halve
 yield per keyword.
 
 ---
+
+
+### 3.5 Experiment: no-invitation publications (started 2026-11-09)
+
+**Question.** Do active publications that don't invite guest posts convert well
+enough by another route to be worth emails? Kai's prior: probably much worse
+than guest posts, so this stays small until the numbers say otherwise.
+
+**Channels** (classified by Haiku from page text we already have, no Semrush cost):
+- `freelance_pitch`: the site takes pitches or story ideas from outside writers without calling them guest posts.
+- `add_to_article`: an existing roundup (where to stay, romantic getaways, hot-tub hotels) could add one hotel and a link to Claire's guide.
+- `expert_source`: the site quotes outside experts or runs roundups and interviews; Claire is offered as a source.
+- Sponsored or paid placements are out of scope.
+
+**Limits.** At most 15 experiment emails a week, never more than about 10% of
+the week's guest-post drafts, and at most 45 in total. Never more than one
+experiment email per domain. Only active sites (content within 6 months).
+
+**Tracking.** A distinct category everywhere:
+- Outreach campaign: "EXPERIMENT: add-to-article" (`d39441ed-9da2-4098-a87f-6a22af45ace0`), same inboxes and send window as guest posts, so reply rates show per campaign on /campaigns.
+- Outreach payload: `contact.attributes.source = "hht-exp-noinvite"`, `attributes.channel = <channel>`, `batch = "EXP-noinvite-<date>"`.
+- Tracker: `verdict = EXPERIMENT`, `code = EXP_<CHANNEL>`, `batch = EXP-noinvite-<date>`, so these rows never mix into guest-post counts.
+- Results file: `exports/guest-post-outreach/EXP-noinvite-results.csv` (sent, reply, positive reply, placement, per channel), compared with guest-post drafts sent in the same weeks.
+
+**Decision rule** (per channel, reviewed weekly with Kai):
+- Kill: 0 positive replies after 15 sends.
+- Keep testing: some positives, but under half the guest-post positive-reply rate.
+- Scale: positive-reply rate at least half of guest posts after 15+ sends; then raise the cap.
+
+**Weekly review** (Mondays, when Kai asks):
+1. For each experiment email (from `EXP-noinvite-*/drafts/outreach-push-*/outreach-outcomes.json`) and each guest-post step 1 email pushed in the same weeks, read its status in the outreach app (pending review / sent / replied / bounced / rejected) and whether a reply is positive.
+2. Refresh `EXP-noinvite-results.csv` (domain, channel, email_id, pushed, status, reply, positive, placement_url) and append a dated line per channel to `EXP-noinvite-weekly.md`.
+3. Apply the decision rule above per channel and recommend; nothing changes without Kai.
+
+**Week 1 (2026-11-09) channel sizing** from 378 no-invitation sites, Haiku on saved page text, no Semrush cost: add_to_article 38 (27 medium/high), expert_source 12 (mostly off-topic), freelance_pitch 6 (almost all newspaper news-tip lines), none 322. So the pilot starts with add_to_article only.
 
 ## 4. Bottleneck 2: processing pages
 
