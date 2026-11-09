@@ -146,7 +146,9 @@ taken over: stop on that form, mention it in the summary, and do not submit it.
 
 ### 8. Finish
 
-`BR stop`, then give Kai one summary table: domain, outcome, code, and reason. Note anything
+`BR stop`, then regenerate the master list of everything waiting on Kai, from the serp-scout
+repo root: `python3 .agents/skills/guest-post-pitches/scripts/manual_queue.py`. That writes
+`exports/guest-post-outreach/Manual Intervention Queue.md`. Then give Kai one summary table: domain, outcome, code, and reason. Note anything
 that needs his decision (every `needs_human`, and any `other` where submit was clicked).
 
 ## Parallel runs
