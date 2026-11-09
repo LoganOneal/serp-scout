@@ -5,6 +5,7 @@
     python3 forms_api.py report DIR needs_human --code CODE --reason R [--filled F] [--confirmation C]
     python3 forms_api.py pending                     local claims with no recorded report (crash recovery)
     python3 forms_api.py list [--status approved]
+    python3 forms_api.py push FILE [--dry-run]       create form drafts for review (never approves)
 
 Never submits a form and never approves anything. Contract: outreach repo docs/FORMS.md.
 
@@ -240,6 +241,83 @@ def cmd_list(args) -> int:
     return 0
 
 
+def draft_problems(form: dict) -> list[str]:
+    problems = []
+    for key in ("campaign_id", "domain", "form_url", "fields"):
+        if not form.get(key):
+            problems.append(f"missing {key}")
+    if form.get("persona") not in (None, "claire"):
+        problems.append("persona must be claire")
+    fields = form.get("fields") or []
+    if len(fields) > 40:
+        problems.append("more than 40 fields")
+    for index, field in enumerate(fields):
+        answer = field.get("answer")
+        if not isinstance(answer, str) or not field.get("label"):
+            problems.append(f"field {index}: needs label and string answer")
+            continue
+        if field.get("required") and not answer.strip():
+            problems.append(f"field {index} ({field['label']}): required answer is empty")
+        if field.get("max_chars") and len(answer) > field["max_chars"]:
+            problems.append(f"field {index} ({field['label']}): {len(answer)} chars over {field['max_chars']}")
+        if "shelby" in answer.lower():
+            problems.append(f"field {index} ({field['label']}): mentions Shelby")
+    for key in ("reviewer_note", "site_rules"):
+        if form.get(key) and len(form[key]) > 4000:
+            problems.append(f"{key} over 4000 chars")
+    return problems
+
+
+def cmd_push(args) -> int:
+    """Create form drafts from a JSON list. One attempt per file: never re-posts after an attempt."""
+    path = Path(args.file).resolve()
+    forms = json.loads(path.read_text())
+    if not isinstance(forms, list) or not forms:
+        sys.exit("FILE must hold a non-empty JSON list of form drafts")
+    bad = {f.get("domain") or i: p for i, f in enumerate(forms) if (p := draft_problems(f))}
+    for key, problems in bad.items():
+        print(f"{key}: {'; '.join(problems)}")
+    if bad:
+        print("Nothing pushed. Fix the drafts above.")
+        return 1
+    domains = [f["domain"] for f in forms]
+    if len(set(domains)) != len(domains):
+        sys.exit("Duplicate domains in FILE")
+    print(f"{len(forms)} drafts valid.")
+    if args.dry_run:
+        return 0
+    attempt = path.with_name(path.stem + "-push-attempt.json")
+    result_file = path.with_name(path.stem + "-push-result.json")
+    if attempt.exists():
+        sys.exit(f"{attempt.name} exists: this file was already pushed. Read {result_file.name} or check /forms; do not re-post.")
+    results = []
+    for start in range(0, len(forms), 100):
+        chunk = forms[start:start + 100]
+        write_json(attempt, {"attempted_at": now(), "count": len(forms), "next_chunk_start": start})
+        try:
+            response = requests.post(f"{BASE}/api/generator/forms", json={"mode": "create", "forms": chunk},
+                                     headers=headers(), timeout=120)
+        except requests.RequestException as error:
+            write_json(result_file, {"received_at": now(), "uncertain": True, "error": type(error).__name__, "results": results})
+            print(f"Push uncertain ({type(error).__name__}). Check /forms before doing anything else.")
+            return 2
+        body = response.json() if response.headers.get("content-type", "").startswith("application/json") else {"text": response.text[:500]}
+        if response.status_code != 200:
+            write_json(result_file, {"received_at": now(), "http_status": response.status_code, "body": body, "results": results})
+            print(f"Push refused: HTTP {response.status_code} {body}")
+            return 1
+        for item in body["results"]:
+            item["index"] += start
+            results.append(item)
+        notification = body.get("notification")
+    write_json(result_file, {"received_at": now(), "http_status": 200, "notification": notification, "results": results})
+    for item in results:
+        state = f"{item['outcome']} {item.get('form_id', '')}" if item["ok"] else f"skipped: {item['error']}"
+        print(f"{forms[item['index']]['domain']:<36} {state}")
+    print(f"created {sum(1 for i in results if i['ok'])}, skipped {sum(1 for i in results if not i['ok'])}, notification {notification}")
+    return 0
+
+
 def main(argv=None) -> int:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     sub = parser.add_subparsers(dest="command", required=True)
@@ -257,8 +335,11 @@ def main(argv=None) -> int:
     listing = sub.add_parser("list")
     listing.add_argument("--status", default="approved")
     listing.add_argument("--limit", type=int, default=50)
+    push = sub.add_parser("push")
+    push.add_argument("file")
+    push.add_argument("--dry-run", action="store_true")
     args = parser.parse_args(argv)
-    return {"claim": cmd_claim, "report": cmd_report, "pending": cmd_pending, "list": cmd_list}[args.command](args)
+    return {"push": cmd_push, "claim": cmd_claim, "report": cmd_report, "pending": cmd_pending, "list": cmd_list}[args.command](args)
 
 
 if __name__ == "__main__":
