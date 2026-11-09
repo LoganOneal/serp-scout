@@ -32,7 +32,6 @@ import {
 } from '@rnr/core'
 import type { Database } from '../db.js'
 import { GOOGLE_ADS_GEO_US, fetchKeywordVolumes, type KeywordVolumeRow } from '../providers/google-ads/keyword-volume.js'
-import { fetchDfsKeywordVolumesFromEnv } from '../providers/dataforseo/keyword-volume.js'
 import { fetchKeywordIdeas } from '../providers/google-ads/keyword-ideas.js'
 import {
   HHT_PX_MCP_ENRICH_MESSAGE,
@@ -64,7 +63,6 @@ import {
 import { generateHhtPxKeywordRows, seedHhtPxGeographies, seedHhtPxTemplates } from './seed.js'
 
 const VOLUME_BATCH = 100
-const DFS_VOLUME_BATCH = 1000
 const DEFAULT_VOLUME_LIMIT = 500
 const DEFAULT_SERP_LIMIT = 25
 const DEFAULT_ENRICH_LIMIT = 25
@@ -316,24 +314,6 @@ async function persistHhtPxVolumeBatch(
   return processed
 }
 
-function dfsRowsToVolume(requested: string[], dfs: Awaited<ReturnType<typeof fetchDfsKeywordVolumesFromEnv>>): KeywordVolumeRow[] {
-  const byKw = new Map(dfs.rows.map((row) => [row.keyword.toLowerCase(), row]))
-  return requested.map((keyword) => {
-    const row = byKw.get(keyword.toLowerCase())
-    return {
-      keyword,
-      returnedKeyword: row?.keyword ?? null,
-      closeVariants: [],
-      avgMonthlySearches: row?.avgMonthlySearches ?? null,
-      competition: row?.competition ?? null,
-      competitionIndex: row?.competitionIndex ?? null,
-      lowTopOfPageBidMicros: row?.lowTopOfPageBidMicros ?? null,
-      highTopOfPageBidMicros: row?.highTopOfPageBidMicros ?? null,
-      monthlySearches: row?.monthlySearches ?? [],
-    }
-  })
-}
-
 export async function fetchHhtPxVolumes(
   database: Database,
   options: PipelineLimitOptions = {},
@@ -392,10 +372,8 @@ export async function fetchHhtPxVolumes(
 
   let processed = cached
   let lastError: string | null = null
-  let useDfs = false
   let index = 0
   while (index < pending.length) {
-    if (!useDfs) {
       const batch = pending.slice(index, index + VOLUME_BATCH)
       await recordJob(database, {
         runId,
@@ -422,52 +400,18 @@ export async function fetchHhtPxVolumes(
         index += batch.length
         continue
       }
-      lastError = result.error
-      useDfs = true
-    }
-
-    const batch = pending.slice(index, index + DFS_VOLUME_BATCH)
+    lastError = result.error ?? 'Google Ads volume failed.'
+    // Paid DataForSEO volume is removed by policy (serp/volume-source.test.ts): stop and report.
     await recordJob(database, {
       runId,
       stage: 'google_ads_volume',
-      provider: 'dataforseo',
+      provider: 'google_ads',
       target: `keywords:${batch[0]!.id}-${batch.at(-1)!.id}`,
-      status: 'running',
-      parameters: { keywordIds: batch.map((row) => row.id), fallback: 'dataforseo_google_ads' },
+      status: 'failed',
+      error: lastError,
     })
-    const dfs = await fetchDfsKeywordVolumesFromEnv({
-      keywords: batch.map((row) => row.keyword),
-      locationCode: GOOGLE_ADS_GEO_US,
-      live: true,
-    })
-    if (dfs.source !== 'dataforseo_google_ads') {
-      lastError = dfs.error ?? lastError ?? 'DataForSEO Google Ads volume failed.'
-      await recordJob(database, {
-        runId,
-        stage: 'google_ads_volume',
-        provider: 'dataforseo',
-        target: `keywords:${batch[0]!.id}-${batch.at(-1)!.id}`,
-        status: 'failed',
-        error: lastError,
-      })
-      await touchRun(database, runId, { status: 'failed', error: lastError })
-      return { processed, remaining: pending.length - (index), error: lastError, runId }
-    }
-    processed += await persistHhtPxVolumeBatch(
-      database,
-      batch,
-      dfsRowsToVolume(batch.map((row) => row.keyword), dfs),
-      `${dfs.volumeGeoTarget} (US national destination demand; Google Ads API ${lastError ?? 'unavailable'})`,
-    )
-    await recordJob(database, {
-      runId,
-      stage: 'google_ads_volume',
-      provider: 'dataforseo',
-      target: `keywords:${batch[0]!.id}-${batch.at(-1)!.id}`,
-      status: 'complete',
-      recordsCompleted: batch.length,
-    })
-    index += batch.length
+    await touchRun(database, runId, { status: 'failed', error: lastError })
+    return { processed, remaining: pending.length - index, error: lastError, runId }
   }
 
   const remainingRow = await database

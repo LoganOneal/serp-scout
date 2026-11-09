@@ -243,6 +243,376 @@ export async function createRetellAgentAction(formData: FormData): Promise<Creat
 }
 
 /**
+ * Every agent in the Retell account, newest first, one row per agent.
+ *
+ * A picker rather than a text box. Copying a 30-character id out of a dashboard URL is
+ * the step that silently binds a site to the wrong agent, and it is invisible until a
+ * call comes in with the wrong greeting.
+ */
+export interface LiveAgentOption {
+  agentId: string
+  agentName: string | null
+  responseEngineType: string
+  version: number | null
+  publishedVersion: number | null
+  isPublished: boolean | null
+}
+
+export async function listLiveAgentsAction(): Promise<{
+  ok: boolean
+  detail?: string
+  agents: LiveAgentOption[]
+}> {
+  const { collapseAgentVersions, parseAgent } = await import('@rnr/core')
+  const { createVoiceProviders, liveCallsEnabled } = await import('@rnr/data')
+
+  if (!process.env['RETELL_API_KEY']) {
+    return { ok: false, detail: 'RETELL_API_KEY is not set.', agents: [] }
+  }
+
+  try {
+    const raw = await createVoiceProviders().listAgents()
+    const agents = collapseAgentVersions(
+      raw.map(parseAgent).filter((a): a is NonNullable<typeof a> => a !== null),
+    ).map((a) => ({
+      agentId: a.agentId,
+      agentName: a.agentName,
+      responseEngineType: a.responseEngineType,
+      version: a.version,
+      publishedVersion: a.publishedVersion,
+      isPublished: a.isPublished,
+    }))
+
+    return {
+      ok: true,
+      agents,
+      ...(liveCallsEnabled()
+        ? {}
+        : { detail: 'LIVE_CALLS_ENABLED is not "true" — this is the offline fixture, not your account.' }),
+    }
+  } catch (e) {
+    return { ok: false, detail: (e as Error).message, agents: [] }
+  }
+}
+
+/**
+ * Adopt an agent built in the Retell dashboard: pull it, audit it, bind it.
+ *
+ * Refuses to bind an agent whose webhook does not point here unless overridden. A site
+ * bound to such an agent produces calls that happen and a CRM that stays empty — and
+ * nothing on any screen afterwards says why.
+ */
+export async function adoptAgentAction(formData: FormData): Promise<{
+  ok: boolean
+  detail: string
+}> {
+  const siteId = Number(formData.get('siteId'))
+  const agentId = String(formData.get('agentId') ?? '').trim()
+  const override = formData.get('override') === 'on'
+  if (!Number.isInteger(siteId) || siteId <= 0) return { ok: false, detail: 'Missing site id.' }
+  if (!/^agent_[A-Za-z0-9]+$/.test(agentId)) return { ok: false, detail: 'Pick an agent first.' }
+
+  const { createVoiceProviders, pullAgent, updateSite } = await import('@rnr/data')
+
+  try {
+    const snap = await pullAgent(db(), { agentId, providers: createVoiceProviders() })
+    const webhookFailing = snap.checks.some((c) => c.id === 'webhook_url' && c.status === 'fail')
+
+    if (webhookFailing && !override) {
+      return {
+        ok: false,
+        detail:
+          `"${snap.agent.agentName ?? agentId}" has no webhook pointing at this app, so calls ` +
+          'would be answered and this CRM would never hear about them. Fix it in the next step ' +
+          'first, or tick the override to bind it anyway.',
+      }
+    }
+
+    await updateSite(db(), siteId, {
+      retellAgentId: agentId,
+      // The agent was authored in Retell, not pushed from here, so this repo's prompt
+      // fingerprint describes nothing about it. Stale is worse than absent.
+      promptFingerprint: null,
+    })
+    revalidatePath(`/sites/${siteId}`)
+    revalidatePath('/agent')
+
+    const failing = snap.checks.filter((c) => c.status === 'fail')
+    return {
+      ok: true,
+      detail:
+        `Bound "${snap.agent.agentName ?? agentId}" (${snap.agent.responseEngineType}` +
+        `${snap.flow ? `, ${snap.flow.nodeCount} nodes` : ''}).` +
+        (failing.length === 0
+          ? ' All integration checks pass.'
+          : ` ${failing.length} check(s) still failing: ${failing.map((c) => c.label).join(', ')}.`),
+    }
+  } catch (e) {
+    return { ok: false, detail: (e as Error).message }
+  }
+}
+
+/** Re-pull the bound agent and re-audit. The "I just wired save_lead" button. */
+export async function recheckAgentAction(siteId: number): Promise<{ ok: boolean; detail: string }> {
+  const { createVoiceProviders, getSiteById, pullAgent } = await import('@rnr/data')
+  const site = await getSiteById(db(), siteId)
+  if (site?.retellAgentId == null) return { ok: false, detail: 'No agent bound to this site.' }
+
+  try {
+    const snap = await pullAgent(db(), {
+      agentId: site.retellAgentId,
+      providers: createVoiceProviders(),
+    })
+    revalidatePath(`/sites/${siteId}`)
+    const failing = snap.checks.filter((c) => c.status === 'fail')
+    return {
+      ok: failing.length === 0,
+      detail:
+        failing.length === 0
+          ? 'Re-read from Retell — everything passes.'
+          : `Re-read from Retell. Still failing: ${failing.map((c) => `${c.label} (${c.detail})`).join(' ')}`,
+    }
+  } catch (e) {
+    return { ok: false, detail: (e as Error).message }
+  }
+}
+
+/** Apply the two integration fields to this site's bound agent. */
+export async function applySiteIntegrationAction(
+  siteId: number,
+): Promise<{ ok: boolean; detail: string }> {
+  const {
+    ANALYSIS_FIELDS,
+    applyIntegration,
+    createVoiceProviders,
+    getSiteById,
+    liveCallsEnabled,
+  } = await import('@rnr/data')
+
+  const site = await getSiteById(db(), siteId)
+  if (site?.retellAgentId == null) return { ok: false, detail: 'No agent bound to this site.' }
+  if (!liveCallsEnabled()) {
+    return {
+      ok: false,
+      detail: 'LIVE_CALLS_ENABLED is not "true", so nothing was sent to Retell.',
+    }
+  }
+
+  try {
+    const { applied, snapshot } = await applyIntegration(db(), {
+      agentId: site.retellAgentId,
+      providers: createVoiceProviders(),
+      analysisFields: [...ANALYSIS_FIELDS],
+    })
+    revalidatePath(`/sites/${siteId}`)
+    const failing = snapshot.checks.filter((c) => c.status === 'fail')
+    return {
+      ok: true,
+      detail:
+        `Applied ${applied.join(' and ')}, then re-read the agent to confirm.` +
+        (failing.length > 0 ? ` Still failing: ${failing.map((c) => c.label).join(', ')}.` : ''),
+    }
+  } catch (e) {
+    return { ok: false, detail: (e as Error).message }
+  }
+}
+
+/**
+ * Provisioning, in two halves.
+ *
+ * `inspect` only reads and returns what would change; `apply` writes. The split is the
+ * CLI's `--confirm` gate, preserved: attaching a number to the trunk takes it off
+ * Programmable Voice and there is no undo.
+ */
+export async function inspectProvisioningAction(
+  siteId: number,
+  phoneNumber: string,
+): Promise<{ ok: boolean; detail?: string; inspection?: unknown }> {
+  const { createVoiceProviders, inspectProvisioning, ProvisionError } = await import('@rnr/data')
+  try {
+    const i = await inspectProvisioning(db(), {
+      siteId,
+      phoneNumber,
+      providers: createVoiceProviders(),
+    })
+    return {
+      ok: true,
+      inspection: {
+        phoneNumber: i.phoneNumber,
+        agentId: i.agentId,
+        friendlyName: i.current?.friendlyName ?? null,
+        voiceUrl: i.current?.voiceUrl ?? null,
+        trunkSid: i.current?.trunkSid ?? null,
+        wouldBreakExistingRouting: i.wouldBreakExistingRouting,
+        alreadyOnTrunk: i.alreadyOnTrunk,
+        disasterRecoveryUrl: i.disasterRecoveryUrl,
+        originationUris: i.originationUris,
+        inboundWebhookUrl: i.inboundWebhookUrl,
+        blockers: i.blockers,
+      },
+    }
+  } catch (e) {
+    if (e instanceof ProvisionError) return { ok: false, detail: e.message }
+    return { ok: false, detail: (e as Error).message }
+  }
+}
+
+export async function applyProvisioningAction(formData: FormData): Promise<{
+  ok: boolean
+  detail: string
+}> {
+  const siteId = Number(formData.get('siteId'))
+  const phoneNumber = String(formData.get('phoneNumber') ?? '').trim()
+  if (!Number.isInteger(siteId) || siteId <= 0) return { ok: false, detail: 'Missing site id.' }
+  if (phoneNumber === '') return { ok: false, detail: 'No number given.' }
+
+  const { applyProvisioning, createVoiceProviders, liveCallsEnabled, ProvisionError } =
+    await import('@rnr/data')
+
+  if (!liveCallsEnabled()) {
+    return {
+      ok: false,
+      detail:
+        'LIVE_CALLS_ENABLED is not "true". This attaches a live business number to a SIP trunk, ' +
+        'so it refuses in fixture mode rather than reporting a success that did not happen.',
+    }
+  }
+
+  try {
+    const r = await applyProvisioning(db(), {
+      siteId,
+      phoneNumber,
+      providers: createVoiceProviders(),
+    })
+    revalidatePath(`/sites/${siteId}`)
+    revalidatePath('/agent')
+    return {
+      ok: true,
+      detail:
+        `${r.phoneNumber} ${r.attachedToTrunk ? 'attached to the trunk' : 'was already on the trunk'}, ` +
+        `${r.imported ? 'imported into Retell' : 'already imported — webhook retargeted'} against ` +
+        `${r.agentId}. Now call it from a real phone: nothing before that validates the SIP setup.`,
+    }
+  } catch (e) {
+    if (e instanceof ProvisionError) return { ok: false, detail: e.message }
+    return { ok: false, detail: (e as Error).message }
+  }
+}
+
+/** What switching to this agent would mean. Read-only. */
+export async function preflightSwitchAction(
+  siteId: number,
+  targetAgentId: string,
+): Promise<{ ok: boolean; detail?: string; preflight?: unknown }> {
+  const { createVoiceProviders, preflightSwitch, SwitchAgentError } = await import('@rnr/data')
+  try {
+    const pre = await preflightSwitch(db(), {
+      siteId,
+      targetAgentId,
+      providers: createVoiceProviders(),
+    })
+    // Only the serialisable parts cross the RSC boundary; the snapshot holds Dates and
+    // the whole remote payload, and the client needs neither.
+    return {
+      ok: true,
+      preflight: {
+        targetAgentId: pre.targetAgentId,
+        targetAgentName: pre.targetAgentName,
+        currentAgentId: pre.currentAgentId,
+        phoneNumber: pre.phoneNumber,
+        numberIsImported: pre.numberIsImported,
+        checks: pre.checks,
+        blockers: pre.blockers,
+      },
+    }
+  } catch (e) {
+    if (e instanceof SwitchAgentError) return { ok: false, detail: e.message }
+    return { ok: false, detail: (e as Error).message }
+  }
+}
+
+/**
+ * Re-point this site — and the number that rings it — at a different agent.
+ *
+ * Changes live call routing, so it refuses in fixture mode and refuses on a failing
+ * preflight unless the caller explicitly overrode it in the UI.
+ */
+export async function switchAgentAction(formData: FormData): Promise<{
+  ok: boolean
+  detail: string
+}> {
+  const siteId = Number(formData.get('siteId'))
+  const targetAgentId = String(formData.get('targetAgentId') ?? '').trim()
+  const override = formData.get('override') === 'on'
+
+  if (!Number.isInteger(siteId) || siteId <= 0) return { ok: false, detail: 'Missing site id.' }
+  if (targetAgentId === '') return { ok: false, detail: 'Pick an agent first.' }
+
+  const { createVoiceProviders, liveCallsEnabled, switchSiteAgent, SwitchAgentError } =
+    await import('@rnr/data')
+
+  if (!liveCallsEnabled()) {
+    return {
+      ok: false,
+      detail:
+        'LIVE_CALLS_ENABLED is not "true", so nothing was sent to Retell. This re-routes a live ' +
+        'phone line, so it refuses in fixture mode rather than pretending.',
+    }
+  }
+
+  try {
+    const r = await switchSiteAgent(db(), {
+      siteId,
+      targetAgentId,
+      providers: createVoiceProviders(),
+      override,
+    })
+    revalidatePath(`/sites/${siteId}`)
+    revalidatePath('/agent')
+
+    const numberPart =
+      r.confirmedAgentIds.length === 0
+        ? 'No imported number to re-point, so only this database changed.'
+        : r.numberRepointed
+          ? 'Retell confirms the number now answers with it.'
+          : `WARNING: Retell still reports ${r.confirmedAgentIds.join(', ')} on that number. ` +
+            'The switch did not take — do not rely on it.'
+
+    return {
+      ok: r.confirmedAgentIds.length === 0 || r.numberRepointed,
+      detail:
+        `Switched from ${r.from ?? 'no agent'} to ${r.to}. ${numberPart}` +
+        (r.overrode.length > 0 ? ` Overrode: ${r.overrode.map((b) => b.id).join(', ')}.` : ''),
+    }
+  } catch (e) {
+    if (e instanceof SwitchAgentError) return { ok: false, detail: e.message }
+    return { ok: false, detail: (e as Error).message }
+  }
+}
+
+export async function switchBackAction(siteId: number): Promise<{ ok: boolean; detail: string }> {
+  const { createVoiceProviders, liveCallsEnabled, switchBack, SwitchAgentError } =
+    await import('@rnr/data')
+
+  if (!liveCallsEnabled()) {
+    return { ok: false, detail: 'LIVE_CALLS_ENABLED is not "true", so nothing was sent to Retell.' }
+  }
+
+  try {
+    const r = await switchBack(db(), { siteId, providers: createVoiceProviders() })
+    revalidatePath(`/sites/${siteId}`)
+    revalidatePath('/agent')
+    return {
+      ok: true,
+      detail: `Rolled back to ${r.to}.${r.numberRepointed ? ' Retell confirms the number.' : ''}`,
+    }
+  } catch (e) {
+    if (e instanceof SwitchAgentError) return { ok: false, detail: e.message }
+    return { ok: false, detail: (e as Error).message }
+  }
+}
+
+/**
  * Send a signed fixture call at our own endpoints.
  *
  * This is the "Send test event" button, and it is the thing that stops a

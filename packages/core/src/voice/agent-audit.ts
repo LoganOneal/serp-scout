@@ -165,6 +165,86 @@ export function parseFlow(raw: unknown): ParsedFlow | null {
   }
 }
 
+/**
+ * One row per AGENT, from a list that returns one row per VERSION.
+ *
+ * ==================== list-agents IS NOT A LIST OF AGENTS ====================
+ * A probe of this account returned nine rows for five agents: "Roger" appeared four
+ * times, v0 through v3. Rendered directly, a picker of five agents reads as nine
+ * near-identical entries differing only by a version number, and choosing the wrong
+ * one binds a site to a version rather than to the agent.
+ *
+ * Keeps the highest version per id, since that is what an unpinned phone number
+ * follows. `publishedVersion` is carried alongside because that is what a number
+ * pinned to "latest_published" follows -- the two can differ, and when they do, which
+ * one answers the phone is the entire question.
+ * ===========================================================================
+ */
+export interface FleetAgent extends ParsedAgent {
+  /** Highest version marked published, or null when none ever was. */
+  publishedVersion: number | null
+  /** How many versions exist. 1 means there is nothing to confuse. */
+  versionCount: number
+}
+
+export function collapseAgentVersions(agents: readonly ParsedAgent[]): FleetAgent[] {
+  const byId = new Map<string, ParsedAgent[]>()
+  for (const a of agents) {
+    const list = byId.get(a.agentId)
+    if (list) list.push(a)
+    else byId.set(a.agentId, [a])
+  }
+
+  const out: FleetAgent[] = []
+  for (const versions of byId.values()) {
+    // Highest version wins. A null version sorts LAST rather than as zero -- the same
+    // rule as scan_targets.difficulty, for the same reason: unknown is not best.
+    const sorted = [...versions].sort((a, b) => (b.version ?? -1) - (a.version ?? -1))
+    const newest = sorted[0]!
+    const published = sorted.filter((v) => v.isPublished === true).map((v) => v.version ?? -1)
+    out.push({
+      ...newest,
+      publishedVersion: published.length === 0 ? null : Math.max(...published),
+      versionCount: versions.length,
+    })
+  }
+
+  return out.sort((a, b) => (b.lastModifiedAt?.getTime() ?? 0) - (a.lastModifiedAt?.getTime() ?? 0))
+}
+
+/** An imported DID as Retell reports it. */
+export interface ParsedPhoneNumber {
+  phoneNumber: string
+  nickname: string | null
+  inboundWebhookUrl: string | null
+  /** Agent ids bound to this number, in weight order. Usually exactly one. */
+  inboundAgentIds: string[]
+  /** Pinned version, an environment tag like "latest_published", or null for latest. */
+  inboundAgentVersion: string | number | null
+}
+
+export function parsePhoneNumber(raw: unknown): ParsedPhoneNumber | null {
+  const p = obj(raw)
+  if (!p) return null
+  const number = str(p['phone_number'])
+  if (!number) return null
+
+  const agents = Array.isArray(p['inbound_agents']) ? p['inbound_agents'] : []
+  const ids = agents.map((a) => str(obj(a)?.['agent_id'])).filter((s): s is string => s !== null)
+
+  const first = obj(agents[0])
+  const version = first?.['agent_version']
+
+  return {
+    phoneNumber: number,
+    nickname: str(p['nickname']),
+    inboundWebhookUrl: str(p['inbound_webhook_url']),
+    inboundAgentIds: ids,
+    inboundAgentVersion:
+      typeof version === 'string' || typeof version === 'number' ? version : null,
+  }
+}
+
 export function parseRetellLlm(raw: unknown): ParsedLlm | null {
   const l = obj(raw)
   if (!l) return null

@@ -538,7 +538,13 @@ export async function handleCallEvent(
   const { call } = await upsertCallFromEvent(db, args)
 
   // Marks the site as reachable, which is what clears the "not connected" banner.
-  if (call.siteId !== null) await touchSiteWebhook(db, call.siteId)
+  // A fixture counts as a webhook but NOT as a working phone line -- see the schema
+  // comment on sites.first_real_call_at.
+  if (call.siteId !== null) {
+    await touchSiteWebhook(db, call.siteId, {
+      simulated: isSimulatedCallId(call.retellCallId),
+    })
+  }
 
   if (args.eventType === 'call_ended' || args.eventType === 'call_analyzed') {
     await recordCallSpend(db, call)

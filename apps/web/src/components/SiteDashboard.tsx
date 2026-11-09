@@ -7,6 +7,7 @@ import {
   getVoiceQueueHealth,
   listCallsForSite,
   listLeadsForSite,
+  loadWizardState,
   getSiteRealisedValue,
   listOutcomesForSite,
   promptIsCurrent,
@@ -16,12 +17,23 @@ import {
 import { CallRow, type CallRowData } from '@/components/CallRow'
 import { ConnectionPanel } from '@/components/ConnectionPanel'
 import { OutcomeCell } from '@/components/OutcomeCell'
+import { SwitchAgentPanel } from '@/components/SwitchAgentPanel'
+import { SetupWizard } from '@/components/SetupWizard'
 import {
+  adoptAgentAction,
+  applyProvisioningAction,
+  applySiteIntegrationAction,
   createRetellAgentAction,
+  inspectProvisioningAction,
+  listLiveAgentsAction,
+  preflightSwitchAction,
+  recheckAgentAction,
   recordLeadOutcomeAction,
   refetchRecordingAction,
   saveTelephonyAction,
   sendTestEventAction,
+  switchAgentAction,
+  switchBackAction,
 } from '@/app/sites/actions'
 import { NULL_DISPLAY, money, num, percent, verdictStyle } from '@/lib/format'
 
@@ -64,6 +76,9 @@ export async function SiteDashboard({ siteId }: { siteId: number }) {
     () => getSiteRealisedValue(database, siteId),
     null,
   )
+  // Derived from stored state on every render, so it cannot claim a step is done that
+  // has since been undone. Null only if the site vanished between queries.
+  const wizard = await queryOr('loadWizardState', () => loadWizardState(database, siteId), null)
 
   const { site } = detail
   const base = (process.env['PUBLIC_BASE_URL'] ?? 'https://YOUR-TUNNEL-HERE').replace(/\/$/, '')
@@ -536,6 +551,29 @@ export async function SiteDashboard({ siteId }: { siteId: number }) {
         zero would claim there were no submissions.
       </div>
 
+      {/* --- Setup ------------------------------------------------------- */}
+      {wizard !== null && !wizard.complete && (
+        <SetupWizard
+          view={{
+            siteId: wizard.siteId,
+            agentId: wizard.agentId,
+            agentName: wizard.agentName,
+            responseEngineType: wizard.responseEngineType,
+            steps: wizard.steps,
+            currentStepId: wizard.currentStepId,
+            complete: wizard.complete,
+          }}
+          trackingNumber={site.trackingNumber}
+          toolUrl={`${base}/api/retell/tool/save-lead`}
+          onList={listLiveAgentsAction}
+          onAdopt={adoptAgentAction}
+          onApplyIntegration={applySiteIntegrationAction}
+          onRecheck={recheckAgentAction}
+          onInspectProvisioning={inspectProvisioningAction}
+          onApplyProvisioning={applyProvisioningAction}
+        />
+      )}
+
       {/* --- Connection --------------------------------------------------- */}
       <ConnectionPanel
         info={{
@@ -562,6 +600,20 @@ export async function SiteDashboard({ siteId }: { siteId: number }) {
         onSaveTelephony={saveTelephonyAction}
         onCreateAgent={createRetellAgentAction}
       />
+
+      {/* Only once an agent is bound — switching from nothing is just binding, and the
+          create/adopt path above already covers that. */}
+      {site.retellAgentId !== null && (
+        <SwitchAgentPanel
+          siteId={siteId}
+          currentAgentId={site.retellAgentId}
+          previousAgentId={site.previousRetellAgentId}
+          onList={listLiveAgentsAction}
+          onPreflight={preflightSwitchAction}
+          onSwitch={switchAgentAction}
+          onSwitchBack={switchBackAction}
+        />
+      )}
 
       {/* --- Queue health ------------------------------------------------- */}
       {queue !== null && (queue.pending > 0 || queue.failed > 0) && (

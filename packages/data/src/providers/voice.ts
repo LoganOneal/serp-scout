@@ -48,6 +48,8 @@ export interface VoiceProviders {
   /** The prompt and tools behind a single-prompt agent. */
   getRetellLlm(llmId: string): Promise<unknown>
   listAgents(): Promise<unknown[]>
+  /** Every imported DID and the agent it answers with. */
+  listPhoneNumbers(): Promise<unknown[]>
   /** Create a single-prompt response engine from this repo's script. */
   createRetellLlm(payload: Record<string, unknown>): Promise<{ llmId: string; raw: unknown }>
   createAgent(payload: Record<string, unknown>): Promise<{ agentId: string; raw: unknown }>
@@ -160,6 +162,12 @@ class FixtureVoiceProviders implements VoiceProviders {
     return [CAPTURED_AGENT]
   }
 
+  async listPhoneNumbers(): Promise<unknown[]> {
+    // Empty, not a fabricated DID. An invented number would appear in the fleet view
+    // as a live line and make the site/number cross-check pass against nothing.
+    return []
+  }
+
   /**
    * ==================== CREATION HAS NO HONEST FIXTURE ====================
    * Every other fixture returns something true offline: a captured agent, a silent
@@ -267,6 +275,9 @@ class LiveVoiceProviders implements VoiceProviders {
   }
   listAgents() {
     return this.retell.listAgents()
+  }
+  listPhoneNumbers() {
+    return this.retell.listPhoneNumbers()
   }
   createRetellLlm(payload: Record<string, unknown>) {
     return this.retell.createRetellLlm(payload)

@@ -15,6 +15,7 @@ import {
 } from '@rnr/core'
 import type { Database } from '../db.js'
 import { siteKeywordTargets, sites } from '../schema.js'
+import { recordSurfaces } from './surfaces.js'
 import { createDfsClientFromEnv } from '../providers/dataforseo/keyword-volume.js'
 import { fetchOrganicSerpDetailed } from '../providers/dataforseo/serp.js'
 import { fetchBulkBacklinks } from '../providers/dataforseo/backlinks.js'
@@ -68,7 +69,7 @@ export async function runDifficultyPass(
   const budget = opts.budgetMicros ?? PRICE.serpOrganicLive * BigInt(max)
 
   const [row] = await db
-    .select({ platformVerticals: sites.platformVerticals })
+    .select({ platformVerticals: sites.platformVerticals, domain: sites.domain })
     .from(sites)
     .where(eq(sites.id, siteId))
     .limit(1)
@@ -96,6 +97,8 @@ export async function runDifficultyPass(
     .select({
       id: siteKeywordTargets.id,
       keyword: siteKeywordTargets.keyword,
+      keywordNorm: siteKeywordTargets.keywordNorm,
+      clusterId: siteKeywordTargets.clusterId,
       volume: siteKeywordTargets.volume,
     })
     .from(siteKeywordTargets)
@@ -176,6 +179,8 @@ export async function runDifficultyPass(
   const fetched: Array<{
     id: number
     keyword: string
+    keywordNorm: string
+    clusterId: number | null
     items: SerpItem[]
     raw: Array<Record<string, unknown>>
   }> = []
@@ -196,7 +201,14 @@ export async function runDifficultyPass(
     })
     costMicros += PRICE.serpOrganicLive
     serpsBought += 1
-    fetched.push({ id: c.id, keyword: c.keyword, items: serp.snapshot.items, raw: serp.rawItems })
+    fetched.push({
+      id: c.id,
+      keyword: c.keyword,
+      keywordNorm: c.keywordNorm,
+      clusterId: c.clusterId ?? null,
+      items: serp.snapshot.items,
+      raw: serp.rawItems,
+    })
   }
 
   const allDomains = new Set<string>()
@@ -229,6 +241,7 @@ export async function runDifficultyPass(
 
   const now = new Date()
   let scored = 0
+  let surfacesRecorded = 0
 
   for (const f of fetched) {
     /**
@@ -264,7 +277,43 @@ export async function runDifficultyPass(
         updatedAt: now,
       })
       .where(eq(siteKeywordTargets.id, f.id))
+
+    /**
+     * ==================== KEEP THE REST OF WHAT WE JUST BOUGHT ==============
+     * This pass extracted the full layout above and, until now, persisted one
+     * boolean of it. The SERP is already paid for and the blocks are already
+     * parsed, so per-surface coverage costs nothing further — it is the
+     * difference between throwing nineteen fields away and keeping them.
+     *
+     * A failure here must not lose the difficulty score that was just written:
+     * coverage is a bonus on top of the thing this pass exists for.
+     * =======================================================================
+     */
+    if (site.domain) {
+      try {
+        await recordSurfaces(db, {
+          siteId,
+          keywordNorm: f.keywordNorm,
+          clusterId: f.clusterId ?? null,
+          ourDomain: site.domain,
+          raw: f.raw,
+          locationCode: space.serpLocationCode,
+          source: 'difficulty_pass',
+          now,
+        })
+        surfacesRecorded += 1
+      } catch (e) {
+        notes.push(`surface coverage not recorded for "${f.keywordNorm}": ${(e as Error).message}`)
+      }
+    }
     scored += 1
+  }
+
+  if (surfacesRecorded > 0) {
+    notes.push(
+      `SERP surface coverage recorded for ${surfacesRecorded} keyword(s) from the same purchased ` +
+        `SERPs — organic, forums, images, video, PAA and AI Overview, at no extra cost.`,
+    )
   }
 
   return {
