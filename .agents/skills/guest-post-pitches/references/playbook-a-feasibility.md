@@ -14,7 +14,7 @@ A hit on point 1, or on a clear signal in point 2 (one is enough when it is unam
 
 What does NOT trigger the exclusion:
 
-- A site based elsewhere (the U.S., the U.K., Europe, Australia and so on) that merely writes about India or Pakistan travel. Excluded sites are those based in or run from India or Pakistan, not those covering them. Judge the others by the normal gates.
+- A site based elsewhere (the U.S., the U.K., Europe, Australia and so on) that merely writes about India or Pakistan travel. Excluded sites are those based in or run from India or Pakistan, or written primarily for Indian or Pakistani readers whatever their domain; not Western sites that cover India or Pakistan as a destination for their own readers. Judge the others by the normal gates.
 - A contributor or editor with an Indian or Pakistani name on an otherwise non-Indian, non-Pakistani site. A name alone is never evidence.
 - Weak or ambiguous signals alone (a single Hindi or Urdu word, a hosting provider, an Indian payment option next to others). When the signals are mixed and nothing clearly shows the site is based in or run from India or Pakistan, do not exclude: continue with Step 1, record `region_check = unclear` and what was seen in `notes`, and let Kai decide at review.
 

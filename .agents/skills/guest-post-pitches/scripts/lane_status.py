@@ -12,7 +12,7 @@ import json
 from datetime import datetime, timezone
 from pathlib import Path
 
-DONE = {"committed", "complete", "completed", "done"}
+DONE = {"ready_for_run_push", "committed", "complete", "completed", "done"}
 
 
 def main(argv=None):

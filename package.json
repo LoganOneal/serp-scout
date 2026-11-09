@@ -53,6 +53,7 @@
     "miner:schema": "tsx --conditions=react-server packages/data/src/scripts/apply-opportunity-miner.mts",
     "miner:bootstrap": "tsx --conditions=react-server packages/data/src/scripts/bootstrap-opportunity-miner.mts",
     "hht:opp": "tsx --conditions=react-server packages/data/src/scripts/hht-opp.mts",
+    "hht:lookalike": "tsx --conditions=react-server packages/data/src/scripts/hht-lookalike.mts",
     "hht:opp:schema": "tsx --conditions=react-server packages/data/src/scripts/apply-hht-opp.mts",
     "hht:px": "tsx --conditions=react-server packages/data/src/scripts/hht-px.mts",
     "engine": "tsx --conditions=react-server packages/data/src/scripts/hht-engine.mts",

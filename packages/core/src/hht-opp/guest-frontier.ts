@@ -10,13 +10,27 @@
 import { serpJaccard, neighborhoodLabel, SERP_OVERLAP_SATURATED, type Neighborhood } from '../hht-engine/frontier.js'
 import { normalizeFrontierKeyword, volumeIsZero } from '../hht-engine/keywords.js'
 import { extractContacts, pickPrimaryContact } from './extract.js'
+import { guestBucket } from './guest-buckets.js'
 
 export const GUEST_NEAR_DUPLICATE_SIMILARITY = 0.92
 export const GUEST_NEIGHBORHOOD_SIMILARITY = 0.72
 export const GUEST_SERP_OVERLAP_SATURATED = SERP_OVERLAP_SATURATED
+/**
+ * Within one SERP plan, a generated keyword this close to a keyword already in
+ * the plan waits for a later plan. Planned keywords have no measured SERP yet, so
+ * the saturation skip cannot see them; without this a plan fills with one topic's
+ * variants ("things to do in seattle ...") before any overlap is known.
+ */
+export const GUEST_PLAN_SPREAD_SIMILARITY = 0.5
 
-const TRAVEL_BLOG =
-  /\b(travel|travell?ing|blog|hotel|honeymoon|tourism|tourist|getaway|destination|vacation|itinerary|resort|romantic|backpack|cruise|things to do|city guide|visitor)\b/i
+/** True when the candidate should wait for a later plan (not a permanent skip). */
+export function deferForPlanSpread(
+  candidate: string,
+  planned: readonly string[],
+  threshold = GUEST_PLAN_SPREAD_SIMILARITY,
+): boolean {
+  return planned.some((keyword) => guestKeywordSimilarity(candidate, keyword) >= threshold)
+}
 
 const OFF_TOPIC =
   /\b(for sale|repair|repairs|install(?:ation|ers)?|chemicals?|parts|casino|crypto|porn|salary|login|coupon)\b/i
@@ -30,6 +44,10 @@ const MAILTO = /mailto:([A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,})/gi
 
 const NOREPLY = /^(noreply|no-reply)@/i
 
+export function isLegacyGuestDiscoveryKeyword(keyword: string): boolean {
+  return /\b(write[\s-]+for[\s-]+(?:us|me|our)|guest[\s-]+(?:posts?|posting|blogs?|blogger|authors?|contributors?)|contribut(?:e|or|ors|ion)|submit|submissions?|pitch us)\b/i.test(keyword)
+}
+
 export interface FetchedGuestKeyword {
   keyword: string
   neighborhood: Neighborhood | null
@@ -42,11 +60,21 @@ export type GuestKeywordSkip = {
   similarity: number
 }
 
+/** A travel phrase worth a SERP pull (the default bucket). */
 export function isGuestFrontierKeyword(keyword: string): boolean {
+  return isGuestBucketKeyword(keyword, 'travel')
+}
+
+/**
+ * A phrase worth a SERP pull for this bucket. The topical regex is per-bucket
+ * configuration (see guest-buckets.ts); unknown or missing buckets use travel.
+ */
+export function isGuestBucketKeyword(keyword: string, bucket: string | null | undefined): boolean {
   const text = keyword.replace(/\s+/g, ' ').trim()
   if (text.split(' ').length < 2) return false
+  if (isLegacyGuestDiscoveryKeyword(text)) return false
   if (OFF_TOPIC.test(text)) return false
-  return TRAVEL_BLOG.test(text)
+  return guestBucket(bucket).topical.test(text)
 }
 
 export function guestKeywordSimilarity(left: string, right: string): number {
@@ -115,10 +143,12 @@ export function selectGuestFrontierIdeas(input: {
   ideas: readonly GuestFrontierIdea[]
   alreadyKnown: Iterable<string>
   limit: number
+  /** Bucket of the seed the ideas came from. Travel when omitted. */
+  bucket?: string | null
 }): string[] {
   const seen = new Set([...input.alreadyKnown].map((keyword) => normalizeFrontierKeyword(keyword)).filter(Boolean))
   const ranked = input.ideas
-    .filter((idea) => isGuestFrontierKeyword(idea.keyword) && !volumeIsZero(idea))
+    .filter((idea) => isGuestBucketKeyword(idea.keyword, input.bucket) && !volumeIsZero(idea))
     .map((idea) => ({ keyword: idea.keyword.replace(/\s+/g, ' ').trim(), volume: idea.avgMonthlySearches ?? idea.volumeHigh ?? 0 }))
     .sort((a, b) => b.volume - a.volume || a.keyword.localeCompare(b.keyword))
   const out: string[] = []
@@ -206,4 +236,80 @@ function resolveUrl(href: string, pageUrl: string): string | null {
   } catch {
     return null
   }
+}
+
+/**
+ * Guest-frontier SERPs are pulled by a Claude session with the Semrush MCP
+ * `execute_report` tool, never by this repo (Kai, 2026-11-08). These describe the
+ * request (`guest-frontier --plan`) and read the pulled reports back (`--serp-from`).
+ */
+export const GUEST_SERP_REPORT = 'phrase_organic'
+
+export interface GuestSerpRequest {
+  keywordId: number
+  keyword: string
+  report: typeof GUEST_SERP_REPORT
+  params: {
+    phrase: string
+    database: 'us'
+    display_limit: 100
+    positions_type: 'organic'
+    export_columns: ['position', 'domain', 'url']
+  }
+}
+
+export function guestSerpRequest(keywordId: number, keyword: string): GuestSerpRequest {
+  return {
+    keywordId,
+    keyword,
+    report: GUEST_SERP_REPORT,
+    params: {
+      phrase: keyword,
+      database: 'us',
+      display_limit: 100,
+      positions_type: 'organic',
+      export_columns: ['position', 'domain', 'url'],
+    },
+  }
+}
+
+/** One pulled report: `data` is the execute_report output; `error` keeps the keyword queued. */
+export interface GuestSerpHarvestEntry {
+  data?: unknown
+  units?: number | null
+  error?: string
+}
+
+/**
+ * Validate a `--serp-from` file: {"<keyword>": {"data": <execute_report data>, "units": N}}.
+ * Keys are matched to queued keywords by normalized text. Throws on a malformed file.
+ */
+export function parseGuestSerpHarvest(raw: unknown): Array<{ keyword: string; normalized: string; entry: GuestSerpHarvestEntry }> {
+  if (!raw || typeof raw !== 'object' || Array.isArray(raw)) {
+    throw new Error('--serp-from must be a JSON object: {"<keyword>": {"data": <execute_report data>, "units": N}}')
+  }
+  const out: Array<{ keyword: string; normalized: string; entry: GuestSerpHarvestEntry }> = []
+  for (const [keyword, value] of Object.entries(raw as Record<string, unknown>)) {
+    if (!value || typeof value !== 'object' || Array.isArray(value)) {
+      throw new Error(`--serp-from entry for "${keyword}" must be {"data": ..., "units": N}`)
+    }
+    const entry = unwrapReportPayload(value as GuestSerpHarvestEntry)
+    if (!('data' in entry) && typeof entry.error !== 'string') {
+      throw new Error(`--serp-from entry for "${keyword}" has neither "data" nor "error"`)
+    }
+    if (entry.units != null && (typeof entry.units !== 'number' || !Number.isFinite(entry.units) || entry.units < 0)) {
+      throw new Error(`--serp-from entry for "${keyword}" has invalid units`)
+    }
+    const normalized = normalizeFrontierKeyword(keyword)
+    if (normalized) out.push({ keyword, normalized, entry })
+  }
+  return out
+}
+
+/** Accept the whole execute_report payload ({data, metadata: {usage: {api_units}}}) pasted as `data`. */
+function unwrapReportPayload(entry: GuestSerpHarvestEntry): GuestSerpHarvestEntry {
+  const inner = entry.data
+  if (!inner || typeof inner !== 'object' || Array.isArray(inner) || !('data' in inner)) return entry
+  const payload = inner as { data: unknown; metadata?: { usage?: { api_units?: number } } }
+  return { ...entry, data: payload.data, units: entry.units ?? payload.metadata?.usage?.api_units ?? null }
 }

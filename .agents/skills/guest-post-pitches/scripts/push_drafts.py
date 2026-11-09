@@ -6,6 +6,7 @@ redacted response after it, then writes outreach-outcomes.json keyed by domain.
 Refuses to run if a previous attempt exists for the batch (reconcile instead).
 """
 import hashlib
+import re
 import json
 import os
 import stat
@@ -15,8 +16,25 @@ from pathlib import Path
 
 import requests
 
+
 BASE = "https://outreach-ten-plum.vercel.app"
 CAMPAIGN = "8cc518fd-9635-41fe-a3a9-fc4e2e4f2a20"
+# The one allowed fictional-experience note: exact text, last line of the body (Kai, 2026-11-09).
+FICTION_NOTE = "Note: The personal travel experiences described in this email are fictional."
+_FICTION_WORDS = re.compile(r"\b(fictional|fictitious|made up|invented)\b", re.I)
+
+
+def fiction_note_error(body):
+    """None if the body has no note, or exactly FICTION_NOTE as its last line; else the problem."""
+    lines = [l.strip() for l in body.strip().splitlines() if l.strip()]
+    flagged = [l for l in lines if _FICTION_WORDS.search(l) and re.search(r"experience|detail|stor|anecdot", l, re.I)]
+    if not flagged:
+        return None
+    if flagged != [FICTION_NOTE] or lines[-1] != FICTION_NOTE:
+        return f"fictional note must be exactly the last line: {FICTION_NOTE!r}"
+    return None
+
+
 SECRET_FILE = os.environ.get(
     "GENERATOR_SECRET_FILE",
     "/Users/kaisulkin/.copilot/session-state/29cffd99-5ecb-4d22-951b-24dc5eae350f/files/generator-secret")
@@ -30,8 +48,8 @@ def token():
     return Path(SECRET_FILE).read_text().strip()
 
 
-def main():
-    batch = Path(sys.argv[1]).resolve()
+def main(batch_dir=None):
+    batch = Path(batch_dir or sys.argv[1]).resolve()
     attempt_path = batch / "outreach-post-attempt.json"
     if attempt_path.exists():
         sys.exit("An attempt is already journaled for this batch; reconcile, do not retry.")
@@ -40,7 +58,9 @@ def main():
     if not payload:
         (batch / "outreach-outcomes.json").write_text("{}\n")
         print("No eligible drafts; nothing pushed.")
-        return
+        return {}
+    if len(payload) > 100:
+        sys.exit("The generator accepts at most 100 drafts per request; use push_run_drafts.py.")
     domains = [p["contact"]["attributes"]["domain"] for p in payload]
     emails = [p["contact"]["email"].lower() for p in payload]
     if len(set(domains)) != len(domains) or len(set(emails)) != len(emails):
@@ -50,8 +70,11 @@ def main():
             sys.exit(f"{p['contact']['attributes']['domain']}: wrong campaign or step.")
         if not p.get("subject") or not p.get("body") or not p.get("reviewer_note"):
             sys.exit(f"{p['contact']['attributes']['domain']}: subject, body and reviewer_note are required.")
+        if fiction_note_error(p["body"]):
+            sys.exit(f"{p['contact']['attributes']['domain']}: {fiction_note_error(p['body'])}")
         if "@" not in p["contact"]["email"]:
             sys.exit(f"{p['contact']['attributes']['domain']}: unreadable recipient.")
+    credential = token()
     attempt = {"attempted_at": datetime.now(timezone.utc).isoformat(), "method": "POST",
                "url": BASE + "/api/generator/drafts", "mode": "create array", "count": len(payload),
                "domains_by_index": domains, "payload_sha256": hashlib.sha256(raw).hexdigest(),
@@ -59,7 +82,7 @@ def main():
     attempt_path.write_text(json.dumps(attempt, indent=2) + "\n")
     try:
         r = requests.post(attempt["url"], json=payload, timeout=90,
-                          headers={"Authorization": "Bearer " + token(), "Content-Type": "application/json"})
+                          headers={"Authorization": "Bearer " + credential, "Content-Type": "application/json"})
         body = r.json() if r.headers.get("content-type", "").startswith("application/json") else {"text": r.text[:500]}
         resp = {"received_at": datetime.now(timezone.utc).isoformat(), "http_status": r.status_code, "body": body}
     except Exception as exc:  # uncertain outcome: never retry blindly
@@ -72,10 +95,14 @@ def main():
         if res is None:
             outcomes[domain] = {"ok": False, "outcome": "uncertain" if resp.get("uncertain") else "no_result",
                                 "index": i, "http_status": resp.get("http_status")}
+        elif res.get("ok") and res.get("outcome") == "created" and not res.get("email_id"):
+            outcomes[domain] = {**res, "ok": False, "outcome": "uncertain",
+                                "error": "Created response has no confirmed email_id; reconcile, do not retry."}
         else:
-            outcomes[domain] = {**res, "notification": "sent" if res.get("ok") else None}
+            outcomes[domain] = {**res, "notification": (resp.get("body") or {}).get("notification")}
     (batch / "outreach-outcomes.json").write_text(json.dumps(outcomes, indent=2) + "\n")
     print(json.dumps({d: (o.get("outcome"), o.get("email_id")) for d, o in outcomes.items()}, indent=1))
+    return outcomes
 
 
 if __name__ == "__main__":

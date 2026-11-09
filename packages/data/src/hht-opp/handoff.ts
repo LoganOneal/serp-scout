@@ -284,11 +284,17 @@ export interface SerpExportResult {
  */
 export async function exportSerpLeads(
   db: Database,
-  options: { limit?: number; linkLimit?: number; fileSize?: number; dryRun?: boolean } = {},
+  options: { limit?: number; linkLimit?: number; fileSize?: number; dryRun?: boolean; keywordIds?: number[] } = {},
 ): Promise<SerpExportResult> {
   await ensureLeadExportSchema(db)
   const limit = options.limit ?? 50
   const linkLimit = options.linkLimit ?? 50
+  if (options.keywordIds && (options.keywordIds.length === 0 || options.keywordIds.some((id) => !Number.isSafeInteger(id) || id <= 0))) {
+    throw new Error('keywordIds must contain positive integer IDs')
+  }
+  const keywordFilter = options.keywordIds
+    ? sql`where k.id in (${sql.join(options.keywordIds.map((id) => sql`${id}`), sql`, `)})`
+    : sql``
   const hits = rowsOf<{
     url: string
     domain: string
@@ -300,7 +306,8 @@ export async function exportSerpLeads(
   }>(await db.execute(sql`
     select r.url, r.domain, r.position, r.keyword_id, k.keyword, k.bucket, k.lead_type
     from hht_opp_guest_serp_results r
-    join hht_opp_guest_keywords k on k.id = r.keyword_id`)).map((row): SerpHit => ({
+    join hht_opp_guest_keywords k on k.id = r.keyword_id
+    ${keywordFilter}`)).map((row): SerpHit => ({
     url: row.url,
     domain: row.domain,
     position: row.position,
@@ -374,8 +381,9 @@ export async function exportSerpLeads(
     }
   }
   const keywords = rowsOf<{ keyword: string; bucket: string | null; results_seen: number; new_domains: number }>(await db.execute(sql`
-    select keyword, bucket, results_seen, new_domains from hht_opp_guest_keywords
-    where fetched_at is not null order by last_run_at desc nulls last, id`))
+    select keyword, bucket, results_seen, new_domains from hht_opp_guest_keywords k
+    ${keywordFilter}
+    order by last_run_at desc nulls last, id`))
   result.perQuery = keywords.map((row) => ({
     query: row.keyword,
     bucket: row.bucket,

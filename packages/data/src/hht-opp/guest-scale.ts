@@ -48,7 +48,7 @@ interface Candidate {
   query: string
 }
 
-const IDEA_SEEDS = ['travel write for us', 'travel guest post', 'travel blogs that accept guest posts']
+const IDEA_SEEDS = ['packing list', 'romantic getaways', 'staycation ideas']
 
 export async function scaleGuestPostDiscovery(
   db: Database,

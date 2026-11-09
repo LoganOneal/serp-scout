@@ -239,6 +239,7 @@ When the pitch needs details only Claire knows (a trip, a restaurant, an anecdot
 - Facts about the site, quotes and statistics must come from fetched sources. Facts about places, history, prices and schedules that were not fetched are stated cautiously and generally.
 - Honesty check on invented experience: never invent a claim that would be harmful or misleading, for example that Claire was pregnant, held a credential, or reported an interview that never happened. Where an angle depends on first-hand experience that would be harmful if false, pick a different angle.
 - No "Placeholders to replace" list and no human-input line anywhere.
+- Invented first-hand experiences (a trip, stay, family event or other personal event that may not have happened) are stated plainly in the draft, and the body's very last line is exactly "Note: The personal travel experiences described in this email are fictional." (forms: exactly "Note: The personal travel experiences described in this submission are fictional."). Never reword it, add to it or move it. `push_drafts.py` and `push_run_drafts.py` refuse any other wording or placement. Kai reviews every draft and deletes that line himself before sending if he chooses (decided 2026-11-09). Drafters never omit it. Real trips by Claire or Shelby from the first-hand travel log (asset-kit.md) need no note. Claire has been to Japan.
 
 ## Part B output
 

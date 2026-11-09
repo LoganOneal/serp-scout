@@ -9,9 +9,23 @@
  * Handoff to the guest-post-pitches skill:
  *   pnpm hht:opp archive                          snapshot every hht_opp_* table to exports/archive
  *   pnpm hht:opp export-backlog [--tiers=A,B,C] [--size=50] [--dry-run]
- *   pnpm hht:opp guest-frontier --max=15 --no-expand   one batch of seed queries, no auto keyword ideas
- *   pnpm hht:opp export-leads [--limit=50] [--link-limit=50] [--size=25] [--dry-run]
+ *   pnpm hht:opp guest-frontier --plan --max=15 [--no-expand] [--out=plan.json]
+ *       pick the next 15 queued keywords (seeds, then guest-templates and keyword ideas) and write
+ *       exports/guest-frontier/serp-plan-*.json. No Semrush call.
+ *   pnpm hht:opp guest-frontier --serp-from=serps.json
+ *       store SERPs a Claude session pulled with the Semrush MCP, then yields and saturation as before.
+ *       File: {"<keyword>": {"data": <execute_report data>, "units": N}} (or {"error": "..."} to leave it queued).
+ *
+ *   Semrush is reached only through the Semrush MCP tools in a Claude session (Kai, 2026-11-08), never the
+ *   repo API key or engine login. For each plan request the session calls:
+ *     execute_report(report="phrase_organic", params={"phrase": "<keyword>", "database": "us",
+ *       "display_limit": 100, "positions_type": "organic", "export_columns": ["position", "domain", "url"]})
+ *   and stores the returned data and its api units under the keyword. Keyword ideas stay on Google Ads (free).
+ *   pnpm hht:opp export-leads [--keyword-ids=1,2] [--limit=50] [--link-limit=50] [--size=25] [--dry-run]
  *   pnpm hht:opp reset-exhausted                   requeue queries marked exhausted without a fetch
+ *   pnpm hht:opp guest-templates [--limit=25] [--buckets=travel,wellness] [--per-template=N] [--json]
+ *                                                  preview template × place keywords (no API calls, no writes)
+ *   pnpm hht:opp guest-templates --enqueue [--limit=25]  volume-check (Google Ads only) and queue them for guest-frontier
  */
 import 'dotenv/config'
 import { expandQueryTemplates } from '@rnr/core'
@@ -32,12 +46,23 @@ import { discoverHhtOppMentions } from '../hht-opp/mentions.js'
 import { hhtOppOutcomeStats } from '../hht-opp/outcomes.js'
 import { listDiscoveryRuns, listHhtOppOpportunities, strategyYield } from '../hht-opp/queries.js'
 import { refreshStaleHhtOppOpportunities } from '../hht-opp/refresh.js'
-import { readFileSync } from 'node:fs'
-import { researchGuestPostUrls, scaleGuestPostDiscovery } from '../hht-opp/guest-scale.js'
-import { expandGuestKeywordIdeas, resetUnfetchedExhausted, runGuestPostFrontier } from '../hht-opp/guest-frontier.js'
+import { mkdirSync, readFileSync, writeFileSync } from 'node:fs'
+import { dirname, join, resolve } from 'node:path'
+import { fileURLToPath } from 'node:url'
+import { researchGuestPostUrls } from '../hht-opp/guest-scale.js'
+import {
+  expandGuestKeywordIdeas,
+  GUEST_FRONTIER_DIRECT_SEMRUSH_DISABLED,
+  ingestGuestFrontierSerps,
+  planGuestPostFrontier,
+  resetUnfetchedExhausted,
+} from '../hht-opp/guest-frontier.js'
+import { enqueueGuestTemplates, previewGuestTemplates } from '../hht-opp/guest-templates.js'
+import { GUEST_BUCKET_IDS, type GuestBucketId } from '@rnr/core'
 import { archiveHhtOpp, exportLegacyBacklog, exportSerpLeads, type LegacyTier } from '../hht-opp/handoff.js'
 import { researchHhtOppSeeds } from '../hht-opp/research.js'
 
+const REPO_ROOT = fileURLToPath(new URL('../../../../', import.meta.url))
 const argv = process.argv.slice(2)
 const command = argv[0] ?? 'help'
 const flag = (n: string): boolean => argv.includes(`--${n}`)
@@ -188,19 +213,68 @@ async function main(): Promise<void> {
       break
     }
     case 'guest-frontier': {
-      const maxRaw = opt('max')
-      const maxKeywords = maxRaw == null ? null : Number(maxRaw)
-      console.log(
-        JSON.stringify(
-          await runGuestPostFrontier(database, {
-            maxKeywords: maxKeywords != null && Number.isFinite(maxKeywords) ? maxKeywords : null,
-            ideaLimit: Number(opt('ideas') ?? 20),
-            expand: !flag('no-expand'),
-          }),
-          null,
-          2,
-        ),
-      )
+      const serpFrom = opt('serp-from')
+      if (serpFrom) {
+        const result = await ingestGuestFrontierSerps(database, JSON.parse(readFileSync(serpFrom, 'utf8')))
+        console.log(JSON.stringify(result, null, 2))
+        console.error(`Semrush units recorded: ${result.units}`)
+        break
+      }
+      if (!flag('plan')) throw new Error(GUEST_FRONTIER_DIRECT_SEMRUSH_DISABLED)
+      const maxKeywords = Number(opt('max') ?? 15)
+      if (!Number.isInteger(maxKeywords) || maxKeywords <= 0) throw new Error('--max must be a positive integer')
+      const plan = await planGuestPostFrontier(database, {
+        maxKeywords,
+        ideaLimit: Number(opt('ideas') ?? 20),
+        expand: !flag('no-expand'),
+      })
+      const out = resolve(opt('out') ?? join(REPO_ROOT, 'exports/guest-frontier', `serp-plan-${plan.createdAt.replace(/[:.]/g, '-')}.json`))
+      mkdirSync(dirname(out), { recursive: true })
+      writeFileSync(out, `${JSON.stringify(plan, null, 2)}\n`)
+      console.log(JSON.stringify({ planFile: out, stop: plan.stop, keywordsSkipped: plan.keywordsSkipped, error: plan.error, keywords: plan.requests.map((r) => r.keyword) }, null, 2))
+      console.error(`Pull each request with Semrush MCP execute_report(report, params), save {"<keyword>": {"data": <data>, "units": N}}, then: pnpm hht:opp guest-frontier --serp-from=<file>`)
+      break
+    }
+    case 'guest-scale': {
+      // Legacy guest discovery through the repo's Semrush API key. Semrush goes through the MCP only.
+      throw new Error(`guest-scale is disabled. ${GUEST_FRONTIER_DIRECT_SEMRUSH_DISABLED}`)
+    }
+    case 'guest-templates': {
+      const buckets = (opt('buckets') ?? '')
+        .split(',')
+        .map((value) => value.trim())
+        .filter(Boolean)
+      const unknown = buckets.filter((value) => !GUEST_BUCKET_IDS.includes(value as GuestBucketId))
+      if (unknown.length > 0) throw new Error(`Unknown bucket(s): ${unknown.join(', ')}. Use ${GUEST_BUCKET_IDS.join(', ')}.`)
+      const perTemplate = opt('per-template') ? Number(opt('per-template')) : undefined
+      const options = {
+        limit: Number(opt('limit') ?? 25),
+        buckets: buckets as GuestBucketId[],
+        perTemplate,
+        metros: opt('metros') ? Number(opt('metros')) : undefined,
+        yieldsPath: opt('yields'),
+      }
+      if (flag('enqueue')) {
+        console.log(JSON.stringify(await enqueueGuestTemplates(database, options), null, 2))
+        break
+      }
+      const preview = await previewGuestTemplates(database, options)
+      if (flag('json')) {
+        console.log(JSON.stringify(preview, null, 2))
+        break
+      }
+      console.log(`Yields: ${preview.yieldsFile ?? 'none (new-domain estimate only)'}`)
+      console.log(`Baseline: ${preview.baseline.perKeyword.toFixed(2)} pitchable/kw, ${(preview.baseline.perNewDomain * 100).toFixed(1)}% of new domains`)
+      console.log(`Entities: ${preview.entities.cities} cities, ${preview.entities.states} states, ${preview.entities.regions} regions\n`)
+      console.log('prior  pitch/kw  new/kw  fetches  template')
+      for (const row of preview.templates) {
+        console.log(`${row.prior.toFixed(2).padStart(5)}  ${(row.pitchablePerKeyword?.toFixed(2) ?? '—').padStart(8)}  ${(row.newDomainsPerKeyword?.toFixed(1) ?? '—').padStart(6)}  ${String(row.fetches).padStart(7)}  ${row.templateId}${row.retired ? '  RETIRED' : ''}`)
+      }
+      console.log(`\nSkipped: ${JSON.stringify(preview.skipped)}`)
+      console.log(`\nTop ${preview.candidates.length} candidates (score = prior × weight × novelty):`)
+      for (const row of preview.candidates) {
+        console.log(`${row.score.toFixed(3)}  ${row.prior.toFixed(2)} × ${row.entity.weight.toFixed(2)} × ${row.novelty.toFixed(2)}  ${row.keyword}  [${row.templateId}]`)
+      }
       break
     }
     case 'reset-exhausted': {
@@ -218,6 +292,7 @@ async function main(): Promise<void> {
             limit: Number(opt('limit') ?? 50),
             linkLimit: Number(opt('link-limit') ?? 50),
             fileSize: opt('size') ? Number(opt('size')) : undefined,
+            keywordIds: opt('keyword-ids')?.split(',').map(Number),
             dryRun: flag('dry-run'),
           }),
           null,
@@ -244,20 +319,6 @@ async function main(): Promise<void> {
       )
       break
     }
-    case 'guest-scale': {
-      console.log(
-        JSON.stringify(
-          await scaleGuestPostDiscovery(database, {
-            serpDepth: Number(opt('serp') ?? 100),
-            domainLimit: Number(opt('domains') ?? 50),
-            ideaLimit: Number(opt('ideas') ?? 8),
-          }),
-          null,
-          2,
-        ),
-      )
-      break
-    }
     case 'queries': {
       const templates = expandQueryTemplates()
       console.log(`${templates.length} query templates`)
@@ -275,9 +336,11 @@ async function main(): Promise<void> {
   pnpm hht:opp enrich --all-qualified
   pnpm hht:opp strategies
   pnpm hht:opp queries
-  pnpm hht:opp guest-scale [--serp=100] [--domains=50] [--ideas=8]
   pnpm hht:opp keyword-ideas [--ideas=20]
-  pnpm hht:opp guest-frontier [--max=10] [--ideas=20]
+  pnpm hht:opp guest-frontier --plan [--max=15] [--ideas=20] [--no-expand] [--out=plan.json]
+  pnpm hht:opp guest-frontier --serp-from=serps.json
+  pnpm hht:opp guest-templates [--limit=25] [--buckets=travel,romance,weddings,wellness,lifestyle] [--per-template=N] [--metros=300] [--yields=path.csv] [--json]
+  pnpm hht:opp guest-templates --enqueue [--limit=25]
   pnpm hht:opp competitors [--seeds=a.com,b.com]
   pnpm hht:opp mentions [--fixture]
   pnpm hht:opp broken

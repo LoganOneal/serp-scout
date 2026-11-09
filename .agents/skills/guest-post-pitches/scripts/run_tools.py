@@ -320,6 +320,8 @@ def batch_paths(run_dir, batch_id):
 def commit(run_dir, batch_id):
     directory, expected = batch_paths(run_dir, batch_id)
     main, articles = validate(directory, batch_id, expected)
+    if any(row.get("outreach_status") == "Awaiting consolidated push" for row in main):
+        raise ValueError("Consolidate the run's staged drafts before committing this batch.")
     with locked(run_dir):
         state = read_json(run_dir / "run.json")
         entry = next(b for b in state["batches"] if b["id"] == batch_id)

@@ -1,33 +1,28 @@
 /**
  * Travel guest-post keyword selection.
  *
- * SERP discovery stays on explicit "write for us" / guest-post phrases.
- * New phrases come from Google Ads Keyword Ideas, the same GenerateKeywordIdeas
- * call the HHT engine uses, then this filter keeps only travel guest-post intent.
+ * The default frontier finds publications through topical travel SERPs.
+ * Explicit contribution helpers below are retained for legacy URL research.
  */
 
-import { normalizeFrontierKeyword, volumeIsZero } from '../hht-engine/keywords.js'
+import { selectGuestFrontierIdeas } from './guest-frontier.js'
 
 /** Page 10 of a Google SERP is 100 organic results. */
 export const HHT_OPP_GUEST_SERP_DEPTH = 100
 
 export const HHT_OPP_GUEST_SEED_KEYWORDS = [
-  'travel write for us',
-  'write for us travel',
-  'travel blogs that accept guest posts',
-  'family travel write for us',
-  'travel guest post',
-  'travel submit guest post',
-  'luxury travel write for us',
-  'adventure travel write for us',
-  'honeymoon write for us',
-  'hotel write for us',
-  'travel blog guest post',
-  'couples travel write for us',
-  'wellness travel write for us',
-  'romantic travel write for us',
-  'travel magazine write for us',
-  'solo travel write for us',
+  'packing list for ecuador',
+  'packing list for argentina',
+  'packing list for chile',
+  'packing list for a spa weekend',
+  'packing list for a cabin getaway',
+  'packing list for a honeymoon',
+  'packing list for a couples getaway',
+  'staycation ideas for married couples',
+  'romantic staycation ideas at home',
+  'anniversary staycation ideas for couples',
+  'luxury staycation ideas for couples',
+  'weekend staycation ideas for couples',
 ] as const
 
 const GUEST_INTENT =
@@ -68,23 +63,9 @@ export function pickGuestPostIdeas(input: {
   alreadySearched: Iterable<string>
   limit: number
 }): string[] {
-  const seen = new Set([...input.alreadySearched].map((keyword) => normalizeFrontierKeyword(keyword)).filter(Boolean))
-  const ranked = input.ideas
-    .filter((idea) => isTravelGuestPostKeyword(idea.keyword))
-    .filter((idea) => !volumeIsZero(idea))
-    .map((idea) => ({
-      keyword: idea.keyword.replace(/\s+/g, ' ').trim(),
-      volume: idea.avgMonthlySearches ?? idea.volumeHigh ?? 0,
-    }))
-    .sort((a, b) => b.volume - a.volume || a.keyword.localeCompare(b.keyword))
-
-  const out: string[] = []
-  for (const row of ranked) {
-    const key = normalizeFrontierKeyword(row.keyword)
-    if (!key || seen.has(key)) continue
-    seen.add(key)
-    out.push(row.keyword)
-    if (out.length >= input.limit) break
-  }
-  return out
+  return selectGuestFrontierIdeas({
+    ideas: input.ideas,
+    alreadyKnown: input.alreadySearched,
+    limit: input.limit,
+  })
 }

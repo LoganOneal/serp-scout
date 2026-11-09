@@ -14,13 +14,16 @@ HARD RULES
 - Never call send_message, create_session, or tool_search_tool. Report only via BATCH_DIR/progress.json
   (batch, total_domains, finalized_domains, research_in_progress, pitches_drafted, outreach_created,
   current_stage, blocker, updated_at ISO with offset). Stages: research, writing, validation, routing,
-  ready_to_commit.
+  ready_for_run_push. The parent sets ready_to_commit after consolidated routing.
 - Use the bundled scripts directly (cwd = BATCH_DIR). Default light policy, 90 s slow-site cap, one
   web search per listed domain (see SKILL.md "Light invitation search").
 - Never edit the master workbook. The parent commits with $SCRIPTS/run_tools.py commit.
-- Push only with `python3 $SCRIPTS/push_drafts.py $BATCH_DIR`, exactly once per batch, after
-  draft-validation passes. If outreach-post-attempt.json already exists, NEVER run it again: use
-  outreach-outcomes.json as the confirmed result.
+- Never push from a lane. Stage eligible drafts locally with outreach_status
+  "Awaiting consolidated push", outreach_email_id null and outreach-outcomes.json {}.
+  Their Markdown must contain the plain line: Routing status: Awaiting consolidated push
+  Finish at ready_for_run_push. The parent waits for every lane, then calls
+  `python3 $SCRIPTS/push_run_drafts.py $RUN_DIR` once, grouping up to 100 drafts per request.
+  If the run's outreach-post-attempt.json exists, reconcile saved outcomes; never re-POST.
 - timing.json: ISO timestamps for started, research_done, writing_done, validation_done, pushed,
   ready_to_commit (keep existing values when resuming; add resumed_at).
 
@@ -41,7 +44,7 @@ REQUIRED OUTPUTS (the parent's validator checks them exactly)
    in drafts.md.
 5. draft-validation.json {"passed": true, "editorial_readthrough_passed": true, "stage": "final", "sites": [...]}
    only when every check genuinely passes.
-6. outreach-outcomes.json (from push_drafts.py).
+6. outreach-outcomes.json {} while staged; the parent fills it after the consolidated push.
 7. tracker-rows.json {"main": [25 rows], "full_articles": [...]}. Main keys only: site, source_sheet, batch,
    sheet_score, verdict, code, confidence, pitch_url, submission_mechanism, contact_route,
    needs_human_input, draft, outreach_status, date_triaged, notes, outreach_email_id, source_query,
@@ -49,12 +52,12 @@ REQUIRED OUTPUTS (the parent's validator checks them exactly)
    "Draft in outreach tool" (confirmed created email_id in outreach_email_id; requirements_note exactly the
    payload reviewer_note), "Article for review (not pushed)", "In Markdown (form only)",
    "In Markdown (no email)", "Blocked (requirements incomplete; not pushed)",
-   "Not pushed (tool unreachable)", "Not pursued". Full Articles keys only: site, batch, send_to,
+   "Awaiting consolidated push", "Not pushed", "Not pushed (tool unreachable)", "Not pursued". Full Articles keys only: site, batch, send_to,
    required_subject, article_delivery, doc_link ("<BATCH>/drafts.md#<anchor>"), title,
    word_count_required, photos_required, bio_and_headshot_required, link_rules, must_replace,
    fact_checks_needed, fee_risk, status ("Drafted"), date_drafted, date_reviewed, date_sent, notes.
 8. report.md and summary.json per the skill's report rules.
-9. progress.json current_stage "ready_to_commit" when all is final.
+9. progress.json current_stage "ready_for_run_push" when local work is final. No lane POSTs.
 
 End your turn with: verdict counts, drafts created (domain -> email_id), article holds, blockers,
 elapsed minutes.

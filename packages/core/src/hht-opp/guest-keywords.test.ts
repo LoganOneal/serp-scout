@@ -4,9 +4,15 @@ import {
   isGuestRoundupUrl,
   isTravelGuestPostKeyword,
   pickGuestPostIdeas,
+  HHT_OPP_GUEST_SEED_KEYWORDS,
 } from './guest-keywords.js'
+import { isGuestFrontierKeyword } from './guest-frontier.js'
 
 describe('travel guest-post keywords', () => {
+  it('defaults to the latest twelve topical seeds', () => {
+    expect(HHT_OPP_GUEST_SEED_KEYWORDS).toHaveLength(12)
+    expect(HHT_OPP_GUEST_SEED_KEYWORDS.every(isGuestFrontierKeyword)).toBe(true)
+  })
   it('keeps travel phrases that ask for a guest post', () => {
     expect(isTravelGuestPostKeyword('luxury travel write for us')).toBe(true)
     expect(isTravelGuestPostKeyword('hotel blogs that accept guest posts')).toBe(true)
@@ -28,7 +34,7 @@ describe('travel guest-post keywords', () => {
 
   it('picks new Google Ads ideas and skips duplicates and zero volume', () => {
     const picked = pickGuestPostIdeas({
-      alreadySearched: ['best travel write for us'],
+      alreadySearched: ['packing list for europe'],
       limit: 2,
       ideas: [
         { keyword: 'travel write for us', avgMonthlySearches: 90, volumeLow: null, volumeHigh: null, volumeIsRange: false },
@@ -36,8 +42,12 @@ describe('travel guest-post keywords', () => {
         { keyword: 'honeymoon guest post', avgMonthlySearches: 0, volumeLow: null, volumeHigh: null, volumeIsRange: false },
         { keyword: 'food guest post', avgMonthlySearches: 500, volumeLow: null, volumeHigh: null, volumeIsRange: false },
         { keyword: 'hotel guest posting sites', avgMonthlySearches: 70, volumeLow: null, volumeHigh: null, volumeIsRange: false },
+        { keyword: 'packing list for europe', avgMonthlySearches: 100, volumeLow: null, volumeHigh: null, volumeIsRange: false },
+        { keyword: 'packing list for japan', avgMonthlySearches: 90, volumeLow: null, volumeHigh: null, volumeIsRange: false },
+        { keyword: 'romantic weekend getaways', avgMonthlySearches: 70, volumeLow: null, volumeHigh: null, volumeIsRange: false },
+        { keyword: 'staycation ideas', avgMonthlySearches: 0, volumeLow: null, volumeHigh: null, volumeIsRange: false },
       ],
     })
-    expect(picked).toEqual(['hotel guest posting sites', 'cruise write for us'])
+    expect(picked).toEqual(['packing list for japan', 'romantic weekend getaways'])
   })
 })

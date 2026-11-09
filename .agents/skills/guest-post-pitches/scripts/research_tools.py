@@ -36,6 +36,9 @@ from xml.etree import ElementTree
 
 import requests
 
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import browser_fetch  # noqa: E402
+
 
 ROOT = Path(os.environ.get("HHT_BATCH_DIR") or os.getcwd()).resolve()
 UA = "GuestPostResearch/1.0"
@@ -153,6 +156,18 @@ def relevant_page(url):
     if re.search(r"/(19|20)\d{2}/", parts.path):
         return False
     return bool(CANDIDATE_PAGE.search(segs[-1])) and len(segs[-1]) <= 45
+
+
+JS_SHELL_MAX_TEXT = 300
+
+
+def needs_browser(entry, raw, text):
+    """Plain fetch was refused, hit an interstitial, or got an empty JavaScript shell."""
+    if entry["result"] in ("access_denied", "challenge"):
+        return True
+    if entry["result"] == "ok" and "html" in (entry.get("content_type") or "").lower():
+        return len(text) < JS_SHELL_MAX_TEXT and "<script" in raw.lower()
+    return False
 
 
 def save(path, data):
@@ -280,6 +295,16 @@ class Research:
         except requests.RequestException as exc:
             entry.update(result="error", error=str(exc))
             self.last_request[host] = time.monotonic()
+            # Connection, TLS or timeout failure: try once in a real browser (not for DNS misses).
+            if browser_fetch.enabled() and "NameResolutionError" not in str(exc):
+                key = hashlib.sha256(url.encode()).hexdigest()[:16]
+                directory = ROOT / "evidence" / self.domain
+                directory.mkdir(parents=True, exist_ok=True)
+                html_path, text_path = directory / (key + ".html"), directory / (key + ".txt")
+                self.browser_retry(url, entry, html_path, text_path)
+                if entry.get("text_file") is None and html_path.exists():
+                    entry.update(raw_file=str(html_path.relative_to(ROOT)), text_file=str(text_path.relative_to(ROOT)))
+                    self.site["fetched_text_references"].append(entry["text_file"])
             self.site["search_log"].append(entry)
             self.checkpoint()
             return entry
@@ -316,10 +341,33 @@ class Research:
             entry["result"] = "challenge"
         else:
             entry["result"] = "ok"
+        if browser_fetch.enabled() and not response.is_redirect and needs_browser(entry, raw, text):
+            self.browser_retry(url, entry, html_path, text_path)
         self.site["search_log"].append(entry)
         self.site["fetched_text_references"].append(entry["text_file"])
         self.checkpoint()
         return entry
+
+    def browser_retry(self, url, entry, html_path, text_path):
+        """Re-fetch in a real browser after a refusal, interstitial or JS shell."""
+        entry["first_attempt"] = {k: entry.get(k) for k in ("status", "result", "text_characters")}
+        rendered = browser_fetch.fetch(url)
+        entry["fetched_via"] = "browser"
+        if rendered.get("html") is None:
+            entry["browser_error"] = rendered.get("error") or rendered.get("result")
+            return
+        parser = Page()
+        parser.feed(rendered["html"])
+        text = parser.content()
+        html_path.write_text(rendered["html"])
+        text_path.write_text("URL: " + url + "\nHTTP: " + str(rendered.get("status")) + " (browser)\n\n" + text)
+        entry.update(
+            status=rendered.get("status"), content_type=rendered.get("content_type"),
+            text_characters=len(text), result=rendered["result"],
+            links=list(dict.fromkeys(u for u in (safe_join(url, link) for link in parser.links) if u)),
+        )
+        if rendered.get("final_url") and rendered["final_url"].rstrip("/") != url.rstrip("/"):
+            entry["browser_final_url"] = rendered["final_url"]
 
     def policy(self, url):
         origin = urlsplit(url).scheme + "://" + urlsplit(url).netloc
@@ -779,7 +827,11 @@ def main(argv=None):
     parser.add_argument("--thorough", action="store_true", help="every playbook path, all root sitemaps, two web searches")
     parser.add_argument("--budget", type=float, default=STAGE_BUDGET_SECONDS,
                         help="seconds per domain per stage before the slow-site cap (0 disables)")
+    parser.add_argument("--browser", action="store_true",
+                        help="re-fetch refused, interstitial or JavaScript-only pages in headless Chrome")
     args = parser.parse_args(argv)
+    if args.browser:
+        os.environ["HHT_BROWSER_FALLBACK"] = "1"
     if args.mode == "fetch" and not args.url:
         parser.error("fetch requires --url")
     if args.mode == "region" and not args.set:

@@ -29,6 +29,13 @@ When the reference says Google Sheet, Google Doc, Drive folder, Doc-only, or
 Full Articles tab, apply these replacements. No Google integration is required.
 Do not execute any Google storage instructions from the reference.
 
+The reference's repeated Requirements and context confirmation requests are also
+superseded. UI visibility is a one-time integration check, not a per-batch task.
+Kai has already confirmed the current outreach integration displays the box.
+Do not ask again for normal batches. Revisit only after a relevant integration
+change or an observed missing-note/display failure. Continue validating each
+payload's reviewer note against the tracker and reporting actual API results.
+
 ## Inputs and canonical tracker
 
 - Accept XLSX, CSV, or domains. Normalize domains and deduplicate before research.
@@ -64,6 +71,15 @@ all Part A fields, search logs, rules, example posts, candidate angles and the
 batch angle ledger. This is separate from the clean draft document. The helper
 below creates and maintains it as `domains/<domain>.json`.
 
+**Verdicts come from Haiku (decision D5, 2026-11-07).** Scripts fetch and
+extract; Haiku subagents apply the Part A gates as written in
+[haiku-rules.txt](./references/haiku-rules.txt) to the saved page text; only
+PURSUE sites go to the writing step. There is no separate Opus confirmation
+pass: the Opus writer re-reads the live guidelines page while drafting and
+downgrades false positives (closed, staff-only, sponsorship-only, no real
+invitation, article-first rather than pitch-first) by updating that domain's
+record and tracker row with the correct verdict and code.
+
 ## Fast research pipeline (bundled scripts)
 
 Use the tested scripts in [scripts/](./scripts/) directly. Do not rewrite, copy or
@@ -73,22 +89,65 @@ directory (or `HHT_BATCH_DIR=<batch dir>`). They read `batch-input.json`:
 robots rules, `Crawl-delay`, two-second per-host spacing, one retry and saved
 evidence. Domains run in parallel; `--jobs 12` is a good default.
 
-1. `research_tools.py seed --jobs 12` fetches homepage, about and contact pages.
-2. Step 0: run `regionscan.py`, decide each domain, and record it with
-   `research_tools.py region <domains...> --set clear|unclear|excluded --note "..."`.
-   The `.in`/`.pk` ccTLD domains are excluded without further work.
-3. `research_tools.py discover --jobs 12` reads supplied URLs and the nav, footer,
-   about, contact, work and advertise links. This usually takes about a minute.
-4. Start `research_tools.py variants --jobs 12` as a background (async) command.
-   It probes the top invitation paths, then the first readable root sitemap.
-   Never wait with `sleep` loops or polling. Continue with Step 5, outreach
-   preflight, activity checks and reading already-confirmed invitation pages.
-   You are notified when the command finishes.
+1. `research_tools.py seed --browser --jobs 12` fetches homepage, about and
+   contact pages (`--browser` re-fetches refused or JavaScript-only pages in
+   headless Chrome).
+2. Step 0: `classify_batch.py region <batch dir>` pre-screens every domain from
+   the saved text: `.in`/`.pk` ccTLD is excluded; two or more strong
+   India/Pakistan signals (+91, +92, ₹, INR, PKR, Pvt Ltd) or two or more
+   audience signals (rupees, lakh, crore, trips from Indian or Pakistani cities,
+   advice for Indian or Pakistani travelers) is unclear; anything else is clear.
+   The rule is audience, not domain: any site written primarily for Indian or
+   Pakistani readers is excluded whatever its TLD, and Haiku's G0 makes that
+   call on unclear sites. It writes `region.json` and keeps
+   any region already recorded (`--force` overwrites). Override single domains
+   with `research_tools.py region <domain> --set ... --note "..."`.
+3. `research_tools.py discover --browser --jobs 12` reads supplied URLs and the
+   nav, footer, about, contact, work and advertise links.
+4. `research_tools.py variants --browser --jobs 12` (background command) probes
+   the top invitation paths, then the first readable root sitemap. Never wait
+   with `sleep` loops or polling; you are notified when it finishes.
 5. Run Step 1.6 web searches only where they can still matter (see below).
-6. Use `research_tools.py overview <domain>` or targeted reads of the saved
-   `evidence/<domain>/*.txt` files to decide the verdict. Fetch any extra source
-   with `research_tools.py fetch <domain> --url <URL>`. Command output is a
-   one-line summary per domain, so avoid dumping raw HTML into context.
+6. `classify_batch.py prep <batch dir>` writes `haiku/RULES.txt`,
+   `haiku/sites/<domain>.txt` (evidence built by `classifier.build_evidence`,
+   invitation pages first, with the code-computed activity line),
+   `haiku/batch-NN.json` (18 domains each), `haiku/prompt-NN.txt` and
+   `haiku/prep.json`. Domains with no page text or an excluded region are listed,
+   not batched.
+7. Launch one Haiku subagent per batch (Agent tool, `model: "haiku"`, at most 20
+   at once), passing the contents of `haiku/prompt-NN.txt` as the prompt. The
+   template, with `{haiku}` the absolute `haiku/` path:
+
+   ```text
+   You are classifying guest-post targets. Use only the Read and Write tools, no web access.
+   1. Read {haiku}/RULES.txt and follow it exactly.
+   2. Read {haiku}/batch-{nn}.json, a JSON list of {count} domains.
+   3. For each domain, read {haiku}/sites/<domain>.txt and decide from that file only.
+   4. Write {haiku}/results/batch-{nn}.jsonl: exactly one JSON object per line, one line per domain,
+      in batch order, with exactly these keys: domain, verdict, code, pitch_url, route, contact,
+      submission_stage, last_activity_date, evidence_quote, confidence. Use null where RULES.txt allows it.
+      evidence_quote must be copied exactly from the site file. Write no other files.
+   Reply with only: done {count}
+   ```
+
+8. `classify_batch.py merge <batch dir>` requires exactly one valid line per
+   batched domain (it lists problems and writes nothing otherwise; re-run only
+   the named batches). No-text sites become NEEDS_REVIEW / INSUFFICIENT_EVIDENCE
+   and excluded regions SKIP / SKIP_REGION_EXCLUDED. It writes
+   `haiku-results.json` and `.csv`, with `quote_found` per site.
+9. `classify_batch.py apply <batch dir>` writes each verdict into
+   `domains/<domain>.json` in Part A shape (verdict, skip_code or review_reason,
+   pitch_url, route, contact, stage, activity, evidence), adds `Not pursued` /
+   `Not pushed` rows to `tracker-rows.json` for non-PURSUE domains without a row,
+   and rebuilds `research.json`. A Haiku SKIP_NO_INVITATION without a full
+   on-site search becomes NEEDS_REVIEW (`SLOW_SITE_CAPPED` or
+   `INVITATION_SEARCH_INCOMPLETE`); run `variants <domain> --full` and re-classify
+   those. Re-running `apply` never overwrites a record whose Haiku result is
+   unchanged, so run it again after the writing step to rebuild `research.json`.
+10. Writing step (Opus) for PURSUE only, as in "Writing". Use
+    `research_tools.py overview <domain>` or targeted reads of
+    `evidence/<domain>/*.txt`, and `research_tools.py fetch <domain> --url <URL>`
+    to re-read the live guidelines page before drafting.
 
 **Early stop.** `discover` and `variants` record `invitation_candidates` when a
 dedicated invitation page (write-for-us, guest, contribute, submissions,
@@ -96,7 +155,7 @@ freelance or writer-guideline path) has its own text that invites outside writer
 gives a route and is not closed. Once one is confirmed, the remaining path probes
 and sitemap candidates are skipped and logged under `invitation_search.early_stop`,
 consistent with Step 1 (the full search is required before concluding no route
-exists). The agent still reads that page and applies every gate. If the page is
+exists). Haiku still reads that page and applies every gate. If the page is
 rejected (soft 404, wording trap, staff role, sponsorship only), run
 `research_tools.py variants <domain> --full` and the web searches before any
 `SKIP_NO_INVITATION`. Pages flagged in `closed_signals` are evidence for
@@ -154,17 +213,30 @@ Discovery does no LLM triage of its own: this skill decides every verdict.
 
 1. Before exporting, refresh the tracker exclusions so the CLI never re-exports
    evaluated sites: `python3 scripts/run_tools.py exclusions`.
-2. Discovery batch, for example
-   `pnpm hht:opp guest-frontier --max=15 --no-expand`, then
-   `pnpm hht:opp export-leads`. That writes `exports/handoff/hht-guest-serp-<date>-*.csv`
+2. Discovery batch. Semrush is reached only through the Semrush MCP tools in this
+   session, never the repo API key or engine login (Kai, 2026-11-08):
+   `pnpm hht:opp guest-frontier --plan --max=15 --no-expand` writes
+   `exports/guest-frontier/serp-plan-*.json`; pull each request with
+   `execute_report(report, params)` exactly as listed and save
+   `{"<keyword>": {"data": <data>, "units": <metadata.usage.api_units>}}`
+   (report units per call). If credits run out (`no_api_units`), stop pulling and tell
+   Kai; ingest what was pulled. Then `pnpm hht:opp guest-frontier --serp-from=<file>`,
+   then `pnpm hht:opp export-leads`. That writes `exports/handoff/hht-guest-serp-<date>-*.csv`
    and `hht-link-insertion-<date>-*.csv`.
 3. Immediately run `python3 scripts/run_tools.py prepare <the new guest CSVs> --run-id HHT-<label>-<date>`.
    Link-insertion rows are never evaluated here; they stay link-insertion leads.
    `prepare` dedupes against both tracker tabs, every researched batch and all
    outreach history before research.
-4. Run the batches as parallel lanes (see below), creating step 1 drafts
-   automatically under the normal outreach rules. Drafts are never sent.
-5. Commit each batch with `run_tools.py commit`, then pause and give Kai one
+4. Evaluate every batch with the scripted chain in "Fast research pipeline":
+   seed, `classify_batch.py region`, discover, variants, web searches,
+   `classify_batch.py prep`, Haiku subagents (at most 20 at once across the
+   run), `merge`, `apply`. Then write only the PURSUE sites with Opus (lanes, see
+   below), re-checking each live guidelines page while drafting, and stage
+   eligible step 1 drafts locally. Lanes never push independently: small waves generate unwanted email
+   notifications. Wait until every lane is ready, then upload the whole discovery
+   run with `python3 scripts/push_run_drafts.py <run dir>`, at most 100 drafts per
+   request. Normally this is one request and one owner notification. Drafts are never sent.
+5. After reconciling the consolidated upload, commit each batch with `run_tools.py commit`, then pause and give Kai one
    combined report: discovery yield (queries run, results, new domains, junk,
    link-insertion leads) plus the guest-post results (verdict counts, drafts
    created, holds, decisions needed). Wait for Kai before the next discovery batch.
@@ -174,12 +246,20 @@ Discovery does no LLM triage of its own: this skill decides every verdict.
 - `scripts/run_tools.py prepare` creates the run folder and batches of 25, renders
   `lane-contract.md` from [the template](./references/lane-contract-template.md),
   backs up the tracker and snapshots it. Every lane worker gets that contract.
-- Workers push only with `scripts/push_drafts.py <batch dir>`, once per batch.
+- Workers never push. They write `outreach-outcomes.json` as `{}` and use
+  `Awaiting consolidated push` / null ID for eligible email drafts. In their
+  Markdown use the exact plain line `Routing status: Awaiting consolidated push`.
+  Their final progress stage is `ready_for_run_push`.
+- The parent waits for all lanes and calls `scripts/push_run_drafts.py <run dir>`
+  once. It validates every lane, combines eligible drafts, checks cross-lane
+  duplicates, and uses the bundled POST helper in groups of at most 100.
+  Results and notification status are persisted once per request and distributed
+  back to each lane's outcomes, tracker rows and local Markdown. No small-wave uploads.
 - The parent commits with `scripts/run_tools.py commit <run dir> <batch id>`
   (`validate` checks without committing). It appends rows only after verifying
   every pre-run row and style, one main row per domain and confirmed draft IDs.
 - If any run fails or is cancelled, resume from the saved files. Never repeat a
-  push whose `outreach-post-attempt.json` exists.
+  run or batch push whose `outreach-post-attempt.json` exists; reconcile instead.
 
 ## Parallel lanes and status updates
 
@@ -191,12 +271,14 @@ repeatedly; record the blocker and continue.
 - Each worker reports only through `<batch>/progress.json`: `batch`,
   `total_domains`, `finalized_domains`, `research_in_progress`,
   `pitches_drafted`, `outreach_created`, `current_stage`, `blocker`, `updated_at`.
-  Write it after every stage change and finalized domain, using `committed` when
-  done. Then end the turn with a concise batch result.
+  Write it after every stage change and finalized domain, using `ready_for_run_push`
+  when local work is complete. The parent sets `committed` after uploading and
+  appending the tracker. Then end the turn with a concise batch result.
 - Only the parent session launches lanes and relays to Kai. About every 15
   minutes it runs `scripts/lane_status.py <run batch dirs>` and reports progress,
-  stale lanes and blockers. When a lane reaches `committed`, the parent starts
-  the next batch itself.
+  stale lanes and blockers. When a lane reaches `ready_for_run_push`, its research
+  slot is released and the parent starts the next batch itself. Do not wait for
+  workbook commits to launch queued lanes: uploads and commits wait for all lanes.
 - **Stagger lanes.** Run at most four lanes, and start each one about three
   minutes after the previous one so their web-search bursts do not collide on the
   shared rate limit. A new lane can start whenever another lane leaves its
@@ -223,7 +305,7 @@ Apply Part B of the reference in full. In particular:
   the full pre-push scan and human-style reading check.
 - Article-first means a completed article accompanies the first submission,
   regardless of email, attachment, shared-document or form delivery.
-- Follow the reference's treatment of personal anecdotes; never fabricate
+- First-hand experience: per playbook-b-writing.md Step B5, invented personal experiences end with the fictional note, which Kai deletes at review if he chooses. Follow the reference's treatment of personal anecdotes; never fabricate
   sources, URLs, contact information, credentials, interviews, or harmful claims.
 
 ## Local Markdown replaces every batch Google Doc
@@ -290,6 +372,12 @@ Skips and unresolved review sites get no invented draft or article.
 - Use `GENERATOR_SECRET` as a bearer token. A credential explicitly supplied
   by Kai may be read from protected session-local storage when the environment
   variable is absent. Never store a fallback token in the skill or repository.
+- This repo already configures `GENERATOR_SECRET` in its root `.env`. Python
+  helpers do not load dotenv automatically. Launch them from a Node wrapper
+  that loads `dotenv/config` and passes its environment to the Python process,
+  or use the existing owner-only credential file via `GENERATOR_SECRET_FILE`.
+  Check this setup before asking Kai to supply the credential again; never
+  print the token or include the environment in logs.
 - Never print credentials, persist authorization headers in logs, or include
   secrets in deliverables or a portable skill archive.
 - First make a read-only `GET /api/generator/campaigns?include=paused`
@@ -329,8 +417,14 @@ Before reporting completion:
 5. Report verdict counts, review reasons, corrected URLs, region exclusions and
    unclear regions, low-confidence pursuits, pitch/article counts, routing,
    article review needs and any unresolved blockers.
-6. Link the canonical workbook, batch Markdown and research report. Ask Kai to
-   verify the first pushed draft's Requirements and context box if any were pushed.
+6. Link the canonical workbook, batch Markdown and research report. Report that
+   reviewer notes were included and backed up in the tracker, without repeating
+   the already-completed UI visibility check.
+
+Finally, regenerate the master list of everything waiting on Kai:
+`python3 scripts/manual_queue.py`. It writes `exports/guest-post-outreach/Manual Intervention Queue.md`
+from the live /forms queue, every form run's site files and the tracker. Every set-aside item needs its reason
+recorded in the tracker or site file so it shows up there. Link that file in the report.
 
 Do not claim an unfinished batch is complete. Persist partial progress and say
 exactly which domains and stages remain when blocked or interrupted.

@@ -31,3 +31,7 @@ exports/
 # Local Semrush MCP harvest CSVs for HHT PX ingest
 .tmp-hht-px-mcp/
 **/.tmp-hht-px-mcp/
+
+# runtime outputs
+__pycache__/
+outreach-preflight.json
