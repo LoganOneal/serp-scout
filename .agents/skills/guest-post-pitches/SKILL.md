@@ -294,6 +294,34 @@ Discovery does no LLM triage of its own: this skill decides every verdict.
    The automatic template refill no longer draws wedding keywords for the same
    reason (`GUEST_REFILL_BUCKET_IDS`; `--buckets=weddings` still runs them on purpose).
 
+   **Blog-intent templates (Kai, 2026-11-10).** City templates were saturating (new
+   domains per keyword fell from about 37 to 15) while blog-intent families yielded
+   1-2.7 pitchable per keyword. The template set now includes `{city|state|region}
+   travel blog`, `hidden gems in {city|state}`, `where to stay in {city|region}`,
+   `is {city} worth visiting`, `{city} in winter` and `{city} on a budget`, each
+   starting from its family's measured yield (`priorHint`). Brunch, anniversary
+   ideas and places to elope are retired outright (`GUEST_TEMPLATES_RETIRED`).
+   Same-phrase templates are told apart by the captured place (state name, curated
+   region, else city).
+
+   **Feedspot lane (Kai, 2026-11-10; no Semrush).** Feedspot's ranked "Top N blogs"
+   lists are live blogs, the sites most likely to take a guest post. Of 197 Feedspot
+   blogs already in the tracker on 2026-11-10, 29 were PURSUE or PAID_ONLY (about
+   14%, against about 4% for SERP leads). Run
+   `python3 scripts/feedspot_leads.py --defaults` (or name list slugs such as
+   `texas_travel_blogs`), then `run_tools.py prepare` on the CSV it writes
+   (`exports/handoff/hht-guest-feedspot-<date>.csv`) and evaluate as usual. The
+   default set gave 634 blogs, 437 of them new. A slug Feedspot lacks is reported
+   (404) and skipped.
+
+   **Lookalike and blogroll lanes: measured, not worth units.** `pnpm hht:lookalike`
+   (organic competitors of PURSUE sites, guest-author bio links, blogroll links)
+   ran on 40 seeds on 2026-11-08: 538 domains evaluated, 0 PURSUE (organic
+   competitor 251, author bio 187, blogroll 100). Do not spend Semrush units on the
+   organic-competitor signal again without Kai's say-so. The free signals
+   (`--no-semrush --signals=author_bio,blogroll`) may be retried on new seeds, but
+   half their leads ended INSUFFICIENT_EVIDENCE (dead or unfetchable blogs).
+
    **Backlink lane.** Sites that already link to a successful travel site from an
    article are proven niche publishers, and the linking article is evidence for the
    pitch. Pull a competitor's `backlinks` report through the Semrush MCP

@@ -17,7 +17,7 @@ export interface GuestBucket {
 
 /** Original TRAVEL_BLOG terms, plus the destination phrasings the templates use. */
 const TRAVEL_TOPICAL =
-  /\b(travel|travell?ing|blog|hotels?|honeymoon|tourism|tourist|getaways?|destinations?|vacation|itinerary|resort|romantic|backpack|cruise|things to do|city guide|visitor|packing list|staycation|road trips?|day trips?|weekend in|hidden gems)\b/i
+  /\b(travel|travell?ing|blog|hotels?|honeymoon|tourism|tourist|getaways?|destinations?|vacation|itinerary|resort|romantic|backpack|cruise|things to do|city guide|visitor|packing list|staycation|road trips?|day trips?|weekend in|hidden gems|where to stay|worth visiting|in winter|on a budget)\b/i
 
 export const GUEST_BUCKETS: Readonly<Record<GuestBucketId, GuestBucket>> = {
   travel: { id: 'travel', label: 'Travel', topical: TRAVEL_TOPICAL },

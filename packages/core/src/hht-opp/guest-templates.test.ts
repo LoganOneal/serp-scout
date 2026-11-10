@@ -3,6 +3,7 @@ import { GUEST_BUCKETS, guestBucket } from './guest-buckets.js'
 import { isGuestBucketKeyword, isGuestFrontierKeyword, selectGuestFrontierIdeas } from './guest-frontier.js'
 import {
   GUEST_TEMPLATES,
+  GUEST_TEMPLATES_RETIRED,
   GUEST_TOURISM_REGIONS,
   guestMetroEntities,
   guestStateEntities,
@@ -181,5 +182,23 @@ describe('template ranking', () => {
     expect(explored.length).toBe(3)
     // Interleaved, not all at the end of the refill.
     expect(ids.slice(0, 5).some((id) => id !== 'travel.things-to-do')).toBe(true)
+  })
+})
+
+describe('blog-intent templates (Kai, 2026-11-10)', () => {
+  it('tells same-phrase templates apart by the captured place', () => {
+    expect(matchGuestTemplate('hidden gems in boise')?.template.id).toBe('travel.hidden-gems-city')
+    expect(matchGuestTemplate('hidden gems in idaho')?.template.id).toBe('travel.hidden-gems-state')
+    expect(matchGuestTemplate('hidden gems in hudson valley')?.template.id).toBe('travel.hidden-gems-region')
+    expect(matchGuestTemplate('texas travel blog')?.template.id).toBe('travel.state-travel-blog')
+    expect(matchGuestTemplate('best tucson travel blog')?.template.id).toBe('travel.city-travel-blog')
+  })
+
+  it('retires the families Kai dropped and seeds new ones from their family yield', () => {
+    const stats = guestTemplateStats([], { baseline: { perNewDomain: 0.036, perKeyword: 0.24 } })
+    for (const id of GUEST_TEMPLATES_RETIRED) expect(stats.get(id)?.retired).toBe(true)
+    expect(stats.get('travel.city-travel-blog')?.prior).toBe(2.67)
+    expect(stats.get('travel.things-to-do')?.prior).toBe(0.24)
+    expect(stats.get('travel.city-travel-blog')?.retired).toBe(false)
   })
 })

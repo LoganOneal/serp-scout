@@ -29,6 +29,12 @@ export interface GuestTemplate {
   bucket: GuestBucketId
   /** Phrase with exactly one `{city}`, `{state}` or `{region}` slot. */
   pattern: string
+  /**
+   * Starting pitchable-per-keyword for the smoothed prior, used instead of the
+   * global rate until the template has its own fetches. Set from the measured
+   * yield of the keyword family the template was built from.
+   */
+  priorHint?: number
 }
 
 export interface GuestEntity {
@@ -38,7 +44,12 @@ export interface GuestEntity {
   weight: number
 }
 
-const t = (bucket: GuestBucketId, slug: string, pattern: string): GuestTemplate => ({ id: `${bucket}.${slug}`, bucket, pattern })
+const t = (bucket: GuestBucketId, slug: string, pattern: string, priorHint?: number): GuestTemplate => ({
+  id: `${bucket}.${slug}`,
+  bucket,
+  pattern,
+  ...(priorHint == null ? {} : { priorHint }),
+})
 
 export const GUEST_TEMPLATES: readonly GuestTemplate[] = [
   // Travel: the measured winners (plan section 1) plus their close relatives.
@@ -50,6 +61,20 @@ export const GUEST_TEMPLATES: readonly GuestTemplate[] = [
   t('travel', 'city-itinerary', '{city} itinerary'),
   t('travel', 'hidden-gems-region', 'hidden gems in {region}'),
   t('travel', 'day-trips-from', 'day trips from {city}'),
+  // Blog-intent families (Kai, 2026-11-10): these SERPs are mostly personal travel
+  // blogs, the sites that take guest posts. Hints are the measured pitchable per
+  // keyword of each family on 2026-11-10 (travel blog 2.67, hidden gems 1.43,
+  // where to stay 1.0); the newer phrasings start at the hidden-gems rate.
+  t('travel', 'city-travel-blog', '{city} travel blog', 2.67),
+  t('travel', 'state-travel-blog', '{state} travel blog', 2.67),
+  t('travel', 'region-travel-blog', '{region} travel blog', 2.67),
+  t('travel', 'hidden-gems-city', 'hidden gems in {city}', 1.43),
+  t('travel', 'hidden-gems-state', 'hidden gems in {state}', 1.43),
+  t('travel', 'where-to-stay', 'where to stay in {city}', 1.0),
+  t('travel', 'where-to-stay-region', 'where to stay in {region}', 1.0),
+  t('travel', 'worth-visiting', 'is {city} worth visiting', 1.0),
+  t('travel', 'in-winter', '{city} in winter', 1.0),
+  t('travel', 'on-a-budget', '{city} on a budget', 1.0),
   // Romance and couples.
   t('romance', 'date-ideas', 'date ideas in {city}'),
   t('romance', 'anniversary-ideas', 'anniversary ideas in {city}'),
@@ -71,6 +96,17 @@ export const GUEST_TEMPLATES: readonly GuestTemplate[] = [
   t('lifestyle', 'staycation-ideas', '{city} staycation ideas'),
   t('lifestyle', 'date-night', '{city} date night ideas'),
 ]
+
+/**
+ * Retired by Kai (2026-11-10) whatever their running yield: brunch, anniversary
+ * and elopement SERPs return restaurants, venues and planners, not blogs
+ * (0.14, 0 and 0 pitchable per keyword).
+ */
+export const GUEST_TEMPLATES_RETIRED: ReadonlySet<string> = new Set([
+  'lifestyle.brunch',
+  'romance.anniversary-ideas',
+  'weddings.places-to-elope-state',
+])
 
 /** Plan section 3.1: retire a template below 0.3 pitchable per keyword after 10 fetches. */
 export const GUEST_TEMPLATE_RETIRE_BELOW = 0.3
@@ -120,23 +156,50 @@ function compileTemplates(templates: readonly GuestTemplate[]): CompiledTemplate
     .sort((a, b) => b.literalLength - a.literalLength)
 }
 
-/** The template a stored keyword was (or could have been) generated from, by its text. */
+/**
+ * The template a stored keyword was (or could have been) generated from, by its text.
+ * Templates that share a phrase and differ only in slot (`hidden gems in {city}` and
+ * `hidden gems in {region}`) are told apart by the captured place: a U.S. state name
+ * goes to the state slot, a curated tourism region to the region slot, anything else
+ * to the city slot.
+ */
 export function matchGuestTemplate(
   keyword: string,
   templates: readonly GuestTemplate[] = GUEST_TEMPLATES,
 ): { template: GuestTemplate; entity: string } | null {
   const text = cleanKeyword(keyword).replace(LEADING_MODIFIER, '')
+  let best: { template: GuestTemplate; entity: string; literalLength: number; fit: number } | null = null
   for (const compiled of compileTemplates(templates)) {
+    if (best && compiled.literalLength < best.literalLength) break
     const entity = text.match(compiled.regex)?.[1]?.trim()
-    if (entity && isPlaceLike(entity)) return { template: compiled.template, entity }
+    if (!entity || !isPlaceLike(entity)) continue
+    const fit = guestTemplateSlot(compiled.template) === placeKind(entity) ? 1 : 0
+    if (!best || fit > best.fit) best = { template: compiled.template, entity, literalLength: compiled.literalLength, fit }
   }
-  return null
+  return best ? { template: best.template, entity: best.entity } : null
+}
+
+const US_STATES = new Set([
+  'alabama', 'alaska', 'arizona', 'arkansas', 'california', 'colorado', 'connecticut', 'delaware', 'florida',
+  'georgia', 'hawaii', 'idaho', 'illinois', 'indiana', 'iowa', 'kansas', 'kentucky', 'louisiana', 'maine',
+  'maryland', 'massachusetts', 'michigan', 'minnesota', 'mississippi', 'missouri', 'montana', 'nebraska',
+  'nevada', 'new hampshire', 'new jersey', 'new mexico', 'new york', 'north carolina', 'north dakota', 'ohio',
+  'oklahoma', 'oregon', 'pennsylvania', 'rhode island', 'south carolina', 'south dakota', 'tennessee', 'texas',
+  'utah', 'vermont', 'virginia', 'washington', 'west virginia', 'wisconsin', 'wyoming',
+])
+
+function placeKind(entity: string): GuestEntityKind {
+  const name = entity.toLowerCase()
+  if (US_STATES.has(name)) return 'state'
+  if (GUEST_TOURISM_REGIONS.some((region) => region.name.toLowerCase() === name)) return 'region'
+  return 'city'
 }
 
 /** Words that mean the slot captured another template's phrasing, not a place. */
 const NOT_A_PLACE = new Set([
   'itinerary', 'road', 'trip', 'trips', 'day', 'days', 'week', 'weeks', 'weekend', 'travel', 'romantic',
   'luxury', 'anniversary', 'staycation', 'slow', 'ideas', 'guide', 'getaway', 'getaways', 'things', 'couples',
+  'blog', 'blogs', 'winter', 'budget', 'worth', 'visiting', 'stay', 'gems',
 ])
 
 function isPlaceLike(entity: string): boolean {
@@ -337,8 +400,9 @@ export function guestTemplateStats(
       newDomains: total.newDomains,
       pitchablePerKeyword: rate == null ? null : round(rate),
       newDomainsPerKeyword: total.fetches > 0 ? round(total.newDomains / total.fetches) : null,
-      prior: round((total.pitchable + smoothing * baseline.perKeyword) / (total.fetches + smoothing)),
-      retired: total.fetches >= retireAfter && rate != null && rate < retireBelow,
+      prior: round((total.pitchable + smoothing * (template.priorHint ?? baseline.perKeyword)) / (total.fetches + smoothing)),
+      retired: GUEST_TEMPLATES_RETIRED.has(template.id)
+        || (total.fetches >= retireAfter && rate != null && rate < retireBelow),
     })
   }
   return out
