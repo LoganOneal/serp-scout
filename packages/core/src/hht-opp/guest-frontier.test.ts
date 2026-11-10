@@ -6,6 +6,7 @@ import {
   guestSerpNeighborhood,
   guestSerpRequest,
   parseGuestSerpHarvest,
+  estimateGuestSerpUnits,
   isGuestFrontierKeyword,
   isLegacyGuestDiscoveryKeyword,
   maxSerpResultOverlap,
@@ -151,12 +152,22 @@ describe('guest frontier Semrush MCP hand-off', () => {
       { position: 1, domain: 'vermont.com', url: 'https://vermont.com/romance/' },
       { position: 2, domain: 'www.ourtravelblog.net', url: 'https://www.ourtravelblog.net/vermont-getaways/' },
     ])
-    expect(entries[0]!.entry.units).toBe(1000)
     expect(parseOrganicSerp(entries[1]!.entry.data)).toEqual([
       { position: 3, domain: 'mainecabins.org', url: 'https://mainecabins.org/list' },
     ])
-    expect(entries[1]!.entry.units).toBe(500)
     expect('data' in entries[2]!.entry).toBe(false)
+    // Cost is 10 per returned row; reported units and api_units are ignored.
+    expect(estimateGuestSerpUnits(entries[0]!.entry)).toBe(20)
+    expect(estimateGuestSerpUnits(entries[1]!.entry)).toBe(10)
+    expect(estimateGuestSerpUnits(entries[2]!.entry)).toBe(0)
+  })
+
+  it('prices a filtered pull by the rows Semrush returned', () => {
+    const [row] = parseGuestSerpHarvest({
+      'hidden gems in ohio': { data: 'Position;Domain;Url\n7;ohioblog.com;https://ohioblog.com/gems/', rows: 40, units: 2400 },
+    })
+    expect(estimateGuestSerpUnits(row!.entry)).toBe(400)
+    expect(() => parseGuestSerpHarvest({ a: { data: '', rows: 2.5 } })).toThrow(/rows/)
   })
 
   it('rejects malformed harvest files', () => {

@@ -15,7 +15,9 @@
  *       exports/guest-frontier/serp-plan-*.json. No Semrush call.
  *   pnpm hht:opp guest-frontier --serp-from=serps.json
  *       store SERPs a Claude session pulled with the Semrush MCP, then yields and saturation as before.
- *       File: {"<keyword>": {"data": <execute_report data>, "units": N}} (or {"error": "..."} to leave it queued).
+ *       File: {"<keyword>": {"data": <execute_report data>, "rows": N}} (or {"error": "..."} to leave it queued).
+ *       "rows" is how many rows Semrush returned; give it when "data" was filtered. Cost is recorded as
+ *       10 units per row. The MCP's usage.api_units is not the per-call cost and is ignored.
  *
  *   Semrush is reached only through the Semrush MCP tools in a Claude session (Kai, 2026-11-08), never the
  *   repo API key or engine login. For each plan request the session calls:
@@ -238,7 +240,7 @@ async function main(): Promise<void> {
       mkdirSync(dirname(out), { recursive: true })
       writeFileSync(out, `${JSON.stringify(plan, null, 2)}\n`)
       console.log(JSON.stringify({ planFile: out, stop: plan.stop, keywordsSkipped: plan.keywordsSkipped, error: plan.error, keywords: plan.requests.map((r) => r.keyword) }, null, 2))
-      console.error(`Pull each request with Semrush MCP execute_report(report, params), save {"<keyword>": {"data": <data>, "units": N}}, then: pnpm hht:opp guest-frontier --serp-from=<file>`)
+      console.error(`Pull each request with Semrush MCP execute_report(report, params), save {"<keyword>": {"data": <data>, "rows": <rows returned>}}, then: pnpm hht:opp guest-frontier --serp-from=<file>`)
       break
     }
     case 'guest-scale': {

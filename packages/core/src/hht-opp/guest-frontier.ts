@@ -11,6 +11,7 @@ import { serpJaccard, neighborhoodLabel, SERP_OVERLAP_SATURATED, type Neighborho
 import { normalizeFrontierKeyword, volumeIsZero } from '../hht-engine/keywords.js'
 import { extractContacts, pickPrimaryContact } from './extract.js'
 import { guestBucket } from './guest-buckets.js'
+import { parseOrganicSerp } from '../hht-engine/serp-table.js'
 
 export const GUEST_NEAR_DUPLICATE_SIMILARITY = 0.92
 export const GUEST_NEIGHBORHOOD_SIMILARITY = 0.72
@@ -273,11 +274,30 @@ export function guestSerpRequest(keywordId: number, keyword: string): GuestSerpR
   }
 }
 
-/** One pulled report: `data` is the execute_report output; `error` keeps the keyword queued. */
+/**
+ * One pulled report: `data` is the execute_report output; `error` keeps the keyword queued.
+ * `rows` is how many rows Semrush returned, for when `data` was filtered before saving.
+ * `units` is accepted for old files but never recorded (see estimateGuestSerpUnits).
+ */
 export interface GuestSerpHarvestEntry {
   data?: unknown
+  rows?: number | null
   units?: number | null
   error?: string
+}
+
+/** Semrush bills phrase_organic at 10 API units per returned row. */
+export const SEMRUSH_UNITS_PER_ORGANIC_ROW = 10
+
+/**
+ * Units a pull cost. The MCP's usage.api_units is not the per-call cost (a 100-row pull
+ * reported 3,850, and some pulls reported negative values), so the cost is computed from
+ * the rows returned: `rows` when given, else the rows in `data`. A failed pull costs 0.
+ */
+export function estimateGuestSerpUnits(entry: GuestSerpHarvestEntry): number {
+  if (typeof entry.rows === 'number') return entry.rows * SEMRUSH_UNITS_PER_ORGANIC_ROW
+  if (!('data' in entry)) return 0
+  return parseOrganicSerp(entry.data).length * SEMRUSH_UNITS_PER_ORGANIC_ROW
 }
 
 /**
@@ -300,16 +320,18 @@ export function parseGuestSerpHarvest(raw: unknown): Array<{ keyword: string; no
     if (entry.units != null && (typeof entry.units !== 'number' || !Number.isFinite(entry.units) || entry.units < 0)) {
       throw new Error(`--serp-from entry for "${keyword}" has invalid units`)
     }
+    if (entry.rows != null && (typeof entry.rows !== 'number' || !Number.isInteger(entry.rows) || entry.rows < 0)) {
+      throw new Error(`--serp-from entry for "${keyword}" has invalid rows`)
+    }
     const normalized = normalizeFrontierKeyword(keyword)
     if (normalized) out.push({ keyword, normalized, entry })
   }
   return out
 }
 
-/** Accept the whole execute_report payload ({data, metadata: {usage: {api_units}}}) pasted as `data`. */
+/** Accept the whole execute_report payload ({data, metadata}) pasted as `data`; its api_units is ignored. */
 function unwrapReportPayload(entry: GuestSerpHarvestEntry): GuestSerpHarvestEntry {
   const inner = entry.data
   if (!inner || typeof inner !== 'object' || Array.isArray(inner) || !('data' in inner)) return entry
-  const payload = inner as { data: unknown; metadata?: { usage?: { api_units?: number } } }
-  return { ...entry, data: payload.data, units: entry.units ?? payload.metadata?.usage?.api_units ?? null }
+  return { ...entry, data: (inner as { data: unknown }).data }
 }

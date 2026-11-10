@@ -2,6 +2,7 @@ import 'server-only'
 import { readFileSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
 import {
+  estimateGuestSerpUnits,
   excludeDiscoveryDomain,
   GUEST_SERP_REPORT,
   guestSerpRequest,
@@ -205,10 +206,12 @@ export async function ingestGuestFrontierSerps(
         continue
       }
       // Units were spent when the session pulled the report, so record them even
-      // for a pull that failed or a keyword already stored.
-      if (entry.units != null) {
-        result.units += entry.units
-        await recordUnits(entry.units)
+      // for a keyword already stored. The cost is 10 per returned row, never the
+      // MCP's reported api_units (see estimateGuestSerpUnits).
+      const units = estimateGuestSerpUnits(entry)
+      if (units > 0) {
+        result.units += units
+        await recordUnits(units)
       }
       if (row.status !== 'NEW') {
         result.alreadyFetched.push(keyword)
