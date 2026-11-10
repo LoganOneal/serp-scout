@@ -319,6 +319,20 @@ Discovery does no LLM triage of its own: this skill decides every verdict.
    next. Feedspot blogs already in the tracker before the lane existed were PURSUE or
    PAID_ONLY 29 times out of 197, so the lower ranks may do better.
 
+   Second round (HHT-feedspot-eval-2026-11-10b, 89 blogs ranked below 20): 2 PURSUE
+   (westmichiganwoman.com form, which prefers local writers; thehappytrip.com article),
+   about 2.2%. Combined Feedspot yield so far: 4 of 146 (2.7%), below SERP. The
+   hotel_blogs list (hotel software vendors) and spa_blogs list (med spas, hot tub
+   stores) gave 0 of 37 and were removed from the defaults on 2026-11-10.
+
+   Blog-intent SERP batch (HHT-serp-eval-2026-11-10e, 2026-11-10): 18 keywords
+   planned, 10 returned Semrush no_data (9 of the 10 `{place} travel blog`
+   keywords: too low volume for Semrush to track, no units charged), 8 pulled for
+   8,650 units. 48 new domains evaluated, 2 PURSUE (recipestravelculture.com,
+   storyhunt.io): 0.25 pitchable per pulled keyword, about the same as the
+   city templates' 0.24 in the batches just before. Not yet better; the
+   template yields will keep updating as batches are evaluated.
+
    **Lookalike and blogroll lanes: measured, not worth units.** `pnpm hht:lookalike`
    (organic competitors of PURSUE sites, guest-author bio links, blogroll links)
    ran on 40 seeds on 2026-11-08: 538 domains evaluated, 0 PURSUE (organic

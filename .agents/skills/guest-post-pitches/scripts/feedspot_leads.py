@@ -36,8 +36,8 @@ UA = ("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 "
 # hotels, plus the travel lists for the states with the most hotel hot tub inventory.
 # Checked 2026-11-10; a slug Feedspot does not have (404) is reported and skipped.
 DEFAULT_LISTS = [
-    "travel_blogs", "usa_travel_blogs", "couple_travel_blogs", "road_trip_blogs", "hotel_blogs",
-    "travel_lifestyle_blogs", "honeymoon_blogs", "spa_blogs", "glamping_blogs",
+    "travel_blogs", "usa_travel_blogs", "couple_travel_blogs", "road_trip_blogs",
+    "travel_lifestyle_blogs", "honeymoon_blogs", "glamping_blogs",
     "california_travel_blogs", "texas_travel_blogs", "florida_travel_blogs",
     "new_york_travel_blogs", "colorado_travel_blogs", "arizona_travel_blogs",
     "north_carolina_travel_blogs", "tennessee_travel_blogs", "michigan_travel_blogs",
