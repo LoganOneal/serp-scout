@@ -299,7 +299,7 @@ Discovery does no LLM triage of its own: this skill decides every verdict.
    pitch. Pull a competitor's `backlinks` report through the Semrush MCP
    (`target_type: root_domain`, `display_sort: page_authority_score_desc`,
    `export_columns: page_authority_score, source_url, source_title, anchor, nofollow`,
-   and dofollow links only: `display_filter: [{"field": "type", "operation": "equals",
+   and dofollow links only: `display_filter: [{"field": "type", "operation": "",
    "value": "follow", "sign": "+"}]`; about 40 units per row). Kai (2026-11-09): only
    dofollow links have value, and a dofollow link to a competitor is the best evidence
    that a site gives dofollow links. The importer also drops any nofollow row, save each response's `data` to a file, then run
@@ -312,6 +312,15 @@ Discovery does no LLM triage of its own: this skill decides every verdict.
    article links that survived the filters (storygrid.uk, irelandbulletin.com) were a
    paid link-placement network (PAID_ONLY). Prefer competitors that earn bylined
    guest posts, such as travel bloggers who write for other sites.
+   Test result (2026-11-09, about 9,500 units): the closest search competitors
+   (tubhotels.com, tubstays.com, excellent-romantic-vacations.com) have almost no
+   editorial dofollow links. 200 rows gave 11 article domains; the rest were Yahoo/Bing
+   result pages, Pinterest and spam link directories. Of the 7 new domains: 0 PURSUE,
+   1 PAID_ONLY (breakingtravelnews.com, £99 release; tubhotels' AS 42 link came that
+   way). Exclude search engines and Pinterest in the pull (`{"field": "refdomain",
+   "operation": "contains", "value": "yahoo", "sign": "-"}`, same for bing and
+   pinterest). The `type` filter needs `"operation": ""`; "equals" is rejected. This
+   lane is not worth more units until a competitor with real guest-post links is found.
 4. Evaluate the whole run with `run_pipeline.py research`, the parallel search
    agents from `search-plan.json`, `run_pipeline.py prep`, the Haiku agents from
    `haiku-plan.json` (at most 20 at once) and `run_pipeline.py finish` (see "Fast

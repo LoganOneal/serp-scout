@@ -19,7 +19,7 @@ tracker exclusions). Dropped here, with counts printed:
   - pages under --min-ascore
   - nofollow links (Kai, 2026-11-09: only dofollow links have value; a dofollow link to a
     competitor is the best evidence a site gives dofollow links). Pull with
-    display_filter [{"field": "type", "operation": "equals", "value": "follow", "sign": "+"}]
+    display_filter [{"field": "type", "operation": "", "value": "follow", "sign": "+"}]
     so nofollow rows are never paid for; --keep-nofollow disables this check.
 """
 import argparse

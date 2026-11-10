@@ -126,6 +126,11 @@ export async function planGuestPostFrontier(
   }
   await prepareFrontier(db, log)
   if (options.refillTemplates && options.refillTemplates > 0) {
+    // The hands-off path never spends Semrush units on wedding keywords: the guest-post
+    // prefilter drops every weddings-bucket lead (0 PURSUE in 491). Explicit wedding runs
+    // (`guest-templates --buckets=weddings`) should plan without --refill.
+    const retiredWeddings = await retireQueuedWeddingTemplates(db)
+    if (retiredWeddings > 0) log(`Retired ${retiredWeddings} queued wedding-bucket template keywords (prefiltered leads).`)
     const queued = (await loadFrontier(db)).keywords
       .filter((row) => row.status === 'NEW' && row.sourceType === GUEST_TEMPLATE_SOURCE).length
     if (queued < options.refillTemplates) {
@@ -447,6 +452,19 @@ async function seedGuestKeywords(db: Database): Promise<void> {
       setWhere: eq(hhtOppGuestKeywords.status, 'proposed'),
     })
   }
+}
+
+export async function retireQueuedWeddingTemplates(db: Database): Promise<number> {
+  const retired = await db.update(hhtOppGuestKeywords).set({
+    status: 'RETIRED',
+    skipReason: 'weddings_prefiltered',
+  }).where(and(
+    inArray(hhtOppGuestKeywords.status, ['NEW', 'proposed']),
+    eq(hhtOppGuestKeywords.sourceType, GUEST_TEMPLATE_SOURCE),
+    eq(hhtOppGuestKeywords.bucket, 'weddings'),
+    sql`${hhtOppGuestKeywords.fetchedAt} is null`,
+  )).returning({ id: hhtOppGuestKeywords.id })
+  return retired.length
 }
 
 export async function retireLegacyGuestKeywords(db: Database): Promise<number> {
