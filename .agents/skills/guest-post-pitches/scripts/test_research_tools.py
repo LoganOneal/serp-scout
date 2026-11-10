@@ -233,11 +233,27 @@ class ResearchToolsTest(unittest.TestCase):
         rt.main(["research", "--budget", "60"])
         rt.main(["needs-search"])
         data = json.loads((rt.ROOT / "needs-search.json").read_text())
+        # A homepage with no publication signals is gated out of the web search.
+        self.assertEqual(data["domains"], [])
+        self.assertEqual(data["gated_out"][0]["domain"], DOMAIN)
+        rt.main(["needs-search", "--all"])
+        data = json.loads((rt.ROOT / "needs-search.json").read_text())
         self.assertEqual(data["domains"][0]["domain"], DOMAIN)
         self.assertEqual(len(data["domains"][0]["queries"]), 1)
-        rt.main(["needs-search", "--thorough"])
+        rt.main(["needs-search", "--all", "--thorough"])
         data = json.loads((rt.ROOT / "needs-search.json").read_text())
         self.assertEqual(len(data["domains"][0]["queries"]), 2)
+
+    def test_search_gate_keeps_publications(self):
+        self.serve({})
+        self.site.routes["/"] = (200, page("<p>" + FILLER + " Our editors and contributors cover the city. "
+                                           "Subscribe to the magazine.</p>"), "text/html")
+        rt.main(["seed"])
+        rt.main(["region", DOMAIN, "--set", "clear"])
+        rt.main(["research", "--budget", "60"])
+        rt.main(["needs-search"])
+        data = json.loads((rt.ROOT / "needs-search.json").read_text())
+        self.assertEqual([d["domain"] for d in data["domains"]], [DOMAIN])
 
 
 class SitemapScopeTest(unittest.TestCase):

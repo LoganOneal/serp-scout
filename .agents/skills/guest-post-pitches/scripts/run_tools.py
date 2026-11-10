@@ -39,6 +39,9 @@ for candidate in (os.environ.get("HHT_PYTHON_DEPS"),
             sys.path.insert(0, candidate)
 from openpyxl import load_workbook  # noqa: E402
 
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import prefilter  # noqa: E402
+
 SKILL_DIR = Path(__file__).resolve().parent.parent
 REPO = Path(os.environ.get("HHT_REPO", "/Users/kaisulkin/serp-scout"))
 EXPORTS = Path(os.environ.get("HHT_EXPORTS", REPO / "exports/guest-post-outreach"))
@@ -198,7 +201,7 @@ def lead_urls(row):
     return [u for u in dict.fromkeys(urls) if u.startswith("http")]
 
 
-def prepare(csv_paths, run_id, size, dry_run):
+def prepare(csv_paths, run_id, size, dry_run, use_prefilter=True):
     run_dir = EXPORTS / run_id
     if not dry_run and run_dir.exists():
         sys.exit(f"{run_dir} exists; never overwrite a run.")
@@ -207,6 +210,7 @@ def prepare(csv_paths, run_id, size, dry_run):
     researched = {p.stem for p in EXPORTS.glob("*/domains/*.json")}
     leads = collections.OrderedDict()
     skipped = collections.Counter()
+    prefiltered = []
     for path in csv_paths:
         with open(path, newline="") as handle:
             for index, row in enumerate(csv.DictReader(handle), 2):
@@ -227,6 +231,12 @@ def prepare(csv_paths, run_id, size, dry_run):
                 if domain in researched:
                     skipped["researched_in_other_batch"] += 1
                     continue
+                why = prefilter.reason(domain, row) if use_prefilter else None
+                if why and domain not in leads:
+                    skipped[why] += 1
+                    prefiltered.append({"domain": domain, "reason": why, "source_sheet": Path(path).name,
+                                        "bucket": row.get("bucket"), "source_query": row.get("source_query")})
+                    continue
                 entry = leads.setdefault(domain, {"domain": domain, "source_rows": [], "supplied_urls": []})
                 entry["source_rows"].append({"source_row": index, "source_sheet": Path(path).name, **row})
                 entry["supplied_urls"] = list(dict.fromkeys(entry["supplied_urls"] + lead_urls(row)))
@@ -238,6 +248,7 @@ def prepare(csv_paths, run_id, size, dry_run):
     if dry_run or not selected:
         return
     run_dir.mkdir(parents=True)
+    write_json(run_dir / "prefiltered.json", prefiltered)
     for n, chunk in enumerate(batches, 1):
         bid = f"{run_id}-B{n:02d}"
         write_json(EXPORTS / bid / "batch-input.json", {
@@ -409,6 +420,7 @@ def main(argv=None):
     pr.add_argument("--run-id", required=True)
     pr.add_argument("--size", type=int, default=25)
     pr.add_argument("--dry-run", action="store_true")
+    pr.add_argument("--no-prefilter", action="store_true", help="keep wedding-bucket and business-name leads")
     for name in ("validate", "commit"):
         s = sub.add_parser(name)
         s.add_argument("run_dir")
@@ -417,7 +429,7 @@ def main(argv=None):
     if a.cmd == "exclusions":
         exclusions()
     elif a.cmd == "prepare":
-        prepare(a.csv, a.run_id, a.size, a.dry_run)
+        prepare(a.csv, a.run_id, a.size, a.dry_run, use_prefilter=not a.no_prefilter)
     elif a.cmd == "validate":
         directory, expected = batch_paths(Path(a.run_dir).resolve(), a.batch_id)
         main_rows, art = validate(directory, a.batch_id, expected)

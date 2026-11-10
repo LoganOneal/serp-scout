@@ -11,6 +11,7 @@ import {
   deferForPlanSpread,
   guestSerpNeighborhood,
   HHT_OPP_GUEST_SEED_KEYWORDS,
+  GUEST_REFILL_BUCKET_IDS,
   isGuestBucketId,
   isLegacyGuestDiscoveryKeyword,
   maxSerpResultOverlap,
@@ -128,7 +129,11 @@ export async function planGuestPostFrontier(
     const queued = (await loadFrontier(db)).keywords
       .filter((row) => row.status === 'NEW' && row.sourceType === GUEST_TEMPLATE_SOURCE).length
     if (queued < options.refillTemplates) {
-      const refill = await enqueueGuestTemplates(db, { limit: options.refillTemplates - queued, log })
+      const refill = await enqueueGuestTemplates(db, {
+        limit: options.refillTemplates - queued,
+        buckets: [...GUEST_REFILL_BUCKET_IDS],
+        log,
+      })
       plan.refill = { before: queued, queued: refill.queued.length, error: refill.error }
       if (refill.error) log(`Template refill: ${refill.error}`)
     } else {

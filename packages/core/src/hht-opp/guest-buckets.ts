@@ -45,6 +45,13 @@ export const GUEST_BUCKETS: Readonly<Record<GuestBucketId, GuestBucket>> = {
 
 export const GUEST_BUCKET_IDS = Object.keys(GUEST_BUCKETS) as GuestBucketId[]
 
+/**
+ * Buckets the automatic template refill draws from. Weddings is left out: of 390
+ * wedding-bucket leads evaluated 2026-11-08..09, none was PURSUE (mostly
+ * photographers and venues). It can still be run on purpose with --buckets=weddings.
+ */
+export const GUEST_REFILL_BUCKET_IDS: readonly GuestBucketId[] = GUEST_BUCKET_IDS.filter((id) => id !== 'weddings')
+
 export function isGuestBucketId(value: string | null | undefined): value is GuestBucketId {
   return value != null && Object.prototype.hasOwnProperty.call(GUEST_BUCKETS, value)
 }

@@ -71,7 +71,8 @@ STAGE_BUDGET_SECONDS = float(os.environ.get("HHT_STAGE_BUDGET", 90))
 SITEMAP_ROOTS = ("sitemap.xml", "sitemap_index.xml", "wp-sitemap.xml", "page-sitemap.xml")
 KEYWORDS = re.compile(
     r"write.for.us|guest.?post|guest.?blog|contribut|submission|submit|pitch|"
-    r"writer|become.a.blog|work.with|collaborat|partner|advertis|media.kit|press|contact|about",
+    r"writer|become.a.blog|work.with|collaborat|partner|advertis|media.kit|press|contact|about|"
+    r"get.featured|freelanc|guidelines",
     re.I,
 )
 FIELDS = (
@@ -97,7 +98,7 @@ CANDIDATE_PAGE = re.compile(
 # invitation page and its own text (navigation/footer lines shared with the
 # homepage removed) invites outside writers, gives a route, and is not closed.
 INVITE_PATH = re.compile(
-    r"write-?for|guest|contribut|submi|pitch|writers?(?:[-/_.]|$)|become-a|join-?us|work-?with|freelanc|"
+    r"write-?for|guest|contribut|submi|pitch|writers?(?:[-/_.]|$)|become-a|join-?us|work-?with|freelanc|get-?featured|"
     r"(?:editorial|writing|writer|submission|contributor)-?guidelines", re.I)
 POSITIVE = re.compile(
     r"write for us|guest[- ]post(?:ing)? (?:guidelines|policy|submissions?|application)|guest posts? (?:are )?welcome|"
@@ -118,6 +119,17 @@ NEGATIVE = re.compile(
     re.I)
 ROUTE = re.compile(r"@|\[at\]|\(at\)|e-?mail|form\b|send (?:us|your|it)|submit|contact us|reach out|apply|application", re.I)
 MIN_UNIQUE_TEXT = 200
+
+# Step 1.6 web-search gate (Kai, 2026-11-09). Across 767 evaluated leads, the web search
+# found the pitch page for only 2 PURSUE sites the on-site probes missed, and both
+# homepages read like publications. Searching only publication-like or unreadable
+# sites cut searches from 740 to about 120 per 767 leads with no PURSUE lost.
+PUBLICATION_SIGNAL = re.compile(
+    r"\bmagazine\b|\beditor(?:s|ial)?\b|\bstaff writer|\bour writers\b|\bcontributors?\b|\bjournalis|"
+    r"\bnewsroom\b|\bblogazine\b|\bpublication\b|\bmasthead\b|\bfreelanc", re.I)
+BUSINESS_SIGNAL = re.compile(
+    r"book now|check availability|request a quote|our packages|pricing|add to cart|reserve now|book your|"
+    r"inquire|investment starts|sessions? start", re.I)
 
 _INPUT = None
 
@@ -753,6 +765,22 @@ class Research:
 
     # ---- reporting ------------------------------------------------------------
 
+    def search_gate(self):
+        """(run_search, detail): only publication-like or unreadable sites get a web search."""
+        text = ""
+        for entry in self.site["search_log"]:
+            if (entry.get("purpose") or "").startswith("Step 0") and entry.get("result") == "ok" and entry.get("text_file"):
+                try:
+                    text += (ROOT / entry["text_file"]).read_text(errors="replace") + "\n"
+                except OSError:
+                    pass
+        if not text.strip():
+            return True, "homepage unreadable"
+        pub = sorted({m.group(0).lower() for m in PUBLICATION_SIGNAL.finditer(text)})
+        biz = sorted({m.group(0).lower() for m in BUSINESS_SIGNAL.finditer(text)})
+        detail = "publication signals %s; business signals %s" % (pub or "none", biz or "none")
+        return len(pub) >= 2 and len(biz) <= 1, detail
+
     def needs_search(self):
         """Why the Step 1.6 web searches are still required, or None."""
         if self.site.get("region_check") == "excluded":
@@ -827,6 +855,8 @@ def main(argv=None):
     parser.add_argument("--thorough", action="store_true", help="every playbook path, all root sitemaps, two web searches")
     parser.add_argument("--budget", type=float, default=STAGE_BUDGET_SECONDS,
                         help="seconds per domain per stage before the slow-site cap (0 disables)")
+    parser.add_argument("--all", action="store_true",
+                        help="needs-search: list every unresolved domain, ignoring the publication gate")
     parser.add_argument("--browser", action="store_true",
                         help="re-fetch refused, interstitial or JavaScript-only pages in headless Chrome")
     args = parser.parse_args(argv)
@@ -843,17 +873,27 @@ def main(argv=None):
             Research(d).overview()
         return 0
     if args.mode == "needs-search":
-        rows = []
+        rows, gated = [], []
         for d in domains:
-            reason = Research(d).needs_search()
+            research = Research(d)
+            reason = research.needs_search()
+            if reason and not args.all and not research.blocked:
+                run_search, detail = research.search_gate()
+                if not run_search:
+                    gated.append({"domain": d, "reason": reason, "gate": detail})
+                    print(d, "| gated out:", detail)
+                    continue
             if reason:
                 queries = ["site:%s write for us OR guest post OR contribute OR submissions" % d]
                 if args.thorough:
                     queries.append("%s guest post guidelines" % d)
                 rows.append({"domain": d, "reason": reason, "queries": queries})
                 print(d, "|", reason)
-        save(ROOT / "needs-search.json", {"generated_at": datetime.now().astimezone().isoformat(), "domains": rows})
-        print("%d of %d domains need the Step 1.6 web search" % (len(rows), len(domains)))
+        save(ROOT / "needs-search.json", {"generated_at": datetime.now().astimezone().isoformat(), "domains": rows,
+                                          "gated_out": gated,
+                                          "gate": "publication-like homepage or unreadable/blocked site; --all disables"})
+        print("%d of %d domains need the Step 1.6 web search (%d gated out as non-publications)"
+              % (len(rows), len(domains), len(gated)))
         return 0
 
     failures = 0

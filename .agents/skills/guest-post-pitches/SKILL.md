@@ -89,6 +89,28 @@ directory (or `HHT_BATCH_DIR=<batch dir>`). They read `batch-input.json`:
 robots rules, `Crawl-delay`, two-second per-host spacing, one retry and saved
 evidence. Domains run in parallel; `--jobs 12` is a good default.
 
+**Run-level fast path (Kai, 2026-11-09).** For a whole run, do not walk batches one
+at a time. `scripts/run_pipeline.py` runs the scripted steps for every pending batch
+at once and writes plans for fanning out the model work:
+
+- `run_pipeline.py research <run id>` runs steps 1 to 4 plus the gated
+  `needs-search` for all batches (6 batches at a time, `--parallel`), then writes
+  `<run>/search-plan.json`: the domains still needing a web search, in chunks of 40.
+  Give each chunk to its own search subagent (Sonnet is enough), all launched
+  together, with the prompt "Read
+  .agents/skills/guest-post-pitches/references/websearch-chunk-task.md and follow it
+  with RUN=<run dir> CHUNK=<n>". Searches inside
+  one agent stay one at a time, and the whole run is normally well under the
+  200-search turn cap.
+- `run_pipeline.py prep <run id>` preps every batch and writes `<run>/haiku-plan.json`.
+  Launch one Haiku subagent per prompt, all at once (at most 20 in flight).
+- `run_pipeline.py finish <run id>` fixes null routes, then merges and applies every
+  batch whose results are complete, and lists PURSUE sites for the writing step.
+- `run_pipeline.py status <run id>` shows where each batch is.
+
+The per-step commands below stay the reference and are what a single batch or a
+re-run of one domain uses.
+
 1. `research_tools.py seed --browser --jobs 12` fetches homepage, about and
    contact pages (`--browser` re-fetches refused or JavaScript-only pages in
    headless Chrome).
@@ -194,7 +216,15 @@ per call, and its rate limit (about 20 calls per minute) is shared by every lane
 - After `discover`, run `research_tools.py needs-search`. It writes
   `needs-search.json` with each listed domain's reason and its exact query.
   Domains with a confirmed on-site invitation, and region-excluded domains, are
-  not listed. Record those with
+  not listed. **Publication gate (Kai, 2026-11-09):** only sites whose homepage,
+  about or contact text reads like a publication (two or more signals such as
+  magazine, editor, contributors, staff writer, newsroom, freelance, and at most one
+  booking/pricing signal), plus blocked or unreadable sites, are listed. Others go
+  to `gated_out` with the signals found. Across 767 leads the web search found the
+  pitch page for only two PURSUE sites the on-site probes missed, both
+  publication-like, so the gate cut searches from 740 to about 120 with no PURSUE
+  lost. A gated-out site is still evaluated from its on-site evidence, and
+  `needs-search --all` restores the old behavior. Record those with
   `websearch_log.py skipped <domain> --invitation <URL>`.
 - Issue the listed queries in parallel, about 10 to 20 calls per turn, while
   `variants` runs in the background. Send exactly the listed query per domain,
@@ -249,11 +279,34 @@ Discovery does no LLM triage of its own: this skill decides every verdict.
 3. Immediately run `python3 scripts/run_tools.py prepare <the new guest CSVs> --run-id HHT-<label>-<date>`.
    Link-insertion rows are never evaluated here; they stay link-insertion leads.
    `prepare` dedupes against both tracker tabs, every researched batch and all
-   outreach history before research.
-4. Evaluate every batch with the scripted chain in "Fast research pipeline":
-   seed, `classify_batch.py region`, discover, variants, web searches,
-   `classify_batch.py prep`, Haiku subagents (at most 20 at once across the
-   run), `merge`, `apply`. Then write only the PURSUE sites with Opus (lanes, see
+   outreach history before research. It also applies `scripts/prefilter.py`
+   (Kai, 2026-11-09): wedding-bucket leads and business-type domain names
+   (photographers, venues, hotels, resorts, lodges, tours, rentals, studios) are
+   dropped unless the name looks like a publication (mag, news, journal, post,
+   press, guide...). Those were 491 of 1,787 evaluated leads with zero PURSUE.
+   Dropped domains are listed in `<run>/prefiltered.json`; `--no-prefilter` keeps them.
+   The automatic template refill no longer draws wedding keywords for the same
+   reason (`GUEST_REFILL_BUCKET_IDS`; `--buckets=weddings` still runs them on purpose).
+
+   **Backlink lane.** Sites that already link to a successful travel site from an
+   article are proven niche publishers, and the linking article is evidence for the
+   pitch. Pull a competitor's `backlinks` report through the Semrush MCP
+   (`target_type: root_domain`, `display_sort: page_authority_score_desc`,
+   `export_columns: page_authority_score, source_url, source_title, anchor, nofollow`;
+   about 40 units per row), save each response's `data` to a file, then run
+   `python3 scripts/backlink_leads.py <competitor> <files...>`. It drops the
+   competitor itself, OTAs and platforms, homepage/sitewide links (hotel "as
+   featured in" badges) and hotel booking pages, and writes
+   `exports/handoff/hht-guest-backlinks-<competitor>-<date>.csv` for `prepare`.
+   Pick competitors whose links come from articles, not from the hotels they review:
+   thehotelguru.com's top backlinks are mostly reviewed hotels and OTAs, and the
+   article links that survived the filters (storygrid.uk, irelandbulletin.com) were a
+   paid link-placement network (PAID_ONLY). Prefer competitors that earn bylined
+   guest posts, such as travel bloggers who write for other sites.
+4. Evaluate the whole run with `run_pipeline.py research`, the parallel search
+   agents from `search-plan.json`, `run_pipeline.py prep`, the Haiku agents from
+   `haiku-plan.json` (at most 20 at once) and `run_pipeline.py finish` (see "Fast
+   research pipeline"). Then write only the PURSUE sites with Opus (lanes, see
    below), re-checking each live guidelines page while drafting, and stage
    eligible step 1 drafts locally. Lanes never push independently: small waves generate unwanted email
    notifications. Wait until every lane is ready, then upload the whole discovery
