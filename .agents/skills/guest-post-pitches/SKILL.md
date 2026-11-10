@@ -305,14 +305,19 @@ Discovery does no LLM triage of its own: this skill decides every verdict.
    region, else city).
 
    **Feedspot lane (Kai, 2026-11-10; no Semrush).** Feedspot's ranked "Top N blogs"
-   lists are live blogs, the sites most likely to take a guest post. Of 197 Feedspot
-   blogs already in the tracker on 2026-11-10, 29 were PURSUE or PAID_ONLY (about
-   14%, against about 4% for SERP leads). Run
-   `python3 scripts/feedspot_leads.py --defaults` (or name list slugs such as
-   `texas_travel_blogs`), then `run_tools.py prepare` on the CSV it writes
-   (`exports/handoff/hht-guest-feedspot-<date>.csv`) and evaluate as usual. The
-   default set gave 634 blogs, 437 of them new. A slug Feedspot lacks is reported
-   (404) and skipped.
+   lists are live blogs. Run `python3 scripts/feedspot_leads.py --defaults` (or name
+   list slugs such as `texas_travel_blogs`), then `run_tools.py prepare` on the CSV it
+   writes (`exports/handoff/hht-guest-feedspot-<date>.csv`) and evaluate as usual. The
+   default set (21 lists) gave 707 blogs, 482 of them new to the tracker. Tourism
+   boards (visitX, Xtourism, travel+state) are dropped at import. A slug Feedspot lacks
+   is reported (404) and skipped.
+   Pilot (HHT-feedspot-eval-2026-11-10a, top 60 new by list count and rank): 57
+   evaluated, 2 PURSUE (loveandroad.com, nomadisbeautiful.com), 7 NEEDS_REVIEW,
+   about 3.5% pitchable, close to SERP's ~4% but with zero Semrush units. The top
+   ranks are famous blogs that often say they take no guest posts (bucketlistly,
+   dangerous-business, ytravelblog, bemytravelmuse); evaluate further down the ranks
+   next. Feedspot blogs already in the tracker before the lane existed were PURSUE or
+   PAID_ONLY 29 times out of 197, so the lower ranks may do better.
 
    **Lookalike and blogroll lanes: measured, not worth units.** `pnpm hht:lookalike`
    (organic competitors of PURSUE sites, guest-author bio links, blogroll links)

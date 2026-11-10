@@ -41,6 +41,16 @@ class FeedspotLeadsTest(unittest.TestCase):
         self.assertEqual(rows[0]["lead_type"], "guest_post")
         self.assertEqual(rows[0]["bucket"], "feedspot")
 
+    def test_tourism_boards_are_dropped(self):
+        html = ('<a class="ext" href="https://www.visitarizona.com/">a</a>'
+                '<a class="ext" href="https://iloveny.com/">b</a>'
+                '<a class="ext" href="https://www.travelnevada.com/">c</a>'
+                '<a class="ext" href="https://seemonterey.com/">d</a>'
+                '<a class="ext" href="https://roadtripsandcoffee.com/">e</a>')
+        leads, dropped = fs.build([("az", html)])
+        self.assertEqual(list(leads), ["roadtripsandcoffee.com"])
+        self.assertEqual(dropped["tourism_board"], 4)
+
     def test_empty_list_is_counted(self):
         _, dropped = fs.build([("x", "<html>no entries</html>")])
         self.assertEqual(dropped["empty_list"], 1)

@@ -49,6 +49,11 @@ SOCIAL = re.compile(
     r"(^|\.)(feedspot|facebook|instagram|twitter|x|pinterest|linkedin|youtube|tiktok|threads|reddit|"
     r"amazon|apple|google|spotify)\.", re.I)
 PER_SUBDOMAIN_HOSTS = ("substack.com", "blogspot.com", "wordpress.com")
+# Tourism boards (visitX.com, Xtourism.org, iloveny.com) sit on the state lists but never
+# take guest posts: 7 of the 57 pilot leads on 2026-11-10, all SKIP.
+TOURISM_BOARD = re.compile(
+    r"^visit[a-z-]+\.(com|org|net|us)$|tourism|cvb|\.gov$|^iloveny\.com$|"
+    r"^(travel|explore|discover|see)(alabama|alaska|arizona|arkansas|california|colorado|connecticut|delaware|florida|georgia|hawaii|idaho|illinois|indiana|iowa|kansas|kentucky|louisiana|maine|maryland|massachusetts|michigan|minnesota|mississippi|missouri|montana|nebraska|nevada|newhampshire|newjersey|newmexico|newyork|northcarolina|northdakota|ohio|oklahoma|oregon|pennsylvania|rhodeisland|southcarolina|southdakota|tennessee|texas|utah|vermont|virginia|washington|westvirginia|wisconsin|wyoming|monterey)\.(com|org|net|us)$", re.I)
 
 
 def host(url):
@@ -99,6 +104,9 @@ def build(pages):
                 dropped["social_or_platform"] += 1
                 continue
             domain = registrable(h)
+            if TOURISM_BOARD.search(domain):
+                dropped["tourism_board"] += 1
+                continue
             lead = leads.setdefault(domain, {"domain": domain, "urls": [], "lists": [], "best_rank": rank})
             lead["urls"].append(url)
             lead["lists"].append(slug)
