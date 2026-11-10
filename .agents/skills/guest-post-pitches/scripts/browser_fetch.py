@@ -11,15 +11,23 @@ Rules it keeps:
   If a challenge or CAPTCHA page is still showing after the page settles, the
   result stays "challenge" and the caller records it and moves on.
 
-One browser per worker thread (Playwright's sync API is not thread-safe).
+Each fetch runs in its own child process (python3 browser_fetch.py <url>) with a
+hard wall-clock limit, HHT_BROWSER_HARD_TIMEOUT_S (default 60s). Playwright's own
+timeouts do not cover page.content() or response.text(), and one stuck page once
+stalled a whole run for 37 minutes, so on timeout the child's process group,
+Chrome included, is killed and the fetch is recorded as an error.
 Enable with HHT_BROWSER_FALLBACK=1 or research_tools.py --browser.
 """
 
 from __future__ import annotations
 
 import atexit
+import json
 import os
 import re
+import signal
+import subprocess
+import sys
 import threading
 
 CHALLENGE = re.compile(
@@ -29,6 +37,7 @@ CHALLENGE = re.compile(
 )
 SETTLE_MS = int(os.environ.get("HHT_BROWSER_SETTLE_MS", 2500))
 NAV_TIMEOUT_MS = int(os.environ.get("HHT_BROWSER_TIMEOUT_MS", 25000))
+HARD_TIMEOUT_S = float(os.environ.get("HHT_BROWSER_HARD_TIMEOUT_S", 60))
 
 _local = threading.local()
 _all: list = []
@@ -64,12 +73,58 @@ def _close_all() -> None:
         _all.clear()
 
 
-def fetch(url: str) -> dict:
-    """Render url. Returns {status, content_type, html, final_url, result, error}."""
+def _descendants(root: int) -> list:
+    """Every live descendant pid of root (node driver, Chrome and its helpers)."""
+    try:
+        out = subprocess.run(["ps", "-A", "-o", "pid=,ppid="], capture_output=True, text=True, timeout=10).stdout
+    except Exception:
+        return []
+    children = {}
+    for line in out.splitlines():
+        parts = line.split()
+        if len(parts) == 2:
+            children.setdefault(int(parts[1]), []).append(int(parts[0]))
+    found, stack = [], [root]
+    while stack:
+        for child in children.get(stack.pop(), []):
+            found.append(child)
+            stack.append(child)
+    return found
+
+
+def fetch(url: str, hard_timeout: float | None = None) -> dict:
+    """Render url in a child process killed after hard_timeout seconds.
+
+    Returns {status, content_type, html, final_url, result, error}.
+    """
+    limit = HARD_TIMEOUT_S if hard_timeout is None else hard_timeout
+    proc = subprocess.Popen([sys.executable, os.path.abspath(__file__), url],
+                            stdout=subprocess.PIPE, stderr=subprocess.DEVNULL, start_new_session=True)
+    try:
+        out, _ = proc.communicate(timeout=limit)
+    except subprocess.TimeoutExpired:
+        # Playwright launches Chrome detached (its own process group), so killing the
+        # child's group is not enough: kill every descendant of the child as well.
+        for pid in [proc.pid] + _descendants(proc.pid):
+            try:
+                os.kill(pid, signal.SIGKILL)
+            except (ProcessLookupError, PermissionError):
+                pass
+        proc.communicate()
+        return {"result": "error", "error": "browser hard timeout after %.0fs (page hung; process killed)" % limit}
+    try:
+        return json.loads(out)
+    except ValueError:
+        return {"result": "error", "error": "browser child exited %s without a result" % proc.returncode}
+
+
+def fetch_in_process(url: str) -> dict:
+    """Render url in this process (used by the child; no wall-clock limit of its own)."""
     try:
         context = _browser().new_context(java_script_enabled=True)
     except Exception as exc:  # browser could not start
         return {"result": "browser_unavailable", "error": str(exc)}
+    context.set_default_timeout(NAV_TIMEOUT_MS)
     page = context.new_page()
     try:
         response = page.goto(url, wait_until="domcontentloaded", timeout=NAV_TIMEOUT_MS)
@@ -103,3 +158,9 @@ def fetch(url: str) -> dict:
             context.close()
         except Exception:
             pass
+
+
+if __name__ == "__main__":
+    result = fetch_in_process(sys.argv[1])
+    _close_all()
+    sys.stdout.write(json.dumps(result))

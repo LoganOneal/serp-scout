@@ -95,6 +95,12 @@ directory (or `HHT_BATCH_DIR=<batch dir>`). They read `batch-input.json`:
 robots rules, `Crawl-delay`, two-second per-host spacing, one retry and saved
 evidence. Domains run in parallel; `--jobs 12` is a good default.
 
+**Hard timeouts (Kai, 2026-11-10).** Each headless-browser fetch runs in its own child
+process and is killed with its Chrome after `HHT_BROWSER_HARD_TIMEOUT_S` (60s). A domain
+still running after `HHT_DOMAIN_HARD_CAP_S` (default max(300s, 3x the stage budget)) is
+logged as `ERROR HardTimeout` and abandoned with its saved progress, so one hung site
+cannot stall a run (one did for 37 minutes on 2026-11-10).
+
 **Run-level fast path (Kai, 2026-11-09).** For a whole run, do not walk batches one
 at a time. `scripts/run_pipeline.py` runs the scripted steps for every pending batch
 at once and writes plans for fanning out the model work:

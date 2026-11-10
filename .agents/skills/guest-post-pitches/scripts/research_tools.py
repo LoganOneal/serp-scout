@@ -25,7 +25,7 @@ import os
 import re
 import sys
 import time
-from concurrent.futures import ThreadPoolExecutor, as_completed
+from concurrent.futures import FIRST_COMPLETED, ThreadPoolExecutor, wait
 from datetime import datetime, timezone
 from html import unescape
 from html.parser import HTMLParser
@@ -897,9 +897,16 @@ def main(argv=None):
         return 0
 
     failures = 0
-    with ThreadPoolExecutor(max_workers=max(1, args.jobs)) as pool:
-        futures = {pool.submit(run_one, d, args): d for d in domains}
-        for future in as_completed(futures):
+    # Backstop: a domain still running after this many seconds is reported and
+    # abandoned, so one hung host cannot stall the batch (HHT_DOMAIN_HARD_CAP_S).
+    cap = float(os.environ.get("HHT_DOMAIN_HARD_CAP_S", 0)) or max(300.0, 3 * (args.budget or STAGE_BUDGET_SECONDS))
+    pool = ThreadPoolExecutor(max_workers=max(1, args.jobs))
+    futures = {pool.submit(run_one, d, args): d for d in domains}
+    started, pending = {}, set(futures)
+    while pending:
+        done, pending = wait(pending, timeout=5, return_when=FIRST_COMPLETED)
+        now = time.monotonic()
+        for future in done:
             domain = futures[future]
             try:
                 research, elapsed = future.result()
@@ -907,6 +914,19 @@ def main(argv=None):
             except Exception as exc:  # report per domain, keep the batch going
                 failures += 1
                 print("%s ERROR %s: %s" % (domain, type(exc).__name__, exc), flush=True)
+        for future in list(pending):
+            if future.running():
+                started.setdefault(future, now)
+                if now - started[future] > cap:
+                    pending.discard(future)
+                    failures += 1
+                    print("%s ERROR HardTimeout: still running after %.0fs; abandoned (saved progress kept)"
+                          % (futures[future], cap), flush=True)
+    abandoned = any(not f.done() for f in futures)
+    pool.shutdown(wait=not abandoned, cancel_futures=True)
+    if abandoned:  # hung worker threads cannot be joined; exit without waiting for them
+        sys.stdout.flush()
+        os._exit(1)
     return 1 if failures else 0
 
 
