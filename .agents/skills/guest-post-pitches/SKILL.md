@@ -327,6 +327,11 @@ Discovery does no LLM triage of its own: this skill decides every verdict.
    travel newsletters and small blogs. 18 new domains: 1 PURSUE (restless.co.uk Writers
    Corner, article-first), 17 skips (no invitation). Live rel checks matched Semrush.
    Substack newsletters are kept per subdomain (`PER_SUBDOMAIN_HOSTS`).
+   Next page (offset 124-223, page_ascore 13-16, 4,000 units) was nearly all junk:
+   Grokipedia, AI-written travel pages, Korean/Arabic aggregators, betting spam, Good
+   Hotel Guide, hotel homepages, plus big outlets already in the master. 2 new
+   domains, 0 PURSUE. A competitor's backlinks run out of value after roughly the top
+   125 dofollow rows by page authority; move to the next competitor there.
 4. Evaluate the whole run with `run_pipeline.py research`, the parallel search
    agents from `search-plan.json`, `run_pipeline.py prep`, the Haiku agents from
    `haiku-plan.json` (at most 20 at once) and `run_pipeline.py finish` (see "Fast
