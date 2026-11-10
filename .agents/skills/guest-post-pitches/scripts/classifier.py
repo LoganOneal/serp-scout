@@ -28,6 +28,7 @@ CODES = [
     "SKIP_CLOSED",
     "SKIP_STAFF_ROLE",
     "SKIP_NO_COMPANIES",
+    "SKIP_NO_DOFOLLOW",
     "SKIP_MISALIGNED",
     "SKIP_DEAD",
     "SKIP_INACTIVE",
@@ -62,6 +63,7 @@ G1b Invitation: some page or explicit sentence invites outside writers to submit
 G2 Open: the invitation explicitly says closed, paused, not accepting, invite only -> SKIP / SKIP_CLOSED.
 G3 Staff only: the route is recruiting staff/team writers, assigned topics only, or says not for guest posts -> SKIP / SKIP_STAFF_ROLE. An open freelance pitch to an editor is NOT a fail (lean PURSUE).
 G4 Companies: explicitly excludes businesses, brands, PR or SEO agencies -> SKIP / SKIP_NO_COMPANIES, or PAID_ONLY (code null) when businesses are sent to a priced sponsored/advertising route. Restricting promotional links inside articles is not a fail.
+G4b Links: the guidelines explicitly say contributor links are nofollow, sponsored or ugc tagged, byline or author credit only with no link, or that no links to the writer's own site are allowed -> SKIP / SKIP_NO_DOFOLLOW. Only a dofollow link has value to Claire. A site silent on links passes, and so does one that bans commercial or promotional links in the body but still gives an author bio link.
 G5 Fit: fail only when clearly no travel/lodging/lifestyle piece from Claire could serve the readers (unrelated subject, hostel backpackers in Asia only, video-only) -> SKIP / SKIP_MISALIGNED. Tone mismatch, regional focus, family or women audiences, company blogs are NOT failures.
 G6 Dead: parked domain, errors, no content -> SKIP / SKIP_DEAD.
 G6b Activity: use the "Activity check" line at the top, which code computed from dates printed on the pages. If it says the newest date is within 6 months of the triage date, the site is active; do not override it by reading dates yourself. Only when it says "no dates found" may you look for dated posts; if none are within 6 months -> SKIP / SKIP_INACTIVE. Ignore copyright years.

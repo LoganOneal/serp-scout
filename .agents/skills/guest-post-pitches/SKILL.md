@@ -23,6 +23,12 @@ the playbook's research, hard gates, evidence, activity, angle quality, Claire
 profile, writing style, word-count validation, sign-off, reviewer-note, API,
 duplicate handling, and no-send requirements.
 
+Dofollow only (Kai, 2026-11-09): a site whose guidelines explicitly say contributor
+links are nofollow, sponsored or ugc tagged, byline or author credit only, or not
+allowed fails gate G4b (`SKIP_NO_DOFOLLOW`), whatever the publisher's reputation. A
+site silent on links passes. Opus writers re-check this on the guideline page before
+writing a pitch.
+
 This skill replaces the supplied playbook's Google storage and routing
 requirements, and its embedded fallback credential, with the local rules below.
 When the reference says Google Sheet, Google Doc, Drive folder, Doc-only, or

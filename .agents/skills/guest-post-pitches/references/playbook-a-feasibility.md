@@ -55,12 +55,13 @@ Stop at the first gate that fails. Quote the exact wording that triggered it.
 | G2 Open? | Page explicitly says closed, paused, not accepting, invite only, or check back later | SKIP_CLOSED |
 | G3 One-off guest posts possible? | The route is explicitly a staff or team role, recruitment of paid team writers, assigned topics from an editorial calendar, or states "not for guest posts or sponsored posts". An open on-spec freelance pitch to an editor is a fence case, not a fail: lean PURSUE if an angle fits their stated sections and geography. | SKIP_STAFF_ROLE |
 | G4 Companies allowed? | Page explicitly excludes businesses, brands, PR or SEO agencies and sends them elsewhere | SKIP_NO_COMPANIES, or PAID_ONLY if the redirect is a priced sponsored-post or advertising route |
+| G4b Dofollow link? | Guidelines explicitly say contributor links are nofollow, sponsored/ugc tagged, byline or author credit only, or no link to the writer's site. Silent on links passes; a ban on commercial links in the body that still allows a bio link passes. Kai, 2026-11-09: only dofollow links have value. | SKIP_NO_DOFOLLOW |
 | G5 Fundamental fit | See below | SKIP_MISALIGNED |
 | G6 Site is dead | Domain parked, persistent errors, or no content | SKIP_DEAD |
 | G6b Recently active? | No dated evidence of activity (a post, an owner reply to a comment, or a linked social post) in the 6 months before the triage date. Metadata dates do not count. | SKIP_INACTIVE |
 | G7 Reachable? | The site invites guest posts but no form, email (including a masked or obfuscated one) or contact route for submitting was found after every step in Step 1 | NEEDS_REVIEW |
 
-A page being silent about companies is NOT a failure. It passes G4 and is noted as `corporate_stance = unstated`. A page that only restricts commercial, promotional or sponsored links inside the article (without excluding businesses or sending them elsewhere) is not a G4 failure either: record it in `link_policy` and `restrictions`, and it goes into the reviewer note (see Part C), but it is not a skip reason and the pitch does not respond to it.
+A page being silent about companies is NOT a failure. It passes G4 and is noted as `corporate_stance = unstated`. A page that only restricts commercial, promotional or sponsored links inside the article (without excluding businesses or sending them elsewhere) is not a G4 failure either: record it in `link_policy` and `restrictions`, and it goes into the reviewer note (see Part C), but it is not a skip reason and the pitch does not respond to it. A stated nofollow, byline-only or no-link policy is different: that fails G4b.
 
 #### G5. Fundamental fit (subjective, but must be justified in writing)
 
@@ -75,7 +76,7 @@ These are NOT failures: a mismatch in tone (reframe the angle), a regional restr
 
 ### Step 3. Record soft signals (never disqualify on these)
 
-- Link policy: dofollow, nofollow, byline-only, none stated, links removed, or commercial or promotional links not accepted (quote the wording).
+- Link policy: dofollow, nofollow, byline-only, none stated, links removed, or commercial or promotional links not accepted (quote the wording). A stated nofollow, byline-only or no-link policy is a G4b skip, not a soft signal.
 - Payment: unpaid, paid to the writer, or fee charged to the contributor (record the amount).
 - Commercial site: a company, tour operator, OTA or hotel blog is fine. Record it.
 - Requirements: word count, number of images, exclusivity, original-only, response time, pitch-first versus article-first and how the article is delivered (pasted in the email text, attached, linked, or form), "must have an active blog".

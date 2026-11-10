@@ -95,6 +95,11 @@ class ClassifyBatchTest(unittest.TestCase):
     def test_rules_file_is_the_classifier_prompt(self):
         self.assertTrue(cb.RULES.read_text().startswith(classifier.SYSTEM))
 
+    def test_no_dofollow_skip_code_is_valid(self):
+        row = dict(self.good_rows()[0], verdict="SKIP", code="SKIP_NO_DOFOLLOW")
+        self.assertEqual(cb.check_row(row), [])
+        self.assertIn("G4b Links", cb.RULES.read_text())
+
     def test_region_prescreen(self):
         rec = self.record("guestblog.example")
         rec["region_check"] = "unclear"
