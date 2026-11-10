@@ -292,8 +292,11 @@ Discovery does no LLM triage of its own: this skill decides every verdict.
    article are proven niche publishers, and the linking article is evidence for the
    pitch. Pull a competitor's `backlinks` report through the Semrush MCP
    (`target_type: root_domain`, `display_sort: page_authority_score_desc`,
-   `export_columns: page_authority_score, source_url, source_title, anchor, nofollow`;
-   about 40 units per row), save each response's `data` to a file, then run
+   `export_columns: page_authority_score, source_url, source_title, anchor, nofollow`,
+   and dofollow links only: `display_filter: [{"field": "type", "operation": "equals",
+   "value": "follow", "sign": "+"}]`; about 40 units per row). Kai (2026-11-09): only
+   dofollow links have value, and a dofollow link to a competitor is the best evidence
+   that a site gives dofollow links. The importer also drops any nofollow row, save each response's `data` to a file, then run
    `python3 scripts/backlink_leads.py <competitor> <files...>`. It drops the
    competitor itself, OTAs and platforms, homepage/sitewide links (hotel "as
    featured in" badges) and hotel booking pages, and writes

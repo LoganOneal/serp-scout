@@ -17,6 +17,10 @@ tracker exclusions). Dropped here, with counts printed:
   - homepage or sitewide links (hotel "as featured in" badges, footers)
   - hotel/booking pages (titles or paths about rooms, rates, booking, a property)
   - pages under --min-ascore
+  - nofollow links (Kai, 2026-11-09: only dofollow links have value; a dofollow link to a
+    competitor is the best evidence a site gives dofollow links). Pull with
+    display_filter [{"field": "type", "operation": "equals", "value": "follow", "sign": "+"}]
+    so nofollow rows are never paid for; --keep-nofollow disables this check.
 """
 import argparse
 import csv
@@ -59,10 +63,12 @@ def rows_from(path):
     return list(csv.DictReader(io.StringIO(text), delimiter=delim))
 
 
-def drop_reason(row, competitor, min_ascore):
+def drop_reason(row, competitor, min_ascore, keep_nofollow=False):
     url = (row.get("source_url") or "").strip()
     if not url.startswith("http"):
         return "no_source_url"
+    if not keep_nofollow and str(row.get("nofollow", "")).strip().lower() in ("true", "1", "yes"):
+        return "nofollow"
     h = host(url)
     if h == competitor or h.endswith("." + competitor):
         return "competitor_itself"
@@ -82,12 +88,12 @@ def drop_reason(row, competitor, min_ascore):
     return None
 
 
-def build(competitor, paths, min_ascore):
+def build(competitor, paths, min_ascore, keep_nofollow=False):
     competitor = competitor.lower().removeprefix("www.")
     leads, dropped = OrderedDict(), Counter()
     for path in paths:
         for row in rows_from(path):
-            why = drop_reason(row, competitor, min_ascore)
+            why = drop_reason(row, competitor, min_ascore, keep_nofollow)
             if why:
                 dropped[why] += 1
                 continue
@@ -106,8 +112,9 @@ def main(argv=None):
     p.add_argument("exports", nargs="+")
     p.add_argument("--min-ascore", type=int, default=10)
     p.add_argument("--out")
+    p.add_argument("--keep-nofollow", action="store_true")
     a = p.parse_args(argv)
-    leads, dropped = build(a.competitor, a.exports, a.min_ascore)
+    leads, dropped = build(a.competitor, a.exports, a.min_ascore, a.keep_nofollow)
     slug = re.sub(r"[^a-z0-9]+", "-", a.competitor.lower()).strip("-")
     out = Path(a.out) if a.out else HANDOFF / f"hht-guest-backlinks-{slug}-{date.today().isoformat()}.csv"
     out.parent.mkdir(parents=True, exist_ok=True)
