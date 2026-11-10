@@ -50,7 +50,13 @@ def host(url):
     return (urlsplit(url).hostname or "").lower().removeprefix("www.")
 
 
+# Hosts where each subdomain is its own publication (a Substack newsletter is not substack.com).
+PER_SUBDOMAIN_HOSTS = ("substack.com",)
+
+
 def registrable(hostname):
+    if any(hostname.endswith("." + h) for h in PER_SUBDOMAIN_HOSTS):
+        return hostname
     parts = hostname.split(".")
     if len(parts) >= 3 and len(parts[-1]) == 2 and parts[-2] in ("co", "com", "org", "net", "ac", "gov"):
         return ".".join(parts[-3:])

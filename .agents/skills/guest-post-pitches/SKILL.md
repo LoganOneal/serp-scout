@@ -321,6 +321,12 @@ Discovery does no LLM triage of its own: this skill decides every verdict.
    "operation": "contains", "value": "yahoo", "sign": "-"}`, same for bing and
    pinterest). The `type` filter needs `"operation": ""`; "equals" is rejected. This
    lane is not worth more units until a competitor with real guest-post links is found.
+   thehotelguru.com pull (2026-11-10, about 6,000 units, dofollow only, search engines,
+   Pinterest and OTAs excluded): newest-first rows are mostly spam; page-authority rows
+   past the top 24 are mostly Good Hotel Guide reviews and hotels, plus ~10 Substack
+   travel newsletters and small blogs. 18 new domains: 1 PURSUE (restless.co.uk Writers
+   Corner, article-first), 17 skips (no invitation). Live rel checks matched Semrush.
+   Substack newsletters are kept per subdomain (`PER_SUBDOMAIN_HOSTS`).
 4. Evaluate the whole run with `run_pipeline.py research`, the parallel search
    agents from `search-plan.json`, `run_pipeline.py prep`, the Haiku agents from
    `haiku-plan.json` (at most 20 at once) and `run_pipeline.py finish` (see "Fast
