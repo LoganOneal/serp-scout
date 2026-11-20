@@ -18,6 +18,7 @@ agent fan out the model work (web search, Haiku) in parallel.
 """
 import argparse
 import json
+import os
 import re
 import subprocess
 import sys
@@ -25,7 +26,8 @@ from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
 SCRIPTS = Path(__file__).resolve().parent
-EXPORTS = SCRIPTS.parents[3] / "exports" / "guest-post-outreach"
+# HHT_EXPORTS keeps a separate lead set (e.g. Ryokan Society) out of the HHT exports tree.
+EXPORTS = Path(os.environ.get("HHT_EXPORTS", SCRIPTS.parents[3] / "exports" / "guest-post-outreach"))
 PY = sys.executable
 
 

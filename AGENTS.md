@@ -16,3 +16,10 @@ separately. Follow the skill's "Chained after hht-opp discovery" section:
   going until Semrush units run out (`no_api_units`) or something genuinely needs
   Kai (disk full, Google Ads or outreach auth down, a decision only Kai can make),
   then give one combined report covering every batch.
+
+## Ryokan Society is a separate lead set
+
+Any work for Ryokan Society (ryokansociety.com: leads, Semrush pulls, pitches as Kai)
+follows `.agents/skills/ryokan-guest-posts/SKILL.md`, not the HHT rules above. Never
+use Claire or the HHT campaign for it, never push or send its drafts, and never run
+`run_tools.py exclusions` or `commit` with the Ryokan environment.

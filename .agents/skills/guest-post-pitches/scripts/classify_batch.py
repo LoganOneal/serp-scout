@@ -24,6 +24,7 @@ Runs after research_tools.py seed / region / discover / variants. No network.
 import argparse
 import csv
 import json
+import os
 import re
 import shutil
 import sys
@@ -34,7 +35,8 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 import classifier  # noqa: E402
 
 SKILL_DIR = Path(__file__).resolve().parent.parent
-RULES = SKILL_DIR / "references" / "haiku-rules.txt"
+# HHT_HAIKU_RULES points a separate lead set (e.g. Ryokan Society) at its own author and fit rules.
+RULES = Path(os.environ.get("HHT_HAIKU_RULES") or SKILL_DIR / "references" / "haiku-rules.txt")
 BATCH_SIZE = 18
 KEYS = ["domain", "verdict", "code", "pitch_url", "route", "contact", "submission_stage",
         "last_activity_date", "evidence_quote", "confidence"]
