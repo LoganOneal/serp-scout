@@ -209,6 +209,29 @@ class ResearchToolsTest(unittest.TestCase):
         self.assertNotIn("/press-kit", self.site.hits)
         self.assertIsNone(r.needs_search())
 
+    def test_raw_body_kept_only_for_robots_and_sitemaps(self):
+        smap = ('<?xml version="1.0"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'
+                "<url><loc>{o}/write-for-examplemom</loc></url></urlset>")
+        self.serve({"/write-for-examplemom": (200, GUIDE, "text/html")})
+        self.site.routes["/page-sitemap.xml"] = (200, smap.replace("{o}", self.site.origin), "application/xml")
+        r = self.run_all()
+        self.assertEqual(r.site["invitation_candidates"][0]["url"], self.site.origin + "/write-for-examplemom")
+        kept = {rt.urlsplit(e["url"]).path for e in r.site["search_log"] if e.get("raw_file")}
+        self.assertEqual(kept, {"/robots.txt", "/page-sitemap.xml"})
+        self.assertEqual(len(list((rt.ROOT / "evidence").rglob("*.html"))), 2)
+        ok = [e for e in r.site["search_log"] if e.get("result") == "ok"]
+        self.assertTrue(ok and all((rt.ROOT / e["text_file"]).exists() for e in ok))
+
+    def test_resume_refetches_robots_when_raw_was_deleted(self):
+        self.serve({"/write-for-us": (200, GUIDE, "text/html")})
+        self.run_all()
+        for p in (rt.ROOT / "evidence").rglob("*.html"):
+            p.unlink()
+        before = self.site.hits.count("/robots.txt")
+        policy = rt.Research(DOMAIN).policy(self.site.origin + "/")
+        self.assertIsNotNone(policy)
+        self.assertEqual(self.site.hits.count("/robots.txt"), before + 1)
+
     def test_redirect_loop_is_logged_not_raised(self):
         import types
         self.serve({})

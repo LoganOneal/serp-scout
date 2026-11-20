@@ -182,6 +182,37 @@ def needs_browser(entry, raw, text):
     return False
 
 
+def looks_like_html(body):
+    lowered = body.lower()
+    return "<html" in lowered or "<!doctype html" in lowered
+
+
+def keep_raw(entry, path, body):
+    """Save the raw body only when it is not HTML (robots.txt, XML sitemaps).
+
+    Page text already lives in the .txt file and nothing rereads raw HTML; it
+    was ~80% of a batch's disk. Readers treat a missing raw_file as HTML.
+    """
+    if looks_like_html(body):
+        path.unlink(missing_ok=True)
+        entry.pop("raw_file", None)
+        return
+    path.write_text(body)
+    entry["raw_file"] = str(path.relative_to(ROOT))
+
+
+def raw_lost(entry):
+    """A raw file was recorded but has since been deleted from disk."""
+    return bool(entry.get("raw_file")) and not (ROOT / entry["raw_file"]).exists()
+
+
+def saved_raw(entry):
+    """The saved non-HTML body, or None when the body was HTML or is gone."""
+    if not entry.get("raw_file") or raw_lost(entry):
+        return None
+    return (ROOT / entry["raw_file"]).read_text()
+
+
 def save(path, data):
     path.parent.mkdir(parents=True, exist_ok=True)
     tmp = path.with_suffix(path.suffix + ".tmp")
@@ -314,8 +345,7 @@ class Research:
                 directory.mkdir(parents=True, exist_ok=True)
                 html_path, text_path = directory / (key + ".html"), directory / (key + ".txt")
                 self.browser_retry(url, entry, html_path, text_path)
-                if entry.get("text_file") is None and html_path.exists():
-                    entry.update(raw_file=str(html_path.relative_to(ROOT)), text_file=str(text_path.relative_to(ROOT)))
+                if entry.get("text_file"):
                     self.site["fetched_text_references"].append(entry["text_file"])
             self.site["search_log"].append(entry)
             self.checkpoint()
@@ -333,10 +363,9 @@ class Research:
         directory.mkdir(parents=True, exist_ok=True)
         html_path = directory / (key + ".html")
         text_path = directory / (key + ".txt")
-        html_path.write_text(raw)
+        keep_raw(entry, html_path, raw)
         text_path.write_text("URL: " + url + "\nHTTP: " + str(response.status_code) + "\n\n" + text)
         entry.update(
-            raw_file=str(html_path.relative_to(ROOT)),
             text_file=str(text_path.relative_to(ROOT)),
             text_characters=len(text),
             links=list(dict.fromkeys(u for u in (safe_join(url, link) for link in parser.links) if u)),
@@ -371,9 +400,10 @@ class Research:
         parser = Page()
         parser.feed(rendered["html"])
         text = parser.content()
-        html_path.write_text(rendered["html"])
+        keep_raw(entry, html_path, rendered["html"])
         text_path.write_text("URL: " + url + "\nHTTP: " + str(rendered.get("status")) + " (browser)\n\n" + text)
         entry.update(
+            text_file=str(text_path.relative_to(ROOT)),
             status=rendered.get("status"), content_type=rendered.get("content_type"),
             text_characters=len(text), result=rendered["result"],
             links=list(dict.fromkeys(u for u in (safe_join(url, link) for link in parser.links) if u)),
@@ -386,7 +416,7 @@ class Research:
         if origin in self.policies:
             return self.policies[origin]
         robots_url = origin + "/robots.txt"
-        prior = next((e for e in self.site["search_log"] if e["url"] == robots_url and e["result"] not in ("local_tool_error", "error")), None)
+        prior = next((e for e in self.site["search_log"] if e["url"] == robots_url and e["result"] not in ("local_tool_error", "error") and not raw_lost(e)), None)
         entry = prior or self.raw(robots_url, "robots policy")
         if entry["result"] == "error" and not prior:
             entry = self.raw(robots_url, "robots policy (one same-URL transient-error retry)")
@@ -402,8 +432,8 @@ class Research:
         if entry.get("status") in (404, 410):
             parser.parse([])
         elif entry.get("result") == "ok":
-            raw = (ROOT / entry["raw_file"]).read_text()
-            if "<html" in raw.lower() or "<!doctype html" in raw.lower():
+            raw = saved_raw(entry)
+            if raw is None or looks_like_html(raw):
                 self.policies[origin] = None
                 return None
             parser.parse(raw.splitlines())
@@ -669,8 +699,11 @@ class Research:
         self.variants(full=full)
 
     def sitemap_entries(self, entry):
-        raw = (ROOT / entry["raw_file"]).read_text()
-        if "<html" in raw.lower() or "<!doctype html" in raw.lower():
+        if raw_lost(entry):
+            entry["sitemap_result"] = "raw sitemap no longer on disk; not re-read"
+            return None, []
+        raw = saved_raw(entry)
+        if raw is None or looks_like_html(raw):
             entry["sitemap_result"] = "HTML page, not a sitemap"
             return None, []
         try:
