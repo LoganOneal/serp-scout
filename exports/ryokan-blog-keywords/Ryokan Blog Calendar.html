@@ -1,0 +1,235 @@
+<title>Ryokan Society Blog Calendar</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@500;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: a single column ledger, one week per band, posts as rows; detail expands in place. Indigo (aizome) ink on washi paper. */
+:root {
+  --paper: #f6f6f3; --surface: #ffffff; --ink: #1d2433; --muted: #5f6676; --line: #dcdfe5;
+  --indigo: #2b4a8b; --indigo-soft: #e6ebf5; --moss: #3d7a4f; --moss-soft: #e3f0e6;
+  --amber: #9a6a12; --amber-soft: #f6ecd8; --rust: #a5432f; --rust-soft: #f6e3de;
+  --display: "Shippori Mincho", "Hiragino Mincho ProN", Georgia, serif;
+  --body: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --paper: #12151c; --surface: #191d27; --ink: #e6e8ee; --muted: #9aa1b0; --line: #2b3140;
+  --indigo: #8fa9e0; --indigo-soft: #1f2a42; --moss: #7fc394; --moss-soft: #1b2e22;
+  --amber: #e0b462; --amber-soft: #33291a; --rust: #e8907d; --rust-soft: #3a221d; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --paper: #12151c; --surface: #191d27; --ink: #e6e8ee; --muted: #9aa1b0; --line: #2b3140;
+  --indigo: #8fa9e0; --indigo-soft: #1f2a42; --moss: #7fc394; --moss-soft: #1b2e22;
+  --amber: #e0b462; --amber-soft: #33291a; --rust: #e8907d; --rust-soft: #3a221d; color-scheme: dark }
+body { background: var(--paper); color: var(--ink); font-family: var(--body); font-size: 14px; line-height: 1.5; }
+.wrap { max-width: 1080px; margin: 0 auto; padding-block: 28px 64px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); display: grid; gap: 28px; }
+h1 { font-family: var(--display); font-weight: 700; font-size: clamp(26px, 4vw, 36px); margin: 0; letter-spacing: .01em; text-wrap: balance; }
+h2 { font-family: var(--display); font-weight: 700; font-size: 20px; margin: 0 0 10px; text-wrap: balance; }
+.lede { color: var(--muted); max-width: 68ch; margin: 8px 0 0; }
+.controls { display: flex; flex-wrap: wrap; gap: 12px 20px; align-items: end; background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 14px 16px; }
+.field { display: grid; gap: 4px; }
+.field label, .eyebrow { font-size: 11px; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); font-weight: 600; }
+select, input[type="date"] { font: inherit; color: var(--ink); background: var(--paper); border: 1px solid var(--line); border-radius: 6px; padding: 6px 8px; }
+select:focus-visible, input:focus-visible, button:focus-visible { outline: 2px solid var(--indigo); outline-offset: 2px; }
+.stats { display: flex; flex-wrap: wrap; gap: 6px 20px; margin-left: auto; font-size: 13px; color: var(--muted); }
+.stats b { color: var(--ink); font-variant-numeric: tabular-nums; font-weight: 600; }
+.legend { display: flex; flex-wrap: wrap; gap: 8px 16px; font-size: 12px; color: var(--muted); align-items: center; }
+.week { display: grid; gap: 0; }
+.week-head { display: flex; justify-content: space-between; align-items: baseline; padding: 0 2px 6px; border-bottom: 2px solid var(--ink); }
+.week-head .w { font-family: var(--display); font-weight: 700; font-size: 16px; }
+.week-head .r { font-size: 12px; color: var(--muted); font-variant-numeric: tabular-nums; }
+.post { border-bottom: 1px solid var(--line); }
+.row { display: grid; grid-template-columns: 92px minmax(0, 1fr) 270px; gap: 12px 16px; padding: 12px 2px; width: 100%; text-align: left; background: none; border: 0; color: inherit; font: inherit; cursor: pointer; }
+.row:hover { background: var(--surface); }
+.date { font-family: var(--mono); font-size: 12px; color: var(--muted); padding-top: 2px; font-variant-numeric: tabular-nums; }
+.date b { display: block; color: var(--ink); font-weight: 500; font-size: 13px; }
+.main { min-width: 0; display: grid; gap: 4px; }
+.title { font-weight: 600; font-size: 15px; }
+.kw { font-family: var(--mono); font-size: 12.5px; color: var(--indigo); background: var(--indigo-soft); padding: 1px 6px; border-radius: 4px; justify-self: start; overflow-wrap: anywhere; }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.chip { font-size: 11.5px; padding: 1px 7px; border-radius: 999px; border: 1px solid var(--line); color: var(--muted); white-space: nowrap; }
+.chip.ok { color: var(--moss); background: var(--moss-soft); border-color: transparent; }
+.chip.reach { color: var(--indigo); background: var(--indigo-soft); border-color: transparent; }
+.chip.split { color: var(--amber); background: var(--amber-soft); border-color: transparent; }
+.chip.late { color: var(--rust); background: var(--rust-soft); border-color: transparent; }
+.nums { display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; align-content: start; font-variant-numeric: tabular-nums; }
+.num { display: grid; gap: 1px; text-align: right; }
+.num span { font-size: 10.5px; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); }
+.num b { font-family: var(--mono); font-weight: 500; font-size: 14px; }
+.kd-easy { color: var(--moss); } .kd-possible { color: var(--ink); } .kd-harder { color: var(--amber); } .kd-hard { color: var(--rust); }
+.detail { padding: 4px 2px 18px 108px; display: grid; gap: 10px; }
+.detail p { margin: 0; max-width: 72ch; }
+.verdict { font-size: 13px; }
+.note { font-size: 13px; color: var(--muted); }
+.tbl { overflow-x: auto; }
+table { border-collapse: collapse; font-size: 12.5px; min-width: 460px; }
+th, td { padding: 5px 12px 5px 0; text-align: right; border-bottom: 1px solid var(--line); font-variant-numeric: tabular-nums; }
+th { font-size: 10.5px; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); font-weight: 600; }
+th:first-child, td:first-child { text-align: left; }
+td:first-child { font-family: var(--mono); }
+tr.is-target td { font-weight: 600; color: var(--indigo); }
+tr.is-max-s td:nth-child(2), tr.is-max-g td:nth-child(3) { text-decoration: underline; text-decoration-color: var(--moss); text-underline-offset: 3px; }
+.guide { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; }
+.guide section { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 16px 18px; }
+.guide ul { margin: 0; padding-left: 18px; display: grid; gap: 6px; }
+.guide p { margin: 0 0 8px; }
+@media (max-width: 720px) {
+  .row { grid-template-columns: 1fr; gap: 6px; }
+  .date b { display: inline; margin-right: 6px; }
+  .nums { justify-content: start; grid-template-columns: repeat(4, auto); gap: 4px 20px; }
+  .num { text-align: left; }
+  .detail { padding-left: 2px; }
+  .stats { margin-left: 0; }
+}
+@media (prefers-reduced-motion: no-preference) { .row { transition: background .15s; } }
+</style>
+
+<div class="wrap">
+  <header>
+    <div class="eyebrow">Ryokan Society · blog plan · keywords checked 19 Nov 2026, revised 21 Nov</div>
+    <h1>Ryokan Society Blog Calendar</h1>
+    <p class="lede">35 posts, each with one target keyword checked against every common phrasing in two sources. Google Ads gives the US search volume for the keyword and Google's close variants combined. Semrush gives exact-phrase US volume and Keyword Difficulty (KD). Tap a post to see every variant compared.</p>
+    <p class="lede">Order: highest priority score first. Score = Semrush volume ÷ (KD + 10), so volume counts for more when the keyword is easy. The +10 stops a tiny KD-7 keyword from jumping the queue. Exception: Yukata ranks top on score, but most of those searches are people buying one, so it goes last.</p>
+    <p class="lede">Revised 21 Nov: three posts that targeted booking searches (onsen ryokan, where to stay in Kyoto, private onsen) were dropped, because the site's own booking pages should rank for those. Two were replaced with planning keywords: Gion, Kyoto and the Hakone Free Pass. Semrush was out of units, so those two show Google volume only, with no KD or score yet.</p>
+  </header>
+
+  <div class="controls">
+    <div class="field"><label for="cadence">Posts per week</label>
+      <select id="cadence">
+        <option value="1">1 (Tue)</option>
+        <option value="2" selected>2 (Tue, Thu)</option>
+        <option value="3">3 (Mon, Wed, Fri)</option>
+        <option value="5">5 (weekdays)</option>
+      </select></div>
+    <div class="field"><label for="start">Start week of</label><input type="date" id="start" value="2026-11-23"></div>
+    <div class="stats" id="stats"></div>
+  </div>
+
+  <div class="legend">
+    <span class="chip ok">Biggest variant</span> the target beats every phrasing in both sources
+    <span class="chip reach">Biggest reachable</span> only much harder head terms are bigger
+    <span class="chip split">Judgment call</span> one source ranks another phrasing higher; see detail
+    <span class="chip late">At peak</span> publishes within a month of its yearly search peak, so it will mostly rank in time for next year
+  </div>
+
+  <main id="cal"></main>
+
+  <div class="guide">
+    <section>
+      <h2>How often to post</h2>
+      <p>Google doesn't reward a posting schedule. It ranks pages that answer the search better than what's already there. Frequency only matters because it decides how much good work gets done.</p>
+      <ul>
+        <li><b>One a day is the most worth publishing.</b> More than that gives no ranking benefit, and each post gets less internal linking and promotion.</li>
+        <li><b>2 a week is the sustainable default</b> for a newer site where each post needs real research, fact checks against the site's own pages, and Kai's review.</li>
+        <li><b>Don't bulk-publish.</b> Dozens of similar AI-assisted pages at once is the pattern Google's scaled-content spam policy targets. Steady, distinct, useful posts are safe.</li>
+        <li><b>Consistency beats bursts.</b> A steady pace gets new pages crawled sooner and lets you see which topics rank before writing more of them.</li>
+      </ul>
+    </section>
+    <section>
+      <h2>How to read the numbers</h2>
+      <ul>
+        <li><b>Google</b>: Google Ads Keyword Planner, US, 12-month average. It groups close variants, so "onsen japan" and "japanese onsen" show the same number.</li>
+        <li><b>Semrush</b>: exact-phrase US volume. Use it to choose the spelling for the title and H1.</li>
+        <li><b>KD</b>: Semrush difficulty, 0 to 100. Under 20 is easy, 20s possible, 30s harder, 40 and up hard for a new site.</li>
+        <li><b>Peak</b>: the month with the most Google searches. New posts usually take 2 to 6 months to rank, so publish a few months before the peak.</li>
+        <li>US only. UK, Canada and Australia add roughly 40 to 60% more.</li>
+      </ul>
+    </section>
+  </div>
+</div>
+
+<script>
+const POSTS = [{"o": 1, "t": "Onsen in Japan: a first-timer's guide", "k": "onsen japan", "s": 9900, "g": 18100, "kd": 12, "d": "Easy", "pk": "Jan", "st": "reachable", "v": "Biggest variant you can realistically rank for. Bigger but much harder: onsen (S 49,500 · G 90,500 · KD 70)", "f": "High", "ty": "Pillar", "nt": "Long-term goal: 'onsen' (49,500, KD 70).", "sec": ["best onsen in japan", "onsen etiquette", "onsen rules", "onsen meaning"], "vs": [["onsen", 49500, 90500, 70], ["onsen japan", 9900, 18100, 12], ["japanese onsen", 3600, 18100, 54], ["japan hot springs", 3600, 2400, 64], ["japanese bath house", 3600, 8100, 50], ["japan onsen", 2400, 18100, 51], ["hot springs japan", 2400, 2400, 67], ["japanese hot springs", 1900, 2400, 56], ["what is an onsen", 1900, 2900, 48], ["onsen meaning", 1900, 2400, 35], ["onsen in japan", 1600, 18100, 51], ["best onsen in japan", 1000, 1600, 21], ["onsen etiquette", 260, 320, 30], ["onsen rules", 110, 170, 26], ["how to onsen", 20, 50, null]], "sc": 450}, {"o": 2, "t": "Takayama, Japan: a guide to Hida Takayama", "k": "takayama japan", "s": 12100, "g": 4400, "kd": 20, "d": "Possible", "pk": "Mar", "st": "split", "v": "Judgment call. Bigger in one source: takayama (S 18,100 · G 27,100 · KD 43); hida takayama (S 3,600 · G 27,100); hida takayama japan (S 70 · G 27,100)", "f": "Medium", "ty": "Town", "nt": "", "sec": ["hida takayama", "things to do in takayama"], "vs": [["takayama", 18100, 27100, 43], ["takayama japan", 12100, 4400, 20], ["hida takayama", 3600, 27100, 14], ["things to do in takayama", 480, 590, 19], ["takayama ryokan", 390, 720, 7], ["where to stay in takayama", 110, 170, 13], ["hida takayama japan", 70, 27100, 19]], "sc": 403}, {"o": 3, "t": "Kinosaki Onsen: the seven baths and where to stay", "k": "kinosaki onsen", "s": 9900, "g": 12100, "kd": 35, "d": "Harder", "pk": "Jan", "st": "top", "v": "Biggest variant in both Semrush and Google.", "f": "Very high", "ty": "Town", "nt": "43 ryokan listed on the site.", "sec": ["kinosaki onsen town"], "vs": [["kinosaki onsen", 9900, 12100, 35], ["kinosaki", 3600, 5400, 51], ["kinosaki onsen town", 1900, 12100, 16], ["kinosaki onsen ryokan", 880, 1300, 23], ["kinosaki ryokan", 260, 390, 23], ["kinosaki onsen guide", 20, 10, null]], "sc": 220}, {"o": 4, "t": "Kusatsu Onsen: the yubatake and where to stay", "k": "kusatsu onsen", "s": 8100, "g": 9900, "kd": 41, "d": "Hard", "pk": "Jan", "st": "top", "v": "Biggest variant in both Semrush and Google.", "f": "High", "ty": "Town", "nt": "", "sec": ["kusatsu"], "vs": [["kusatsu onsen", 8100, 9900, 41], ["kusatsu", 1600, 1900, 43], ["kusatsu onsen ryokan", 390, 720, 16]], "sc": 159}, {"o": 5, "t": "Shibu Onsen and the snow monkeys: a winter ryokan trip", "k": "shibu onsen", "s": 2900, "g": 3600, "kd": 9, "d": "Easy", "pk": "Nov", "st": "reachable", "v": "Biggest variant you can realistically rank for. Bigger but much harder: jigokudani monkey park (S 9,900 · G 18,100 · KD 50); snow monkey park (S 6,600 · G 18,100 · KD 50); snow monkeys japan (S 2,900 · G 12,100 · KD 38)", "f": "High", "ty": "Town", "nt": "", "sec": ["snow monkeys japan", "jigokudani monkey park"], "vs": [["jigokudani monkey park", 9900, 18100, 50], ["snow monkey park", 6600, 18100, 50], ["shibu onsen", 2900, 3600, 9], ["snow monkeys japan", 2900, 12100, 38], ["shibu onsen ryokan", 210, 260, 14], ["snow monkey onsen", 170, 210, 40], ["shibu onsen snow monkeys", 20, 20, null]], "sc": 153}, {"o": 6, "t": "Kanazawa, Ishikawa, Japan: what to see and where to stay", "k": "kanazawa ishikawa japan", "s": 4400, "g": 40500, "kd": 19, "d": "Easy", "pk": "Jan", "st": "reachable", "v": "Biggest variant you can realistically rank for. Bigger but much harder: kanazawa (S 27,100 · G 40,500 · KD 49); kanazawa japan (S 6,600 · G 40,500 · KD 41)", "f": "Medium", "ty": "Town", "nt": "Odd phrasing; Google treats it as part of the 'kanazawa' group (40,500). Use 'Kanazawa, Japan' in the H1.", "sec": ["things to do in kanazawa"], "vs": [["kanazawa", 27100, 40500, 49], ["kanazawa japan", 6600, 40500, 41], ["kanazawa ishikawa japan", 4400, 40500, 19], ["things to do in kanazawa", 1000, 1300, 27], ["kanazawa hotels", 1000, 1600, 21], ["kanazawa ryokan", 320, 720, 16]], "sc": 152}, {"o": 7, "t": "Gion, Kyoto: a guide to the geisha district", "k": "gion kyoto", "s": null, "g": 8100, "kd": null, "d": "Unknown", "pk": "Jan", "st": "top", "v": "Replaces 'ryokan kyoto' (booking intent; the Kyoto destination page owns it). Biggest informational Kyoto variant that fits the site: Gion is where most Kyoto ryokan sit.", "f": "High", "ty": "Town", "nt": "KD not pulled: Semrush is out of units. SERP: Wikipedia, Lonely Planet, Inside Kyoto, Japan Objects, japan.travel. Rejected 'things to do in kyoto' (G 14,800): Lonely Planet plus 50-item listicles, too hard for now.", "sec": ["gion district kyoto", "gion district", "hanamikoji"], "vs": [["gion", null, 14800, null], ["gion kyoto", null, 8100, null], ["gion district kyoto", null, 8100, null], ["gion district", null, 4400, null], ["gion corner", null, 1600, null]], "sc": "–"}, {"o": 8, "t": "Hakone Free Pass: is it worth it, and how to use it", "k": "hakone free pass", "s": null, "g": 4400, "kd": null, "d": "Unknown", "pk": "Jan", "st": "top", "v": "Replaces 'hakone ryokan' (booking intent; the Hakone destination page owns it). Biggest Hakone planning query not already on the calendar.", "f": "High", "ty": "Town", "nt": "KD not pulled: Semrush is out of units. SERP is mostly OTAs selling the pass (Klook, Headout, KKday, Civitatis) plus japan-guide and a GaijinPot post: very beatable with an honest 'is it worth it' calculation. Keep it distinct from 'Tokyo to Hakone' (routes).", "sec": ["hakone freepass", "hakone loop"], "vs": [["hakone free pass", null, 4400, null], ["hakone loop", 1600, 1900, 20]], "sc": "–"}, {"o": 9, "t": "Beppu: Japan's hot-spring capital", "k": "beppu", "s": 5400, "g": 6600, "kd": 41, "d": "Hard", "pk": "Mar", "st": "top", "v": "Biggest variant in both Semrush and Google.", "f": "High", "ty": "Town", "nt": "", "sec": ["beppu onsen", "beppu hot springs"], "vs": [["beppu", 5400, 6600, 41], ["beppu onsen", 1000, 1600, 56], ["beppu hot springs", 320, 390, 43], ["beppu ryokan", 170, 210, 20]], "sc": 106}, {"o": 10, "t": "Japan in December: weather, crowds and the best ryokan stays", "k": "japan in december", "s": 2400, "g": 2900, "kd": 14, "d": "Easy", "pk": "Nov", "st": "split", "v": "Judgment call. Bigger in one source: japan in december weather (S 720 · G 6,600 · KD 24)", "f": "Medium", "ty": "Seasonal", "nt": "Google groups weather searches into a bigger cluster (6,600); cover weather as its own section.", "sec": ["japan december", "japan in december weather", "tokyo in december", "visiting japan in december"], "vs": [["japan in december", 2400, 2900, 14], ["tokyo in december", 1000, 1300, 20], ["japan in december weather", 720, 6600, 24], ["japan december", 390, 2900, 23], ["visiting japan in december", 320, 480, 22]], "sc": 100}, {"o": 11, "t": "Kurokawa Onsen: Kyushu's prettiest hot-spring village", "k": "kurokawa onsen", "s": 3600, "g": 4400, "kd": 29, "d": "Possible", "pk": "Jan", "st": "top", "v": "Biggest variant in both Semrush and Google.", "f": "High", "ty": "Town", "nt": "", "sec": [], "vs": [["kurokawa onsen", 3600, 4400, 29], ["kurokawa onsen ryokan", 210, 320, 15]], "sc": 92}, {"o": 12, "t": "Arima Onsen: gold and silver springs an hour from Osaka", "k": "arima onsen", "s": 4400, "g": 6600, "kd": 39, "d": "Harder", "pk": "Jan", "st": "top", "v": "Biggest variant in both Semrush and Google.", "f": "High", "ty": "Town", "nt": "", "sec": ["arima hot springs"], "vs": [["arima onsen", 4400, 6600, 39], ["arima hot springs", 2400, 6600, 36], ["arima onsen ryokan", 260, 320, 9]], "sc": 90}, {"o": 13, "t": "Ginzan Onsen: the snow-lit town and its ryokan", "k": "ginzan onsen", "s": 5400, "g": 8100, "kd": 50, "d": "Hard", "pk": "Jan", "st": "top", "v": "Biggest variant in both Semrush and Google.", "f": "High", "ty": "Town", "nt": "", "sec": [], "vs": [["ginzan onsen", 5400, 8100, 50], ["ginzan onsen ryokan", 320, 390, 17]], "sc": 90}, {"o": 14, "t": "Takaragawa Onsen: Japan's giant riverside baths", "k": "takaragawa onsen", "s": 2900, "g": 4400, "kd": 25, "d": "Possible", "pk": "Jan", "st": "top", "v": "Biggest variant in both Semrush and Google.", "f": "Medium", "ty": "Town", "nt": "A single-inn onsen. Check that Osenkaku is listed.", "sec": ["takaragawa onsen osenkaku"], "vs": [["takaragawa onsen", 2900, 4400, 25], ["takaragawa onsen osenkaku", 1600, 2400, 30]], "sc": 83}, {"o": 15, "t": "Things to do in Hakone", "k": "things to do in hakone", "s": 1900, "g": 2400, "kd": 18, "d": "Easy", "pk": "Jan", "st": "reachable", "v": "Biggest variant you can realistically rank for. Bigger but much harder: hakone (S 33,100 · G 49,500 · KD 61); hakone japan (S 9,900 · G 12,100 · KD 52)", "f": "Medium", "ty": "Town", "nt": "", "sec": ["hakone things to do", "hakone day trip", "hakone itinerary"], "vs": [["hakone", 33100, 49500, 61], ["hakone japan", 9900, 12100, 52], ["things to do in hakone", 1900, 2400, 18], ["hakone day trip", 720, 880, 21], ["hakone things to do", 480, 590, 15], ["hakone itinerary", 140, 140, 14]], "sc": 68}, {"o": 16, "t": "Noboribetsu Onsen: Hell Valley and Hokkaido's best ryokan", "k": "noboribetsu", "s": 2900, "g": 4400, "kd": 35, "d": "Harder", "pk": "Apr", "st": "top", "v": "Biggest variant in both Semrush and Google.", "f": "High", "ty": "Town", "nt": "", "sec": ["noboribetsu onsen"], "vs": [["noboribetsu", 2900, 4400, 35], ["noboribetsu onsen", 1300, 1600, 24], ["noboribetsu ryokan", 90, 170, 17]], "sc": 64}, {"o": 17, "t": "Tokyo to Hakone: how to get there (and why to stay the night)", "k": "tokyo to hakone", "s": 2400, "g": 2900, "kd": 29, "d": "Possible", "pk": "Jan", "st": "top", "v": "Biggest variant in both Semrush and Google.", "f": "Medium", "ty": "Town", "nt": "", "sec": ["tokyo to hakone day trip", "how to get to hakone from tokyo"], "vs": [["tokyo to hakone", 2400, 2900, 29], ["tokyo to hakone day trip", 320, 720, 21], ["how to get to hakone from tokyo", 210, 260, 31]], "sc": 62}, {"o": 18, "t": "Winter in Japan: snow, onsen and when to go", "k": "japan winter", "s": 1900, "g": 4400, "kd": 26, "d": "Possible", "pk": "Dec", "st": "top", "v": "Biggest variant in both Semrush and Google.", "f": "High", "ty": "Seasonal", "nt": "", "sec": ["winter in japan", "japan in winter", "when is winter in japan"], "vs": [["japan winter", 1900, 4400, 26], ["winter in japan", 1600, 4400, 28], ["when is winter in japan", 1300, 1900, 7], ["japan in winter", 720, 4400, 32], ["japan winter travel", 110, 390, 31], ["snow onsen", 20, 50, null]], "sc": 53}, {"o": 19, "t": "Onsen in Kyoto: the best hot springs in and near the city", "k": "kyoto onsen", "s": 1900, "g": 3600, "kd": 26, "d": "Possible", "pk": "Jan", "st": "top", "v": "Biggest variant in both Semrush and Google.", "f": "High", "ty": "Town", "nt": "", "sec": ["onsen in kyoto", "onsen kyoto", "onsen near kyoto"], "vs": [["kyoto onsen", 1900, 3600, 26], ["kyoto hot springs", 1300, 320, 35], ["onsen kyoto", 1000, 3600, 27], ["onsen in kyoto", 1000, 3600, 23], ["onsen near kyoto", 210, 320, 21], ["kyoto onsen ryokan", 140, 880, 17], ["hot springs kyoto", 70, 320, 28], ["hot springs near kyoto", 50, 90, 30]], "sc": 53}, {"o": 20, "t": "Yufuin: a quiet onsen town in Kyushu", "k": "yufuin", "s": 2400, "g": 3600, "kd": 35, "d": "Harder", "pk": "Jan", "st": "top", "v": "Biggest variant in both Semrush and Google.", "f": "High", "ty": "Town", "nt": "", "sec": ["yufuin onsen"], "vs": [["yufuin", 2400, 3600, 35], ["yufuin onsen", 720, 880, 28], ["yufuin ryokan", 170, 210, 36]], "sc": 53}, {"o": 21, "t": "Japan itinerary: 10 days with a ryokan night", "k": "japan itinerary 10 days", "s": 1600, "g": 2900, "kd": 23, "d": "Possible", "pk": "Jan", "st": "split", "v": "Judgment call. Bigger in one source: japan itinerary (S 2,400 · G 4,400 · KD 33)", "f": "Medium", "ty": "Itinerary", "nt": "", "sec": ["10 day japan itinerary", "japan itinerary 7 days", "7 day japan itinerary"], "vs": [["japan itinerary", 2400, 4400, 33], ["japan itinerary 10 days", 1600, 2900, 23], ["10 day japan itinerary", 1000, 2900, 23], ["japan itinerary 7 days", 880, 1300, 17], ["7 day japan itinerary", 320, 1300, 12], ["1 week japan itinerary", 140, 590, 22]], "sc": 48}, {"o": 22, "t": "Kinugawa Onsen: an easy hot-spring trip from Tokyo", "k": "kinugawa onsen", "s": 1600, "g": 1300, "kd": 24, "d": "Possible", "pk": "Mar", "st": "top", "v": "Biggest variant in both Semrush and Google.", "f": "High", "ty": "Town", "nt": "", "sec": [], "vs": [["kinugawa onsen", 1600, 1300, 24], ["kinugawa onsen ryokan", 40, 70, 14]], "sc": 47}, {"o": 23, "t": "The 2-week Japan itinerary", "k": "2 week japan itinerary", "s": 1300, "g": 2400, "kd": 18, "d": "Easy", "pk": "Jan", "st": "top", "v": "Biggest variant in both Semrush and Google.", "f": "Medium", "ty": "Itinerary", "nt": "", "sec": ["japan two week itinerary", "japan itinerary 2 weeks", "japan itinerary 14 days"], "vs": [["2 week japan itinerary", 1300, 2400, 18], ["japan two week itinerary", 1300, 2400, 20], ["japan itinerary 14 days", 720, 1600, 26], ["japan itinerary 2 weeks", 170, 2400, 18]], "sc": 46}, {"o": 24, "t": "Japan in January: weather, snow festivals and onsen", "k": "japan in january", "s": 1300, "g": 1900, "kd": 21, "d": "Possible", "pk": "Oct", "st": "split", "v": "Judgment call. Bigger in one source: japan in january weather (S 320 · G 3,600)", "f": "Medium", "ty": "Seasonal", "nt": "Google groups weather searches into a bigger cluster (3,600); cover weather as its own section.", "sec": ["japan in january weather", "visiting japan in january"], "vs": [["japan in january", 1300, 1900, 21], ["japan in january weather", 320, 3600, 11], ["visiting japan in january", 170, 260, 16], ["japan january", 70, 90, 27]], "sc": 42}, {"o": 25, "t": "Zao Onsen: snow monsters, skiing and hot springs", "k": "zao onsen", "s": 1300, "g": 1900, "kd": 23, "d": "Possible", "pk": "Jan", "st": "top", "v": "Biggest variant in both Semrush and Google.", "f": "High", "ty": "Town", "nt": "", "sec": ["zao onsen ski resort", "zao snow monsters"], "vs": [["zao onsen", 1300, 1900, 23], ["zao onsen ski resort", 1300, 1600, 29], ["zao snow monsters", 170, 390, 20]], "sc": 39}, {"o": 26, "t": "Dogo Onsen: Japan's oldest hot spring", "k": "dogo onsen", "s": 1900, "g": 2400, "kd": 41, "d": "Hard", "pk": "Jan", "st": "top", "v": "Biggest variant in both Semrush and Google.", "f": "High", "ty": "Town", "nt": "", "sec": ["dogo onsen honkan"], "vs": [["dogo onsen", 1900, 2400, 41], ["dogo onsen honkan", 390, 480, 50]], "sc": 37}, {"o": 27, "t": "Nyuto Onsen: Tsurunoyu and the hidden baths of Akita", "k": "nyuto onsen", "s": 1300, "g": 1600, "kd": 28, "d": "Possible", "pk": "Dec", "st": "top", "v": "Biggest variant in both Semrush and Google.", "f": "High", "ty": "Town", "nt": "", "sec": ["tsurunoyu onsen"], "vs": [["nyuto onsen", 1300, 1600, 28], ["tsurunoyu onsen", 720, 880, 26]], "sc": 34}, {"o": 28, "t": "What is a ryokan? A guide to Japan's traditional inns", "k": "what is a ryokan", "s": 1600, "g": 1900, "kd": 37, "d": "Harder", "pk": "Jan", "st": "split", "v": "Judgment call. Bigger in one source: ryokan (S 40,500 · G 60,500 · KD 44); ryokan japan (S 4,400 · G 5,400); japanese ryokan (S 1,600 · G 3,600 · KD 43); ryokan meaning (S 1,300 · G 2,400); japanese inn (S 1,300 · G 14,800 · KD 70)", "f": "High", "ty": "Pillar", "nt": "Long-term goal: 'ryokan' (40,500, KD 44).", "sec": ["ryokan meaning", "ryokan japan", "japanese ryokan", "ryokan vs hotel"], "vs": [["ryokan", 40500, 60500, 44], ["ryokan japan", 4400, 5400, 40], ["what is a ryokan", 1600, 1900, 37], ["japanese ryokan", 1600, 3600, 43], ["ryokan meaning", 1300, 2400, 29], ["japanese inn", 1300, 14800, 70], ["ryokan vs hotel", 40, 70, 13]], "sc": 34}, {"o": 29, "t": "Kaiseki dinner at a ryokan, explained", "k": "kaiseki dinner", "s": 1300, "g": 1900, "kd": 29, "d": "Possible", "pk": "Oct", "st": "split", "v": "Judgment call. Bigger in one source: kaiseki (S 9,900 · G 14,800 · KD 48); kaiseki restaurant (S 1,600 · G 3,600)", "f": "High", "ty": "Food", "nt": "'kaiseki restaurant' is bigger (1,600, KD 19) but mostly US diners looking for a restaurant near them.", "sec": ["kaiseki", "what is kaiseki", "kaiseki ryori", "ryokan dinner"], "vs": [["kaiseki", 9900, 14800, 48], ["kaiseki restaurant", 1600, 3600, 19], ["kaiseki dinner", 1300, 1900, 29], ["kaiseki meal", 590, 720, 64], ["what is kaiseki", 480, 880, 59], ["kaiseki ryori", 480, 590, 53], ["ryokan dinner", 70, 110, 16], ["kaiseki dinner ryokan", 20, 20, null]], "sc": 33}, {"o": 30, "t": "Kaiseki vs omakase: what's the difference?", "k": "kaiseki vs omakase", "s": 590, "g": 880, "kd": 8, "d": "Easy", "pk": "Oct", "st": "top", "v": "Biggest variant in both Semrush and Google.", "f": "Medium", "ty": "Food", "nt": "", "sec": ["omakase vs kaiseki"], "vs": [["kaiseki vs omakase", 590, 880, 8], ["omakase vs kaiseki", 170, 210, 19]], "sc": 33}, {"o": 31, "t": "Onsen in Tokyo: city baths and the best hot springs nearby", "k": "onsen tokyo", "s": 1000, "g": 3600, "kd": 24, "d": "Possible", "pk": "Jan", "st": "top", "v": "Biggest variant in both Semrush and Google.", "f": "Medium", "ty": "Town", "nt": "", "sec": ["tokyo onsen", "onsen in tokyo", "onsen near tokyo", "hot spring tokyo"], "vs": [["onsen tokyo", 1000, 3600, 24], ["tokyo onsen", 880, 3600, 39], ["onsen in tokyo", 720, 3600, 38], ["onsen near tokyo", 480, 590, 32], ["hot springs near tokyo", 170, 260, 33], ["hot spring tokyo", 90, 590, 26]], "sc": 29}, {"o": 32, "t": "Gero Onsen: one of Japan's three great hot springs", "k": "gero onsen", "s": 1300, "g": 1600, "kd": 41, "d": "Hard", "pk": "Jan", "st": "top", "v": "Biggest variant in both Semrush and Google.", "f": "High", "ty": "Town", "nt": "", "sec": [], "vs": [["gero onsen", 1300, 1600, 41], ["gero onsen ryokan", 90, 110, 20]], "sc": 25}, {"o": 33, "t": "Tattoo-friendly onsen and ryokan in Japan", "k": "tattoo friendly onsen", "s": 880, "g": 1600, "kd": 27, "d": "Possible", "pk": "Mar", "st": "top", "v": "Biggest variant in both Semrush and Google.", "f": "Very high", "ty": "Data", "nt": "Uses the 25-of-2,598 count. Doubles as the press data page.", "sec": ["tattoo friendly onsen tokyo", "onsen tattoo", "onsen with tattoos", "tattoo friendly ryokan"], "vs": [["tattoo friendly onsen", 880, 1600, 27], ["tattoo friendly onsen tokyo", 720, 1000, 19], ["onsen tattoo", 320, 390, 27], ["onsen with tattoos", 140, 390, 20], ["tattoo friendly ryokan", 90, 140, 13], ["tattoo onsen japan", 50, 50, 25], ["onsen tattoos", 40, 390, 21], ["tattoo friendly hot springs japan", 20, 30, null], ["tattoos onsen japan", 10, 50, null]], "sc": 24}, {"o": 34, "t": "Things to do in Nikko, plus a night at Kinugawa", "k": "things to do in nikko", "s": 480, "g": 720, "kd": 18, "d": "Easy", "pk": "Jan", "st": "reachable", "v": "Biggest variant you can realistically rank for. Bigger but much harder: nikko (S 18,100 · G 33,100 · KD 44); nikko japan (S 6,600 · G 33,100 · KD 48)", "f": "Medium", "ty": "Town", "nt": "Long-term goal: 'nikko' (18,100, KD 44).", "sec": ["nikko day trip"], "vs": [["nikko", 18100, 33100, 44], ["nikko japan", 6600, 33100, 48], ["things to do in nikko", 480, 720, 18], ["nikko day trip", 260, 480, 21]], "sc": 17}, {"o": 35, "t": "Yukata: how to wear one at a ryokan", "k": "yukata", "s": 40500, "g": 60500, "kd": 12, "d": "Easy", "pk": "Mar", "st": "top", "v": "Biggest variant in both Semrush and Google.", "f": "Low", "ty": "Pillar", "nt": "Huge but mostly shoppers buying a yukata. Write it last, if at all.", "sec": ["ryokan etiquette"], "vs": [["yukata", 40500, 60500, 12], ["ryokan etiquette", 20, 40, null], ["how to stay at a ryokan", 20, 10, null], ["ryokan tips", 20, 10, null], ["what to expect at a ryokan", 0, null, null]], "sc": 1841}];
+const DAYS = { 1: [2], 2: [2, 4], 3: [1, 3, 5], 5: [1, 2, 3, 4, 5] };
+const MON = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+const fmt = n => n == null ? "–" : n.toLocaleString("en-US");
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+const STATUS = { top: ["ok", "Biggest variant"], reachable: ["reach", "Biggest reachable"], split: ["split", "Judgment call"] };
+const kdClass = d => ({ Easy: "kd-easy", Possible: "kd-possible", Harder: "kd-harder", Hard: "kd-hard" }[d] || "");
+
+function mondayOf(d) { const x = new Date(d); const k = (x.getDay() + 6) % 7; x.setDate(x.getDate() - k); return x; }
+function schedule(perWeek, startStr) {
+  const days = DAYS[perWeek];
+  let wk = mondayOf(new Date(startStr + "T12:00:00"));
+  const out = [];
+  let i = 0;
+  while (i < POSTS.length) {
+    for (const d of days) {
+      if (i >= POSTS.length) break;
+      const date = new Date(wk); date.setDate(wk.getDate() + d - 1);
+      out.push({ ...POSTS[i], date, week: new Date(wk) }); i++;
+    }
+    wk = new Date(wk); wk.setDate(wk.getDate() + 7);
+  }
+  return out;
+}
+function afterPeak(p) {
+  if (!p.pk) return false;
+  const peakM = MON.indexOf(p.pk), m = p.date.getMonth();
+  const gap = (peakM - m + 12) % 12;  // months from publish to the next peak
+  return gap <= 1 || gap >= 11;
+}
+function render() {
+  const per = +document.getElementById("cadence").value;
+  const start = document.getElementById("start").value || "2026-11-23";
+  try { localStorage.setItem("rs-cal", JSON.stringify({ per, start })); } catch (e) {}
+  const rows = schedule(per, start);
+  const total = rows.reduce((a, p) => a + (p.g || 0), 0);
+  const last = rows[rows.length - 1].date;
+  document.getElementById("stats").innerHTML =
+    `<span><b>${rows.length}</b> posts</span><span>last post <b>${last.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}</b></span><span><b>${fmt(total)}</b> Google searches/mo targeted</span>`;
+  const weeks = new Map();
+  rows.forEach(p => { const k = p.week.toISOString().slice(0, 10); if (!weeks.has(k)) weeks.set(k, []); weeks.get(k).push(p); });
+  let html = "", wn = 0;
+  for (const [, ps] of weeks) {
+    wn++;
+    const vol = ps.reduce((a, p) => a + (p.g || 0), 0);
+    const wl = ps[0].week.toLocaleDateString("en-US", { month: "short", day: "numeric" });
+    html += `<section class="week"><div class="week-head"><span class="w">Week ${wn} · ${wl}</span><span class="r">${fmt(vol)} searches/mo</span></div>`;
+    for (const p of ps) {
+      const [cls, lab] = STATUS[p.st];
+      const late = afterPeak(p);
+      const maxS = Math.max(...p.vs.map(v => v[1] || 0)), maxG = Math.max(...p.vs.map(v => v[2] || 0));
+      const id = "d" + p.o;
+      html += `<div class="post">
+        <button class="row" type="button" aria-expanded="false" aria-controls="${id}">
+          <div class="date"><b>${p.date.toLocaleDateString("en-US", { weekday: "short" })}</b>${p.date.toLocaleDateString("en-US", { month: "short", day: "numeric" })}</div>
+          <div class="main">
+            <div class="title">${esc(p.t)}</div>
+            <code class="kw">${esc(p.k)}</code>
+            <div class="chips"><span class="chip ${cls}">${lab}</span>${late ? '<span class="chip late">At peak</span>' : ""}<span class="chip">${esc(p.ty)}</span><span class="chip">Fit: ${esc(p.f)}</span>${p.pk ? `<span class="chip">Peak ${p.pk}</span>` : ""}</div>
+          </div>
+          <div class="nums">
+            <div class="num"><span>Google</span><b>${fmt(p.g)}</b></div>
+            <div class="num"><span>Semrush</span><b>${fmt(p.s)}</b></div>
+            <div class="num"><span>Score</span><b>${p.sc}</b></div>
+            <div class="num"><span>KD</span><b class="${kdClass(p.d)}">${p.kd ?? "–"}</b></div>
+          </div>
+        </button>
+        <div class="detail" id="${id}" hidden>
+          <p class="verdict">${esc(p.v)}</p>
+          ${p.nt ? `<p class="note">${esc(p.nt)}</p>` : ""}
+          ${p.sec.length ? `<p class="note">Also work in: ${p.sec.map(esc).join(", ")}</p>` : ""}
+          <div class="tbl"><table><thead><tr><th>Variant checked</th><th>Semrush</th><th>Google</th><th>KD</th></tr></thead><tbody>
+          ${p.vs.map(v => `<tr class="${v[0] === p.k ? "is-target" : ""} ${v[1] === maxS && maxS ? "is-max-s" : ""} ${v[2] === maxG && maxG ? "is-max-g" : ""}"><td>${esc(v[0])}</td><td>${fmt(v[1])}</td><td>${fmt(v[2])}</td><td>${v[3] ?? "–"}</td></tr>`).join("")}
+          </tbody></table></div>
+          <p class="note">Bold is the target. Underlined is the highest number in that column.</p>
+        </div></div>`;
+    }
+    html += `</section>`;
+  }
+  const cal = document.getElementById("cal");
+  cal.innerHTML = html;
+  cal.style.display = "grid"; cal.style.gap = "26px";
+}
+document.addEventListener("click", e => {
+  const b = e.target.closest(".row"); if (!b) return;
+  const d = document.getElementById(b.getAttribute("aria-controls"));
+  const open = b.getAttribute("aria-expanded") === "true";
+  b.setAttribute("aria-expanded", String(!open)); d.hidden = open;
+});
+try { const s = JSON.parse(localStorage.getItem("rs-cal") || "null"); if (s) { document.getElementById("cadence").value = String(s.per); document.getElementById("start").value = s.start; } } catch (e) {}
+document.getElementById("cadence").addEventListener("change", render);
+document.getElementById("start").addEventListener("change", render);
+render();
+</script>

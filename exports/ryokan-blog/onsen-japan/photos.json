@@ -1,0 +1,82 @@
+{
+ "checked": "2026-11-21",
+ "note": "Commons photos: license, author and description read via the Commons API today and each image viewed on a contact sheet. Inn photos are static.cupid.travel originals from each inn page's gallery (Kai approved inn photos for blog use, 2026-11-20). Site destination photos not reused: their combined credit lines can't be matched to single files.",
+ "not_used": [
+  {"file": "Tsurunoyu onsen rotenburo.JPG", "why": "Shows identifiable bathers in the nude; photo-rules say avoid private people as the subject."},
+  {"file": "251128 Yubatake, Kusatsu 13.jpg / 16.jpg", "why": "Night shots with colored lighting; the daytime 251130 shot shows the Yubatake more clearly."},
+  {"file": "Noren-onsen-kutukake-onsen-oguranoyu (1280px)", "why": "Good noren photo but only 1280 px and cluttered; the men's-bath noren reads better."}
+ ],
+ "credits_rule": "All credits in the Photo credits section at the end; captions under photos describe only (Kai, 2026-11-20).",
+ "photos": [
+  {
+   "role": "hero",
+   "file": "251130 Yubatake, Kusatsu 02.jpg",
+   "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c9/251130_Yubatake%2C_Kusatsu_02.jpg/1920px-251130_Yubatake%2C_Kusatsu_02.jpg",
+   "source": "Wikimedia Commons",
+   "page": "https://commons.wikimedia.org/wiki/File:251130_Yubatake,_Kusatsu_02.jpg",
+   "size": "4032x2268",
+   "license": "CC0",
+   "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+   "attribution": "Aspere, CC0, via Wikimedia Commons (no credit required; credited anyway)",
+   "alt": "Steaming hot-spring water running through wooden channels at the Yubatake in Kusatsu Onsen",
+   "placement": "Hero, in the body under the opening"
+  },
+  {
+   "role": "section",
+   "file": "Noren (45556489832).jpg",
+   "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/14/Noren_%2845556489832%29.jpg/1920px-Noren_%2845556489832%29.jpg",
+   "source": "Wikimedia Commons (from Flickr)",
+   "page": "https://commons.wikimedia.org/wiki/File:Noren_(45556489832).jpg",
+   "size": "3024x4032",
+   "license": "CC BY 2.0",
+   "license_url": "https://creativecommons.org/licenses/by/2.0/",
+   "attribution": "Michael Ocampo, CC BY 2.0, via Wikimedia Commons",
+   "alt": "Navy noren curtain marked 男 (men) hanging over the entrance to a men's changing room",
+   "placement": "How to use an onsen, step by step (portrait; shown at w=360)"
+  },
+  {
+   "role": "section",
+   "file": "Nyuto Onsen - NyutoOnsen7048.jpg",
+   "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/45/Nyuto_Onsen_-_NyutoOnsen7048.jpg/1920px-Nyuto_Onsen_-_NyutoOnsen7048.jpg",
+   "source": "Wikimedia Commons",
+   "page": "https://commons.wikimedia.org/wiki/File:Nyuto_Onsen_-_NyutoOnsen7048.jpg",
+   "size": "5363x3576",
+   "license": "CC0",
+   "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+   "attribution": "lumoplank, CC0, via Wikimedia Commons (no credit required; credited anyway)",
+   "alt": "Entrance gate and old timber buildings of Tsuru-no-yu in Nyuto Onsen among autumn leaves",
+   "placement": "The best onsen towns in Japan, by region"
+  },
+  {
+   "role": "section",
+   "file": "Dogo Onsen Honkan (Main building), 道後温泉 本館 - panoramio (1).jpg",
+   "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/77/Dogo_Onsen_Honkan_%28Main_building%29%2C_%E9%81%93%E5%BE%8C%E6%B8%A9%E6%B3%89_%E6%9C%AC%E9%A4%A8_-_panoramio_%281%29.jpg/1920px-Dogo_Onsen_Honkan_%28Main_building%29%2C_%E9%81%93%E5%BE%8C%E6%B8%A9%E6%B3%89_%E6%9C%AC%E9%A4%A8_-_panoramio_%281%29.jpg",
+   "source": "Wikimedia Commons (from Panoramio)",
+   "page": "https://commons.wikimedia.org/wiki/File:Dogo_Onsen_Honkan_(Main_building),_%E9%81%93%E5%BE%8C%E6%B8%A9%E6%B3%89_%E6%9C%AC%E9%A4%A8_-_panoramio_(1).jpg",
+   "size": "2133x1600",
+   "license": "CC BY 3.0",
+   "license_url": "https://creativecommons.org/licenses/by/3.0/",
+   "attribution": "z tanuki, CC BY 3.0, via Wikimedia Commons",
+   "alt": "Wooden main building of Dogo Onsen Honkan in Matsuyama at dusk, with visitors at the entrance",
+   "placement": "Onsen, sento and ryokan baths"
+  },
+  {
+   "role": "section",
+   "file": "Hyotan Onsen (5011201676).jpg",
+   "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/19/Hyotan_Onsen_%285011201676%29.jpg/1920px-Hyotan_Onsen_%285011201676%29.jpg",
+   "source": "Wikimedia Commons (from Flickr)",
+   "page": "https://commons.wikimedia.org/wiki/File:Hyotan_Onsen_(5011201676).jpg",
+   "size": "4288x2848",
+   "license": "CC BY-SA 2.0",
+   "license_url": "https://creativecommons.org/licenses/by-sa/2.0/",
+   "attribution": "Jordi Sanchez Teruel, CC BY-SA 2.0, via Wikimedia Commons",
+   "alt": "Courtyard of Hyotan Onsen in Beppu with noren for the men's bath and the women's sand bath",
+   "placement": "Types of bath"
+  },
+  {"role": "inn", "inn": "Nishimuraya Honkan", "image": "https://static.cupid.travel/hotels/25236199.jpg", "source": "Inn page gallery, ryokansociety.com/kinosaki-onsen/nishimuraya-honkan", "license": "Inn photo, approved by Kai 2026-11-20", "attribution": "Courtesy of the ryokan", "alt": "Garden and wooden buildings of Nishimuraya Honkan in Kinosaki Onsen", "placement": "At-a-glance thumbnail + under its H3"},
+  {"role": "inn", "inn": "Gora Hanaougi", "image": "https://static.cupid.travel/hotels/ex_2581bfef_z.jpg", "source": "Inn page gallery, ryokansociety.com/hakone/gora-hanaougi", "license": "Inn photo, approved by Kai 2026-11-20", "attribution": "Courtesy of the ryokan", "alt": "Rock-lined open-air hot-spring bath at Gora Hanaougi in Hakone at night", "placement": "At-a-glance thumbnail + under its H3"},
+  {"role": "inn", "inn": "Mount View Hakone", "image": "https://static.cupid.travel/hotels/207501380.jpg", "source": "Inn page gallery, ryokansociety.com/hakone/mount-view-hakone", "license": "Inn photo, approved by Kai 2026-11-20", "attribution": "Courtesy of the ryokan", "alt": "Milky-white open-air hot-spring bath at Mount View Hakone", "placement": "At-a-glance thumbnail + under its H3"},
+  {"role": "inn", "inn": "Hanaingen", "image": "https://static.cupid.travel/hotels/87765150.jpg", "source": "Inn page gallery, ryokansociety.com/kusatsu-onsen/hanaingen", "license": "Inn photo, approved by Kai 2026-11-20", "attribution": "Courtesy of the ryokan", "alt": "Entrance of Hanaingen in Kusatsu Onsen with a noren curtain", "placement": "At-a-glance thumbnail + under its H3"},
+  {"role": "inn", "inn": "Oyado Noshiyu", "image": "https://static.cupid.travel/hotels/47767472.jpg", "source": "Inn page gallery, ryokansociety.com/kurokawa-onsen/kurokawa-onsen-oyado-noshiyu", "license": "Inn photo, approved by Kai 2026-11-20", "attribution": "Courtesy of the ryokan", "alt": "Open-air hot-spring bath at Oyado Noshiyu in Kurokawa Onsen at night", "placement": "At-a-glance thumbnail + under its H3"}
+ ]
+}

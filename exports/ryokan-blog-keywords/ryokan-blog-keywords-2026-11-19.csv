@@ -1,0 +1,141 @@
+keyword,volume,kd,opp,cluster,intent,cpc
+onsen japan,9900,12,6930,Ryokan basics,info,0.48
+takayama japan,12100,20,6050,Town: Takayama,info,0.84
+hida takayama,3600,14,2340,Town: Takayama,info,0.0
+kanazawa ishikawa japan,4400,19,2310,Town: Kanazawa,info,0.62
+shibu onsen,2900,9,2248,Town: Shibu,info,1.53
+ryokan kyoto,4400,25,1650,Town: Kyoto,info,1.35
+hakone ryokan,3600,23,1530,Town: Hakone,transactional,1.34
+hakone ginyu japan,2900,20,1450,"Named inn (→ inn page, not a post)","info, transactional",1.21
+onsen ryokan,3600,25,1350,Onsen general,info,1.02
+ryokan hakone ginyu,3600,26,1260,"Named inn (→ inn page, not a post)",info,1.21
+where to stay in kyoto,3600,27,1170,Where to stay,info,1.38
+kinosaki onsen town,1900,16,1140,Town: Kinosaki,info,0.88
+takaragawa onsen,2900,25,1088,Town: Takaragawa,info,1.07
+when is winter in japan,1300,7,1072,Winter in Japan,info,0.12
+things to do in hakone,1900,18,1045,Town: Hakone,info,0.43
+kurokawa onsen,3600,29,990,Town: Kurokawa,info,1.19
+hakone gora byakudan,2400,24,960,"Named inn (→ inn page, not a post)","info, transactional",1.91
+hakone open-air museum,1900,20,950,Town: Hakone,info,0.6
+how to get to izu from hakone,1900,20,950,Town: Hakone,info,0.0
+hakone pax yoshino,1600,19,840,"Named inn (→ inn page, not a post)","info, transactional",1.66
+kaiseki restaurant,1600,19,840,Kaiseki and ryokan food,commercial,0.0
+takaragawa onsen - gunma japan,1900,23,808,Town: Takaragawa,info,1.07
+hakone hotels,1900,23,808,Where to stay,transactional,1.63
+hakone loop,1600,20,800,Town: Hakone,info,0.52
+solaniwa onsen,1900,24,760,"Named inn (→ inn page, not a post)",nav,0.75
+private onsen,2400,28,720,Private baths,info,0.9
+2 week japan itinerary,1300,18,715,Itineraries,info,0.62
+onsen in kyoto city,1900,25,712,Town: Kyoto,commercial,0.99
+ryokan with private onsen,1000,12,700,Private baths,info,0.73
+japan itinerary 10 days,1600,23,680,Itineraries,info,1.29
+kyoto onsen,1900,26,665,Town: Kyoto,commercial,0.99
+tokyo to hakone,2400,29,660,Town: Hakone,info,0.69
+japan two week itinerary,1300,20,650,Itineraries,info,0.8
+kinugawa onsen,1600,24,640,Town: Kinugawa,info,1.49
+japan 2 week itinerary,1000,15,625,Itineraries,info,0.62
+hakone yuryo,1900,28,570,"Named inn (→ inn page, not a post)","info, nav",1.63
+zao onsen,1300,23,552,Town: Zao,info,1.8
+tokyo to kanazawa,1000,18,550,Town: Kanazawa,"info, commercial",0.89
+kurama hot spring onsen day pass,1000,19,525,Town: Kurama,info,0.0
+noboribetsu onsen,1300,24,520,Town: Noboribetsu,info,1.91
+japan itinerary 7 days,880,17,506,Itineraries,info,1.29
+kanazawa hotel japan,1000,20,500,Where to stay,transactional,2.16
+ryokan in kyoto,1300,25,488,Town: Kyoto,"info, transactional",1.57
+hakone japan onsen,1300,25,488,Town: Hakone,commercial,1.39
+ryokan hakone,1600,28,480,Town: Hakone,transactional,1.32
+winter in japan,1600,28,480,Winter in Japan,info,0.59
+best onsen in japan,1000,21,475,Ryokan basics,commercial,0.57
+kanazawa hotels,1000,21,475,Where to stay,transactional,1.98
+kaiseki vs omakase,590,8,472,Kaiseki and ryokan food,"info, commercial",0.0
+hashiri bettei kaiseki aoki,720,14,468,"Named inn (→ inn page, not a post)","info, transactional",0.0
+hakone onsen ryokan,1000,22,450,Town: Hakone,transactional,1.4
+higashi chaya kanazawa,880,20,440,Town: Kanazawa,info,0.95
+kaiseki dinner kyoto,720,16,432,Kaiseki and ryokan food,commercial,1.29
+onsen in kyoto,1000,23,425,Town: Kyoto,commercial,1.0
+10 day japan itinerary,1000,23,425,Itineraries,info,1.19
+gaige house ryokan a four sisters inn,590,13,398,"Named inn (→ inn page, not a post)","info, transactional",1.03
+nyuto onsen,1300,28,390,Town: Nyuto,info,1.37
+kaiseki restaurant kyoto,720,19,378,Kaiseki and ryokan food,commercial,0.79
+tattoo friendly onsen tokyo,720,19,378,Tattoos and onsen,info,0.45
+fujisan onsen hotel kaneyamaen,1000,25,375,"Named inn (→ inn page, not a post)",info,1.52
+tokyo japan itinerary,1000,25,375,Itineraries,info,0.81
+kinosaki onsen ryokan,880,23,374,Town: Kinosaki,info,1.28
+hotels in takayama gifu,590,15,369,Where to stay,commercial,1.93
+ryokan meaning,1300,29,358,Ryokan basics,info,0.34
+ubuya ryokan,1300,29,358,"Named inn (→ inn page, not a post)","nav, transactional",1.08
+zao onsen ski resort,1300,29,358,Winter in Japan,"info, transactional",1.15
+hot spring tokyo japan,1300,29,358,Town: Tokyo,info,0.81
+kaiseki dinner,1300,29,358,Kaiseki and ryokan food,info,0.23
+ryokan hakone with onsen,720,21,342,Town: Hakone,commercial,1.4
+hida takayama hotel,590,17,339,Where to stay,transactional,1.93
+best ryokan in hakone,880,25,330,Where to stay,commercial,1.33
+best ryokan in kyoto,880,25,330,Where to stay,commercial,1.37
+onsen kyoto,1000,27,325,Town: Kyoto,commercial,1.0
+things to do in kanazawa,1000,27,325,Town: Kanazawa,info,0.22
+best ryokan in japan,720,22,324,Where to stay,commercial,0.85
+kyoto ryokan with private onsen,480,13,324,Private baths,"info, transactional",1.1
+ryokan vs onsen,720,23,306,Ryokan basics,"info, commercial",1.12
+beppu kyushu,720,23,306,Town: Beppu,info,0.87
+things to do in nikko japan,390,9,302,Town: Nikko,info,0.28
+ryokan asakusa shigetsu,1000,28,300,"Named inn (→ inn page, not a post)","nav, transactional",1.29
+ryokan in hakone,720,24,288,Town: Hakone,transactional,1.34
+private onsen ryokan,480,16,288,Private baths,info,0.68
+tattoo friendly onsen,880,27,286,Tattoos and onsen,info,0.29
+kyoto garden ryokan yachiyo,590,21,280,"Named inn (→ inn page, not a post)",info,1.28
+natsuzuma natsu ryokan,590,21,280,"Named inn (→ inn page, not a post)",info,0.0
+kinosaki ryokan onsen,480,17,276,Town: Kinosaki,info,1.28
+seikoro ryokan,720,25,270,"Named inn (→ inn page, not a post)","info, transactional",1.99
+hakone ryokan private onsen,590,22,266,Private baths,transactional,1.29
+ryokan kyoto family friendly,480,18,264,Where to stay,info,0.97
+itinerary in japan tokyo,880,28,264,Itineraries,info,0.59
+tattoo friendly onsen kyoto,390,14,254,Tattoos and onsen,info,0.73
+hakone japan ryokan,720,26,252,Town: Hakone,transactional,1.32
+andon ryokan,480,19,252,"Named inn (→ inn page, not a post)","nav, transactional",1.61
+winter in hokkaido japan,480,20,240,Winter in Japan,info,1.27
+kusatsu onsen ryokan,390,16,234,Town: Kusatsu,transactional,1.57
+iwaso ryokan,590,25,221,"Named inn (→ inn page, not a post)","info, transactional",1.64
+japan nikko day trip,320,13,216,Town: Nikko,info,1.33
+ajisai onsen ryokan,590,26,206,"Named inn (→ inn page, not a post)",info,1.44
+ryokan osaka,590,26,206,Town: Osaka,transactional,1.01
+kozantei ubuya ryokan,480,23,204,"Named inn (→ inn page, not a post)","nav, transactional",1.08
+arima onsen ryokan,260,9,202,Town: Arima,"info, transactional",1.95
+iwaso ryokan miyajima,590,27,192,"Named inn (→ inn page, not a post)","info, transactional",1.67
+arai ryokan izu japan,480,24,192,"Named inn (→ inn page, not a post)","info, transactional",1.7
+luxury ryokan,480,24,192,Where to stay,info,1.59
+kaiseki kyoto,480,24,192,Kaiseki and ryokan food,commercial,0.85
+hakone japan hot springs,320,17,184,Town: Hakone,info,1.17
+osaka ryokan hotels,480,25,180,Where to stay,info,1.01
+define ryokan,480,26,168,Ryokan basics,info,0.15
+kaminarimon ryokan,480,26,168,"Named inn (→ inn page, not a post)","info, transactional",1.38
+osaka ryokan,480,26,168,Town: Osaka,transactional,1.2
+kaiseki meal kyoto,320,19,168,Kaiseki and ryokan food,commercial,0.79
+kinosaki onsen tattoo friendly,390,23,166,Tattoos and onsen,info,0.34
+gion ryokan karaku,590,29,162,"Named inn (→ inn page, not a post)","info, transactional",1.85
+temperature in nikko japan,390,25,146,Town: Nikko,info,0.0
+kyoto onsen tattoo friendly,320,22,144,Tattoos and onsen,info,0.48
+tokyo to kusatsu onsen,210,13,142,Town: Kusatsu,info,0.59
+where to stay in kyoto japan,390,26,136,Where to stay,info,1.6
+when winter in japan,390,27,127,Winter in Japan,info,0.13
+where to stay in kyoto first time,260,21,124,Where to stay,info,1.11
+hot spring hotel japan,260,22,117,Where to stay,transactional,0.73
+japan macaque hot springs,260,24,104,Town: Macaque,info,0.39
+onsen tattoo,320,27,104,Tattoos and onsen,info,0.27
+kusatsu onsen boun,260,24,104,"Named inn (→ inn page, not a post)","info, nav",1.64
+kusatsu onsen hotel,210,21,100,Where to stay,transactional,1.24
+where to stay in kyoto reddit,210,21,100,Where to stay,nav,0.98
+onsen japan hot springs,260,25,98,Onsen general,commercial,0.69
+kusatsu machi,260,25,98,Town: Kusatsu,info,1.37
+amanek beppu yula-re,210,23,89,"Named inn (→ inn page, not a post)","info, transactional",3.16
+japan hot springs tokyo,320,29,88,Town: Tokyo,commercial,0.67
+hot spring japan tokyo,170,20,85,Town: Tokyo,commercial,0.84
+beppu japan hot springs,260,27,84,Town: Beppu,commercial,0.71
+hokkaido japan hot springs,140,17,80,Town: Hokkaido,info,0.75
+gozen japan house hot springs,210,25,79,"Named inn (→ inn page, not a post)","info, transactional",0.0
+kusatsu gunma hotel,170,22,76,Where to stay,transactional,1.26
+suginoi beppu,210,26,74,"Named inn (→ inn page, not a post)","info, transactional",1.47
+how cold does japan get in the winter,170,26,60,Winter in Japan,info,0.0
+arima onsen ryokan kobe,110,24,44,Town: Arima,"info, transactional",1.9
+where to stay in kyoto with family,90,21,43,Where to stay,info,1.46
+arima onsen hot springs,90,21,43,Town: Arima,info,1.34
+arima onsen gekkoen yugetsusanso,70,27,23,"Named inn (→ inn page, not a post)","info, transactional",1.82

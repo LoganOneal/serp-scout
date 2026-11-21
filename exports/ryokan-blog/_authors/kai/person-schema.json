@@ -1,0 +1,14 @@
+{
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "name": "Kai Sulkin",
+  "jobTitle": "Founder",
+  "worksFor": {
+    "@type": "Organization",
+    "name": "Ryokan Society",
+    "url": "https://ryokansociety.com"
+  },
+  "url": "https://ryokansociety.com/authors/kai-sulkin",
+  "image": "https://ryokansociety.com/authors/kai-sulkin.jpg",
+  "description": "Kai Sulkin is the founder of Ryokan Society. He grew up in Tokyo in a hotel family, learned Japanese hospitality from the back of the house, and now splits his time between Tokyo and New York City."
+}
