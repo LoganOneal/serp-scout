@@ -2,6 +2,12 @@
 
 Copy this into `qa.md`, mark each line, and fix every failure before handing over.
 
+## Rewrite (SKILL.md step 8a)
+- [ ] `post.md` is the version rewritten by a Chinese open-source model; `post.draft.md` holds the original
+- [ ] Model, version and date recorded here
+- [ ] Every number, price, count, date and URL in `post.draft.md` is still in `post.md`, unchanged; no new claims
+- [ ] Front matter, headings, links, image lines and Photo credits unchanged
+
 ## Search basics
 - [ ] Target keyword in title tag (≤ 60 chars), H1, slug, first 100 words, one H2, meta description (≤ 155 chars)
 - [ ] Every must-cover topic from the teardown has a section
