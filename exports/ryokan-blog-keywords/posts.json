@@ -1,0 +1,2291 @@
+[
+ {
+  "n": 1,
+  "title": "Japan in December: weather, crowds and the best ryokan stays",
+  "target": "japan in december",
+  "secondaries": [
+   "japan december",
+   "japan in december weather",
+   "tokyo in december",
+   "visiting japan in december"
+  ],
+  "sem": 2400,
+  "google": 2900,
+  "kd": 14,
+  "peak": "Nov",
+  "difficulty": "Easy",
+  "group": [],
+  "status": "split",
+  "verdict": "Judgment call. Bigger in one source: japan in december weather (S 720 \u00b7 G 6,600 \u00b7 KD 24)",
+  "fit": "Medium",
+  "type": "Seasonal",
+  "note": "Google groups weather searches into a bigger cluster (6,600); cover weather as its own section.",
+  "variants": [
+   {
+    "kw": "japan in december",
+    "s": 2400,
+    "g": 2900,
+    "kd": 14,
+    "cv": []
+   },
+   {
+    "kw": "tokyo in december",
+    "s": 1000,
+    "g": 1300,
+    "kd": 20,
+    "cv": []
+   },
+   {
+    "kw": "japan in december weather",
+    "s": 720,
+    "g": 6600,
+    "kd": 24,
+    "cv": []
+   },
+   {
+    "kw": "japan december",
+    "s": 390,
+    "g": 2900,
+    "kd": 23,
+    "cv": []
+   },
+   {
+    "kw": "visiting japan in december",
+    "s": 320,
+    "g": 480,
+    "kd": 22,
+    "cv": []
+   }
+  ]
+ },
+ {
+  "n": 2,
+  "title": "Winter in Japan: snow, onsen and when to go",
+  "target": "japan winter",
+  "secondaries": [
+   "winter in japan",
+   "japan in winter",
+   "when is winter in japan"
+  ],
+  "sem": 1900,
+  "google": 4400,
+  "kd": 26,
+  "peak": "Dec",
+  "difficulty": "Possible",
+  "group": [],
+  "status": "top",
+  "verdict": "Biggest variant in both Semrush and Google.",
+  "fit": "High",
+  "type": "Seasonal",
+  "note": "",
+  "variants": [
+   {
+    "kw": "japan winter",
+    "s": 1900,
+    "g": 4400,
+    "kd": 26,
+    "cv": []
+   },
+   {
+    "kw": "winter in japan",
+    "s": 1600,
+    "g": 4400,
+    "kd": 28,
+    "cv": []
+   },
+   {
+    "kw": "when is winter in japan",
+    "s": 1300,
+    "g": 1900,
+    "kd": 7,
+    "cv": []
+   },
+   {
+    "kw": "japan in winter",
+    "s": 720,
+    "g": 4400,
+    "kd": 32,
+    "cv": [
+     "japan winter"
+    ]
+   },
+   {
+    "kw": "japan winter travel",
+    "s": 110,
+    "g": 390,
+    "kd": 31,
+    "cv": []
+   },
+   {
+    "kw": "snow onsen",
+    "s": 20,
+    "g": 50,
+    "kd": null,
+    "cv": []
+   }
+  ]
+ },
+ {
+  "n": 3,
+  "title": "Tattoo-friendly onsen and ryokan in Japan",
+  "target": "tattoo friendly onsen",
+  "secondaries": [
+   "tattoo friendly onsen tokyo",
+   "onsen tattoo",
+   "onsen with tattoos",
+   "tattoo friendly ryokan"
+  ],
+  "sem": 880,
+  "google": 1600,
+  "kd": 27,
+  "peak": "Mar",
+  "difficulty": "Possible",
+  "group": [],
+  "status": "top",
+  "verdict": "Biggest variant in both Semrush and Google.",
+  "fit": "Very high",
+  "type": "Data",
+  "note": "Uses the 25-of-2,598 count. Doubles as the press data page.",
+  "variants": [
+   {
+    "kw": "tattoo friendly onsen",
+    "s": 880,
+    "g": 1600,
+    "kd": 27,
+    "cv": []
+   },
+   {
+    "kw": "tattoo friendly onsen tokyo",
+    "s": 720,
+    "g": 1000,
+    "kd": 19,
+    "cv": []
+   },
+   {
+    "kw": "onsen tattoo",
+    "s": 320,
+    "g": 390,
+    "kd": 27,
+    "cv": [
+     "onsen tattoos"
+    ]
+   },
+   {
+    "kw": "onsen with tattoos",
+    "s": 140,
+    "g": 390,
+    "kd": 20,
+    "cv": []
+   },
+   {
+    "kw": "tattoo friendly ryokan",
+    "s": 90,
+    "g": 140,
+    "kd": 13,
+    "cv": []
+   },
+   {
+    "kw": "tattoo onsen japan",
+    "s": 50,
+    "g": 50,
+    "kd": 25,
+    "cv": [
+     "tattoos onsen japan"
+    ]
+   },
+   {
+    "kw": "onsen tattoos",
+    "s": 40,
+    "g": 390,
+    "kd": 21,
+    "cv": []
+   },
+   {
+    "kw": "tattoo friendly hot springs japan",
+    "s": 20,
+    "g": 30,
+    "kd": null,
+    "cv": []
+   },
+   {
+    "kw": "tattoos onsen japan",
+    "s": 10,
+    "g": 50,
+    "kd": null,
+    "cv": []
+   }
+  ]
+ },
+ {
+  "n": 4,
+  "title": "Ryokan with a private onsen: where to book one",
+  "target": "private onsen",
+  "secondaries": [
+   "ryokan with private onsen",
+   "private onsen ryokan",
+   "private onsen tokyo",
+   "private onsen japan"
+  ],
+  "sem": 2400,
+  "google": 3600,
+  "kd": 28,
+  "peak": "Jan",
+  "difficulty": "Possible",
+  "group": [],
+  "status": "top",
+  "verdict": "Biggest variant in both Semrush and Google.",
+  "fit": "Very high",
+  "type": "Data",
+  "note": "Uses the 1,331 private-bath count.",
+  "variants": [
+   {
+    "kw": "private onsen",
+    "s": 2400,
+    "g": 3600,
+    "kd": 28,
+    "cv": []
+   },
+   {
+    "kw": "ryokan with private onsen",
+    "s": 1000,
+    "g": 1600,
+    "kd": 12,
+    "cv": []
+   },
+   {
+    "kw": "private onsen ryokan",
+    "s": 480,
+    "g": 1600,
+    "kd": 16,
+    "cv": [
+     "ryokan with private onsen"
+    ]
+   },
+   {
+    "kw": "private onsen japan",
+    "s": 480,
+    "g": 720,
+    "kd": 15,
+    "cv": []
+   },
+   {
+    "kw": "private onsen tokyo",
+    "s": 480,
+    "g": 1000,
+    "kd": 7,
+    "cv": []
+   },
+   {
+    "kw": "hotel with private onsen",
+    "s": 170,
+    "g": 320,
+    "kd": 13,
+    "cv": []
+   },
+   {
+    "kw": "ryokan with private bath",
+    "s": 90,
+    "g": 110,
+    "kd": 13,
+    "cv": []
+   },
+   {
+    "kw": "private hot spring japan",
+    "s": 30,
+    "g": 110,
+    "kd": null,
+    "cv": []
+   },
+   {
+    "kw": "ryokan with private onsen in room",
+    "s": 20,
+    "g": 10,
+    "kd": null,
+    "cv": []
+   }
+  ]
+ },
+ {
+  "n": 5,
+  "title": "Onsen in Japan: a first-timer's guide",
+  "target": "onsen japan",
+  "secondaries": [
+   "best onsen in japan",
+   "onsen etiquette",
+   "onsen rules",
+   "onsen meaning"
+  ],
+  "sem": 9900,
+  "google": 18100,
+  "kd": 12,
+  "peak": "Jan",
+  "difficulty": "Easy",
+  "group": [],
+  "status": "reachable",
+  "verdict": "Biggest variant you can realistically rank for. Bigger but much harder: onsen (S 49,500 \u00b7 G 90,500 \u00b7 KD 70)",
+  "fit": "High",
+  "type": "Pillar",
+  "note": "Long-term goal: 'onsen' (49,500, KD 70).",
+  "variants": [
+   {
+    "kw": "onsen",
+    "s": 49500,
+    "g": 90500,
+    "kd": 70,
+    "cv": []
+   },
+   {
+    "kw": "onsen japan",
+    "s": 9900,
+    "g": 18100,
+    "kd": 12,
+    "cv": []
+   },
+   {
+    "kw": "japanese onsen",
+    "s": 3600,
+    "g": 18100,
+    "kd": 54,
+    "cv": []
+   },
+   {
+    "kw": "japan hot springs",
+    "s": 3600,
+    "g": 2400,
+    "kd": 64,
+    "cv": [
+     "japanese hot springs"
+    ]
+   },
+   {
+    "kw": "japanese bath house",
+    "s": 3600,
+    "g": 8100,
+    "kd": 50,
+    "cv": []
+   },
+   {
+    "kw": "japan onsen",
+    "s": 2400,
+    "g": 18100,
+    "kd": 51,
+    "cv": [
+     "japanese onsen"
+    ]
+   },
+   {
+    "kw": "hot springs japan",
+    "s": 2400,
+    "g": 2400,
+    "kd": 67,
+    "cv": [
+     "japan hot springs",
+     "japanese hot springs"
+    ]
+   },
+   {
+    "kw": "japanese hot springs",
+    "s": 1900,
+    "g": 2400,
+    "kd": 56,
+    "cv": [
+     "japan hot springs"
+    ]
+   },
+   {
+    "kw": "what is an onsen",
+    "s": 1900,
+    "g": 2900,
+    "kd": 48,
+    "cv": []
+   },
+   {
+    "kw": "onsen meaning",
+    "s": 1900,
+    "g": 2400,
+    "kd": 35,
+    "cv": []
+   },
+   {
+    "kw": "onsen in japan",
+    "s": 1600,
+    "g": 18100,
+    "kd": 51,
+    "cv": [
+     "onsen japan"
+    ]
+   },
+   {
+    "kw": "best onsen in japan",
+    "s": 1000,
+    "g": 1600,
+    "kd": 21,
+    "cv": []
+   },
+   {
+    "kw": "onsen etiquette",
+    "s": 260,
+    "g": 320,
+    "kd": 30,
+    "cv": []
+   },
+   {
+    "kw": "onsen rules",
+    "s": 110,
+    "g": 170,
+    "kd": 26,
+    "cv": []
+   },
+   {
+    "kw": "how to onsen",
+    "s": 20,
+    "g": 50,
+    "kd": null,
+    "cv": []
+   }
+  ]
+ },
+ {
+  "n": 6,
+  "title": "The best ryokan in Hakone",
+  "target": "hakone ryokan",
+  "secondaries": [
+   "ryokan hakone",
+   "best ryokan in hakone",
+   "hakone onsen ryokan",
+   "luxury ryokan hakone",
+   "hakone ryokan with private onsen"
+  ],
+  "sem": 3600,
+  "google": 5400,
+  "kd": 23,
+  "peak": "Jan",
+  "difficulty": "Possible",
+  "group": [
+   "hakone ryokans"
+  ],
+  "status": "top",
+  "verdict": "Biggest variant in both Semrush and Google.",
+  "fit": "Very high",
+  "type": "Booking",
+  "note": "",
+  "variants": [
+   {
+    "kw": "hakone ryokan",
+    "s": 3600,
+    "g": 5400,
+    "kd": 23,
+    "cv": [
+     "hakone ryokans"
+    ]
+   },
+   {
+    "kw": "ryokan hakone",
+    "s": 1600,
+    "g": 1900,
+    "kd": 28,
+    "cv": [
+     "ryokan in hakone"
+    ]
+   },
+   {
+    "kw": "hakone onsen ryokan",
+    "s": 1000,
+    "g": 1600,
+    "kd": 22,
+    "cv": []
+   },
+   {
+    "kw": "best ryokan in hakone",
+    "s": 880,
+    "g": 1600,
+    "kd": 25,
+    "cv": []
+   },
+   {
+    "kw": "ryokan in hakone",
+    "s": 720,
+    "g": 1900,
+    "kd": 24,
+    "cv": []
+   },
+   {
+    "kw": "hakone japan ryokan",
+    "s": 720,
+    "g": 5400,
+    "kd": 26,
+    "cv": []
+   },
+   {
+    "kw": "hakone ryokan with private onsen",
+    "s": 390,
+    "g": 720,
+    "kd": 10,
+    "cv": []
+   },
+   {
+    "kw": "best ryokan hakone",
+    "s": 210,
+    "g": 1600,
+    "kd": 17,
+    "cv": [
+     "best ryokan in hakone"
+    ]
+   },
+   {
+    "kw": "hakone ryokans",
+    "s": 210,
+    "g": 5400,
+    "kd": 16,
+    "cv": []
+   },
+   {
+    "kw": "luxury ryokan hakone",
+    "s": 210,
+    "g": 1300,
+    "kd": 17,
+    "cv": []
+   }
+  ]
+ },
+ {
+  "n": 7,
+  "title": "The best ryokan in Kyoto",
+  "target": "ryokan kyoto",
+  "secondaries": [
+   "kyoto ryokan",
+   "ryokan in kyoto",
+   "best ryokan in kyoto",
+   "luxury ryokan kyoto"
+  ],
+  "sem": 4400,
+  "google": 8100,
+  "kd": 25,
+  "peak": "Jan",
+  "difficulty": "Possible",
+  "group": [],
+  "status": "top",
+  "verdict": "Biggest variant in both Semrush and Google.",
+  "fit": "Very high",
+  "type": "Booking",
+  "note": "",
+  "variants": [
+   {
+    "kw": "ryokan kyoto",
+    "s": 4400,
+    "g": 8100,
+    "kd": 25,
+    "cv": []
+   },
+   {
+    "kw": "kyoto ryokan",
+    "s": 1900,
+    "g": 8100,
+    "kd": 32,
+    "cv": [
+     "kyoto ryokans"
+    ]
+   },
+   {
+    "kw": "ryokan in kyoto",
+    "s": 1300,
+    "g": 8100,
+    "kd": 25,
+    "cv": [
+     "ryokan kyoto"
+    ]
+   },
+   {
+    "kw": "best ryokan in kyoto",
+    "s": 880,
+    "g": 1300,
+    "kd": 25,
+    "cv": [
+     "best ryokan kyoto"
+    ]
+   },
+   {
+    "kw": "best ryokan kyoto",
+    "s": 260,
+    "g": 1300,
+    "kd": 24,
+    "cv": []
+   },
+   {
+    "kw": "luxury ryokan kyoto",
+    "s": 210,
+    "g": 590,
+    "kd": 24,
+    "cv": []
+   },
+   {
+    "kw": "traditional ryokan kyoto",
+    "s": 210,
+    "g": 320,
+    "kd": 29,
+    "cv": []
+   },
+   {
+    "kw": "kyoto ryokans",
+    "s": 70,
+    "g": 8100,
+    "kd": 27,
+    "cv": []
+   }
+  ]
+ },
+ {
+  "n": 8,
+  "title": "Kinosaki Onsen: the seven baths and where to stay",
+  "target": "kinosaki onsen",
+  "secondaries": [
+   "kinosaki onsen town",
+   "kinosaki onsen ryokan",
+   "kinosaki ryokan"
+  ],
+  "sem": 9900,
+  "google": 12100,
+  "kd": 35,
+  "peak": "Jan",
+  "difficulty": "Harder",
+  "group": [],
+  "status": "top",
+  "verdict": "Biggest variant in both Semrush and Google.",
+  "fit": "Very high",
+  "type": "Town",
+  "note": "43 ryokan listed on the site.",
+  "variants": [
+   {
+    "kw": "kinosaki onsen",
+    "s": 9900,
+    "g": 12100,
+    "kd": 35,
+    "cv": []
+   },
+   {
+    "kw": "kinosaki",
+    "s": 3600,
+    "g": 5400,
+    "kd": 51,
+    "cv": []
+   },
+   {
+    "kw": "kinosaki onsen town",
+    "s": 1900,
+    "g": 12100,
+    "kd": 16,
+    "cv": []
+   },
+   {
+    "kw": "kinosaki onsen ryokan",
+    "s": 880,
+    "g": 1300,
+    "kd": 23,
+    "cv": []
+   },
+   {
+    "kw": "kinosaki ryokan",
+    "s": 260,
+    "g": 390,
+    "kd": 23,
+    "cv": []
+   },
+   {
+    "kw": "kinosaki onsen guide",
+    "s": 20,
+    "g": 10,
+    "kd": null,
+    "cv": []
+   }
+  ]
+ },
+ {
+  "n": 9,
+  "title": "Shibu Onsen and the snow monkeys: a winter ryokan trip",
+  "target": "shibu onsen",
+  "secondaries": [
+   "shibu onsen ryokan",
+   "snow monkeys japan",
+   "jigokudani monkey park"
+  ],
+  "sem": 2900,
+  "google": 3600,
+  "kd": 9,
+  "peak": "Nov",
+  "difficulty": "Easy",
+  "group": [],
+  "status": "reachable",
+  "verdict": "Biggest variant you can realistically rank for. Bigger but much harder: jigokudani monkey park (S 9,900 \u00b7 G 18,100 \u00b7 KD 50); snow monkey park (S 6,600 \u00b7 G 18,100 \u00b7 KD 50); snow monkeys japan (S 2,900 \u00b7 G 12,100 \u00b7 KD 38)",
+  "fit": "High",
+  "type": "Town",
+  "note": "",
+  "variants": [
+   {
+    "kw": "jigokudani monkey park",
+    "s": 9900,
+    "g": 18100,
+    "kd": 50,
+    "cv": []
+   },
+   {
+    "kw": "snow monkey park",
+    "s": 6600,
+    "g": 18100,
+    "kd": 50,
+    "cv": []
+   },
+   {
+    "kw": "shibu onsen",
+    "s": 2900,
+    "g": 3600,
+    "kd": 9,
+    "cv": []
+   },
+   {
+    "kw": "snow monkeys japan",
+    "s": 2900,
+    "g": 12100,
+    "kd": 38,
+    "cv": []
+   },
+   {
+    "kw": "shibu onsen ryokan",
+    "s": 210,
+    "g": 260,
+    "kd": 14,
+    "cv": []
+   },
+   {
+    "kw": "snow monkey onsen",
+    "s": 170,
+    "g": 210,
+    "kd": 40,
+    "cv": []
+   },
+   {
+    "kw": "shibu onsen snow monkeys",
+    "s": 20,
+    "g": 20,
+    "kd": null,
+    "cv": []
+   }
+  ]
+ },
+ {
+  "n": 10,
+  "title": "The best onsen ryokan in Japan",
+  "target": "onsen ryokan",
+  "secondaries": [
+   "best ryokan in japan",
+   "luxury ryokan",
+   "best onsen ryokan in japan"
+  ],
+  "sem": 3600,
+  "google": 8100,
+  "kd": 25,
+  "peak": "Mar",
+  "difficulty": "Possible",
+  "group": [],
+  "status": "top",
+  "verdict": "Biggest variant in both Semrush and Google.",
+  "fit": "Very high",
+  "type": "Booking",
+  "note": "",
+  "variants": [
+   {
+    "kw": "onsen ryokan",
+    "s": 3600,
+    "g": 8100,
+    "kd": 25,
+    "cv": []
+   },
+   {
+    "kw": "best ryokan in japan",
+    "s": 720,
+    "g": 1300,
+    "kd": 22,
+    "cv": []
+   },
+   {
+    "kw": "luxury ryokan",
+    "s": 480,
+    "g": 720,
+    "kd": 24,
+    "cv": []
+   },
+   {
+    "kw": "best onsen ryokan in japan",
+    "s": 110,
+    "g": 140,
+    "kd": 16,
+    "cv": []
+   },
+   {
+    "kw": "onsen ryokan japan",
+    "s": 40,
+    "g": 480,
+    "kd": 27,
+    "cv": []
+   },
+   {
+    "kw": "best onsen ryokan",
+    "s": 20,
+    "g": 30,
+    "kd": null,
+    "cv": []
+   }
+  ]
+ },
+ {
+  "n": 11,
+  "title": "Zao Onsen: snow monsters, skiing and hot springs",
+  "target": "zao onsen",
+  "secondaries": [
+   "zao onsen ski resort",
+   "zao snow monsters"
+  ],
+  "sem": 1300,
+  "google": 1900,
+  "kd": 23,
+  "peak": "Jan",
+  "difficulty": "Possible",
+  "group": [],
+  "status": "top",
+  "verdict": "Biggest variant in both Semrush and Google.",
+  "fit": "High",
+  "type": "Town",
+  "note": "",
+  "variants": [
+   {
+    "kw": "zao onsen",
+    "s": 1300,
+    "g": 1900,
+    "kd": 23,
+    "cv": []
+   },
+   {
+    "kw": "zao onsen ski resort",
+    "s": 1300,
+    "g": 1600,
+    "kd": 29,
+    "cv": []
+   },
+   {
+    "kw": "zao snow monsters",
+    "s": 170,
+    "g": 390,
+    "kd": 20,
+    "cv": []
+   }
+  ]
+ },
+ {
+  "n": 12,
+  "title": "Nyuto Onsen: Tsurunoyu and the hidden baths of Akita",
+  "target": "nyuto onsen",
+  "secondaries": [
+   "tsurunoyu onsen"
+  ],
+  "sem": 1300,
+  "google": 1600,
+  "kd": 28,
+  "peak": "Dec",
+  "difficulty": "Possible",
+  "group": [],
+  "status": "top",
+  "verdict": "Biggest variant in both Semrush and Google.",
+  "fit": "High",
+  "type": "Town",
+  "note": "",
+  "variants": [
+   {
+    "kw": "nyuto onsen",
+    "s": 1300,
+    "g": 1600,
+    "kd": 28,
+    "cv": []
+   },
+   {
+    "kw": "tsurunoyu onsen",
+    "s": 720,
+    "g": 880,
+    "kd": 26,
+    "cv": []
+   }
+  ]
+ },
+ {
+  "n": 13,
+  "title": "Onsen in Kyoto: the best hot springs in and near the city",
+  "target": "kyoto onsen",
+  "secondaries": [
+   "onsen in kyoto",
+   "onsen kyoto",
+   "kyoto onsen ryokan",
+   "onsen near kyoto"
+  ],
+  "sem": 1900,
+  "google": 3600,
+  "kd": 26,
+  "peak": "Jan",
+  "difficulty": "Possible",
+  "group": [],
+  "status": "top",
+  "verdict": "Biggest variant in both Semrush and Google.",
+  "fit": "High",
+  "type": "Town",
+  "note": "",
+  "variants": [
+   {
+    "kw": "kyoto onsen",
+    "s": 1900,
+    "g": 3600,
+    "kd": 26,
+    "cv": []
+   },
+   {
+    "kw": "kyoto hot springs",
+    "s": 1300,
+    "g": 320,
+    "kd": 35,
+    "cv": []
+   },
+   {
+    "kw": "onsen kyoto",
+    "s": 1000,
+    "g": 3600,
+    "kd": 27,
+    "cv": []
+   },
+   {
+    "kw": "onsen in kyoto",
+    "s": 1000,
+    "g": 3600,
+    "kd": 23,
+    "cv": [
+     "onsen kyoto"
+    ]
+   },
+   {
+    "kw": "onsen near kyoto",
+    "s": 210,
+    "g": 320,
+    "kd": 21,
+    "cv": []
+   },
+   {
+    "kw": "kyoto onsen ryokan",
+    "s": 140,
+    "g": 880,
+    "kd": 17,
+    "cv": []
+   },
+   {
+    "kw": "hot springs kyoto",
+    "s": 70,
+    "g": 320,
+    "kd": 28,
+    "cv": [
+     "kyoto hot springs"
+    ]
+   },
+   {
+    "kw": "hot springs near kyoto",
+    "s": 50,
+    "g": 90,
+    "kd": 30,
+    "cv": []
+   }
+  ]
+ },
+ {
+  "n": 14,
+  "title": "Kaiseki dinner at a ryokan, explained",
+  "target": "kaiseki dinner",
+  "secondaries": [
+   "kaiseki",
+   "what is kaiseki",
+   "kaiseki ryori",
+   "ryokan dinner"
+  ],
+  "sem": 1300,
+  "google": 1900,
+  "kd": 29,
+  "peak": "Oct",
+  "difficulty": "Possible",
+  "group": [],
+  "status": "split",
+  "verdict": "Judgment call. Bigger in one source: kaiseki (S 9,900 \u00b7 G 14,800 \u00b7 KD 48); kaiseki restaurant (S 1,600 \u00b7 G 3,600)",
+  "fit": "High",
+  "type": "Food",
+  "note": "'kaiseki restaurant' is bigger (1,600, KD 19) but mostly US diners looking for a restaurant near them.",
+  "variants": [
+   {
+    "kw": "kaiseki",
+    "s": 9900,
+    "g": 14800,
+    "kd": 48,
+    "cv": []
+   },
+   {
+    "kw": "kaiseki restaurant",
+    "s": 1600,
+    "g": 3600,
+    "kd": 19,
+    "cv": []
+   },
+   {
+    "kw": "kaiseki dinner",
+    "s": 1300,
+    "g": 1900,
+    "kd": 29,
+    "cv": []
+   },
+   {
+    "kw": "kaiseki meal",
+    "s": 590,
+    "g": 720,
+    "kd": 64,
+    "cv": []
+   },
+   {
+    "kw": "what is kaiseki",
+    "s": 480,
+    "g": 880,
+    "kd": 59,
+    "cv": []
+   },
+   {
+    "kw": "kaiseki ryori",
+    "s": 480,
+    "g": 590,
+    "kd": 53,
+    "cv": []
+   },
+   {
+    "kw": "ryokan dinner",
+    "s": 70,
+    "g": 110,
+    "kd": 16,
+    "cv": []
+   },
+   {
+    "kw": "kaiseki dinner ryokan",
+    "s": 20,
+    "g": 20,
+    "kd": null,
+    "cv": []
+   }
+  ]
+ },
+ {
+  "n": 15,
+  "title": "Kaiseki vs omakase: what's the difference?",
+  "target": "kaiseki vs omakase",
+  "secondaries": [
+   "omakase vs kaiseki"
+  ],
+  "sem": 590,
+  "google": 880,
+  "kd": 8,
+  "peak": "Oct",
+  "difficulty": "Easy",
+  "group": [],
+  "status": "top",
+  "verdict": "Biggest variant in both Semrush and Google.",
+  "fit": "Medium",
+  "type": "Food",
+  "note": "",
+  "variants": [
+   {
+    "kw": "kaiseki vs omakase",
+    "s": 590,
+    "g": 880,
+    "kd": 8,
+    "cv": []
+   },
+   {
+    "kw": "omakase vs kaiseki",
+    "s": 170,
+    "g": 210,
+    "kd": 19,
+    "cv": []
+   }
+  ]
+ },
+ {
+  "n": 16,
+  "title": "Where to stay in Kyoto: neighborhoods, hotels and ryokan",
+  "target": "where to stay in kyoto",
+  "secondaries": [
+   "best hotels in kyoto",
+   "best area to stay in kyoto",
+   "best place to stay in kyoto"
+  ],
+  "sem": 3600,
+  "google": 3600,
+  "kd": 27,
+  "peak": "Jan",
+  "difficulty": "Possible",
+  "group": [
+   "where to stay kyoto"
+  ],
+  "status": "top",
+  "verdict": "Biggest variant in both Semrush and Google.",
+  "fit": "High",
+  "type": "Booking",
+  "note": "",
+  "variants": [
+   {
+    "kw": "where to stay in kyoto",
+    "s": 3600,
+    "g": 3600,
+    "kd": 27,
+    "cv": [
+     "where to stay kyoto"
+    ]
+   },
+   {
+    "kw": "best hotels in kyoto",
+    "s": 2400,
+    "g": 3600,
+    "kd": 25,
+    "cv": []
+   },
+   {
+    "kw": "best area to stay in kyoto",
+    "s": 1300,
+    "g": 1600,
+    "kd": 30,
+    "cv": []
+   },
+   {
+    "kw": "best place to stay in kyoto",
+    "s": 1000,
+    "g": 1600,
+    "kd": 26,
+    "cv": []
+   },
+   {
+    "kw": "where to stay kyoto",
+    "s": 390,
+    "g": 3600,
+    "kd": 28,
+    "cv": []
+   },
+   {
+    "kw": "kyoto where to stay",
+    "s": 210,
+    "g": 390,
+    "kd": 23,
+    "cv": []
+   }
+  ]
+ },
+ {
+  "n": 17,
+  "title": "What is a ryokan? A guide to Japan's traditional inns",
+  "target": "what is a ryokan",
+  "secondaries": [
+   "ryokan meaning",
+   "ryokan japan",
+   "japanese ryokan",
+   "ryokan vs hotel"
+  ],
+  "sem": 1600,
+  "google": 1900,
+  "kd": 37,
+  "peak": "Jan",
+  "difficulty": "Harder",
+  "group": [],
+  "status": "split",
+  "verdict": "Judgment call. Bigger in one source: ryokan (S 40,500 \u00b7 G 60,500 \u00b7 KD 44); ryokan japan (S 4,400 \u00b7 G 5,400); japanese ryokan (S 1,600 \u00b7 G 3,600 \u00b7 KD 43); ryokan meaning (S 1,300 \u00b7 G 2,400); japanese inn (S 1,300 \u00b7 G 14,800 \u00b7 KD 70)",
+  "fit": "High",
+  "type": "Pillar",
+  "note": "Long-term goal: 'ryokan' (40,500, KD 44).",
+  "variants": [
+   {
+    "kw": "ryokan",
+    "s": 40500,
+    "g": 60500,
+    "kd": 44,
+    "cv": []
+   },
+   {
+    "kw": "ryokan japan",
+    "s": 4400,
+    "g": 5400,
+    "kd": 40,
+    "cv": []
+   },
+   {
+    "kw": "what is a ryokan",
+    "s": 1600,
+    "g": 1900,
+    "kd": 37,
+    "cv": []
+   },
+   {
+    "kw": "japanese ryokan",
+    "s": 1600,
+    "g": 3600,
+    "kd": 43,
+    "cv": []
+   },
+   {
+    "kw": "ryokan meaning",
+    "s": 1300,
+    "g": 2400,
+    "kd": 29,
+    "cv": []
+   },
+   {
+    "kw": "japanese inn",
+    "s": 1300,
+    "g": 14800,
+    "kd": 70,
+    "cv": []
+   },
+   {
+    "kw": "ryokan vs hotel",
+    "s": 40,
+    "g": 70,
+    "kd": 13,
+    "cv": []
+   }
+  ]
+ },
+ {
+  "n": 18,
+  "title": "Things to do in Hakone",
+  "target": "things to do in hakone",
+  "secondaries": [
+   "hakone things to do",
+   "hakone day trip",
+   "hakone itinerary"
+  ],
+  "sem": 1900,
+  "google": 2400,
+  "kd": 18,
+  "peak": "Jan",
+  "difficulty": "Easy",
+  "group": [],
+  "status": "reachable",
+  "verdict": "Biggest variant you can realistically rank for. Bigger but much harder: hakone (S 33,100 \u00b7 G 49,500 \u00b7 KD 61); hakone japan (S 9,900 \u00b7 G 12,100 \u00b7 KD 52)",
+  "fit": "Medium",
+  "type": "Town",
+  "note": "",
+  "variants": [
+   {
+    "kw": "hakone",
+    "s": 33100,
+    "g": 49500,
+    "kd": 61,
+    "cv": []
+   },
+   {
+    "kw": "hakone japan",
+    "s": 9900,
+    "g": 12100,
+    "kd": 52,
+    "cv": []
+   },
+   {
+    "kw": "things to do in hakone",
+    "s": 1900,
+    "g": 2400,
+    "kd": 18,
+    "cv": []
+   },
+   {
+    "kw": "hakone day trip",
+    "s": 720,
+    "g": 880,
+    "kd": 21,
+    "cv": []
+   },
+   {
+    "kw": "hakone things to do",
+    "s": 480,
+    "g": 590,
+    "kd": 15,
+    "cv": []
+   },
+   {
+    "kw": "hakone itinerary",
+    "s": 140,
+    "g": 140,
+    "kd": 14,
+    "cv": []
+   }
+  ]
+ },
+ {
+  "n": 19,
+  "title": "Tokyo to Hakone: how to get there (and why to stay the night)",
+  "target": "tokyo to hakone",
+  "secondaries": [
+   "tokyo to hakone day trip",
+   "how to get to hakone from tokyo"
+  ],
+  "sem": 2400,
+  "google": 2900,
+  "kd": 29,
+  "peak": "Jan",
+  "difficulty": "Possible",
+  "group": [],
+  "status": "top",
+  "verdict": "Biggest variant in both Semrush and Google.",
+  "fit": "Medium",
+  "type": "Town",
+  "note": "",
+  "variants": [
+   {
+    "kw": "tokyo to hakone",
+    "s": 2400,
+    "g": 2900,
+    "kd": 29,
+    "cv": []
+   },
+   {
+    "kw": "tokyo to hakone day trip",
+    "s": 320,
+    "g": 720,
+    "kd": 21,
+    "cv": []
+   },
+   {
+    "kw": "how to get to hakone from tokyo",
+    "s": 210,
+    "g": 260,
+    "kd": 31,
+    "cv": []
+   }
+  ]
+ },
+ {
+  "n": 20,
+  "title": "Takayama, Japan: a guide to Hida Takayama",
+  "target": "takayama japan",
+  "secondaries": [
+   "hida takayama",
+   "takayama ryokan",
+   "things to do in takayama",
+   "where to stay in takayama"
+  ],
+  "sem": 12100,
+  "google": 4400,
+  "kd": 20,
+  "peak": "Mar",
+  "difficulty": "Possible",
+  "group": [],
+  "status": "split",
+  "verdict": "Judgment call. Bigger in one source: takayama (S 18,100 \u00b7 G 27,100 \u00b7 KD 43); hida takayama (S 3,600 \u00b7 G 27,100); hida takayama japan (S 70 \u00b7 G 27,100)",
+  "fit": "Medium",
+  "type": "Town",
+  "note": "",
+  "variants": [
+   {
+    "kw": "takayama",
+    "s": 18100,
+    "g": 27100,
+    "kd": 43,
+    "cv": []
+   },
+   {
+    "kw": "takayama japan",
+    "s": 12100,
+    "g": 4400,
+    "kd": 20,
+    "cv": []
+   },
+   {
+    "kw": "hida takayama",
+    "s": 3600,
+    "g": 27100,
+    "kd": 14,
+    "cv": []
+   },
+   {
+    "kw": "things to do in takayama",
+    "s": 480,
+    "g": 590,
+    "kd": 19,
+    "cv": []
+   },
+   {
+    "kw": "takayama ryokan",
+    "s": 390,
+    "g": 720,
+    "kd": 7,
+    "cv": []
+   },
+   {
+    "kw": "where to stay in takayama",
+    "s": 110,
+    "g": 170,
+    "kd": 13,
+    "cv": []
+   },
+   {
+    "kw": "hida takayama japan",
+    "s": 70,
+    "g": 27100,
+    "kd": 19,
+    "cv": []
+   }
+  ]
+ },
+ {
+  "n": 21,
+  "title": "Kanazawa, Ishikawa, Japan: what to see and where to stay",
+  "target": "kanazawa ishikawa japan",
+  "secondaries": [
+   "kanazawa hotels",
+   "things to do in kanazawa",
+   "kanazawa ryokan"
+  ],
+  "sem": 4400,
+  "google": 40500,
+  "kd": 19,
+  "peak": "Jan",
+  "difficulty": "Easy",
+  "group": [],
+  "status": "reachable",
+  "verdict": "Biggest variant you can realistically rank for. Bigger but much harder: kanazawa (S 27,100 \u00b7 G 40,500 \u00b7 KD 49); kanazawa japan (S 6,600 \u00b7 G 40,500 \u00b7 KD 41)",
+  "fit": "Medium",
+  "type": "Town",
+  "note": "Odd phrasing; Google treats it as part of the 'kanazawa' group (40,500). Use 'Kanazawa, Japan' in the H1.",
+  "variants": [
+   {
+    "kw": "kanazawa",
+    "s": 27100,
+    "g": 40500,
+    "kd": 49,
+    "cv": []
+   },
+   {
+    "kw": "kanazawa japan",
+    "s": 6600,
+    "g": 40500,
+    "kd": 41,
+    "cv": []
+   },
+   {
+    "kw": "kanazawa ishikawa japan",
+    "s": 4400,
+    "g": 40500,
+    "kd": 19,
+    "cv": []
+   },
+   {
+    "kw": "things to do in kanazawa",
+    "s": 1000,
+    "g": 1300,
+    "kd": 27,
+    "cv": []
+   },
+   {
+    "kw": "kanazawa hotels",
+    "s": 1000,
+    "g": 1600,
+    "kd": 21,
+    "cv": []
+   },
+   {
+    "kw": "kanazawa ryokan",
+    "s": 320,
+    "g": 720,
+    "kd": 16,
+    "cv": []
+   }
+  ]
+ },
+ {
+  "n": 22,
+  "title": "Japan itinerary: 10 days with a ryokan night",
+  "target": "japan itinerary 10 days",
+  "secondaries": [
+   "10 day japan itinerary",
+   "japan itinerary 7 days",
+   "7 day japan itinerary"
+  ],
+  "sem": 1600,
+  "google": 2900,
+  "kd": 23,
+  "peak": "Jan",
+  "difficulty": "Possible",
+  "group": [],
+  "status": "split",
+  "verdict": "Judgment call. Bigger in one source: japan itinerary (S 2,400 \u00b7 G 4,400 \u00b7 KD 33)",
+  "fit": "Medium",
+  "type": "Itinerary",
+  "note": "",
+  "variants": [
+   {
+    "kw": "japan itinerary",
+    "s": 2400,
+    "g": 4400,
+    "kd": 33,
+    "cv": []
+   },
+   {
+    "kw": "japan itinerary 10 days",
+    "s": 1600,
+    "g": 2900,
+    "kd": 23,
+    "cv": []
+   },
+   {
+    "kw": "10 day japan itinerary",
+    "s": 1000,
+    "g": 2900,
+    "kd": 23,
+    "cv": [
+     "japan itinerary 10 days"
+    ]
+   },
+   {
+    "kw": "japan itinerary 7 days",
+    "s": 880,
+    "g": 1300,
+    "kd": 17,
+    "cv": []
+   },
+   {
+    "kw": "7 day japan itinerary",
+    "s": 320,
+    "g": 1300,
+    "kd": 12,
+    "cv": [
+     "japan itinerary 7 days"
+    ]
+   },
+   {
+    "kw": "1 week japan itinerary",
+    "s": 140,
+    "g": 590,
+    "kd": 22,
+    "cv": []
+   }
+  ]
+ },
+ {
+  "n": 23,
+  "title": "The 2-week Japan itinerary",
+  "target": "2 week japan itinerary",
+  "secondaries": [
+   "japan two week itinerary",
+   "japan itinerary 2 weeks",
+   "japan itinerary 14 days"
+  ],
+  "sem": 1300,
+  "google": 2400,
+  "kd": 18,
+  "peak": "Jan",
+  "difficulty": "Easy",
+  "group": [
+   "japan itinerary 2 weeks"
+  ],
+  "status": "top",
+  "verdict": "Biggest variant in both Semrush and Google.",
+  "fit": "Medium",
+  "type": "Itinerary",
+  "note": "",
+  "variants": [
+   {
+    "kw": "2 week japan itinerary",
+    "s": 1300,
+    "g": 2400,
+    "kd": 18,
+    "cv": [
+     "japan itinerary 2 weeks"
+    ]
+   },
+   {
+    "kw": "japan two week itinerary",
+    "s": 1300,
+    "g": 2400,
+    "kd": 20,
+    "cv": []
+   },
+   {
+    "kw": "japan itinerary 14 days",
+    "s": 720,
+    "g": 1600,
+    "kd": 26,
+    "cv": []
+   },
+   {
+    "kw": "japan itinerary 2 weeks",
+    "s": 170,
+    "g": 2400,
+    "kd": 18,
+    "cv": []
+   }
+  ]
+ },
+ {
+  "n": 24,
+  "title": "Japan in January: weather, snow festivals and onsen",
+  "target": "japan in january",
+  "secondaries": [
+   "japan in january weather",
+   "visiting japan in january"
+  ],
+  "sem": 1300,
+  "google": 1900,
+  "kd": 21,
+  "peak": "Oct",
+  "difficulty": "Possible",
+  "group": [],
+  "status": "split",
+  "verdict": "Judgment call. Bigger in one source: japan in january weather (S 320 \u00b7 G 3,600)",
+  "fit": "Medium",
+  "type": "Seasonal",
+  "note": "Google groups weather searches into a bigger cluster (3,600); cover weather as its own section.",
+  "variants": [
+   {
+    "kw": "japan in january",
+    "s": 1300,
+    "g": 1900,
+    "kd": 21,
+    "cv": []
+   },
+   {
+    "kw": "japan in january weather",
+    "s": 320,
+    "g": 3600,
+    "kd": 11,
+    "cv": []
+   },
+   {
+    "kw": "visiting japan in january",
+    "s": 170,
+    "g": 260,
+    "kd": 16,
+    "cv": []
+   },
+   {
+    "kw": "japan january",
+    "s": 70,
+    "g": 90,
+    "kd": 27,
+    "cv": []
+   }
+  ]
+ },
+ {
+  "n": 25,
+  "title": "Onsen in Tokyo: city baths and the best hot springs nearby",
+  "target": "onsen tokyo",
+  "secondaries": [
+   "tokyo onsen",
+   "onsen in tokyo",
+   "onsen near tokyo",
+   "hot spring tokyo"
+  ],
+  "sem": 1000,
+  "google": 3600,
+  "kd": 24,
+  "peak": "Jan",
+  "difficulty": "Possible",
+  "group": [
+   "tokyo onsen"
+  ],
+  "status": "top",
+  "verdict": "Biggest variant in both Semrush and Google.",
+  "fit": "Medium",
+  "type": "Town",
+  "note": "",
+  "variants": [
+   {
+    "kw": "onsen tokyo",
+    "s": 1000,
+    "g": 3600,
+    "kd": 24,
+    "cv": [
+     "tokyo onsen"
+    ]
+   },
+   {
+    "kw": "tokyo onsen",
+    "s": 880,
+    "g": 3600,
+    "kd": 39,
+    "cv": [
+     "onsen tokyo"
+    ]
+   },
+   {
+    "kw": "onsen in tokyo",
+    "s": 720,
+    "g": 3600,
+    "kd": 38,
+    "cv": [
+     "onsen tokyo",
+     "tokyo onsen"
+    ]
+   },
+   {
+    "kw": "onsen near tokyo",
+    "s": 480,
+    "g": 590,
+    "kd": 32,
+    "cv": []
+   },
+   {
+    "kw": "hot springs near tokyo",
+    "s": 170,
+    "g": 260,
+    "kd": 33,
+    "cv": []
+   },
+   {
+    "kw": "hot spring tokyo",
+    "s": 90,
+    "g": 590,
+    "kd": 26,
+    "cv": []
+   }
+  ]
+ },
+ {
+  "n": 26,
+  "title": "Kurokawa Onsen: Kyushu's prettiest hot-spring village",
+  "target": "kurokawa onsen",
+  "secondaries": [
+   "kurokawa onsen ryokan"
+  ],
+  "sem": 3600,
+  "google": 4400,
+  "kd": 29,
+  "peak": "Jan",
+  "difficulty": "Possible",
+  "group": [],
+  "status": "top",
+  "verdict": "Biggest variant in both Semrush and Google.",
+  "fit": "High",
+  "type": "Town",
+  "note": "",
+  "variants": [
+   {
+    "kw": "kurokawa onsen",
+    "s": 3600,
+    "g": 4400,
+    "kd": 29,
+    "cv": []
+   },
+   {
+    "kw": "kurokawa onsen ryokan",
+    "s": 210,
+    "g": 320,
+    "kd": 15,
+    "cv": []
+   }
+  ]
+ },
+ {
+  "n": 27,
+  "title": "Takaragawa Onsen: Japan's giant riverside baths",
+  "target": "takaragawa onsen",
+  "secondaries": [
+   "takaragawa onsen osenkaku"
+  ],
+  "sem": 2900,
+  "google": 4400,
+  "kd": 25,
+  "peak": "Jan",
+  "difficulty": "Possible",
+  "group": [],
+  "status": "top",
+  "verdict": "Biggest variant in both Semrush and Google.",
+  "fit": "Medium",
+  "type": "Town",
+  "note": "A single-inn onsen. Check that Osenkaku is listed.",
+  "variants": [
+   {
+    "kw": "takaragawa onsen",
+    "s": 2900,
+    "g": 4400,
+    "kd": 25,
+    "cv": []
+   },
+   {
+    "kw": "takaragawa onsen osenkaku",
+    "s": 1600,
+    "g": 2400,
+    "kd": 30,
+    "cv": []
+   }
+  ]
+ },
+ {
+  "n": 28,
+  "title": "Kinugawa Onsen: an easy hot-spring trip from Tokyo",
+  "target": "kinugawa onsen",
+  "secondaries": [
+   "kinugawa onsen ryokan"
+  ],
+  "sem": 1600,
+  "google": 1300,
+  "kd": 24,
+  "peak": "Mar",
+  "difficulty": "Possible",
+  "group": [],
+  "status": "top",
+  "verdict": "Biggest variant in both Semrush and Google.",
+  "fit": "High",
+  "type": "Town",
+  "note": "",
+  "variants": [
+   {
+    "kw": "kinugawa onsen",
+    "s": 1600,
+    "g": 1300,
+    "kd": 24,
+    "cv": []
+   },
+   {
+    "kw": "kinugawa onsen ryokan",
+    "s": 40,
+    "g": 70,
+    "kd": 14,
+    "cv": []
+   }
+  ]
+ },
+ {
+  "n": 29,
+  "title": "Noboribetsu Onsen: Hell Valley and Hokkaido's best ryokan",
+  "target": "noboribetsu",
+  "secondaries": [
+   "noboribetsu onsen",
+   "noboribetsu ryokan"
+  ],
+  "sem": 2900,
+  "google": 4400,
+  "kd": 35,
+  "peak": "Apr",
+  "difficulty": "Harder",
+  "group": [],
+  "status": "top",
+  "verdict": "Biggest variant in both Semrush and Google.",
+  "fit": "High",
+  "type": "Town",
+  "note": "",
+  "variants": [
+   {
+    "kw": "noboribetsu",
+    "s": 2900,
+    "g": 4400,
+    "kd": 35,
+    "cv": []
+   },
+   {
+    "kw": "noboribetsu onsen",
+    "s": 1300,
+    "g": 1600,
+    "kd": 24,
+    "cv": []
+   },
+   {
+    "kw": "noboribetsu ryokan",
+    "s": 90,
+    "g": 170,
+    "kd": 17,
+    "cv": []
+   }
+  ]
+ },
+ {
+  "n": 30,
+  "title": "Things to do in Nikko, plus a night at Kinugawa",
+  "target": "things to do in nikko",
+  "secondaries": [
+   "nikko day trip"
+  ],
+  "sem": 480,
+  "google": 720,
+  "kd": 18,
+  "peak": "Jan",
+  "difficulty": "Easy",
+  "group": [],
+  "status": "reachable",
+  "verdict": "Biggest variant you can realistically rank for. Bigger but much harder: nikko (S 18,100 \u00b7 G 33,100 \u00b7 KD 44); nikko japan (S 6,600 \u00b7 G 33,100 \u00b7 KD 48)",
+  "fit": "Medium",
+  "type": "Town",
+  "note": "Long-term goal: 'nikko' (18,100, KD 44).",
+  "variants": [
+   {
+    "kw": "nikko",
+    "s": 18100,
+    "g": 33100,
+    "kd": 44,
+    "cv": []
+   },
+   {
+    "kw": "nikko japan",
+    "s": 6600,
+    "g": 33100,
+    "kd": 48,
+    "cv": []
+   },
+   {
+    "kw": "things to do in nikko",
+    "s": 480,
+    "g": 720,
+    "kd": 18,
+    "cv": []
+   },
+   {
+    "kw": "nikko day trip",
+    "s": 260,
+    "g": 480,
+    "kd": 21,
+    "cv": []
+   }
+  ]
+ },
+ {
+  "n": 31,
+  "title": "Arima Onsen: gold and silver springs an hour from Osaka",
+  "target": "arima onsen",
+  "secondaries": [
+   "arima hot springs",
+   "arima onsen ryokan"
+  ],
+  "sem": 4400,
+  "google": 6600,
+  "kd": 39,
+  "peak": "Jan",
+  "difficulty": "Harder",
+  "group": [],
+  "status": "top",
+  "verdict": "Biggest variant in both Semrush and Google.",
+  "fit": "High",
+  "type": "Town",
+  "note": "",
+  "variants": [
+   {
+    "kw": "arima onsen",
+    "s": 4400,
+    "g": 6600,
+    "kd": 39,
+    "cv": []
+   },
+   {
+    "kw": "arima hot springs",
+    "s": 2400,
+    "g": 6600,
+    "kd": 36,
+    "cv": []
+   },
+   {
+    "kw": "arima onsen ryokan",
+    "s": 260,
+    "g": 320,
+    "kd": 9,
+    "cv": []
+   }
+  ]
+ },
+ {
+  "n": 32,
+  "title": "Kusatsu Onsen: the yubatake and where to stay",
+  "target": "kusatsu onsen",
+  "secondaries": [
+   "kusatsu onsen ryokan",
+   "kusatsu"
+  ],
+  "sem": 8100,
+  "google": 9900,
+  "kd": 41,
+  "peak": "Jan",
+  "difficulty": "Hard",
+  "group": [],
+  "status": "top",
+  "verdict": "Biggest variant in both Semrush and Google.",
+  "fit": "High",
+  "type": "Town",
+  "note": "",
+  "variants": [
+   {
+    "kw": "kusatsu onsen",
+    "s": 8100,
+    "g": 9900,
+    "kd": 41,
+    "cv": []
+   },
+   {
+    "kw": "kusatsu",
+    "s": 1600,
+    "g": 1900,
+    "kd": 43,
+    "cv": []
+   },
+   {
+    "kw": "kusatsu onsen ryokan",
+    "s": 390,
+    "g": 720,
+    "kd": 16,
+    "cv": []
+   }
+  ]
+ },
+ {
+  "n": 33,
+  "title": "Beppu: Japan's hot-spring capital",
+  "target": "beppu",
+  "secondaries": [
+   "beppu onsen",
+   "beppu ryokan",
+   "beppu hot springs"
+  ],
+  "sem": 5400,
+  "google": 6600,
+  "kd": 41,
+  "peak": "Mar",
+  "difficulty": "Hard",
+  "group": [],
+  "status": "top",
+  "verdict": "Biggest variant in both Semrush and Google.",
+  "fit": "High",
+  "type": "Town",
+  "note": "",
+  "variants": [
+   {
+    "kw": "beppu",
+    "s": 5400,
+    "g": 6600,
+    "kd": 41,
+    "cv": []
+   },
+   {
+    "kw": "beppu onsen",
+    "s": 1000,
+    "g": 1600,
+    "kd": 56,
+    "cv": []
+   },
+   {
+    "kw": "beppu hot springs",
+    "s": 320,
+    "g": 390,
+    "kd": 43,
+    "cv": []
+   },
+   {
+    "kw": "beppu ryokan",
+    "s": 170,
+    "g": 210,
+    "kd": 20,
+    "cv": []
+   }
+  ]
+ },
+ {
+  "n": 34,
+  "title": "Yufuin: a quiet onsen town in Kyushu",
+  "target": "yufuin",
+  "secondaries": [
+   "yufuin onsen",
+   "yufuin ryokan"
+  ],
+  "sem": 2400,
+  "google": 3600,
+  "kd": 35,
+  "peak": "Jan",
+  "difficulty": "Harder",
+  "group": [],
+  "status": "top",
+  "verdict": "Biggest variant in both Semrush and Google.",
+  "fit": "High",
+  "type": "Town",
+  "note": "",
+  "variants": [
+   {
+    "kw": "yufuin",
+    "s": 2400,
+    "g": 3600,
+    "kd": 35,
+    "cv": []
+   },
+   {
+    "kw": "yufuin onsen",
+    "s": 720,
+    "g": 880,
+    "kd": 28,
+    "cv": []
+   },
+   {
+    "kw": "yufuin ryokan",
+    "s": 170,
+    "g": 210,
+    "kd": 36,
+    "cv": []
+   }
+  ]
+ },
+ {
+  "n": 35,
+  "title": "Ginzan Onsen: the snow-lit town and its ryokan",
+  "target": "ginzan onsen",
+  "secondaries": [
+   "ginzan onsen ryokan"
+  ],
+  "sem": 5400,
+  "google": 8100,
+  "kd": 50,
+  "peak": "Jan",
+  "difficulty": "Hard",
+  "group": [],
+  "status": "top",
+  "verdict": "Biggest variant in both Semrush and Google.",
+  "fit": "High",
+  "type": "Town",
+  "note": "",
+  "variants": [
+   {
+    "kw": "ginzan onsen",
+    "s": 5400,
+    "g": 8100,
+    "kd": 50,
+    "cv": []
+   },
+   {
+    "kw": "ginzan onsen ryokan",
+    "s": 320,
+    "g": 390,
+    "kd": 17,
+    "cv": []
+   }
+  ]
+ },
+ {
+  "n": 36,
+  "title": "Dogo Onsen: Japan's oldest hot spring",
+  "target": "dogo onsen",
+  "secondaries": [
+   "dogo onsen honkan"
+  ],
+  "sem": 1900,
+  "google": 2400,
+  "kd": 41,
+  "peak": "Jan",
+  "difficulty": "Hard",
+  "group": [],
+  "status": "top",
+  "verdict": "Biggest variant in both Semrush and Google.",
+  "fit": "High",
+  "type": "Town",
+  "note": "",
+  "variants": [
+   {
+    "kw": "dogo onsen",
+    "s": 1900,
+    "g": 2400,
+    "kd": 41,
+    "cv": []
+   },
+   {
+    "kw": "dogo onsen honkan",
+    "s": 390,
+    "g": 480,
+    "kd": 50,
+    "cv": []
+   }
+  ]
+ },
+ {
+  "n": 37,
+  "title": "Gero Onsen: one of Japan's three great hot springs",
+  "target": "gero onsen",
+  "secondaries": [
+   "gero onsen ryokan"
+  ],
+  "sem": 1300,
+  "google": 1600,
+  "kd": 41,
+  "peak": "Jan",
+  "difficulty": "Hard",
+  "group": [],
+  "status": "top",
+  "verdict": "Biggest variant in both Semrush and Google.",
+  "fit": "High",
+  "type": "Town",
+  "note": "",
+  "variants": [
+   {
+    "kw": "gero onsen",
+    "s": 1300,
+    "g": 1600,
+    "kd": 41,
+    "cv": []
+   },
+   {
+    "kw": "gero onsen ryokan",
+    "s": 90,
+    "g": 110,
+    "kd": 20,
+    "cv": []
+   }
+  ]
+ },
+ {
+  "n": 38,
+  "title": "Yukata: how to wear one at a ryokan",
+  "target": "yukata",
+  "secondaries": [
+   "ryokan etiquette"
+  ],
+  "sem": 40500,
+  "google": 60500,
+  "kd": 12,
+  "peak": "Mar",
+  "difficulty": "Easy",
+  "group": [],
+  "status": "top",
+  "verdict": "Biggest variant in both Semrush and Google.",
+  "fit": "Low",
+  "type": "Pillar",
+  "note": "Huge but mostly shoppers buying a yukata. Write it last, if at all.",
+  "variants": [
+   {
+    "kw": "yukata",
+    "s": 40500,
+    "g": 60500,
+    "kd": 12,
+    "cv": []
+   },
+   {
+    "kw": "ryokan etiquette",
+    "s": 20,
+    "g": 40,
+    "kd": null,
+    "cv": []
+   },
+   {
+    "kw": "how to stay at a ryokan",
+    "s": 20,
+    "g": 10,
+    "kd": null,
+    "cv": []
+   },
+   {
+    "kw": "ryokan tips",
+    "s": 20,
+    "g": 10,
+    "kd": null,
+    "cv": []
+   },
+   {
+    "kw": "what to expect at a ryokan",
+    "s": 0,
+    "g": null,
+    "kd": null,
+    "cv": []
+   }
+  ]
+ }
+]

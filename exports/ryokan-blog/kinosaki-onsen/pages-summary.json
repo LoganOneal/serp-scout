@@ -1,0 +1,101 @@
+{
+ "kinds": [
+  [
+   "official/tourism board",
+   2
+  ],
+  [
+   "reviews/OTA",
+   2
+  ],
+  [
+   "forum",
+   1
+  ],
+  [
+   "encyclopedia",
+   1
+  ],
+  [
+   "blog/editorial",
+   1
+  ],
+  [
+   "big guide site",
+   1
+  ],
+  [
+   "video",
+   1
+  ]
+ ],
+ "beatable_articles": [
+  "https://www.insidekyoto.com/kinosaki-onsen-guide-and-map",
+  "https://www.japan-guide.com/e/e3525.html"
+ ],
+ "fetched": 6,
+ "failed": [
+  "https://www.reddit.com/r/JapanTravelTips/comments/162v7ya/is_kinosaki_onsen_worth_the_visit/",
+  "https://www.tripadvisor.com/Attraction_Review-g1022822-d1238308-Reviews-Kinosaki_Onsen-Toyooka_Hyogo_Prefecture_Kinki.html",
+  "https://www.klook.com/en-US/destination/p50293911-kinosaki-onsen/"
+ ],
+ "words_median": 1094,
+ "words_top3_median": 756,
+ "images_median": 23.0,
+ "with_table": 2,
+ "with_faq_headings": 0,
+ "schema": [
+  [
+   "ImageObject",
+   3
+  ],
+  [
+   "ListItem",
+   2
+  ],
+  [
+   "Organization",
+   2
+  ],
+  [
+   "SearchAction",
+   2
+  ],
+  [
+   "WebSite",
+   2
+  ],
+  [
+   "CollectionPage",
+   1
+  ],
+  [
+   "GovernmentOrganization",
+   1
+  ],
+  [
+   "ItemList",
+   1
+  ],
+  [
+   "Article",
+   1
+  ],
+  [
+   "BreadcrumbList",
+   1
+  ],
+  [
+   "EntryPoint",
+   1
+  ],
+  [
+   "PropertyValueSpecification",
+   1
+  ]
+ ],
+ "heading_terms_on_3plus_pages": [
+  "kinosaki",
+  "onsen"
+ ]
+}

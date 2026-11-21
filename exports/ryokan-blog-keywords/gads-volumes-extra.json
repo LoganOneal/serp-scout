@@ -1,0 +1,1745 @@
+{
+ "source": "google_ads",
+ "error": "",
+ "rows": [
+  {
+   "keyword": "japan december",
+   "returnedKeyword": "japan december",
+   "closeVariants": [],
+   "avgMonthlySearches": 2900,
+   "competition": "LOW",
+   "competitionIndex": 9,
+   "lowTopOfPageBidMicros": 634993,
+   "highTopOfPageBidMicros": 7505250,
+   "monthlySearches": [
+    {
+     "year": 2025,
+     "month": 11,
+     "searchVolume": 4400
+    },
+    {
+     "year": 2025,
+     "month": 12,
+     "searchVolume": 2400
+    },
+    {
+     "year": 2026,
+     "month": 1,
+     "searchVolume": 1900
+    },
+    {
+     "year": 2026,
+     "month": 2,
+     "searchVolume": 1600
+    },
+    {
+     "year": 2026,
+     "month": 3,
+     "searchVolume": 1900
+    },
+    {
+     "year": 2026,
+     "month": 4,
+     "searchVolume": 2400
+    },
+    {
+     "year": 2026,
+     "month": 5,
+     "searchVolume": 2400
+    },
+    {
+     "year": 2026,
+     "month": 6,
+     "searchVolume": 2900
+    },
+    {
+     "year": 2026,
+     "month": 7,
+     "searchVolume": 3600
+    },
+    {
+     "year": 2026,
+     "month": 8,
+     "searchVolume": 4400
+    },
+    {
+     "year": 2026,
+     "month": 9,
+     "searchVolume": 4400
+    },
+    {
+     "year": 2026,
+     "month": 10,
+     "searchVolume": 4400
+    }
+   ]
+  },
+  {
+   "keyword": "visiting japan in december",
+   "returnedKeyword": "visiting japan in december",
+   "closeVariants": [],
+   "avgMonthlySearches": 480,
+   "competition": "MEDIUM",
+   "competitionIndex": 45,
+   "lowTopOfPageBidMicros": 604537,
+   "highTopOfPageBidMicros": 5307724,
+   "monthlySearches": [
+    {
+     "year": 2025,
+     "month": 11,
+     "searchVolume": 590
+    },
+    {
+     "year": 2025,
+     "month": 12,
+     "searchVolume": 320
+    },
+    {
+     "year": 2026,
+     "month": 1,
+     "searchVolume": 260
+    },
+    {
+     "year": 2026,
+     "month": 2,
+     "searchVolume": 210
+    },
+    {
+     "year": 2026,
+     "month": 3,
+     "searchVolume": 320
+    },
+    {
+     "year": 2026,
+     "month": 4,
+     "searchVolume": 320
+    },
+    {
+     "year": 2026,
+     "month": 5,
+     "searchVolume": 480
+    },
+    {
+     "year": 2026,
+     "month": 6,
+     "searchVolume": 480
+    },
+    {
+     "year": 2026,
+     "month": 7,
+     "searchVolume": 590
+    },
+    {
+     "year": 2026,
+     "month": 8,
+     "searchVolume": 720
+    },
+    {
+     "year": 2026,
+     "month": 9,
+     "searchVolume": 720
+    },
+    {
+     "year": 2026,
+     "month": 10,
+     "searchVolume": 1000
+    }
+   ]
+  },
+  {
+   "keyword": "japan in december weather",
+   "returnedKeyword": "japan in december weather",
+   "closeVariants": [],
+   "avgMonthlySearches": 6600,
+   "competition": "LOW",
+   "competitionIndex": 4,
+   "lowTopOfPageBidMicros": 34282,
+   "highTopOfPageBidMicros": 600420,
+   "monthlySearches": [
+    {
+     "year": 2025,
+     "month": 11,
+     "searchVolume": 9900
+    },
+    {
+     "year": 2025,
+     "month": 12,
+     "searchVolume": 5400
+    },
+    {
+     "year": 2026,
+     "month": 1,
+     "searchVolume": 3600
+    },
+    {
+     "year": 2026,
+     "month": 2,
+     "searchVolume": 3600
+    },
+    {
+     "year": 2026,
+     "month": 3,
+     "searchVolume": 3600
+    },
+    {
+     "year": 2026,
+     "month": 4,
+     "searchVolume": 4400
+    },
+    {
+     "year": 2026,
+     "month": 5,
+     "searchVolume": 4400
+    },
+    {
+     "year": 2026,
+     "month": 6,
+     "searchVolume": 5400
+    },
+    {
+     "year": 2026,
+     "month": 7,
+     "searchVolume": 6600
+    },
+    {
+     "year": 2026,
+     "month": 8,
+     "searchVolume": 8100
+    },
+    {
+     "year": 2026,
+     "month": 9,
+     "searchVolume": 8100
+    },
+    {
+     "year": 2026,
+     "month": 10,
+     "searchVolume": 9900
+    }
+   ]
+  },
+  {
+   "keyword": "tokyo in december",
+   "returnedKeyword": "tokyo in december",
+   "closeVariants": [],
+   "avgMonthlySearches": 1300,
+   "competition": "LOW",
+   "competitionIndex": 6,
+   "lowTopOfPageBidMicros": 171167,
+   "highTopOfPageBidMicros": 7198671,
+   "monthlySearches": [
+    {
+     "year": 2025,
+     "month": 11,
+     "searchVolume": 2400
+    },
+    {
+     "year": 2025,
+     "month": 12,
+     "searchVolume": 1000
+    },
+    {
+     "year": 2026,
+     "month": 1,
+     "searchVolume": 720
+    },
+    {
+     "year": 2026,
+     "month": 2,
+     "searchVolume": 590
+    },
+    {
+     "year": 2026,
+     "month": 3,
+     "searchVolume": 720
+    },
+    {
+     "year": 2026,
+     "month": 4,
+     "searchVolume": 720
+    },
+    {
+     "year": 2026,
+     "month": 5,
+     "searchVolume": 880
+    },
+    {
+     "year": 2026,
+     "month": 6,
+     "searchVolume": 1000
+    },
+    {
+     "year": 2026,
+     "month": 7,
+     "searchVolume": 1600
+    },
+    {
+     "year": 2026,
+     "month": 8,
+     "searchVolume": 1900
+    },
+    {
+     "year": 2026,
+     "month": 9,
+     "searchVolume": 2400
+    },
+    {
+     "year": 2026,
+     "month": 10,
+     "searchVolume": 2900
+    }
+   ]
+  },
+  {
+   "keyword": "japan january",
+   "returnedKeyword": "japan january",
+   "closeVariants": [],
+   "avgMonthlySearches": 90,
+   "competition": "LOW",
+   "competitionIndex": 4,
+   "lowTopOfPageBidMicros": 526334,
+   "highTopOfPageBidMicros": 3620379,
+   "monthlySearches": [
+    {
+     "year": 2025,
+     "month": 11,
+     "searchVolume": 170
+    },
+    {
+     "year": 2025,
+     "month": 12,
+     "searchVolume": 140
+    },
+    {
+     "year": 2026,
+     "month": 1,
+     "searchVolume": 70
+    },
+    {
+     "year": 2026,
+     "month": 2,
+     "searchVolume": 40
+    },
+    {
+     "year": 2026,
+     "month": 3,
+     "searchVolume": 50
+    },
+    {
+     "year": 2026,
+     "month": 4,
+     "searchVolume": 30
+    },
+    {
+     "year": 2026,
+     "month": 5,
+     "searchVolume": 70
+    },
+    {
+     "year": 2026,
+     "month": 6,
+     "searchVolume": 70
+    },
+    {
+     "year": 2026,
+     "month": 7,
+     "searchVolume": 90
+    },
+    {
+     "year": 2026,
+     "month": 8,
+     "searchVolume": 110
+    },
+    {
+     "year": 2026,
+     "month": 9,
+     "searchVolume": 140
+    },
+    {
+     "year": 2026,
+     "month": 10,
+     "searchVolume": 210
+    }
+   ]
+  },
+  {
+   "keyword": "japan in january weather",
+   "returnedKeyword": "japan in january weather",
+   "closeVariants": [],
+   "avgMonthlySearches": 3600,
+   "competition": "LOW",
+   "competitionIndex": 6,
+   "lowTopOfPageBidMicros": 46022,
+   "highTopOfPageBidMicros": 569169,
+   "monthlySearches": [
+    {
+     "year": 2025,
+     "month": 11,
+     "searchVolume": 6600
+    },
+    {
+     "year": 2025,
+     "month": 12,
+     "searchVolume": 6600
+    },
+    {
+     "year": 2026,
+     "month": 1,
+     "searchVolume": 2400
+    },
+    {
+     "year": 2026,
+     "month": 2,
+     "searchVolume": 1000
+    },
+    {
+     "year": 2026,
+     "month": 3,
+     "searchVolume": 1600
+    },
+    {
+     "year": 2026,
+     "month": 4,
+     "searchVolume": 1600
+    },
+    {
+     "year": 2026,
+     "month": 5,
+     "searchVolume": 1900
+    },
+    {
+     "year": 2026,
+     "month": 6,
+     "searchVolume": 2900
+    },
+    {
+     "year": 2026,
+     "month": 7,
+     "searchVolume": 2900
+    },
+    {
+     "year": 2026,
+     "month": 8,
+     "searchVolume": 3600
+    },
+    {
+     "year": 2026,
+     "month": 9,
+     "searchVolume": 4400
+    },
+    {
+     "year": 2026,
+     "month": 10,
+     "searchVolume": 6600
+    }
+   ]
+  },
+  {
+   "keyword": "visiting japan in january",
+   "returnedKeyword": "visiting japan in january",
+   "closeVariants": [],
+   "avgMonthlySearches": 260,
+   "competition": "MEDIUM",
+   "competitionIndex": 59,
+   "lowTopOfPageBidMicros": 362788,
+   "highTopOfPageBidMicros": 4724157,
+   "monthlySearches": [
+    {
+     "year": 2025,
+     "month": 11,
+     "searchVolume": 390
+    },
+    {
+     "year": 2025,
+     "month": 12,
+     "searchVolume": 320
+    },
+    {
+     "year": 2026,
+     "month": 1,
+     "searchVolume": 140
+    },
+    {
+     "year": 2026,
+     "month": 2,
+     "searchVolume": 70
+    },
+    {
+     "year": 2026,
+     "month": 3,
+     "searchVolume": 90
+    },
+    {
+     "year": 2026,
+     "month": 4,
+     "searchVolume": 170
+    },
+    {
+     "year": 2026,
+     "month": 5,
+     "searchVolume": 170
+    },
+    {
+     "year": 2026,
+     "month": 6,
+     "searchVolume": 170
+    },
+    {
+     "year": 2026,
+     "month": 7,
+     "searchVolume": 210
+    },
+    {
+     "year": 2026,
+     "month": 8,
+     "searchVolume": 320
+    },
+    {
+     "year": 2026,
+     "month": 9,
+     "searchVolume": 320
+    },
+    {
+     "year": 2026,
+     "month": 10,
+     "searchVolume": 390
+    }
+   ]
+  },
+  {
+   "keyword": "hakone things to do",
+   "returnedKeyword": "hakone things to do",
+   "closeVariants": [],
+   "avgMonthlySearches": 590,
+   "competition": "HIGH",
+   "competitionIndex": 98,
+   "lowTopOfPageBidMicros": 330759,
+   "highTopOfPageBidMicros": 1566429,
+   "monthlySearches": [
+    {
+     "year": 2025,
+     "month": 11,
+     "searchVolume": 720
+    },
+    {
+     "year": 2025,
+     "month": 12,
+     "searchVolume": 720
+    },
+    {
+     "year": 2026,
+     "month": 1,
+     "searchVolume": 880
+    },
+    {
+     "year": 2026,
+     "month": 2,
+     "searchVolume": 720
+    },
+    {
+     "year": 2026,
+     "month": 3,
+     "searchVolume": 720
+    },
+    {
+     "year": 2026,
+     "month": 4,
+     "searchVolume": 720
+    },
+    {
+     "year": 2026,
+     "month": 5,
+     "searchVolume": 590
+    },
+    {
+     "year": 2026,
+     "month": 6,
+     "searchVolume": 480
+    },
+    {
+     "year": 2026,
+     "month": 7,
+     "searchVolume": 590
+    },
+    {
+     "year": 2026,
+     "month": 8,
+     "searchVolume": 590
+    },
+    {
+     "year": 2026,
+     "month": 9,
+     "searchVolume": 590
+    },
+    {
+     "year": 2026,
+     "month": 10,
+     "searchVolume": 590
+    }
+   ]
+  },
+  {
+   "keyword": "how to get to hakone from tokyo",
+   "returnedKeyword": "how to get to hakone from tokyo",
+   "closeVariants": [],
+   "avgMonthlySearches": 260,
+   "competition": "LOW",
+   "competitionIndex": 23,
+   "lowTopOfPageBidMicros": 444322,
+   "highTopOfPageBidMicros": 3423522,
+   "monthlySearches": [
+    {
+     "year": 2025,
+     "month": 11,
+     "searchVolume": 320
+    },
+    {
+     "year": 2025,
+     "month": 12,
+     "searchVolume": 260
+    },
+    {
+     "year": 2026,
+     "month": 1,
+     "searchVolume": 390
+    },
+    {
+     "year": 2026,
+     "month": 2,
+     "searchVolume": 320
+    },
+    {
+     "year": 2026,
+     "month": 3,
+     "searchVolume": 320
+    },
+    {
+     "year": 2026,
+     "month": 4,
+     "searchVolume": 320
+    },
+    {
+     "year": 2026,
+     "month": 5,
+     "searchVolume": 210
+    },
+    {
+     "year": 2026,
+     "month": 6,
+     "searchVolume": 170
+    },
+    {
+     "year": 2026,
+     "month": 7,
+     "searchVolume": 260
+    },
+    {
+     "year": 2026,
+     "month": 8,
+     "searchVolume": 260
+    },
+    {
+     "year": 2026,
+     "month": 9,
+     "searchVolume": 260
+    },
+    {
+     "year": 2026,
+     "month": 10,
+     "searchVolume": 260
+    }
+   ]
+  },
+  {
+   "keyword": "tokyo to hakone day trip",
+   "returnedKeyword": "tokyo to hakone day trip",
+   "closeVariants": [],
+   "avgMonthlySearches": 720,
+   "competition": "HIGH",
+   "competitionIndex": 91,
+   "lowTopOfPageBidMicros": 804651,
+   "highTopOfPageBidMicros": 3648395,
+   "monthlySearches": [
+    {
+     "year": 2025,
+     "month": 11,
+     "searchVolume": 880
+    },
+    {
+     "year": 2025,
+     "month": 12,
+     "searchVolume": 1000
+    },
+    {
+     "year": 2026,
+     "month": 1,
+     "searchVolume": 1000
+    },
+    {
+     "year": 2026,
+     "month": 2,
+     "searchVolume": 720
+    },
+    {
+     "year": 2026,
+     "month": 3,
+     "searchVolume": 720
+    },
+    {
+     "year": 2026,
+     "month": 4,
+     "searchVolume": 720
+    },
+    {
+     "year": 2026,
+     "month": 5,
+     "searchVolume": 590
+    },
+    {
+     "year": 2026,
+     "month": 6,
+     "searchVolume": 390
+    },
+    {
+     "year": 2026,
+     "month": 7,
+     "searchVolume": 590
+    },
+    {
+     "year": 2026,
+     "month": 8,
+     "searchVolume": 590
+    },
+    {
+     "year": 2026,
+     "month": 9,
+     "searchVolume": 590
+    },
+    {
+     "year": 2026,
+     "month": 10,
+     "searchVolume": 720
+    }
+   ]
+  },
+  {
+   "keyword": "omakase vs kaiseki",
+   "returnedKeyword": "omakase vs kaiseki",
+   "closeVariants": [],
+   "avgMonthlySearches": 210,
+   "competition": "LOW",
+   "competitionIndex": 0,
+   "lowTopOfPageBidMicros": null,
+   "highTopOfPageBidMicros": null,
+   "monthlySearches": [
+    {
+     "year": 2025,
+     "month": 11,
+     "searchVolume": 260
+    },
+    {
+     "year": 2025,
+     "month": 12,
+     "searchVolume": 320
+    },
+    {
+     "year": 2026,
+     "month": 1,
+     "searchVolume": 260
+    },
+    {
+     "year": 2026,
+     "month": 2,
+     "searchVolume": 260
+    },
+    {
+     "year": 2026,
+     "month": 3,
+     "searchVolume": 260
+    },
+    {
+     "year": 2026,
+     "month": 4,
+     "searchVolume": 210
+    },
+    {
+     "year": 2026,
+     "month": 5,
+     "searchVolume": 210
+    },
+    {
+     "year": 2026,
+     "month": 6,
+     "searchVolume": 170
+    },
+    {
+     "year": 2026,
+     "month": 7,
+     "searchVolume": 210
+    },
+    {
+     "year": 2026,
+     "month": 8,
+     "searchVolume": 170
+    },
+    {
+     "year": 2026,
+     "month": 9,
+     "searchVolume": 210
+    },
+    {
+     "year": 2026,
+     "month": 10,
+     "searchVolume": 320
+    }
+   ]
+  },
+  {
+   "keyword": "best onsen ryokan",
+   "returnedKeyword": "best onsen ryokan",
+   "closeVariants": [],
+   "avgMonthlySearches": 30,
+   "competition": "MEDIUM",
+   "competitionIndex": 44,
+   "lowTopOfPageBidMicros": 384184,
+   "highTopOfPageBidMicros": 3628545,
+   "monthlySearches": [
+    {
+     "year": 2025,
+     "month": 11,
+     "searchVolume": 20
+    },
+    {
+     "year": 2025,
+     "month": 12,
+     "searchVolume": 30
+    },
+    {
+     "year": 2026,
+     "month": 1,
+     "searchVolume": 50
+    },
+    {
+     "year": 2026,
+     "month": 2,
+     "searchVolume": 40
+    },
+    {
+     "year": 2026,
+     "month": 3,
+     "searchVolume": 30
+    },
+    {
+     "year": 2026,
+     "month": 4,
+     "searchVolume": 20
+    },
+    {
+     "year": 2026,
+     "month": 5,
+     "searchVolume": 20
+    },
+    {
+     "year": 2026,
+     "month": 6,
+     "searchVolume": 20
+    },
+    {
+     "year": 2026,
+     "month": 7,
+     "searchVolume": 10
+    },
+    {
+     "year": 2026,
+     "month": 8,
+     "searchVolume": 30
+    },
+    {
+     "year": 2026,
+     "month": 9,
+     "searchVolume": 20
+    },
+    {
+     "year": 2026,
+     "month": 10,
+     "searchVolume": 20
+    }
+   ]
+  },
+  {
+   "keyword": "onsen ryokan japan",
+   "returnedKeyword": "onsen ryokan japan",
+   "closeVariants": [],
+   "avgMonthlySearches": 480,
+   "competition": "LOW",
+   "competitionIndex": 32,
+   "lowTopOfPageBidMicros": 756993,
+   "highTopOfPageBidMicros": 4283387,
+   "monthlySearches": [
+    {
+     "year": 2025,
+     "month": 11,
+     "searchVolume": 320
+    },
+    {
+     "year": 2025,
+     "month": 12,
+     "searchVolume": 720
+    },
+    {
+     "year": 2026,
+     "month": 1,
+     "searchVolume": 590
+    },
+    {
+     "year": 2026,
+     "month": 2,
+     "searchVolume": 390
+    },
+    {
+     "year": 2026,
+     "month": 3,
+     "searchVolume": 880
+    },
+    {
+     "year": 2026,
+     "month": 4,
+     "searchVolume": 320
+    },
+    {
+     "year": 2026,
+     "month": 5,
+     "searchVolume": 720
+    },
+    {
+     "year": 2026,
+     "month": 6,
+     "searchVolume": 480
+    },
+    {
+     "year": 2026,
+     "month": 7,
+     "searchVolume": 480
+    },
+    {
+     "year": 2026,
+     "month": 8,
+     "searchVolume": 320
+    },
+    {
+     "year": 2026,
+     "month": 9,
+     "searchVolume": 320
+    },
+    {
+     "year": 2026,
+     "month": 10,
+     "searchVolume": 260
+    }
+   ]
+  },
+  {
+   "keyword": "best onsen ryokan in japan",
+   "returnedKeyword": "best onsen ryokan in japan",
+   "closeVariants": [],
+   "avgMonthlySearches": 140,
+   "competition": "MEDIUM",
+   "competitionIndex": 49,
+   "lowTopOfPageBidMicros": 527859,
+   "highTopOfPageBidMicros": 4793265,
+   "monthlySearches": [
+    {
+     "year": 2025,
+     "month": 11,
+     "searchVolume": 140
+    },
+    {
+     "year": 2025,
+     "month": 12,
+     "searchVolume": 170
+    },
+    {
+     "year": 2026,
+     "month": 1,
+     "searchVolume": 210
+    },
+    {
+     "year": 2026,
+     "month": 2,
+     "searchVolume": 140
+    },
+    {
+     "year": 2026,
+     "month": 3,
+     "searchVolume": 140
+    },
+    {
+     "year": 2026,
+     "month": 4,
+     "searchVolume": 110
+    },
+    {
+     "year": 2026,
+     "month": 5,
+     "searchVolume": 110
+    },
+    {
+     "year": 2026,
+     "month": 6,
+     "searchVolume": 70
+    },
+    {
+     "year": 2026,
+     "month": 7,
+     "searchVolume": 90
+    },
+    {
+     "year": 2026,
+     "month": 8,
+     "searchVolume": 140
+    },
+    {
+     "year": 2026,
+     "month": 9,
+     "searchVolume": 110
+    },
+    {
+     "year": 2026,
+     "month": 10,
+     "searchVolume": 110
+    }
+   ]
+  },
+  {
+   "keyword": "kaiseki dinner ryokan",
+   "returnedKeyword": "kaiseki dinner ryokan",
+   "closeVariants": [],
+   "avgMonthlySearches": 20,
+   "competition": "LOW",
+   "competitionIndex": 0,
+   "lowTopOfPageBidMicros": null,
+   "highTopOfPageBidMicros": null,
+   "monthlySearches": [
+    {
+     "year": 2025,
+     "month": 11,
+     "searchVolume": 10
+    },
+    {
+     "year": 2025,
+     "month": 12,
+     "searchVolume": 10
+    },
+    {
+     "year": 2026,
+     "month": 1,
+     "searchVolume": 50
+    },
+    {
+     "year": 2026,
+     "month": 2,
+     "searchVolume": 40
+    },
+    {
+     "year": 2026,
+     "month": 3,
+     "searchVolume": 50
+    },
+    {
+     "year": 2026,
+     "month": 4,
+     "searchVolume": 20
+    },
+    {
+     "year": 2026,
+     "month": 5,
+     "searchVolume": 10
+    },
+    {
+     "year": 2026,
+     "month": 6,
+     "searchVolume": 20
+    },
+    {
+     "year": 2026,
+     "month": 7,
+     "searchVolume": 10
+    },
+    {
+     "year": 2026,
+     "month": 8,
+     "searchVolume": 20
+    },
+    {
+     "year": 2026,
+     "month": 9,
+     "searchVolume": 20
+    },
+    {
+     "year": 2026,
+     "month": 10,
+     "searchVolume": 10
+    }
+   ]
+  },
+  {
+   "keyword": "ryokan dinner",
+   "returnedKeyword": "ryokan dinner",
+   "closeVariants": [],
+   "avgMonthlySearches": 110,
+   "competition": "LOW",
+   "competitionIndex": 0,
+   "lowTopOfPageBidMicros": null,
+   "highTopOfPageBidMicros": null,
+   "monthlySearches": [
+    {
+     "year": 2025,
+     "month": 11,
+     "searchVolume": 110
+    },
+    {
+     "year": 2025,
+     "month": 12,
+     "searchVolume": 90
+    },
+    {
+     "year": 2026,
+     "month": 1,
+     "searchVolume": 140
+    },
+    {
+     "year": 2026,
+     "month": 2,
+     "searchVolume": 110
+    },
+    {
+     "year": 2026,
+     "month": 3,
+     "searchVolume": 140
+    },
+    {
+     "year": 2026,
+     "month": 4,
+     "searchVolume": 90
+    },
+    {
+     "year": 2026,
+     "month": 5,
+     "searchVolume": 90
+    },
+    {
+     "year": 2026,
+     "month": 6,
+     "searchVolume": 90
+    },
+    {
+     "year": 2026,
+     "month": 7,
+     "searchVolume": 90
+    },
+    {
+     "year": 2026,
+     "month": 8,
+     "searchVolume": 140
+    },
+    {
+     "year": 2026,
+     "month": 9,
+     "searchVolume": 140
+    },
+    {
+     "year": 2026,
+     "month": 10,
+     "searchVolume": 170
+    }
+   ]
+  },
+  {
+   "keyword": "hida takayama japan",
+   "returnedKeyword": "hida takayama japan",
+   "closeVariants": [],
+   "avgMonthlySearches": 27100,
+   "competition": "LOW",
+   "competitionIndex": 3,
+   "lowTopOfPageBidMicros": 300298,
+   "highTopOfPageBidMicros": 6496440,
+   "monthlySearches": [
+    {
+     "year": 2025,
+     "month": 11,
+     "searchVolume": 22200
+    },
+    {
+     "year": 2025,
+     "month": 12,
+     "searchVolume": 22200
+    },
+    {
+     "year": 2026,
+     "month": 1,
+     "searchVolume": 27100
+    },
+    {
+     "year": 2026,
+     "month": 2,
+     "searchVolume": 27100
+    },
+    {
+     "year": 2026,
+     "month": 3,
+     "searchVolume": 33100
+    },
+    {
+     "year": 2026,
+     "month": 4,
+     "searchVolume": 27100
+    },
+    {
+     "year": 2026,
+     "month": 5,
+     "searchVolume": 22200
+    },
+    {
+     "year": 2026,
+     "month": 6,
+     "searchVolume": 22200
+    },
+    {
+     "year": 2026,
+     "month": 7,
+     "searchVolume": 22200
+    },
+    {
+     "year": 2026,
+     "month": 8,
+     "searchVolume": 27100
+    },
+    {
+     "year": 2026,
+     "month": 9,
+     "searchVolume": 22200
+    },
+    {
+     "year": 2026,
+     "month": 10,
+     "searchVolume": 22200
+    }
+   ]
+  },
+  {
+   "keyword": "takayama travel",
+   "returnedKeyword": "takayama travel",
+   "closeVariants": [],
+   "avgMonthlySearches": 30,
+   "competition": "MEDIUM",
+   "competitionIndex": 52,
+   "lowTopOfPageBidMicros": 151044,
+   "highTopOfPageBidMicros": 4489601,
+   "monthlySearches": [
+    {
+     "year": 2025,
+     "month": 11,
+     "searchVolume": 20
+    },
+    {
+     "year": 2025,
+     "month": 12,
+     "searchVolume": 30
+    },
+    {
+     "year": 2026,
+     "month": 1,
+     "searchVolume": 20
+    },
+    {
+     "year": 2026,
+     "month": 2,
+     "searchVolume": 30
+    },
+    {
+     "year": 2026,
+     "month": 3,
+     "searchVolume": 20
+    },
+    {
+     "year": 2026,
+     "month": 4,
+     "searchVolume": 20
+    },
+    {
+     "year": 2026,
+     "month": 5,
+     "searchVolume": 40
+    },
+    {
+     "year": 2026,
+     "month": 6,
+     "searchVolume": 30
+    },
+    {
+     "year": 2026,
+     "month": 7,
+     "searchVolume": 30
+    },
+    {
+     "year": 2026,
+     "month": 8,
+     "searchVolume": 70
+    },
+    {
+     "year": 2026,
+     "month": 9,
+     "searchVolume": 50
+    },
+    {
+     "year": 2026,
+     "month": 10,
+     "searchVolume": 40
+    }
+   ]
+  },
+  {
+   "keyword": "best time to visit kinosaki onsen",
+   "returnedKeyword": "best time to visit kinosaki onsen",
+   "closeVariants": [],
+   "avgMonthlySearches": null,
+   "competition": null,
+   "competitionIndex": null,
+   "lowTopOfPageBidMicros": null,
+   "highTopOfPageBidMicros": null,
+   "monthlySearches": []
+  },
+  {
+   "keyword": "kinosaki onsen guide",
+   "returnedKeyword": "kinosaki onsen guide",
+   "closeVariants": [],
+   "avgMonthlySearches": 10,
+   "competition": "LOW",
+   "competitionIndex": 24,
+   "lowTopOfPageBidMicros": 89642,
+   "highTopOfPageBidMicros": 3972531,
+   "monthlySearches": [
+    {
+     "year": 2025,
+     "month": 11,
+     "searchVolume": 10
+    },
+    {
+     "year": 2025,
+     "month": 12,
+     "searchVolume": 10
+    },
+    {
+     "year": 2026,
+     "month": 1,
+     "searchVolume": 10
+    },
+    {
+     "year": 2026,
+     "month": 2,
+     "searchVolume": 10
+    },
+    {
+     "year": 2026,
+     "month": 3,
+     "searchVolume": 10
+    },
+    {
+     "year": 2026,
+     "month": 4,
+     "searchVolume": 10
+    },
+    {
+     "year": 2026,
+     "month": 5,
+     "searchVolume": 10
+    },
+    {
+     "year": 2026,
+     "month": 6,
+     "searchVolume": 10
+    },
+    {
+     "year": 2026,
+     "month": 7,
+     "searchVolume": 10
+    },
+    {
+     "year": 2026,
+     "month": 8,
+     "searchVolume": 10
+    },
+    {
+     "year": 2026,
+     "month": 9,
+     "searchVolume": 10
+    },
+    {
+     "year": 2026,
+     "month": 10,
+     "searchVolume": 10
+    }
+   ]
+  },
+  {
+   "keyword": "snow monkey park",
+   "returnedKeyword": "snow monkey park",
+   "closeVariants": [],
+   "avgMonthlySearches": 18100,
+   "competition": "HIGH",
+   "competitionIndex": 73,
+   "lowTopOfPageBidMicros": 985688,
+   "highTopOfPageBidMicros": 4842282,
+   "monthlySearches": [
+    {
+     "year": 2025,
+     "month": 11,
+     "searchVolume": 18100
+    },
+    {
+     "year": 2025,
+     "month": 12,
+     "searchVolume": 27100
+    },
+    {
+     "year": 2026,
+     "month": 1,
+     "searchVolume": 33100
+    },
+    {
+     "year": 2026,
+     "month": 2,
+     "searchVolume": 27100
+    },
+    {
+     "year": 2026,
+     "month": 3,
+     "searchVolume": 22200
+    },
+    {
+     "year": 2026,
+     "month": 4,
+     "searchVolume": 18100
+    },
+    {
+     "year": 2026,
+     "month": 5,
+     "searchVolume": 12100
+    },
+    {
+     "year": 2026,
+     "month": 6,
+     "searchVolume": 9900
+    },
+    {
+     "year": 2026,
+     "month": 7,
+     "searchVolume": 12100
+    },
+    {
+     "year": 2026,
+     "month": 8,
+     "searchVolume": 12100
+    },
+    {
+     "year": 2026,
+     "month": 9,
+     "searchVolume": 8100
+    },
+    {
+     "year": 2026,
+     "month": 10,
+     "searchVolume": 8100
+    }
+   ]
+  },
+  {
+   "keyword": "shibu onsen snow monkeys",
+   "returnedKeyword": "shibu onsen snow monkeys",
+   "closeVariants": [],
+   "avgMonthlySearches": 20,
+   "competition": "LOW",
+   "competitionIndex": 12,
+   "lowTopOfPageBidMicros": null,
+   "highTopOfPageBidMicros": null,
+   "monthlySearches": [
+    {
+     "year": 2025,
+     "month": 11,
+     "searchVolume": 10
+    },
+    {
+     "year": 2025,
+     "month": 12,
+     "searchVolume": 20
+    },
+    {
+     "year": 2026,
+     "month": 1,
+     "searchVolume": 30
+    },
+    {
+     "year": 2026,
+     "month": 2,
+     "searchVolume": 20
+    },
+    {
+     "year": 2026,
+     "month": 3,
+     "searchVolume": 30
+    },
+    {
+     "year": 2026,
+     "month": 4,
+     "searchVolume": 10
+    },
+    {
+     "year": 2026,
+     "month": 5,
+     "searchVolume": 10
+    },
+    {
+     "year": 2026,
+     "month": 6,
+     "searchVolume": 10
+    },
+    {
+     "year": 2026,
+     "month": 7,
+     "searchVolume": 10
+    },
+    {
+     "year": 2026,
+     "month": 8,
+     "searchVolume": 10
+    },
+    {
+     "year": 2026,
+     "month": 9,
+     "searchVolume": 20
+    },
+    {
+     "year": 2026,
+     "month": 10,
+     "searchVolume": 20
+    }
+   ]
+  },
+  {
+   "keyword": "what is an onsen",
+   "returnedKeyword": "what is an onsen",
+   "closeVariants": [],
+   "avgMonthlySearches": 2900,
+   "competition": "LOW",
+   "competitionIndex": 3,
+   "lowTopOfPageBidMicros": 30522,
+   "highTopOfPageBidMicros": 891575,
+   "monthlySearches": [
+    {
+     "year": 2025,
+     "month": 11,
+     "searchVolume": 2900
+    },
+    {
+     "year": 2025,
+     "month": 12,
+     "searchVolume": 2400
+    },
+    {
+     "year": 2026,
+     "month": 1,
+     "searchVolume": 2900
+    },
+    {
+     "year": 2026,
+     "month": 2,
+     "searchVolume": 2900
+    },
+    {
+     "year": 2026,
+     "month": 3,
+     "searchVolume": 2900
+    },
+    {
+     "year": 2026,
+     "month": 4,
+     "searchVolume": 2400
+    },
+    {
+     "year": 2026,
+     "month": 5,
+     "searchVolume": 2900
+    },
+    {
+     "year": 2026,
+     "month": 6,
+     "searchVolume": 2400
+    },
+    {
+     "year": 2026,
+     "month": 7,
+     "searchVolume": 2400
+    },
+    {
+     "year": 2026,
+     "month": 8,
+     "searchVolume": 2900
+    },
+    {
+     "year": 2026,
+     "month": 9,
+     "searchVolume": 2400
+    },
+    {
+     "year": 2026,
+     "month": 10,
+     "searchVolume": 2900
+    }
+   ]
+  },
+  {
+   "keyword": "onsen meaning",
+   "returnedKeyword": "onsen meaning",
+   "closeVariants": [],
+   "avgMonthlySearches": 2400,
+   "competition": "LOW",
+   "competitionIndex": 2,
+   "lowTopOfPageBidMicros": 29912,
+   "highTopOfPageBidMicros": 703807,
+   "monthlySearches": [
+    {
+     "year": 2025,
+     "month": 11,
+     "searchVolume": 1900
+    },
+    {
+     "year": 2025,
+     "month": 12,
+     "searchVolume": 1600
+    },
+    {
+     "year": 2026,
+     "month": 1,
+     "searchVolume": 1900
+    },
+    {
+     "year": 2026,
+     "month": 2,
+     "searchVolume": 1600
+    },
+    {
+     "year": 2026,
+     "month": 3,
+     "searchVolume": 1900
+    },
+    {
+     "year": 2026,
+     "month": 4,
+     "searchVolume": 2400
+    },
+    {
+     "year": 2026,
+     "month": 5,
+     "searchVolume": 3600
+    },
+    {
+     "year": 2026,
+     "month": 6,
+     "searchVolume": 3600
+    },
+    {
+     "year": 2026,
+     "month": 7,
+     "searchVolume": 2400
+    },
+    {
+     "year": 2026,
+     "month": 8,
+     "searchVolume": 2900
+    },
+    {
+     "year": 2026,
+     "month": 9,
+     "searchVolume": 1900
+    },
+    {
+     "year": 2026,
+     "month": 10,
+     "searchVolume": 2400
+    }
+   ]
+  },
+  {
+   "keyword": "japanese bath house",
+   "returnedKeyword": "japanese bath house",
+   "closeVariants": [],
+   "avgMonthlySearches": 8100,
+   "competition": "LOW",
+   "competitionIndex": 1,
+   "lowTopOfPageBidMicros": 110247,
+   "highTopOfPageBidMicros": 2953781,
+   "monthlySearches": [
+    {
+     "year": 2025,
+     "month": 11,
+     "searchVolume": 8100
+    },
+    {
+     "year": 2025,
+     "month": 12,
+     "searchVolume": 8100
+    },
+    {
+     "year": 2026,
+     "month": 1,
+     "searchVolume": 9900
+    },
+    {
+     "year": 2026,
+     "month": 2,
+     "searchVolume": 8100
+    },
+    {
+     "year": 2026,
+     "month": 3,
+     "searchVolume": 8100
+    },
+    {
+     "year": 2026,
+     "month": 4,
+     "searchVolume": 8100
+    },
+    {
+     "year": 2026,
+     "month": 5,
+     "searchVolume": 8100
+    },
+    {
+     "year": 2026,
+     "month": 6,
+     "searchVolume": 8100
+    },
+    {
+     "year": 2026,
+     "month": 7,
+     "searchVolume": 6600
+    },
+    {
+     "year": 2026,
+     "month": 8,
+     "searchVolume": 8100
+    },
+    {
+     "year": 2026,
+     "month": 9,
+     "searchVolume": 6600
+    },
+    {
+     "year": 2026,
+     "month": 10,
+     "searchVolume": 8100
+    }
+   ]
+  }
+ ]
+}

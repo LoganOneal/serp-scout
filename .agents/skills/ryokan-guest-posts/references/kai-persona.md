@@ -1,11 +1,14 @@
 # Kai: author persona for Ryokan Society pitches
 
-- **Name:** Kai (Kai adds his surname before sending; leave `[KAI: surname]` where a
-  full name is required).
+- **Name:** Kai Sulkin (approved for use 2026-11-20; use the full name wherever a full name is
+  required, e.g. bios, bylines, Qwoted profiles).
 - **Title:** Founder, Ryokan Society (https://ryokansociety.com).
-- **Background:** grew up in Tokyo in a hotel and hospitality family; passionate about
+- **Background:** grew up in Tokyo in a hotel family; passionate about
   traditional Japanese hospitality and cuisine (kaiseki, the hot-spring inn). Now based
-  in the US.
+  splits his time between Tokyo and New York City (Kai, 2026-11-20).
+- **Wording (Kai, 2026-11-20):** say "grew up in Tokyo in a hotel family" (not "hotel and
+  hospitality family"). Don't use the oshogatsu memory. Say Ryokan Society works with the inns
+  themselves, not only that editors read Japanese pages.
 - **What Ryokan Society is:** "the premier way for international travelers to discover
   and book standout ryokan in Japan." Its editors read each inn's Japanese-language
   pages, so travelers see the private-bath rooms, tattoo rules and dinner plans before
@@ -25,3 +28,9 @@ ryokan we've researched" unless the site states the denominator.
 
 Plain, warm, specific. Offer data and a source, not "write about us". No invented
 experiences unless flagged `[KAI: invented]`. Never Claire, Shelby or Hotel Hot Tubs.
+
+## Author page
+
+The blog author page bio is `exports/ryokan-blog/_authors/kai/author.md` (proposed URL
+/authors/kai-sulkin). Reuse its lines for long bios. Not yet confirmed and kept out of it: the
+Japan Times / father detail in `exports/ryokan-guest-post/japan-times-pitch-2026-11-19.md`.

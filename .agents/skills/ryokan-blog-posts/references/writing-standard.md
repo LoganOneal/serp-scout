@@ -1,0 +1,95 @@
+# Writing standard
+
+## Voice
+Kai: Tokyo-raised, from a hotel and hospitality family, founder of Ryokan Society. Warm,
+plain, specific, confident about recommendations. Write the way a knowledgeable friend
+answers a question. American English.
+
+## Structure
+- **Never open with an answer to a question the reader hasn't seen.** "Yes, X is worth it."
+  as the first words reads oddly with no question above it. Open by saying what the place is,
+  then give the verdict ("It's well worth a night.").
+- **Answer first.** The first paragraph answers the search and contains the unique number
+  (inn count, price range, private-bath count).
+- **At a glance table** right after (see linking-rules "Funnel"): worth it? how long? best for?
+  then linked picks, then the bold all-ryokan CTA.
+- Short paragraphs (2 to 4 sentences), descriptive H2s phrased the way people search
+  ("How to get to Kinosaki Onsen from Kyoto").
+- At least one **table** where the reader compares things: routes, seasons, other towns.
+- **Inns appear in two places only** (Kai, 2026-11-20): the at-a-glance table (top picks, with
+  thumbnails) and one H3 per inn in "Where to stay". No third inn comparison table: put its facts
+  in a line under each H3, `**Baths:** … **Ages:** … **Known for:** …`.
+- **FAQ** at the end, from the real questions in the teardown, each answered in 2 to 4
+  sentences.
+- End with the "Book your <town> ryokan" H2 (see linking rules).
+
+## Author credit
+Every post is credited to its author from the registry `exports/ryokan-blog/_authors/<id>/author.md`
+(name, role, photo, short bio, long bio). Kai's id is `kai`. Set `author: <id>` in front matter
+and never write the byline by hand: `render` puts "By Kai, founder of Ryokan Society" with his
+photo at the top of the body and an "About the author" section (photo, short bio, "More about
+Kai →") before Photo credits. Both link to the author page `/authors/<id>`. The author's own
+headshot needs no credit line.
+
+## Live template constraints
+The post renders inside `apps/ryokan-web/src/app/blog/[slug]/page.tsx` with `blog-content.css`.
+- **The H1 is the `title`.** The template ignores a separate `h1`; keep them identical.
+- **The article column is 768 px** (`max-w-3xl` in page.tsx), narrower than the 1,232 px site
+  shell. Tables get cramped: keep them to 2 to 5 short columns, and put photos in tables at
+  `{w=360}` (the 2-column at-a-glance table fits it).
+- **Dates:** the page always shows "Published on <published>". "Last updated" appears only when
+  `updated` is a later day (Kai, 2026-11-20). Bump `updated` only for real content changes. The
+  live template still shows both dates; the fix is in `_authors/kai/dev-notes.md`.
+- **The hero is not shown** on the page; put the hero photo in the body under the opening.
+- **No blockquotes** for boxes: they render gray and italic. Use a table, bold line or H2.
+- Only plain elements are styled (h2–h4, p, lists, tables, img, figure/figcaption, hr). No
+  custom classes, buttons or cards; a CTA is a bold link.
+- Check every post in the site preview (`blog_tools.py render <slug>`) before QA.
+
+## Facts
+- Every number from a page read today; prefer ryokansociety.com. Write counts the way the site
+  supports them: "of the ryokan we've researched" unless the site states the full denominator.
+- Prices: "from about $180 a night for two, with dinner and breakfast" only if the inn page
+  says so. Give the date: "prices checked Nov 2026".
+- Travel times from an official timetable or the official tourism site.
+- Never state something a competitor says unless you confirmed it yourself.
+
+## First-hand perspective
+Add at least one short passage only Kai could write: what a ryokan host means by a phrase, how
+to read a dinner plan, how to ask about tattoos politely, what's worth paying more for.
+Write it in Kai's voice and leave it unflagged: it is confirmed by default (Kai, 2026-11-20).
+Use only persona facts: grew up in Tokyo in a hotel family, splits his time between Tokyo and
+New York City, Ryokan Society works with the inns. Record each such passage under "Written as
+Kai" in qa.md.
+
+## Avoid
+- Filler openers ("Nestled in the mountains...", "If you're looking for...").
+- Stock phrases: "hidden gem", "nestled", "breathtaking", "unforgettable experience", "a
+  must-visit", "in conclusion", "whether you're a ... or a ...".
+- Lists of inns with no reason to pick each one.
+- Keyword stuffing: use the target keyword in the title, H1, first 100 words, one H2 and the meta
+  description. After that, write naturally.
+- Em dashes as decoration; colon-then-reveal sentences; "not X, but Y" framing.
+
+## post.md format
+```
+---
+title: <title tag>
+h1: <H1>
+slug: /blog/<slug>
+meta_description: <≤155 chars>
+target_keyword: <target>
+secondary_keywords: [...]
+author: kai   # an id from exports/ryokan-blog/_authors/; the renderer adds the byline and bio
+published: <YYYY-MM-DD>   # authored date, always shown
+updated: <YYYY-MM-DD>     # same as published until the post really changes
+hero: {image: <url or path>, alt: <alt>, credit: <attribution or "Ryokan Society">}
+schema: Article
+---
+<body in Markdown. Images as ![alt](url), optionally followed by an italic descriptive caption
+(never a credit; credits go in "Photo credits" at the end). ![alt](url){w=360} makes a
+fixed-width thumbnail for table cells.>
+
+## Photo credits
+- <attribution lines>
+```

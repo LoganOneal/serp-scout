@@ -23,3 +23,7 @@ Any work for Ryokan Society (ryokansociety.com: leads, Semrush pulls, pitches as
 follows `.agents/skills/ryokan-guest-posts/SKILL.md`, not the HHT rules above. Never
 use Claire or the HHT campaign for it, never push or send its drafts, and never run
 `run_tools.py exclusions` or `commit` with the Ryokan environment.
+
+Ryokan Society blog posts (research, briefs, writing, photos) follow
+`.agents/skills/ryokan-blog-posts/SKILL.md`; the post order is the "Ryokan Blog Calendar"
+in `exports/ryokan-blog-keywords/calendar-data.json`.

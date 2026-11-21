@@ -1,0 +1,158 @@
+{
+  "checked": "2026-11-20",
+  "note": "All from Wikimedia Commons; license, author and description read via the Commons API today and each image viewed. Site destination photos not reused individually because the site's combined credit line can't be matched to single files without guessing; the hero and winter shots below are Commons originals by the same photographers the site credits. Use the 1920px thumb URLs or download and host.",
+  "photos": [
+    {
+      "role": "hero",
+      "file": "161029 Kinosaki Onsen Toyooka Hyogo pref Japan01s.jpg",
+      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8d/161029_Kinosaki_Onsen_Toyooka_Hyogo_pref_Japan01s.jpg/1920px-161029_Kinosaki_Onsen_Toyooka_Hyogo_pref_Japan01s.jpg",
+      "source": "Wikimedia Commons",
+      "page": "https://commons.wikimedia.org/wiki/File:161029_Kinosaki_Onsen_Toyooka_Hyogo_pref_Japan01s.jpg",
+      "size": "5280x3520",
+      "license": "CC BY 2.5",
+      "license_url": "https://creativecommons.org/licenses/by/2.5",
+      "attribution": "663highland, CC BY 2.5, via Wikimedia Commons",
+      "alt": "Willow-lined Otani River and stone bridge in Kinosaki Onsen at night",
+      "placement": "Hero, above the opening"
+    },
+    {
+      "role": "section",
+      "file": "Kinosaki-Onsen Gosho-no-yu.jpg",
+      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b1/Kinosaki-Onsen_Gosho-no-yu.jpg/1920px-Kinosaki-Onsen_Gosho-no-yu.jpg",
+      "source": "Wikimedia Commons",
+      "page": "https://commons.wikimedia.org/wiki/File:Kinosaki-Onsen_Gosho-no-yu.jpg",
+      "size": "5471x3647",
+      "license": "CC0",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "attribution": "MaedaAkihiko, CC0, via Wikimedia Commons (no credit required; credited anyway)",
+      "alt": "Tiled roofs and wooden entrance hall of Goshono-yu public bathhouse in Kinosaki Onsen",
+      "placement": "The seven public baths"
+    },
+    {
+      "role": "section",
+      "file": "Fresh Matsuba Crab Full Course Kaiseki (22418491357).jpg",
+      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/07/Fresh_Matsuba_Crab_Full_Course_Kaiseki_%2822418491357%29.jpg/1920px-Fresh_Matsuba_Crab_Full_Course_Kaiseki_%2822418491357%29.jpg",
+      "source": "Wikimedia Commons (from the inn's own Flickr account)",
+      "page": "https://commons.wikimedia.org/wiki/File:Fresh_Matsuba_Crab_Full_Course_Kaiseki_(22418491357).jpg",
+      "size": "3700x2850",
+      "license": "CC BY 2.0",
+      "license_url": "https://creativecommons.org/licenses/by/2.0",
+      "attribution": "Nishimuraya Kinosaki Onsen, CC BY 2.0, via Wikimedia Commons",
+      "alt": "Snow crab kaiseki dinner laid out at a Kinosaki Onsen ryokan",
+      "placement": "Dinner in Kinosaki"
+    },
+    {
+      "role": "section",
+      "file": "Kinosaki Onsen Otani River 2026-02 ac (1).jpg",
+      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/Kinosaki_Onsen_Otani_River_2026-02_ac_%281%29.jpg/1920px-Kinosaki_Onsen_Otani_River_2026-02_ac_%281%29.jpg",
+      "source": "Wikimedia Commons",
+      "page": "https://commons.wikimedia.org/wiki/File:Kinosaki_Onsen_Otani_River_2026-02_ac_(1).jpg",
+      "size": "4080x2720",
+      "license": "CC BY-SA 4.0",
+      "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+      "attribution": "Asturio Cantabrio, CC BY-SA 4.0, via Wikimedia Commons",
+      "alt": "Snow on the willows and inns along the Otani River in Kinosaki Onsen, February",
+      "placement": "When to go"
+    },
+    {
+      "role": "section",
+      "file": "Cherry blossoms in Kinosaki Onsen.jpg",
+      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ae/Cherry_blossoms_in_Kinosaki_Onsen.jpg/1920px-Cherry_blossoms_in_Kinosaki_Onsen.jpg",
+      "source": "Wikimedia Commons",
+      "page": "https://commons.wikimedia.org/wiki/File:Cherry_blossoms_in_Kinosaki_Onsen.jpg",
+      "size": "3000x2250",
+      "license": "CC BY-SA 4.0",
+      "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+      "attribution": "Samchan91, CC BY-SA 4.0, via Wikimedia Commons",
+      "alt": "Cherry blossoms and a red lantern post beside inns in Kinosaki Onsen in April",
+      "placement": "How long to stay"
+    },
+    {
+      "role": "inn",
+      "inn_page": "https://ryokansociety.com/kinosaki-onsen/nishimuraya-honkan",
+      "image": "https://static.cupid.travel/hotels/25236199.jpg",
+      "source": "Our inn page gallery (gallery #1 of 5)",
+      "license": "Supplier photo shown on our inn page; Kai approved blog use 2026-11-20",
+      "attribution": "Ryokan photos: courtesy of each ryokan, as shown on its Ryokan Society page",
+      "shows": "Garden with stone lanterns and pines",
+      "placement": "Under the inn's H3 (linked); 360 px thumbnail in the at-a-glance table for the four picks there"
+    },
+    {
+      "role": "inn",
+      "inn_page": "https://ryokansociety.com/kinosaki-onsen/onishiya-suishoen",
+      "image": "https://static.cupid.travel/hotels/41000303.jpg",
+      "source": "Our inn page gallery (gallery #1)",
+      "license": "Supplier photo shown on our inn page; Kai approved blog use 2026-11-20",
+      "attribution": "Ryokan photos: courtesy of each ryokan, as shown on its Ryokan Society page",
+      "shows": "Exterior at dusk",
+      "placement": "Under the inn's H3 (linked); 360 px thumbnail in the at-a-glance table for the four picks there"
+    },
+    {
+      "role": "inn",
+      "inn_page": "https://ryokansociety.com/kinosaki-onsen/kinosaki-onsen-tokitotoki",
+      "image": "https://static.cupid.travel/hotels/519721800.jpg",
+      "source": "Our inn page gallery (gallery #3)",
+      "license": "Supplier photo shown on our inn page; Kai approved blog use 2026-11-20",
+      "attribution": "Ryokan photos: courtesy of each ryokan, as shown on its Ryokan Society page",
+      "shows": "Spring water pouring into a wooden tub (matches the \"spring water\" pick)",
+      "placement": "Under the inn's H3 (linked); 360 px thumbnail in the at-a-glance table for the four picks there"
+    },
+    {
+      "role": "inn",
+      "inn_page": "https://ryokansociety.com/kinosaki-onsen/sensui",
+      "image": "https://static.cupid.travel/hotels/408312137.jpg",
+      "source": "Our inn page gallery (gallery #1)",
+      "license": "Supplier photo shown on our inn page; Kai approved blog use 2026-11-20",
+      "attribution": "Ryokan photos: courtesy of each ryokan, as shown on its Ryokan Society page",
+      "shows": "Entrance with noren",
+      "placement": "Under the inn's H3 (linked); 360 px thumbnail in the at-a-glance table for the four picks there"
+    },
+    {
+      "role": "inn",
+      "inn_page": "https://ryokansociety.com/kinosaki-onsen/koyado-enn",
+      "image": "https://static.cupid.travel/hotels/564008074.jpg",
+      "source": "Our inn page gallery (gallery #2, 1280 px)",
+      "license": "Supplier photo shown on our inn page; Kai approved blog use 2026-11-20",
+      "attribution": "Ryokan photos: courtesy of each ryokan, as shown on its Ryokan Society page",
+      "shows": "Tajima beef dinner (matches the \"Tajima beef\" pick)",
+      "placement": "Under the inn's H3 (linked); 360 px thumbnail in the at-a-glance table for the four picks there"
+    },
+    {
+      "role": "inn",
+      "inn_page": "https://ryokansociety.com/kinosaki-onsen/kinosaki-onsen-hanakouji-saigetsu",
+      "image": "https://static.cupid.travel/hotels/116965136.jpg",
+      "source": "Our inn page gallery (gallery #1)",
+      "license": "Supplier photo shown on our inn page; Kai approved blog use 2026-11-20",
+      "attribution": "Ryokan photos: courtesy of each ryokan, as shown on its Ryokan Society page",
+      "shows": "Lantern-lit entrance at night",
+      "placement": "Under the inn's H3 (linked); 360 px thumbnail in the at-a-glance table for the four picks there"
+    },
+    {
+      "role": "inn",
+      "inn_page": "https://ryokansociety.com/kinosaki-onsen/mikuniya",
+      "image": "https://static.cupid.travel/hotels/541593280.jpg",
+      "source": "Our inn page gallery (gallery #1)",
+      "license": "Supplier photo shown on our inn page; Kai approved blog use 2026-11-20",
+      "attribution": "Ryokan photos: courtesy of each ryokan, as shown on its Ryokan Society page",
+      "shows": "Lattice facade",
+      "placement": "Under the inn's H3 (linked); 360 px thumbnail in the at-a-glance table for the four picks there"
+    },
+    {
+      "role": "inn",
+      "inn_page": "https://ryokansociety.com/kinosaki-onsen/yuraku-kinosaki-spa-gardens",
+      "image": "https://static.cupid.travel/hotels/421273943.jpg",
+      "source": "Our inn page gallery (gallery #3)",
+      "license": "Supplier photo shown on our inn page; Kai approved blog use 2026-11-20",
+      "attribution": "Ryokan photos: courtesy of each ryokan, as shown on its Ryokan Society page",
+      "shows": "Stone private bath with petals",
+      "placement": "Under the inn's H3 (linked); 360 px thumbnail in the at-a-glance table for the four picks there"
+    }
+  ],
+  "not_used": [
+    {
+      "file": "Kinosaki Onsen cherry blossoms.jpg",
+      "why": "Description says taken by a different person (Shogo Nishiyama) than the uploader; provenance unclear."
+    }
+  ],
+  "credits_rule": "All credits in the Photo credits section at the end; captions under photos describe only (Kai, 2026-11-20)."
+}
