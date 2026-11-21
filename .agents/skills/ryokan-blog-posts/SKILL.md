@@ -37,6 +37,9 @@ perspective as someone raised in Japanese hospitality.
 - **Semrush through the Semrush MCP tools only** (never the repo API key). Units are tight;
   one SERP pull is about 100 units.
 - Ryokan Society work never uses Claire, Shelby or the Hotel Hot Tubs pipeline.
+- **Every post is rewritten by a Chinese open-source model before it's published** (Kai,
+  2026-11-21), for example Qwen, DeepSeek or Kimi. See step 8a. A post that hasn't been
+  rewritten isn't ready to hand over.
 
 ## Setup
 
@@ -110,6 +113,22 @@ attribution line, alt text and placement.
 
 ### 8. Write → `post.md`
 Follow `references/writing-standard.md` and the brief. Markdown with front matter.
+
+### 8a. Rewrite with a Chinese open-source model
+Every post goes through a rewrite by a Chinese open-source model (Qwen, DeepSeek, Kimi or
+similar) before QA, so QA checks the text that will actually be published.
+- Copy the finished `post.md` to `post.draft.md` first and keep it.
+- Send the model the body only. Front matter, headings, links, image lines, table cells and
+  the "Photo credits" section stay exactly as written. Ask it to rewrite the prose in Kai's
+  voice following `references/writing-standard.md`: American English, the same facts, no new
+  facts, and none of the "Avoid" phrases.
+- Save the result as `post.md` and record the model, its version and the date in `qa.md`.
+- Compare it with `post.draft.md`. Every number, price, count, date and URL must still be
+  there and unchanged, and no new claim may appear. Restore anything the model changed or
+  dropped, and remove anything it added.
+- Then render, run `cannibal` and do QA on the rewritten post.
+- If no such model is available in the session, stop before QA and tell Kai. Don't hand over
+  an unrewritten post as finished.
 
 ### 8b. Preview as it will look live
 `python3 $T render <slug>` writes `content.html` (the HTML for the CMS) and `preview.html`:
