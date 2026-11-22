@@ -1,0 +1,107 @@
+{
+ "date": "2026-11-21",
+ "items": 56,
+ "rewritten": 49,
+ "qwen_input_tokens": 15448,
+ "qwen_output_tokens": 2851,
+ "judge_model": "us.anthropic.claude-sonnet-4-6",
+ "judge_input_tokens": 12847,
+ "judge_output_tokens": 2595,
+ "accepted": {
+  "cell\tYes, if you want a real onsen town. It's the classic overnight trip from Kyoto or Osaka.": "Yes, for a genuine onsen town visit. It's the traditional overnight excursion from Kyoto or Osaka.",
+  "cell\tOne night covers it; two nights lets you slow down and reach every open bathhouse.": "One night is sufficient; two nights gives you time to slow down and visit each open bathhouse.",
+  "heading\tWhat makes Kinosaki different": "What sets Kinosaki apart",
+  "caption\tGoshono-yu, one of the seven public bathhouses.": "The public bathhouse named Goshono-yu, part of the group of seven.",
+  "cell\tClosed for renovation since April 1, 2024": "Under renovation since April 1, 2024",
+  "heading\tHow the bath pass works": "How the bathing pass functions",
+  "heading\tPrivate baths: what \"in-room onsen\" really means in Kinosaki": "Understanding private baths and \"in-room onsen\" in Kinosaki",
+  "baths\t**Baths:** Three large baths; open-air bath in some rooms. **Ages:** 10+. **Known for:** Founded 1854–60; Two Michelin Keys (2026).": "**Baths:** Three big baths; some rooms have open-air baths. **Ages:** Minimum age 10. **Known for:** Founded 1854–60; Two Michelin Keys in 2026.",
+  "inn_tag\tsmall and quiet": "quiet and small",
+  "baths\t**Baths:** 3 private hot-spring baths. **Ages:** 13+. **Known for:** 13 rooms, no shared baths.": "**Baths:** 3 private hot-spring baths. **Ages:** 13+. **Known for:** 13 rooms, bathing is exclusively private.",
+  "inn_tag\tadults only": "for adults only",
+  "inn_tag\tprivate baths at no extra cost": "private baths included with no added charge",
+  "heading\tHow long to stay: one night or two?": "Stay duration: one night or two?",
+  "heading\tGetting to Kinosaki Onsen from Kyoto, Osaka and Tokyo": "Travel to Kinosaki Onsen from Kyoto, Osaka, and Tokyo",
+  "cell\tSeveral round trips a day": "Multiple round trips each day",
+  "heading\tWhen to go": "When to visit",
+  "cell\tWinter (mid-Dec to early Mar)": "Mid-December through early March",
+  "cell\tSnow crab season (Nov to Mar); snow on the willows": "Snow crab is served from November to March; snow appears on the willows.",
+  "cell\tThe busiest time; book early for crab plans": "This is the most crowded season; reserve early for crab meals.",
+  "cell\tCherry blossoms, usually the last week of March to the first week of April": "Cherry blossoms typically bloom from the final week of March into the first week of April.",
+  "cell\tLanterns light the trees in the evening": "Evening illumination of the trees with lanterns",
+  "cell\tHot and humid from late July to mid-August": "Hot and humid conditions from late July through mid-August",
+  "cell\tComfortable weather, and crab starts in November": "Pleasant weather, with crab season beginning in November",
+  "caption\tA snow crab kaiseki dinner.": "A kaiseki meal featuring snow crab.",
+  "faq\tIs Kinosaki Onsen worth visiting?": "Is a visit to Kinosaki Onsen worth it?",
+  "faq\tIs Kinosaki Onsen mixed gender?": "Is Kinosaki Onsen a mixed gender onsen?",
+  "faq\tHow much is the Kinosaki Onsen pass, and where do I buy it?": "Where can I purchase the Kinosaki Onsen pass and what is its cost?",
+  "faq\tHow far is Kinosaki Onsen from Kyoto and Osaka?": "What is the distance from Kyoto and Osaka to Kinosaki Onsen?",
+  "faq\tWhat time do the baths close?": "When do the baths close?",
+  "faq\tIs Kinosaki Onsen touristy or crowded?": "Does Kinosaki Onsen get crowded or touristy?",
+  "faq\tWhat is Kinosaki Onsen known for?": "For what is Kinosaki Onsen known?",
+  "cta\tSee all 43 Kinosaki Onsen ryokan →": "View all 43 Kinosaki Onsen ryokan →",
+  "inn_tag\tspring water, privately": "private spring water",
+  "baths\t**Baths:** 2 private hot-spring baths. **Ages:** Not stated. **Known for:** Six rooms, free-flowing private baths.": "**Baths:** 2 private hot-spring baths. **Ages:** Not stated. **Known for:** Six rooms, private baths with free-flowing water.",
+  "cell\tCouples, first-time ryokan guests, travelers with tattoos, and crab season (November to March).": "Couples, first-time ryokan visitors, travelers with tattoos, and crab season (November through March).",
+  "cta\tSee all 43 Kinosaki Onsen ryokan, with prices for your dates →": "View all 43 Kinosaki Onsen ryokan, with pricing for your dates →",
+  "cell\tMore than ten round trips a day; some end at Fukuchiyama, so check for a direct train": "Over ten daily round trips; certain trips finish at Fukuchiyama, so confirm you board a direct train.",
+  "faq\tIs Kinosaki Onsen kid friendly?": "Is Kinosaki Onsen suitable for children?",
+  "heading\tDinner in Kinosaki: crab, Tajima beef, and why to book it with your room": "Kinosaki dining: crab, Tajima beef, and booking meals with your stay",
+  "baths\t**Baths:** Cypress and granite private baths. **Ages:** 16+. **Known for:** Kaiseki in a private dining room.": "**Baths:** Private baths made of cypress and granite. **Ages:** 16 and up. **Known for:** Private dining room kaiseki meals.",
+  "heading\tIs Kinosaki tattoo friendly?": "Are tattoos allowed in Kinosaki?",
+  "caption\tSource: [Visit Kinosaki](https://visitkinosaki.com/about-kinosaki/the-7-mystic-onsen/), checked November 20, 2026. Children up to 12 pay 400 yen.": "Source: [Visit Kinosaki](https://visitkinosaki.com/about-kinosaki/the-7-mystic-onsen/), verified November 20, 2026. A fee of 400 yen applies for children aged 12 and under.",
+  "cell\tTokaido Shinkansen to Kyoto, then the Kinosaki": "Take the Tokaido Shinkansen to Kyoto, then take the Kinosaki.",
+  "inn_tag\tvalue and families": "good value and family-friendly",
+  "caption\tSources: [Ekitan](https://ekitan.com/en/article/kinosaki) timetable guides (current as of July 2026) and [Visit Kinosaki](https://visitkinosaki.com/access/). Check exact departures on the [JR West](https://www.westjr.co.jp/global/en/) site.": "Information sourced from [Ekitan](https://ekitan.com/en/article/kinosaki) timetable guides (current as of July 2026) and [Visit Kinosaki](https://visitkinosaki.com/access/). Verify precise departure times on the [JR West](https://www.westjr.co.jp/global/en/) site.",
+  "inn_tag\tmixed groups and special diets": "accommodating mixed groups and special dietary needs",
+  "heading\tThe seven public baths": "Seven public baths",
+  "baths\t**Baths:** Open-air bath, jacuzzi, sauna. **Ages:** All ages. **Known for:** Below the town's middle price; 9.3 from 1,289 reviews.": "**Baths:** Outdoor bath, jacuzzi, sauna. **Ages:** All ages. **Known for:** Costs less than the town's median price; rated 9.3 by 1,289 reviewers.",
+  "meta\tIs Kinosaki Onsen worth it? The 7 baths, bath pass, getting there, and 43 ryokan from $180 a night, with which have private baths. Updated Nov 2026.": "Considering Kinosaki Onsen? Details on 7 baths, bath pass, travel, and 43 ryokan from $180 nightly, including those with private baths. Updated Nov 2026."
+ },
+ "left_as_written": [
+  {
+   "item": "14",
+   "kind": "inn_tag",
+   "text": "the splurge",
+   "why": "fact checker: NEW changes the tag 'the splurge' to 'a luxurious choice', altering the meaning (a specific cost-based category label vs. a general quality description)."
+  },
+  {
+   "item": "22",
+   "kind": "inn_tag",
+   "text": "Tajima beef",
+   "why": "fact checker: NEW adds the word 'serves' before 'Tajima beef', introducing a verb/claim not present in the original tag."
+  },
+  {
+   "item": "23",
+   "kind": "baths",
+   "text": "**Baths:** 2 free private hot-spring baths. **Ages:** 13+. **Known for:** Dinner is a Tajima beef course; 3 min from the station.",
+   "why": "the numbers must be exactly ['13', '2', '3'] (you had ['13'])"
+  },
+  {
+   "item": "27",
+   "kind": "baths",
+   "text": "**Baths:** 4 private hot-spring baths. **Ages:** All ages. **Known for:** Four free private baths, 3 min from the station.",
+   "why": "the numbers must be exactly ['3', '4'] (you had [])"
+  },
+  {
+   "item": "29",
+   "kind": "baths",
+   "text": "**Baths:** Shared baths, 3 free private open-air baths, some rooms with their own bath. **Ages:** All ages. **Known for:** Vegetarian, vegan and Muslim-friendly menus; under-3s free.",
+   "why": "the numbers must be exactly ['3', '3'] (you had ['3'])"
+  },
+  {
+   "item": "43",
+   "kind": "cell",
+   "text": "Foliage around Onsen-ji temple; fall festivals",
+   "why": "it added a time or period: autumn"
+  },
+  {
+   "item": "47",
+   "kind": "heading",
+   "text": "Kinosaki or another onsen town?",
+   "why": "it added a time or period: spring"
+  }
+ ],
+ "check_ok": true,
+ "issues": []
+}

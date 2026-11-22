@@ -1,5 +1,14 @@
 # QA: kinosaki-onsen (2026-11-20)
 
+## Rewrite (SKILL.md step 8a)
+- [x] `post.md` is the rewrite; `post.draft.md` holds the original, `post.prose.md` the prose-only stage
+- [x] Writer: `deepseek.v3.2` on Amazon Bedrock (us-west-2), 2026-11-21. Checker: Claude Sonnet 4.6 on Bedrock, verdicts only (none of its words are in the post)
+- [x] Prose (`rewrite_post.py`): 53 of 65 passages rewritten and passed every check; the rest keep the draft wording (reasons in `rewrite-log.json`)
+- [x] Headings, FAQ questions, captions, CTAs, Baths lines, table cells, meta description (`rewrite_extras.py`): 49 of 56 rewritten, rechecked against the original. Left as written by the skill's rules: title/H1, "Where to stay" / "Book your" / FAQ H2s, inn names, "See rooms and rates" and "Compare all" lines, table headers, image alt text, link text
+- [ ] 51% of the body's words still sit in runs of 4+ words copied from the draft
+- [x] `rewrite_post.py kinosaki-onsen --check` passes (heading levels, table shape, URLs, images, numbers, credits); re-rendered; `cannibal` reports nothing
+- [ ] Read the changed headings and inn H3 tags before publishing
+
 ## Written as Kai (confirmed by default, Kai 2026-11-20)
 - "How to ask an inn" (tattoo section): the polite note to send when booking.
 - "From Kai: how to read a Kinosaki dinner plan": crab plans priced by amount and grade, Tajima

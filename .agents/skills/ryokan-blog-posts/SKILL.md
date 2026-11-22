@@ -115,20 +115,35 @@ attribution line, alt text and placement.
 Follow `references/writing-standard.md` and the brief. Markdown with front matter.
 
 ### 8a. Rewrite with a Chinese open-source model
-Every post goes through a rewrite by a Chinese open-source model (Qwen, DeepSeek, Kimi or
-similar) before QA, so QA checks the text that will actually be published.
-- Copy the finished `post.md` to `post.draft.md` first and keep it.
-- Send the model the body only. Front matter, headings, links, image lines, table cells and
-  the "Photo credits" section stay exactly as written. Ask it to rewrite the prose in Kai's
-  voice following `references/writing-standard.md`: American English, the same facts, no new
-  facts, and none of the "Avoid" phrases.
-- Save the result as `post.md` and record the model, its version and the date in `qa.md`.
-- Compare it with `post.draft.md`. Every number, price, count, date and URL must still be
-  there and unchanged, and no new claim may appear. Restore anything the model changed or
-  dropped, and remove anything it added.
-- Then render, run `cannibal` and do QA on the rewritten post.
-- If no such model is available in the session, stop before QA and tell Kai. Don't hand over
-  an unrewritten post as finished.
+Every post is rewritten by a Chinese open-source model before QA, so QA checks the text that
+will be published. Kai chose the guarded pipeline with DeepSeek V3.2 on Amazon Bedrock
+(2026-11-21). Needs `AWS_BEARER_TOKEN_BEDROCK` and `AWS_REGION=us-west-2` in `.env`.
+
+```bash
+S=.agents/skills/ryokan-blog-posts/scripts
+python3 $S/rewrite_post.py <slug>             # prose; keeps post.draft.md, writes post.md + post.prose.md
+python3 $S/rewrite_extras.py <slug> --fresh   # headings, FAQ questions, captions, CTAs, Baths lines, cells, meta
+python3 $S/rewrite_post.py <slug> --check     # structure and numbers still match the draft
+```
+
+- The writer is DeepSeek V3.2 (`REWRITE_MODEL`). Qwen3 235B was tried first: it copied more
+  wording and broke numbered lists. GLM-5 and MiniMax barely changed the text.
+- Every rewritten line passes automatic rules (numbers, link URLs, images, bold, qualifiers,
+  first person, added times/names/claim words, booking-page phrases, a minimum amount of
+  rewording) and then a meaning check by Claude Sonnet 4.6 on Bedrock (`BEDROCK_JUDGE_MODEL`),
+  which only returns verdicts, so none of Claude's words go into the post. Rejected lines are
+  retried; batches run three at a time. A line that never passes keeps the draft wording and is
+  listed in `rewrite-log.json` / `rewrite-extras-log.json`.
+- Left as written on purpose: front matter (title, H1), the "Where to stay in …: our picks",
+  "Book your … ryokan" and FAQ H2s, inn names, "See rooms and rates at …" and "Compare all …"
+  lines, table headers, image alt text and Photo credits.
+- `--resume` (prose) reuses accepted passages; `rewrite_extras.py` without `--fresh` rechecks
+  earlier acceptances against the original. Always run extras after the prose step.
+- Record in qa.md: models, date, passages and items rewritten, what was left as written, and the
+  cost from the two log files. Then render, run `cannibal` and do QA on the rewritten post.
+- Read the changed headings and inn H3 tags before handing over: short labels are where the
+  checker is weakest.
+- If Bedrock isn't reachable, stop before QA and tell Kai. Don't hand over an unrewritten post.
 
 ### 8b. Preview as it will look live
 `python3 $T render <slug>` writes `content.html` (the HTML for the CMS) and `preview.html`:
