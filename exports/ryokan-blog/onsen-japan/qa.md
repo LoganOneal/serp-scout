@@ -1,5 +1,14 @@
 # QA: onsen-japan (2026-11-21)
 
+## Rewrite (SKILL.md step 8a)
+- [x] `post.md` is the rewrite; `post.draft.md` holds the original, `post.prose.md` the prose-only stage
+- [x] Writer: `deepseek.v3.2` on Amazon Bedrock (us-west-2), 2026-11-21. Checker: Claude Sonnet 4.6 on Bedrock, verdicts only (none of its words are in the post)
+- [x] Prose (`rewrite_post.py`): 43 of 58 passages rewritten and passed every check; the rest keep the draft wording (reasons in `rewrite-log.json`)
+- [x] Headings, FAQ questions, captions, CTAs, Baths lines, table cells, meta description (`rewrite_extras.py`): 55 of 56 rewritten, rechecked against the original. Left as written by the skill's rules: title/H1, "Where to stay" / "Book your" / FAQ H2s, inn names, "See rooms and rates" and "Compare all" lines, table headers, image alt text, link text
+- [ ] 50% of the body's words still sit in runs of 4+ words copied from the draft
+- [x] `rewrite_post.py onsen-japan --check` passes (heading levels, table shape, URLs, images, numbers, credits); re-rendered; `cannibal` reports nothing
+- [ ] Read the changed headings and inn H3 tags before publishing
+
 ## Search basics
 - [x] Target "onsen japan": title "Onsen in Japan: Etiquette, Tattoos and the Best Towns" (53 chars), H1 = title, slug /blog/onsen-japan, first sentence, H2 "The best onsen towns in Japan, by region" and H2 "Onsen in Japan FAQ", meta description (140 chars)
 - [x] Every must-cover topic from the teardown has a section (definition, onsen vs sento, steps, rules, bath types, tattoos, private baths, towns, where to stay, when to go, how long, day trip in FAQ). Health and minerals are covered only as the legal definition plus the water-handling table; no health claims made.

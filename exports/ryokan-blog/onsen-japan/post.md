@@ -2,7 +2,7 @@
 title: "Onsen in Japan: Etiquette, Tattoos and the Best Towns"
 h1: "Onsen in Japan: Etiquette, Tattoos and the Best Towns"
 slug: /blog/onsen-japan
-meta_description: "How to use an onsen in Japan, what to do about tattoos, and the best onsen towns, plus which of our 2,598 ryokan have real hot-spring water."
+meta_description: "Guide to using an onsen in Japan, tattoo policies, top onsen towns, and which of our 2,598 ryokan offer genuine hot-spring water."
 target_keyword: onsen japan
 secondary_keywords: [best onsen in japan, onsen etiquette, onsen rules, onsen meaning]
 author: kai
@@ -14,126 +14,126 @@ schema: Article
 
 An onsen is a bath filled from a natural hot spring, and Japan has more of them than anywhere else: 2,839 hot-spring areas with places to stay and 27,899 registered springs, according to the [Ministry of the Environment's count for March 2025](https://www.env.go.jp/nature/onsen/pdf/6-7_p_1.pdf). For a first trip, the best way to try one is to sleep where the water is. Of the [2,598 ryokan we list](https://ryokansociety.com/ryokans), [1,700 have hot-spring water](https://ryokansociety.com/ryokans?onsen=yes) in some or all of their baths, which means about a third of Japanese inns run ordinary heated water even when the bath looks the part.
 
-Below: what counts as an onsen, the etiquette step by step, tattoos and private baths, and the best onsen towns with what a night costs. Counts and prices checked November 21, 2026.
+What follows explains what defines an onsen, the correct bathing procedure, managing tattoos and private baths, and leading onsen towns with nightly rates. All numbers and prices are from November 21, 2026.
 
 ![Steaming hot-spring water running through wooden channels at the Yubatake in Kusatsu Onsen](https://upload.wikimedia.org/wikipedia/commons/thumb/c/c9/251130_Yubatake%2C_Kusatsu_02.jpg/1920px-251130_Yubatake%2C_Kusatsu_02.jpg)
-*The Yubatake in Kusatsu Onsen, where the town's spring water is cooled in wooden channels before it reaches the baths.*
+*At Kusatsu Onsen's Yubatake, wooden troughs cool the spring water for the town before it flows to the baths.*
 
 | Onsen in Japan at a glance | |
 | --- | --- |
-| **Worth it?** | Yes. It's the one thing on a Japan trip almost every visitor ends up loving, once the nerves about bathing nude pass. |
-| **How long?** | A soak takes 10 to 20 minutes. An overnight stay in an onsen town lets you bathe at night and again in the morning. |
-| **Best for** | Anyone with a free night outside the big cities. Winter is the classic season. |
+| **Worth it?** | Yes. It's the activity on a Japan trip that nearly all visitors come to adore, once initial anxiety over nude bathing fades. |
+| **How long?** | Bathing lasts 10 to 20 minutes. Staying overnight in an onsen town permits bathing at night and in the morning. |
+| **Best for** | Anyone with an available night outside large cities. The traditional season is winter. |
 | **Classic onsen town** | [![Garden and wooden buildings of Nishimuraya Honkan in Kinosaki Onsen](https://static.cupid.travel/hotels/25236199.jpg){w=360}](https://ryokansociety.com/kinosaki-onsen/nishimuraya-honkan) [Nishimuraya Honkan, Kinosaki](https://ryokansociety.com/kinosaki-onsen/nishimuraya-honkan) |
 | **Hot-spring bath in every room** | [![Rock-lined open-air hot-spring bath at Gora Hanaougi in Hakone at night](https://static.cupid.travel/hotels/ex_2581bfef_z.jpg){w=360}](https://ryokansociety.com/hakone/gora-hanaougi) [Gora Hanaougi, Hakone](https://ryokansociety.com/hakone/gora-hanaougi) |
 | **Tattoos allowed, good value** | [![Milky-white open-air hot-spring bath at Mount View Hakone](https://static.cupid.travel/hotels/207501380.jpg){w=360}](https://ryokansociety.com/hakone/mount-view-hakone) [Mount View Hakone](https://ryokansociety.com/hakone/mount-view-hakone) |
 | **Free private baths in town** | [![Entrance of Hanaingen in Kusatsu Onsen with a noren curtain](https://static.cupid.travel/hotels/87765150.jpg){w=360}](https://ryokansociety.com/kusatsu-onsen/hanaingen) [Hanaingen, Kusatsu](https://ryokansociety.com/kusatsu-onsen/hanaingen) |
 | **Small inn, private baths** | [![Open-air hot-spring bath at Oyado Noshiyu in Kurokawa Onsen at night](https://static.cupid.travel/hotels/47767472.jpg){w=360}](https://ryokansociety.com/kurokawa-onsen/kurokawa-onsen-oyado-noshiyu) [Oyado Noshiyu, Kurokawa](https://ryokansociety.com/kurokawa-onsen/kurokawa-onsen-oyado-noshiyu) |
 
-**[See all 1,700 ryokan with hot-spring water, with prices for your dates →](https://ryokansociety.com/ryokans?onsen=yes)**
+**[Check all 1,700 ryokan with hot-spring water, priced for your stay →](https://ryokansociety.com/ryokans?onsen=yes)**
 
-## What is an onsen? The meaning, and what counts
+## Onsen meaning: what is an onsen and what qualifies
 
-Onsen (温泉) means "hot spring," and in Japan the word has a legal definition. Under the Hot Springs Act, water from the ground counts as an onsen if it comes out at 25°C or warmer, or if it contains enough of at least one of 19 listed substances, such as sulfur, iron or carbonic acid. So a spring can be cool and still qualify because of what's dissolved in it, which is why some onsen baths are reheated.
+The term onsen (温泉) translates to "hot spring" and has a legal meaning in Japan. According to the Hot Springs Act, groundwater qualifies if its temperature reaches 25°C or higher, or if it contains a sufficient amount of at least one of 19 listed substances, such as sulfur, iron, or carbonic acid. This means a cool spring can still be an onsen due to its mineral content, which is why some baths are reheated.
 
 The word also covers the places built around the water. An onsen can be a single bathhouse, the bath inside a ryokan, or a whole town such as Kusatsu Onsen or Kinosaki Onsen, where the town name carries the word. Hokkaido has the most onsen areas of any prefecture (226), and Oita in Kyushu, home to Beppu and Yufuin, has the most springs (5,094), per the same Ministry of the Environment count.
 
-## Onsen vs sento: which baths use real hot-spring water?
+## Onsen or sento: which baths have genuine hot-spring water?
 
 ![Wooden main building of Dogo Onsen Honkan in Matsuyama at dusk, with visitors at the entrance](https://upload.wikimedia.org/wikipedia/commons/thumb/7/77/Dogo_Onsen_Honkan_%28Main_building%29%2C_%E9%81%93%E5%BE%8C%E6%B8%A9%E6%B3%89_%E6%9C%AC%E9%A4%A8_-_panoramio_%281%29.jpg/1920px-Dogo_Onsen_Honkan_%28Main_building%29%2C_%E9%81%93%E5%BE%8C%E6%B8%A9%E6%B3%89_%E6%9C%AC%E9%A4%A8_-_panoramio_%281%29.jpg)
-*Dogo Onsen Honkan in Matsuyama, one of Japan's best-known public bathhouses.*
+*The Dogo Onsen Honkan in Matsuyama, among Japan's best-known public bathhouses.*
 
-The etiquette is the same everywhere you bathe in Japan. The water isn't.
+Bathing etiquette follows the same steps wherever you go in Japan. The water itself, however, is not the same.
 
 | Bath | Water | Where you find it |
 | --- | --- | --- |
-| **Onsen** | Natural hot-spring water | Onsen towns, bathhouses, many ryokan and hotels |
-| **Sento** | Heated tap or well water | Neighborhood public baths in every city |
-| **Super sento** | Either, check the sign | Large day-spa complexes |
-| **Ryokan or hotel bath** | Either, inn by inn | 1,700 of our 2,598 ryokan have hot-spring water |
+| **Onsen** | Water from natural hot springs | Onsen towns, bathhouses, numerous ryokan and hotels |
+| **Sento** | Tap or well water that is heated | Local public baths found in each city |
+| **Super sento** | It can be either one, so verify the signage | Big day-spa complexes |
+| **Ryokan or hotel bath** | It varies from one inn to the next | Out of our 2,598 ryokan, 1,700 offer hot-spring water. |
 
-A sento makes a good first rehearsal in Tokyo or Osaka. A ryokan bath can be either: of our 1,700 ryokan with hot-spring water, 1,580 use it in every bath. Hotels can have onsen too, and we list [1,107 onsen hotels](https://ryokansociety.com/onsen-hotels).
+Visiting a sento in Tokyo or Osaka offers a solid practice run. Ryokan baths might use either kind of water; among the 1,700 ryokan we feature that have hot-spring water, 1,580 provide it for all baths. Some hotels also offer onsen, and we list [1,107 onsen hotels](https://ryokansociety.com/onsen-hotels).
 
-**[Find ryokan with hot-spring water in every bath →](https://ryokansociety.com/ryokans?onsen=yes)**
+**[Discover ryokan where each bath uses hot-spring water →](https://ryokansociety.com/ryokans?onsen=yes)**
 
-## How to use an onsen, step by step
+## A step-by-step guide to using an onsen
 
 ![Navy noren curtain marked 男 for men hanging over the entrance to a men's changing room](https://upload.wikimedia.org/wikipedia/commons/thumb/1/14/Noren_%2845556489832%29.jpg/1920px-Noren_%2845556489832%29.jpg){w=360}
-*The noren tells you which side is which: 男 is men, 女 is women.*
+*The noren shows which side is which: 男 for men, 女 for women.*
 
-Onsen etiquette comes down to one idea. Everyone shares the water, so you arrive in it clean and keep it calm.
+The core principle of onsen etiquette is simple. The bathwater is shared, so you should be clean before entering and avoid disturbing the water.
 
-1. **Shoes off** at the entrance. In a ryokan you walk to the bath in slippers and the yukata robe from your room.
-2. **Find your side.** The curtains (noren) are usually blue or marked 男 for men and red or marked 女 for women. Some inns swap the two baths between morning and evening, so check again the next day.
-3. **Undress completely** in the changing room and leave your clothes in a basket or locker. Swimsuits aren't worn. Take only the small towel in with you.
-4. **Wash first, sitting down.** Sit on a stool at a shower station, wash your body and hair, and rinse off every bit of suds.
-5. **Get in slowly.** The water is hot. Lower yourself in, and keep your head above water.
-6. **Keep the towel out of the water.** Fold it on your head or leave it on the edge. Tie long hair up so it stays out of the water too.
-7. **Soak in short rounds.** Ten minutes at a time is plenty at first. Get out, cool down, and go back in if you like.
-8. **Dry off before the changing room.** Wipe yourself down with the small towel so you don't drip on the floor. Many bathers skip a final shower to keep the minerals on their skin.
+1. **Take off your shoes** when you enter. Inside a ryokan, you wear slippers and your room's yukata robe to go to the bath.
+2. **Find your side.** The entry curtains, or noren, are normally blue or feature the character 男 for men, and are red or feature 女 for women. Since some inns switch the assigned baths from morning to evening, you should confirm the setup again the following day.
+3. **Undress fully** inside the changing area and place your clothes in a basket or locker. Do not wear a swimsuit. Bring just the small towel inside with you.
+4. **Wash yourself first while seated.** Use a stool at a shower station to clean your body and hair, ensuring all soap is rinsed away.
+5. **Step into the bath gradually.** The water is hot. Ease your body in and make sure your head stays above the surface.
+6. **Don't put your towel in the bath.** You can set it folded on your head or leave it on the side. Also, tie up long hair to keep it out of the water.
+7. **Limit your soaking time.** Ten minutes at a time is plenty at first. Step out to cool off, then you can go back in for another round if you want.
+8. **Dry yourself before entering the changing area.** Use your small towel to wipe off so you don't leave puddles. Many guests choose not to rinse after bathing to let the minerals stay on their skin.
 
-**[Find ryokan with hot-spring water to try this at →](https://ryokansociety.com/ryokans?onsen=yes)**
+**[Locate ryokan offering hot-spring water to experience this →](https://ryokansociety.com/ryokans?onsen=yes)**
 
-## Onsen rules people ask about
+## Commonly asked onsen rules
 
-- **No swimsuits.** Shared baths are nude and separated by gender. If you'd rather not, book a private bath (see below).
-- **No phones or cameras** in the changing room or bath. Other people are undressed.
-- **No swimming, splashing or diving.** Speak quietly.
-- **No towels or washcloths in the water,** and no soap in the tub.
-- **Skip the bath after drinking** a lot, and drink water before and after a long soak.
+- **Swimsuits are not allowed.** Communal bathing is done nude and is gender-segregated. If you prefer not to, you can reserve a private bath (details are below).
+- **Do not bring phones or cameras** into the changing room or bathing area, as others will be undressed.
+- **Do not swim, splash, or dive in the bath.** Keep your voice low while you are there.
+- **Don't put towels or washcloths in the water,** and don't use soap in the tub.
+- **Avoid the bath if you've had a lot to drink,** and be sure to drink water both before and after a long soak.
 
-## Types of bath you'll come across
+## Different bath varieties you will encounter
 
 ![Courtyard of Hyotan Onsen in Beppu with noren for the men's bath and the women's sand bath](https://upload.wikimedia.org/wikipedia/commons/thumb/1/19/Hyotan_Onsen_%285011201676%29.jpg/1920px-Hyotan_Onsen_%285011201676%29.jpg)
-*Hyotan Onsen in Beppu, where the women's side includes a sand bath.*
+*Hyotan Onsen in Beppu, with a sand bath available on the women's side.*
 
-- **Shared indoor bath (daiyokujo).** The main bath of a ryokan or bathhouse, separated by gender.
-- **Open-air bath (rotenburo).** An outdoor pool of rock or wood, the one people picture.
-- **Private bath to book (kashikiri).** A bath you reserve for your own party for a set time, such as 45 minutes at Mount View Hakone. Some inns charge for it; others let you use it free whenever it's empty.
-- **Bath in your room.** A tub on your balcony or in your bathroom, so you can bathe whenever you like.
+- **Shared indoor bath (daiyokujo).** This is the gender-separated primary bathing facility at a ryokan or public bathhouse.
+- **Open-air bath (rotenburo).** People typically envision this outdoor pool, which is constructed from rock or wood.
+- **Private bath to book (kashikiri).** You can reserve this bath for just your group for a specific period, like 45 minutes at Mount View Hakone. A fee may apply, though some inns offer it without charge when it's available.
+- **Bath in your room.** This tub is located on your balcony or inside your bathroom, allowing you to bathe at any time.
 - **Mixed bath (konyoku).** A shared bath for men and women. They're rare now, mostly in old mountain onsen, and many let women wear a bath wrap.
-- **Foot bath (ashiyu).** A free public foot soak found in most onsen towns.
+- **Foot bath (ashiyu).** This complimentary public pool for your feet is available in most onsen towns.
 
 "Private" and "open-air" don't mean hot-spring water, which surprises a lot of first-timers. At [Nishimuraya Honkan](https://ryokansociety.com/kinosaki-onsen/nishimuraya-honkan) in Kinosaki, the open-air baths in some rooms are heated plain water, because the town keeps its spring water for the shared baths. At [Mount View Hakone](https://ryokansociety.com/hakone/mount-view-hakone), the open-air baths are milky sulfur water piped from Owakudani, while the indoor baths are heated groundwater. Check which bath is which before you pay extra for a room's tub.
 
-## How to tell if a bath is real hot-spring water
+## How to know when a bath uses genuine hot-spring water
 
-Growing up in a hotel family in Tokyo, I learned early that the most honest description of a bath is usually the small sign by the changing-room door, written in Japanese. Most onsen post an analysis sheet (温泉分析書) and a note on how the water is handled. Four phrases tell you most of what you need.
+My Tokyo hotel family upbringing taught me that the small Japanese sign by the changing-room door typically offers the most accurate bath description. Most onsen display an analysis sheet (温泉分析書) and a notice about their water system. Four phrases communicate the bulk of what you need to know.
 
 | On the sign | Reading | What it means |
 | --- | --- | --- |
-| 源泉掛け流し | gensen kakenagashi | Water flows straight from the spring and overflows out; nothing is reused. The best you can get. |
-| 加水 | kasui | Water is added, usually to cool a spring that comes out too hot. |
-| 加温 | kaon | The water is heated, usually because the spring is under bathing temperature. |
-| 循環 | junkan | The water is filtered and recirculated, like a pool. |
+| 源泉掛け流し | gensen kakenagashi | Water comes directly from the spring and overflows; none is recirculated. This is the finest quality. |
+| 加水 | kasui | Water is introduced, typically to lower the temperature of a spring that is too hot. |
+| 加温 | kaon | Water heating is done, usually as the spring's temperature is below the level needed for bathing. |
+| 循環 | junkan | Water is filtered and recirculated, similar to a swimming pool. |
 
-None of these is a warning sign. A heated spring is still an onsen, and recirculation is how big hotels keep a large bath clean. But if you're paying for a room because of its bath, ask which applies. Good ryokan hosts are proud to answer. On our inn pages we note it where the inn tells us, such as "free-flowing" or "some water added."
+These phrases do not indicate a problem. Even a bath that heats its water qualifies as an onsen, and recirculation is the method large hotels use to maintain a big bathing area. However, if you are booking a room primarily for its bath, you should inquire about the water system. Good ryokan hosts are happy to provide that detail. We include that information on our inn pages when the inn provides it, using notes like "free-flowing" or "some water added."
 
-**[See ryokan with hot-spring water in every bath →](https://ryokansociety.com/ryokans?onsen=yes)**
+**[Find ryokan where every bath has hot-spring water →](https://ryokansociety.com/ryokans?onsen=yes)**
 
-## Onsen with tattoos: what actually works
+## Tattoos at onsen: what really works
 
-Tattoos are still the hardest part of onsen in Japan. Many shared baths turn away anyone with visible ink, a rule rooted in tattoos' old link with organized crime. Our numbers show how it plays out: only [25 of our 2,598 ryokan](https://ryokansociety.com/ryokans?tattoos=fine) say tattoos are fine in their shared baths, while [1,331 let you bathe privately](https://ryokansociety.com/ryokans?tattoos=private), in a bath in your room or a private bath you book.
+Tattoos remain the most challenging aspect of visiting Japanese hot springs. Many public baths refuse entry to anyone with visible tattoos, a policy linked to ink's historical association with organized crime. Our numbers show the situation: only [25 of our 2,598 ryokan](https://ryokansociety.com/ryokans?tattoos=fine) state their shared baths welcome tattoos, while [1,331 let you bathe privately](https://ryokansociety.com/ryokans?tattoos=private), meaning in your room's bath or a reserved private bath.
 
-So for most travelers with tattoos, the answer is a private bath. Small tattoos can sometimes be covered with a skin-colored sticker, but that's the inn's call, not yours. Some whole towns are relaxed about it. Kinosaki's seven public bathhouses allow tattoos of any size, and both of our Hakone picks below allow tattoos, according to their pages.
+Therefore, for the majority of visitors with tattoos, a private bath is the solution. You may occasionally conceal a small tattoo with a flesh-toned patch, but the inn makes that rule, not you. A few entire towns are more permissive. The seven public baths in Kinosaki accept tattoos of all dimensions, and both our selected Hakone ryokan permit them, as their pages confirm.
 
-How to ask: an inn's tattoo rule is often only on its Japanese website, if it's written down at all. When I book for friends, I send one short line before paying, with the size and where the tattoo is, and ask which baths they can use. A clear question gets a clear answer, and nobody is embarrassed at the bath door. If you want the shortest list, we have [8 ryokan with private baths where tattoos are fine everywhere](https://ryokansociety.com/private-onsen?tattoos=fine).
+How to ask: an inn's tattoo policy is often only listed on its Japanese website, if it is documented at all. When I reserve for friends, I send a brief message before payment, stating the tattoo's size and location, and ask which bathing areas they may use. A direct question receives a direct reply, and no one feels awkward at the bath entrance. For the most concise list, we have [8 ryokan with private baths where tattoos are fine everywhere](https://ryokansociety.com/private-onsen?tattoos=fine).
 
-**[See the 1,331 ryokan where you can bathe privately with tattoos →](https://ryokansociety.com/ryokans?tattoos=private)**
+**[Browse 1,331 ryokan offering private bathing for guests with tattoos →](https://ryokansociety.com/ryokans?tattoos=private)**
 
-## Can you bathe privately?
+## Is private bathing available?
 
-Yes, and it's the easiest first onsen if bathing nude with strangers isn't for you, you want to bathe together as a couple or family, or you have tattoos.
+That's right, and it provides the simplest introduction for anyone uneasy about communal nudity, for couples or families wishing to bathe together, or for guests with tattoos.
 
-- **A bath in your room.** [726 of our ryokan](https://ryokansociety.com/ryokans?bath=room) have one in some or all rooms. Check that it's filled with hot-spring water if that matters to you.
-- **A private bath to book.** [996 of our ryokan](https://ryokansociety.com/ryokans?bath=private) have one. At many small inns it's free; you lock the door and the bath is yours until you leave.
+- **A bath inside your room.** [726 of our ryokan](https://ryokansociety.com/ryokans?bath=room) offer this in some or all rooms. Verify it uses hot-spring water if that is important to you.
+- **A private bath to book.** [996 of our ryokan](https://ryokansociety.com/ryokans?bath=private) offer this. In many small inns there is no charge; you just lock the door and the bath is yours until you depart.
 
-**[Browse ryokan with a bath in the room →](https://ryokansociety.com/private-onsen)**
+**[Find ryokan offering in-room baths →](https://ryokansociety.com/private-onsen)**
 
-## The best onsen towns in Japan, by region
+## Japan's best onsen towns, organized by region
 
 ![Entrance gate and old timber buildings of Tsuru-no-yu in Nyuto Onsen among autumn leaves](https://upload.wikimedia.org/wikipedia/commons/thumb/4/45/Nyuto_Onsen_-_NyutoOnsen7048.jpg/1920px-Nyuto_Onsen_-_NyutoOnsen7048.jpg)
-*Tsuru-no-yu in Nyuto Onsen, Akita, in autumn.*
+*Autumn at Tsuru-no-yu in Nyuto Onsen, Akita.*
 
 The best onsen in Japan is usually a town rather than a single bath, because staying overnight lets you bathe after dinner and again at dawn. These are the onsen towns I'd send a first-timer to, with how many ryokan we list in each and what most of them cost.
 
@@ -153,112 +153,112 @@ The best onsen in Japan is usually a town rather than a single bath, because sta
 | [Yufuin](https://ryokansociety.com/yufuin) | Kyushu | 77 | $140 to $590 |
 | [Kurokawa Onsen](https://ryokansociety.com/kurokawa-onsen) | Kyushu | 26 | $240 to $770 |
 
-How to choose between them:
+Here's how to decide among them:
 
 - **Short on time, starting in Tokyo:** [Hakone](https://ryokansociety.com/hakone) is the easy trip and has the widest choice of inns. [Kusatsu](https://ryokansociety.com/kusatsu-onsen) is the classic onsen town, with the steaming Yubatake in the middle of it. Both are on our list of [ryokan near Tokyo](https://ryokansociety.com/near-tokyo).
-- **Starting in Kyoto or Osaka:** [Kinosaki](https://ryokansociety.com/kinosaki-onsen) for the walk between seven public bathhouses in a yukata, or [Arima](https://ryokansociety.com/arima-onsen) for a short hop from Kobe.
+- **When you begin your trip in Kyoto or Osaka:** Choose [Kinosaki](https://ryokansociety.com/kinosaki-onsen) for strolling between seven public baths in a yukata, or pick [Arima](https://ryokansociety.com/arima-onsen) for a quick trip from Kobe.
 - **Old wooden onsen in the mountains:** [Nyuto](https://ryokansociety.com/nyuto-onsen), [Shibu](https://ryokansociety.com/shibu-onsen) or [Kurokawa](https://ryokansociety.com/kurokawa-onsen). Of the Kurokawa ryokan we list, 10 have a bath in some rooms and 2 have a private bath to book.
 - **The most water for your money:** [Beppu](https://ryokansociety.com/beppu), where the springs are everywhere, and quieter [Yufuin](https://ryokansociety.com/yufuin) next door, where 27 of the ryokan we list have a bath in some rooms and 13 have a private bath to book.
 
-**[Browse every onsen town by region →](https://ryokansociety.com/destinations)**
+**[Explore all onsen towns by region →](https://ryokansociety.com/destinations)**
 
 ## Where to stay in Japan for your first onsen: our picks for each kind of trip
 
 Five inns, each for a different kind of first trip, with reasons from their pages on our site.
 
-### Nishimuraya Honkan, Kinosaki: the classic onsen town
+### Nishimuraya Honkan, Kinosaki: the quintessential onsen town
 
 [![Garden and wooden buildings of Nishimuraya Honkan in Kinosaki Onsen](https://static.cupid.travel/hotels/25236199.jpg)](https://ryokansociety.com/kinosaki-onsen/nishimuraya-honkan)
 
 A ryokan from the Ansei era (1854 to 1860) with 29 rooms, a 15-minute walk from the station. Stay here for the full onsen-town evening: public bathhouses down the street and the inn's own spring baths open until 12:30 a.m. Its in-room baths are heated plain water, so use the shared baths for the spring.
 
-**Baths:** three shared hot-spring baths; some rooms with a private open-air bath (not spring water). **Ages:** 10 and over. **Known for:** Two Michelin Keys and more than 160 years in Kinosaki.
+**Baths:** three communal onsen baths; select rooms include a private rotenburo (non-spring water). **Ages:** 10 years old and above. **Known for:** holding two Michelin Keys and operating in Kinosaki for over 160 years.
 
 **[See rooms and rates at Nishimuraya Honkan →](https://ryokansociety.com/kinosaki-onsen/nishimuraya-honkan)**
 
-### Gora Hanaougi, Hakone: a hot-spring bath in every room
+### Gora Hanaougi, Hakone: each room includes a hot-spring bath
 
 [![Rock-lined open-air hot-spring bath at Gora Hanaougi in Hakone at night](https://static.cupid.travel/hotels/ex_2581bfef_z.jpg)](https://ryokansociety.com/hakone/gora-hanaougi)
 
-Every room has its own open-air bath of free-flowing hot spring, so you can bathe whenever you like with nobody else around. Kaiseki dinner is served in a private dining room. Rates start from about $780 a night (checked Nov 2026).
+Each accommodation includes a private open-air bath with continuously flowing hot spring water, allowing for solitary bathing anytime. Kaiseki meals come in a personal dining space. Nightly rates begin at approximately $780, as verified in November 2026.
 
-**Baths:** open-air spring bath in every room, plus shared baths (closed 10:00 to 15:00). **Ages:** children only in some rooms. **Known for:** tattoos allowed, private dining.
+**Baths:** each room has an open-air spring bath; shared baths also available (closed from 10:00 to 15:00). **Ages:** children allowed in certain rooms only. **Known for:** tattoos permitted, private dining.
 
 **[See rooms and rates at Gora Hanaougi →](https://ryokansociety.com/hakone/gora-hanaougi)**
 
-### Mount View Hakone: tattoos allowed, milky water, good value
+### Mount View Hakone: tattoos permitted, milky water, good value
 
 [![Milky-white open-air hot-spring bath at Mount View Hakone](https://static.cupid.travel/hotels/207501380.jpg)](https://ryokansociety.com/hakone/mount-view-hakone)
 
-A 37-room inn whose open-air baths use milky sulfur water piped from Owakudani, at rates from about $172 a night (checked Nov 2026). Four private baths can be booked for 45 minutes, some free and some up to ¥3,000. The Japanese-style rooms don't have their own bath, so plan on the shared and private ones.
+A 37-room property, it offers open-air baths filled with milky sulfur water sourced from Owakudani. Nightly rates begin around $172, as of November 2026. You can reserve four private baths for 45-minute slots; some are free, while others cost up to ¥3,000. The traditional rooms lack their own bath, so you'll use the shared and bookable options.
 
 **Baths:** open-air hot-spring baths, indoor baths of heated groundwater, 4 private baths to book. **Ages:** ask when booking. **Known for:** tattoos allowed, cloudy sulfur water at a low price.
 
 **[See rooms and rates at Mount View Hakone →](https://ryokansociety.com/hakone/mount-view-hakone)**
 
-### Hanaingen, Kusatsu: free private baths by the Yubatake
+### Hanaingen, Kusatsu: private baths at no cost near the Yubatake
 
 [![Entrance of Hanaingen in Kusatsu Onsen with a noren curtain](https://static.cupid.travel/hotels/87765150.jpg)](https://ryokansociety.com/kusatsu-onsen/hanaingen)
 
-Opened in 2016, 99 steps from the Yubatake. Every bath is 100% Kusatsu spring water, and one draws straight from the Yubatake source. Its four private baths are free and open 24 hours: lock the door and they're yours. Most plans are breakfast only, which leaves you free to eat in town.
+This ryokan opened in 2016 and sits just 99 steps from the Yubatake. All of its baths use 100% Kusatsu spring water, and one is fed directly from the Yubatake. Four private baths are complimentary and available 24 hours; you simply lock the door to claim one. Most of their lodging plans include only breakfast, giving you the freedom to dine elsewhere.
 
-**Baths:** 100% Kusatsu spring water; 4 free private baths, 24 hours. **Ages:** ask when booking. **Known for:** the location and its free private baths.
+**Baths:** 100% Kusatsu spring water; 4 complimentary private baths, available 24 hours. **Ages:** inquire at booking. **Known for:** its location and the free private baths.
 
 **[See rooms and rates at Hanaingen →](https://ryokansociety.com/kusatsu-onsen/hanaingen)**
 
-### Oyado Noshiyu, Kurokawa: a small inn with private spring baths
+### Oyado Noshiyu, Kurokawa: a compact inn offering private spring baths
 
 [![Open-air hot-spring bath at Oyado Noshiyu in Kurokawa Onsen at night](https://static.cupid.travel/hotels/47767472.jpg)](https://ryokansociety.com/kurokawa-onsen/kurokawa-onsen-oyado-noshiyu)
 
 Eleven rooms and five private hot-spring baths, free on a first-come basis, with kaiseki dinner. With so few guests sharing five baths, you rarely wait. Some annex rooms are adults only and have their own hot-spring bath.
 
-**Baths:** 5 free private hot-spring baths (free-flowing, some water added). **Ages:** children only in the Azami and Shion rooms. **Known for:** privacy in a small mountain onsen town.
+**Baths:** 5 private hot-spring baths at no extra charge (free-flowing, with some water supplementation). **Ages:** children allowed solely in Azami and Shion rooms. **Known for:** seclusion within a compact mountain onsen town.
 
 **[See rooms and rates at Oyado Noshiyu →](https://ryokansociety.com/kurokawa-onsen/kurokawa-onsen-oyado-noshiyu)**
 
 **[Compare all 1,700 ryokan with hot-spring water →](https://ryokansociety.com/ryokans?onsen=yes)**
 
-## When to go, and how long to soak
+## When to visit and how long to bathe
 
-Onsen are open all year, but winter suits them best, with snow around the open-air baths in the mountains. Autumn leaves come second.
+Onsen operate year-round, but winter is the ideal season, with snow surrounding the open-air baths in the mountains. Autumn foliage is the next best time.
 
-Avoid Japan's own holidays, when onsen towns fill up and prices peak: New Year, Golden Week (late April to early May) and Obon in mid-August. A weeknight is quieter and cheaper.
+Skip Japan's domestic holidays, as onsen towns get crowded and rates are highest then: New Year, Golden Week from late April to early May, and Obon in mid-August. Staying on a weeknight will be more tranquil and less expensive.
 
 In the water, start with 5 to 10 minutes and cool off between rounds. Two or three short soaks beat one long one. At an inn, don't miss the after-dinner and early-morning baths.
 
 ## Onsen in Japan FAQ
 
-**Do you have to be naked in an onsen?**
-Yes, in shared baths. Swimsuits aren't worn, and you carry only a small towel that stays out of the water. If that's a dealbreaker, a [bath in your room](https://ryokansociety.com/ryokans?bath=room) or a private bath you book lets you bathe alone or with your own group.
+**Is nudity required in an onsen?**
+That is the policy for shared baths. You do not wear swimwear, and you bring just a small towel, keeping it away from the bath water. If this is not acceptable, using a [bath in your room](https://ryokansociety.com/ryokans?bath=room) or reserving a private bath allows you to wash by yourself or with your own party.
 
-**Are onsen mixed gender?**
-Almost all are separated by gender. Mixed baths (konyoku) still exist, mostly at old mountain onsen, and many of those allow a bath wrap. Families and couples who want to bathe together usually book a [private bath](https://ryokansociety.com/ryokans?bath=private).
+**Do onsen have mixed gender bathing?**
+Nearly every shared bath is single-sex. Mixed-gender baths, called konyoku, are still found, mostly at older mountain onsen, and many of those permit a bath wrap. Families or couples wishing to bathe together typically reserve a [private bath](https://ryokansociety.com/ryokans?bath=private).
 
-**How much does an onsen cost?**
-Public bathhouses charge a small entry fee, and towels are often extra. At a ryokan the baths are included, and many small inns include their private baths too.
+**What is the price to enter an onsen?**
+A public bathhouse has a low admission price, and towels usually cost extra. Your ryokan stay includes access to its baths, and many small inns include their private baths as well.
 
-**Can children go in an onsen?**
+**Are onsen open to children?**
 Yes. Young children usually go into the shared bath with a parent, and the age limit for going in with the other parent is set locally, so ask at the front desk. Some ryokan set age limits for staying, so check the inn page, or start with [ryokan that welcome children](https://ryokansociety.com/ryokans?children=welcome).
 
-**Can I use an onsen on my period?**
-Most people skip the shared baths on heavy days, out of courtesy to other bathers. A bath in your room solves it.
+**May I enter an onsen while menstruating?**
+On heavy days, most guests choose not to use the shared baths as a courtesy to others. Having a private bath in your room addresses this.
 
-**Is there an onsen near Tokyo?**
-Hakone and Kusatsu are the two classic trips, and both have dozens of ryokan with their own hot-spring baths. See our [ryokan near Tokyo](https://ryokansociety.com/near-tokyo) for more.
+**Is there an onsen close to Tokyo?**
+The two classic destinations are Hakone and Kusatsu, each home to dozens of ryokan with their own hot-spring baths. You can find them in our [ryokan near Tokyo](https://ryokansociety.com/near-tokyo).
 
-**Can I just visit for the day?**
-Yes. Onsen towns have public bathhouses, and some ryokan open their baths to day visitors. The night and morning baths only come with a stay.
+**Is it possible to visit only for the day?**
+You can. Public bathhouses operate in onsen towns, and some ryokan allow daytime access to their baths. The night and morning bathing periods only come with an overnight stay.
 
 ## Book your onsen stay in Japan
 
-We list [2,598 ryokan across Japan](https://ryokansociety.com/ryokans), with the type of bath, the water and the tattoo rules shown for each. Jump straight to the stays that fit:
+Our guide includes [2,598 ryokan across Japan](https://ryokansociety.com/ryokans), displaying each one's bathing style, water source, and tattoo policy. Head directly to the listings that suit you:
 - [Ryokan with hot-spring water](https://ryokansociety.com/ryokans?onsen=yes) (1,700)
 - [Ryokan with a bath in the room](https://ryokansociety.com/ryokans?bath=room) (726)
 - [Ryokan with a private bath to book](https://ryokansociety.com/ryokans?bath=private) (996)
 - [Ryokan where you can bathe privately with tattoos](https://ryokansociety.com/ryokans?tattoos=private) (1,331)
 - [Onsen hotels](https://ryokansociety.com/onsen-hotels) (1,107)
 
-**[See all 2,598 ryokan we list →](https://ryokansociety.com/ryokans)**
+**[Browse all 2,598 ryokan we list →](https://ryokansociety.com/ryokans)**
 
 ## Photo credits
 - Yubatake, Kusatsu (top): Aspere, [CC0](https://creativecommons.org/publicdomain/zero/1.0/), via Wikimedia Commons

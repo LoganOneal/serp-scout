@@ -1,0 +1,368 @@
+```json
+{
+    "54": "**From Kai: how to read a Kinosaki dinner plan.** Inns often list identical rooms under different plans, and the main change is almost always the dinner menu. During winter, you'll find crab plans, and the price increases with the amount and quality of crab served. If you don't want crab, a Tajima beef dinner plan frequently offers a better value meal. Having grown up in a Tokyo hotel family, I know that an inn's dinner times reveal how its kitchen works: a set early time, such as 17:00 at Sensui or 17:30 to 18:30 at Nishimuraya Honkan, means courses are prepared in sequence and served individually, so returning late from the baths isn't a good idea.",
+    "59": "Overnight visitors typically receive it complimentary from their ryokan, and it remains valid until 13:00 on their departure day. Day trippers can purchase the Yumepa pass for 1,500 yen (750 yen for children) at any bathhouse, or pay 800 yen for a single entry. Staying overnight provides better value; see the ⟦L1⟧.",
+    "61": "Most public bathhouses shut at 23:00. Kono-yu, Goshono-yu, Ichino-yu and Jizo-yu begin operations at 7:00; Mandara-yu and Yanagi-yu open at 15:00.",
+    "63": "Yes, it is. The local tourism office provides a family guide, Jizo-yu offers a warm children's bath, and many inns accept kids: Onishiya Suishoen and Yuraku Kinosaki Spa & Gardens welcome all ages, and Mikuniya is family-friendly. Some higher-end ryokans enforce age limits, like Nishimuraya Honkan (10+) and Sensui (13+). Check the ⟦L1⟧.",
+    "64": "Its seven public bathhouses and the tradition of walking between them in yukata and clogs, winter snow crab, and Tajima beef. It also has a reputation as one of Japan's most tattoo-permissive onsen towns.",
+    "65": "We catalog all ⟦L1⟧, displaying details like private baths, dinner options, and child policies for each room. Go directly to the accommodations that suit your needs:"
+}
+```
+
+```json
+{
+  "31": "Most guests stay right in town and walk to everything. Out of our 43 Kinosaki listings, 20 are a short walk from Kinosaki Onsen Station, and the ryokan association's bus meets the limited express trains from 12:30 to 18:00 for the others. Nightly rates for two people range from about $180 up to $720, with many clustered around $410. These are typical lowest prices we see over a year, so check your exact dates on our Kinosaki Onsen ryokan page for current numbers. Below are eight choices, each suited to a different trip, with details pulled from each inn's own page on our site (verified November 17–20, 2026).",
+  "34": "Our editors chose this one for its water. Rooms don't have private baths; you use one of two free-flowing private baths whenever they're unoccupied. Be aware of the 22:00 curfew.",
+  "35": "There are 13 rooms and no shared baths, so tattoos are always fine. Two of its three private hot-spring baths are free to use whenever they're empty. The inn welcomes guests aged 13 and up.",
+  "36": "Each dinner is a Tajima beef course served in its upstairs restaurant. Its two private baths are free to reserve for 40-minute slots, and it's a three-minute walk from the station.",
+  "50": "Are you arriving with luggage? These ryokan are just a few minutes' walk from the station: Koyado Enn, Mikuniya and Hanakouji Saigetsu (3 minutes), Tokitotoki (5 minutes) and Sensui (7 minutes).",
+  "53": "Reserve dinner with your room. On our inn pages, every plan notes if dinner is included and where you'll eat it. Many town shops and restaurants shut for a few hours in the early evening, typically between 17:00 and 20:00, because nearly everyone is dining at their inn. Room-only plans are available (Kinosaki Onsen Kawaguchiya Honkan, for example, sells only those), but you'll be looking for a table during the one hour the whole town eats."
+}
+```
+
+```json
+{
+    "1": "Kinosaki Onsen is a hot spring town in Hyogo, on the Sea of Japan coast. Visitors stroll between public bathhouses in cotton yukata, and most inns give you a free pass to all seven. A stay is definitely worthwhile. We feature ⟦L1⟧, with nightly rates for two typically between $180 and $720. Among them, 29 offer private bathing: ⟦L2⟧ and ⟦L3⟧ (a few properties have both options).",
+    "4": "The evening is the main event. After checking in, guests change into the yukata provided by their ryokan, slip on wooden geta sandals, and head out to explore both before and after dinner.",
+    "11": "Mandara-yu is considered the town's original spring, featuring two small ceramic outdoor tubs. Yanagi-yu, the most compact bathhouse, has a cypress bath. Both open daily at 15:00, perfect for a pre-dinner stroll. Jizo-yu is a local favorite and includes a lukewarm bath suitable for children.",
+    "23": "You can find these options using our Kinosaki page: **⟦L1⟧**",
+    "25": "Out of the 43 Kinosaki Onsen ryokan we list, 6 have open-air baths in select rooms. Another 23 offer a private bath you can reserve for your group. This makes Kinosaki a solid pick for couples or visitors who prefer not to bathe publicly.",
+    "26": "Here's a key detail many guides overlook. Kinosaki reserves its onsen water for the shared public baths, so in-room tubs generally use heated tap water. That's what ⟦L1⟧ notes for its rooms with open-air baths. A room bath is nice for privacy, but for **real hot-spring water** without sharing, book a ryokan with private onsen baths instead:"
+}
+```
+
+```json
+{
+  "1": "Kinosaki Onsen is a compact hot spring town in Hyogo, on the Sea of Japan coast. You stroll between public bathhouses wearing a cotton yukata, and most ryokan give you a complimentary pass to all of them. Staying a night is highly recommended. Our listings include ⟦L1⟧, with rates for two typically ranging from $180 to $720 nightly. Among these, 29 provide private bathing: ⟦L2⟧ and ⟦L3⟧ (a handful of properties offer both).",
+  "4": "The evening is the main focus. Guests change into the yukata supplied by their ryokan, slip on wooden geta sandals, and step out both before and after dinner.",
+  "11": "Mandara-yu is regarded as the town's original spring, with two small ceramic outdoor tubs. Yanagi-yu, the most petite bathhouse, features a cypress bath. Both open daily at 15:00, ideal for a pre-dinner walk. Jizo-yu is a local favorite and includes a lukewarm bath appropriate for kids.",
+  "23": "You can locate these options on our Kinosaki page: **⟦L1⟧**",
+  "25": "Out of the 43 Kinosaki Onsen ryokan we feature, 6 include an open-air bath in some of their rooms. Another 23 offer a private bath you can reserve for your group. This makes Kinosaki a solid option for couples or anyone hesitant about public bathing.",
+  "26": "Here is a key point many guides overlook. Kinosaki dedicates its onsen water to the shared public baths, so in-room tubs usually contain heated tap water. That is what ⟦L1⟧ notes for its rooms with open-air baths. A room with its own bath is nice for privacy. For **genuine hot-spring water** without company, book a ryokan with private onsen baths instead:"
+}
+```
+
+```json
+{
+    "54": "**From Kai: how to read a Kinosaki dinner plan.** Ryokans frequently offer the identical room with several distinct plans, where the dinner is nearly always what changes. Winter brings crab plans, and the cost rises based on the quantity and quality of crab included. For those not wanting crab, a Tajima beef dinner plan commonly provides a superior meal relative to its price. Having a hotel family background in Tokyo taught me that an inn's dinner schedule indicates its kitchen style: a set early time, for instance 17:00 at Sensui or 17:30 to 18:30 at Nishimuraya Honkan, shows courses are prepared sequentially and served individually, so arriving late from the baths is not recommended.",
+    "59": "Ryokans typically provide it at no charge to overnight visitors, and it can be used until 13:00 when they depart. For day trips, you can purchase a Yumepa pass for 1,500 yen (750 yen for a child) at any bathhouse, or pay 800 yen for a single entry. An overnight stay offers more value; check the ⟦L1⟧.",
+    "61": "The majority of public bathhouses stop admitting guests at 23:00. Opening at 7:00 are Kono-yu, Goshono-yu, Ichino-yu and Jizo-yu; Mandara-yu and Yanagi-yu start at 15:00.",
+    "63": "It is. A family guide is available from the local tourism office, Jizo-yu provides a warm bath for kids, and numerous inns accept children: Onishiya Suishoen and Yuraku Kinosaki Spa & Gardens welcome every age, while Mikuniya is family-friendly. Certain higher-end ryokans maintain age restrictions, including Nishimuraya Honkan (10+) and Sensui (13+). Review the ⟦L1⟧.",
+    "64": "The town is famous for its seven public bathhouses and the custom of walking among them in yukata and geta, winter snow crab, and Tajima beef. It also has a reputation as one of Japan's onsen towns most accepting of tattoos.",
+    "65": "We display every ⟦L1⟧, with private baths, dinner options, and children's rules listed for each specific room. Go directly to the accommodations matching your requirements:"
+}
+```
+
+```json
+{
+    "31": "The majority of guests stay in the town center and walk to everything. Out of 43 Kinosaki properties we list, 20 are a short stroll from Kinosaki Onsen Station. For the others, the local ryokan association's bus greets limited express trains between 12:30 and 18:00. Nightly rates for two span roughly $180 to $720, with a common cluster near $410. These reflect typical low prices observed over a full year; for current rates, check your specific dates on our Kinosaki Onsen ryokan page. Below are eight selections, each fitting a different traveler, with specifics drawn from each inn's own profile on our site (verified November 17–20, 2026).",
+    "34": "We selected this inn specifically for its hot spring source. Accommodations lack private bathrooms; instead, guests can use either of two free-flowing private baths when vacant. Please be mindful of the 22:00 curfew.",
+    "35": "This property has 13 rooms and no public bathing areas, so tattoos are completely acceptable. Two out of its three private hot-spring baths are complimentary for use whenever unoccupied. The inn accepts guests aged 13 and above.",
+    "36": "All dinners consist of a Tajima beef course served in the inn's restaurant upstairs. Its two private baths are complimentary to reserve in 40-minute blocks, and it's located a three-minute walk from the station.",
+    "50": "Traveling with bags? These ryokan are only a short walk from the station: Koyado Enn, Mikuniya and Hanakouji Saigetsu (3 minutes), Tokitotoki (5 minutes) and Sensui (7 minutes).",
+    "53": "Reserve your dinner when you book your room. Every plan on our inn pages indicates if dinner is part of the package and its service location. Most town shops and restaurants shut for several hours in the early evening, usually from 17:00 to 20:00, since almost all visitors dine at their lodging. Room-only plans are an option (Kinosaki Onsen Kawaguchiya Honkan, for instance, offers only these), but you'll be searching for a seat during the single hour when the entire town eats."
+}
+```
+
+```json
+{
+  "1": "Kinosaki Onsen is a compact hot spring town in Hyogo, on the coast of the Sea of Japan. Visitors stroll between public baths wearing a cotton yukata, and most ryokan give guests a complimentary pass to all of them at check-in. Spending a night is highly recommended. Our website features ⟦L1⟧, with most rates for two people spanning $180 to $720 per night. Among these, 29 properties provide private bathing: ⟦L2⟧ and ⟦L3⟧ for exclusive use (a few offer both types).",
+  "4": "Nighttime is the highlight. Visitors wear the yukata supplied by their ryokan, slip on wooden geta sandals, and head out both before and after the evening meal.",
+  "11": "Mandara-yu is considered Kinosaki's original spring, featuring two small ceramic tubs outdoors. Yanagi-yu, the most petite bathhouse, contains a bath made of cypress wood. Both open solely from 15:00 daily, fitting nicely into a pre-dinner stroll. Jizo-yu is popular with locals and provides a lukewarm side bath suitable for children.",
+  "23": "You can find these options filtered on our Kinosaki page: **⟦L1⟧**",
+  "25": "Among the 43 Kinosaki Onsen ryokan we list, 6 include an open-air bath in certain rooms, while 23 more provide a private bath you can reserve for your group. This makes Kinosaki a strong pick for couples or those uncomfortable with public bathing.",
+  "26": "This is an important point many overviews omit. Kinosaki dedicates its onsen water to the communal public baths, so in-room tubs typically contain heated plain water. This is what ⟦L1⟧ notes for its rooms with open-air baths. Having a bath in your room is lovely for privacy. For **authentic hot-spring water** without strangers, reserve an inn with private hot-spring baths instead:"
+}
+```
+
+```json
+{
+  "54": "**From Kai: how to read a Kinosaki dinner plan.** Ryokans commonly offer the same accommodation under multiple packages, and the variation is nearly always the evening meal. Winter features crab menus priced by the amount and quality of crab provided. For diners preferring an alternative, a Tajima beef package frequently delivers greater value. My Tokyo hotel family upbringing taught me that an inn's dining schedule reveals its kitchen operation: a predetermined early time, such as 17:00 at Sensui or 17:30 to 18:30 at Nishimuraya Honkan, indicates courses are served in a timed, individual sequence, making a late return from bathing inadvisable.",
+  "59": "Lodging guests typically receive it complimentary from their inn, with access until 13:00 on their departure date. Day trippers may purchase a Yumepa pass for 1,500 yen (750 yen for a child) at any bath, or pay 800 yen for a single entry. Overnight lodging provides superior value; review the ⟦L1⟧.",
+  "63": "It is. A family guide is offered by the local tourist association, Jizo-yu maintains a tepid bath for children, and numerous inns accommodate them: Onishiya Suishoen and Yuraku Kinosaki Spa & Gardens accept all ages, and Mikuniya is family-friendly. Some premier ryokans enforce age restrictions, like Nishimuraya Honkan (10+) and Sensui (13+). Examine the ⟦L1⟧.",
+  "64": "The town is defined by its seven public baths and the tradition of walking between them in yukata and geta, winter snow crab, and Tajima beef. It also ranks among Japan's most tattoo-permissive hot spring towns.",
+  "65": "We show every ⟦L1⟧, displaying private baths, dinner plans, and child policies for each specific room. Proceed directly to the accommodations meeting your criteria:"
+}
+```
+
+```json
+{
+    "31": "The town center is where most guests stay, letting them walk to everything. Our site lists 43 Kinosaki properties, and 20 are just a short walk from Kinosaki Onsen Station. For the others, a bus from the local ryokan association meets specific limited express trains from 12:30 until 18:00. Nightly rates for two people range from about $180 to $720, with many clustered near $410. These represent typical low prices seen over a full year; for actual rates, check your chosen dates on our Kinosaki Onsen ryokan page. Below are eight choices, each suited to a different traveler type, with details pulled from each inn's profile on our site (verified November 17–20, 2026).",
+    "34": "We chose this inn for its hot spring source. Rooms do not include private bathrooms; guests instead use either of two private baths with free-flowing water when they are unoccupied. Please note the 22:00 curfew.",
+    "35": "This property has 13 rooms and no public bathing areas, making tattoos fully acceptable. Two of its three private hot-spring baths are complimentary for guests to use whenever they are vacant. The inn welcomes guests aged 13 and over.",
+    "36": "All dinner plans feature a Tajima beef course served in the inn's restaurant on the upper floor. Its two private baths are complimentary for 40-minute sessions, and it's located a three-minute walk from the station.",
+    "50": "Traveling with suitcases? These ryokan are only a short walk from the station: Koyado Enn, Mikuniya and Hanakouji Saigetsu (3 minutes), Tokitotoki (5 minutes) and Sensui (7 minutes).",
+    "53": "Reserve your dinner when you book your room. Every plan listed on our inn pages indicates if dinner is part of the package and its service location. Many shops and restaurants close for several hours in the early evening, typically from 17:00 to 20:00, since nearly everyone in town is dining at their inn. Room-only plans are available (Kinosaki Onsen Kawaguchiya Honkan, for example, sells only these), but you'll be looking for a seat during the single hour when the whole town eats."
+}
+```
+
+```json
+{
+    "11": "Mandara-yu is regarded as the original hot spring in Kinosaki, with two modest ceramic tubs outside. Yanagi-yu, the most compact bathhouse, features a tub built from cypress wood. Their hours start at 15:00, making them ideal for a stroll before your evening meal. Jizo-yu is the local preference, offering a tepid side bath suitable for kids.",
+    "23": "These can be filtered for on our Kinosaki page: **⟦L1⟧**"
+}
+```
+
+```json
+{
+  "1": "Kinosaki Onsen is a compact hot spring town along Hyogo's Sea of Japan coast, where visitors stroll among public bathhouses wearing cotton yukata robes. Most ryokan provide a complimentary pass for all these baths upon arrival. Staying overnight is highly recommended. Our list includes ⟦L1⟧, with most nightly rates for two people ranging from $180 to $720. Among these, 29 properties feature a private bathing option: ⟦L2⟧ and ⟦L3⟧ reserved for your group (a small number provide both kinds).",
+  "4": "Nighttime is the main event. Visitors wear the yukata supplied by their inn, step into wooden geta sandals, and venture out both before and after the evening meal."
+}
+```
+
+```json
+{
+  "31": "The majority of guests choose to stay in the town center, where they can walk to all attractions. Among our 43 Kinosaki properties, 20 are a short walk from Kinosaki Onsen Station. For the others, a bus operated by the local ryokan association meets certain limited express trains between 12:30 and 18:00. Nightly rates for two people range from approximately $180 to $720, with many options near $410. These figures represent typical low prices observed over a full calendar year; for current rates, select your dates on our Kinosaki Onsen ryokan page. Below are eight selections, each suited to a different travel style, with information sourced from each inn's profile on our site (verified November 17–20, 2026).",
+  "34": "We selected this ryokan for its hot spring source. Guest rooms do not have private bathrooms; instead, visitors use one of two private baths with free-flowing water when they are available. Please be aware of the 22:00 curfew."
+}
+```
+
+```json
+{
+  "25": "Kinosaki Onsen offers 43 ryokan on our list. Six provide certain rooms with an outdoor bath, and 23 more let you reserve a private bath for your group. This makes the town a solid option for couples or guests who prefer not to bathe publicly.",
+  "26": "Many overviews leave out this key fact. The onsen water in Kinosaki is reserved for the public baths, so in-room tubs usually contain heated regular water. This is what ⟦L1⟧ notes for its rooms with outdoor baths. Having a bath in your room is great for seclusion. For **real hot-spring water** in private, choose a ryokan with reservable baths of that type instead:"
+}
+```
+
+```json
+{
+  "35": "This inn has 13 rooms and no public bathing facilities, meaning tattoos are always permitted. Two of its three private hot-spring baths are complimentary for guests to use on a first-come, first-served basis. The minimum guest age is 13.",
+  "36": "All dinner plans include a Tajima beef course served at the restaurant upstairs. Its two private baths are complimentary for 40-minute sessions, and the inn is located three minutes from the station."
+}
+```
+
+```json
+{
+  "54": "**From Kai: how to read a Kinosaki dinner plan.** A ryokan will often advertise the same accommodation with multiple packages, where the evening meal is almost always what changes. Winter crab menus are priced according to the quantity and quality of crab included. When crab isn't preferred, a Tajima beef package frequently offers more value. My Tokyo hotel family background taught me that a fixed dining schedule reveals how a kitchen operates: a set early time, such as 17:00 at Sensui or 17:30 to 18:30 at Nishimuraya Honkan, indicates courses are served in a sequenced, individual manner, making a late return from the baths unwise.",
+  "59": "Guests staying overnight usually receive it complimentary from their inn, with access until 13:00 on their departure date. Day trippers can purchase a Yumepa pass for 1,500 yen (750 yen for a child) at any bathhouse, or pay 800 yen for a single entry. Staying the night provides better value; review the ⟦L1⟧."
+}
+```
+
+```json
+{
+    "50": "Bringing suitcases? These ryokan are just a short stroll from the station: ⟦L1⟧, ⟦L2⟧ and ⟦L3⟧ (3 minutes), ⟦L4⟧ (5 minutes), and ⟦L5⟧ (7 minutes).",
+    "53": "Reserve your evening meal when you reserve your room. Every package listed on our ryokan pages notes if dinner is part of the deal and its serving location. Most stores and eateries shut down for several hours in the early evening, usually from 17:00 to 20:00, as almost all local guests dine at their accommodations. You can book a stay without meals (⟦L1⟧, for instance, offers only these plans), but you'll be searching for a restaurant during the single hour when the entire town has dinner."
+}
+```
+
+```json
+{
+  "65": "Our guide includes every ⟦L1⟧, with details on private baths, meal plans, and children's rules for each room. Go directly to the accommodations that match your needs:"
+}
+```
+
+```json
+{
+    "63": "It is. The official tourism office operates a family guide, Jizo-yu provides a lukewarm bath for kids, and numerous inns accept children: Onishiya Suishoen and Yuraku Kinosaki Spa & Gardens welcome all ages, and Mikuniya is family-friendly. Certain premier ryokans enforce age minimums, including Nishimuraya Honkan (10+) and Sensui (13+). Check the ⟦L1⟧.",
+    "64": "The town is known for its seven public bathhouses and the custom of walking between them in yukata and geta, winter snow crab, and Tajima beef. It also ranks among Japan's most tattoo-permissive hot spring destinations."
+}
+```
+
+```json
+{
+  "26": "Many overviews omit this important point. The onsen water in Kinosaki is dedicated to public facilities, so in-room tubs typically use heated tap water. This is precisely what ⟦L1⟧ notes for its rooms featuring outdoor baths. Having your own bath is ideal for solitude. For **genuine hot-spring water** in a private setting, reserve a ryokan that offers baths of that kind:",
+  "31": "The majority of guests prefer lodging in the central area, where they can access everything on foot. Out of our 43 Kinosaki properties, 20 are a brief walk from Kinosaki Onsen Station. For the others, a bus from the local ryokan association meets select limited express trains between 12:30 and 18:00. Nightly rates for two people start around $180 and go up to $720, with numerous options close to $410. These numbers reflect common low prices observed throughout a full year; for present rates, input your dates on ⟦L1⟧. Below are eight choices, each matching a distinct travel style, using information from each inn's profile on our site (verified November 17–20, 2026)."
+}
+```
+
+```json
+{
+  "1": "Kinosaki Onsen is a compact seaside hot spring town in Hyogo, where guests stroll between public baths wearing a cotton yukata. A complimentary pass for all these baths is provided by most ryokan upon arrival. Staying overnight is a good choice. Our list covers ⟦L1⟧, with nightly rates for two people typically between $180 and $720. Among these, 29 properties feature a private bathing facility: ⟦L2⟧ and ⟦L3⟧ reserved for your group (a few offer both).",
+  "11": "Mandara-yu is considered Kinosaki's original hot spring, featuring two modest ceramic tubs outdoors. Yanagi-yu, the most petite bathhouse, contains a tub made from cypress wood. Their operating hours begin at 15:00, fitting nicely with a pre-dinner walk. Jizo-yu is the preferred spot for locals, and it includes a tepid secondary bath suitable for children."
+}
+```
+
+```json
+{
+  "23": "You can find these on our Kinosaki page using the filter: **⟦L1⟧**",
+  "25": "Kinosaki Onsen has 43 ryokan on our list. Six offer certain rooms with an outdoor bath, and 23 more provide a private bath you can reserve for your group. This makes the town a strong pick for couples or visitors who prefer not to bathe in public."
+}
+```
+
+```json
+{
+    "50": "Traveling with suitcases? These ryokan are only a few minutes on foot from the station: ⟦L1⟧, ⟦L2⟧ and ⟦L3⟧ (3 minutes), ⟦L4⟧ (5 minutes), and ⟦L5⟧ (7 minutes).",
+    "53": "Reserve your evening meal when you book your room. Every package listed on our ryokan pages indicates if dinner is part of the plan and its service location. Many stores and restaurants shut for several hours in the early evening, typically from 17:00 to 20:00, since nearly everyone in town dines at their accommodation. You can book a stay without meals (⟦L1⟧, for example, sells only these plans), but you will be looking for a restaurant during the single hour when the whole town has dinner."
+}
+```
+
+```json
+{
+    "54": "**From Kai: how to read a Kinosaki dinner plan.** A ryokan will commonly offer the same room with different packages, and the evening meal is nearly always what varies. Winter crab menus are priced based on the amount and type of crab provided. When crab isn't desired, a Tajima beef package frequently gives more value for your money. My Tokyo hotel family background showed me that a set dining schedule indicates how a kitchen works: a specific early time, like 17:00 at Sensui or 17:30 to 18:30 at Nishimuraya Honkan, shows courses are served individually in sequence, so returning late from the onsen is not a good idea.",
+    "59": "People staying overnight typically receive it at no cost from their inn, with use allowed until 13:00 on their departure date. Day trip visitors can acquire a Yumepa pass for 1,500 yen (750 yen for a child) at any bathhouse, or spend 800 yen for one entry. An overnight stay offers a better deal; check the ⟦L1⟧."
+}
+```
+
+```json
+{
+  "65": "Our guide covers every ⟦L1⟧, showing which rooms have private baths, include dinner, and welcome children. Go directly to the listings that match your criteria:"
+}
+```
+
+```json
+{
+  "63": "It does. A family guide is available from the tourism office, Jizo-yu offers a tepid bath for young ones, and several ryokans are open to kids: Onishiya Suishoen and Yuraku Kinosaki Spa & Gardens accept all ages, while Mikuniya is family-oriented. However, a few high-end places enforce minimum ages, like Nishimuraya Honkan (10+) and Sensui (13+). You can find them on the page for ⟦L1⟧.",
+  "64": "The town is famous for its seven public baths and the tradition of visiting them in yukata and geta, along with winter snow crab and Tajima beef. It also ranks as one of Japan's most accommodating hot spring destinations for guests with tattoos."
+}
+```
+
+```json
+{
+    "34": "We chose this ryokan for its hot spring source. Guest rooms lack private bathrooms; visitors can reserve one of two private baths with free-flowing water when available. Please note the 22:00 curfew.",
+    "35": "This inn has 13 rooms and no public bathing facilities, so tattoos are always allowed. Two of its three private hot-spring baths are complimentary for guests to use on a first-come, first-served basis. The minimum age for guests is 13."
+}
+```
+
+```json
+{
+  "23": "You can find these on the Kinosaki page by applying the filter: **⟦L1⟧**",
+  "25": "Kinosaki Onsen has 43 ryokan on our list. Six offer certain rooms with an outdoor bath, and 23 more provide a private bath you can reserve for your group. This makes the town a strong pick for couples or visitors who prefer not to bathe in public."
+}
+```
+
+```json
+{
+    "34": "This ryokan is our top choice for its hot spring source. Guest rooms do not include private bathrooms; you can reserve one of two private baths with free-flowing water when available. Please be aware of the 22:00 curfew.",
+    "35": "The inn has 13 rooms and no public bathing facilities, so tattoos are always permitted. Two of its three private hot-spring baths are complimentary for guests to use on a first-come, first-served basis. The minimum guest age is 13."
+}
+```
+
+```json
+{
+    "1": "Kinosaki Onsen is a compact hot spring town located on Hyogo's Sea of Japan coast, where visitors stroll between public bathhouses wearing a cotton yukata. A complimentary pass for all these baths is typically given to guests by their ryokan at check-in. Spending a night here is highly recommended. Our guide covers ⟦L1⟧, with nightly rates for two people generally ranging from $180 to $720. Among these, 29 properties provide a private bathing option: ⟦L2⟧ and ⟦L3⟧ exclusively for your group (a small number feature both).",
+    "11": "Mandara-yu is regarded as the original hot spring in Kinosaki, offering two modest ceramic tubs set outdoors. Yanagi-yu, the most petite bathhouse, contains a tub crafted from cypress wood. These two facilities begin operation at 15:00, aligning well with a stroll before your evening meal. Jizo-yu is the preferred choice for local residents, and it provides a tepid secondary bath appropriate for kids."
+}
+```
+
+```json
+{
+    "50": "Traveling with bags? These ryokan are just a short walk from the station: ⟦L1⟧, ⟦L2⟧ and ⟦L3⟧ (3 minutes), ⟦L4⟧ (5 minutes), and ⟦L5⟧ (7 minutes).",
+    "53": "Reserve your evening meal when you book your room. Every package on our inn pages notes if dinner is part of the deal and its serving location. Most stores and restaurants shut for a few hours in the early evening, usually from 17:00 to 20:00, as nearly everyone in town dines at their accommodation. You can book a stay without meals (⟦L1⟧, for instance, sells only these plans), but you will be searching for a restaurant during the single hour when the entire town has dinner."
+}
+```
+
+```json
+{
+    "54": "**From Kai: how to read a Kinosaki dinner plan.** A ryokan will commonly list one room under multiple packages, and the evening meal is nearly always what changes. Winter crab menus are priced according to the quantity and quality of crab included. When crab isn't wanted, a Tajima beef package frequently provides more value for your money. My Tokyo hotel family background taught me that a set dinner schedule reveals how a kitchen operates: a specific early time, such as 17:00 at Sensui or 17:30 to 18:30 at Nishimuraya Honkan, indicates courses are served individually in order, so coming back late from the onsen is not advised.",
+    "59": "Overnight visitors usually receive it at no charge from their inn, with access valid until 13:00 on their departure day. Day trip guests can purchase a Yumepa pass for 1,500 yen (750 yen for a child) at any bathhouse, or pay 800 yen for a single entry. An overnight stay gives you a better deal; check the ⟦L1⟧."
+}
+```
+
+```json
+{
+    "63": "Yes. A family guide is provided by the tourism office, Jizo-yu features a lukewarm bath for children, and many inns are child-friendly: Onishiya Suishoen and Yuraku Kinosaki Spa & Gardens accept all ages, while Mikuniya is welcoming to families. Some top inns have age limits, including Nishimuraya Honkan (10 and over) and Sensui (13 and over). Check ⟦L1⟧.",
+    "64": "The town is known for its seven public bathhouses and the custom of walking between them in yukata and geta, plus winter snow crab and Tajima beef. It also ranks among Japan's most tattoo-friendly hot spring destinations."
+}
+```
+
+```json
+{
+  "65": "Our guide details every ⟦L1⟧, indicating which rooms offer private baths, provide dinner, and have policies for children. Go right to the listings that meet your needs:"
+}
+```
+
+```json
+{
+    "26": "Many overviews leave out this crucial fact. The onsen water in Kinosaki is reserved for public use, so in-room tubs are almost always filled with heated plain water. This is exactly what ⟦L1⟧ reports for its accommodations featuring outdoor baths. Having your own bath is perfect for seclusion. For **true hot-spring water** in a private space, you need to reserve a ryokan that provides private hot-spring baths:",
+    "31": "The bulk of guests choose to lodge in the central district and walk to all attractions. Out of 43 Kinosaki properties we list, 20 are a short walk from Kinosaki Onsen Station. For the remaining inns, a bus operated by the local ryokan association meets certain limited express trains between 12:30 and 18:00. Nightly rates for two people start at approximately $180 and reach $720, with many options near $410. These figures represent common low prices seen over a full calendar year; for current pricing, enter your dates on ⟦L1⟧. Below are eight selections, each suited to a different travel type, using information pulled from each inn's profile on our site (verified November 17–20, 2026)."
+}
+```
+
+```json
+{
+    "25": "Kinosaki Onsen has 43 ryokan on our list. Six provide certain rooms with an outdoor bath, and 23 others offer a private bath you can reserve for your group. This makes the town a solid option for couples or travelers who are not comfortable bathing publicly.",
+    "26": "This is the key point many overviews omit. Kinosaki reserves its onsen water for public use, so in-room tubs generally run on heated plain water. This is exactly what ⟦L1⟧ reports for its open-air room baths. Having your own bath is great for privacy. For **real hot-spring water** in a private setting, you need to book an inn with private hot-spring baths instead:"
+}
+```
+
+```json
+{
+  "1": "Kinosaki Onsen is a compact hot spring town situated along Hyogo's Sea of Japan coast, where visitors stroll between public bathhouses dressed in cotton yukata. A complimentary pass for all these baths is provided at check-in by most ryokan. Spending a night here is highly recommended. Our guide includes ⟦L1⟧, with nightly rates for two people mostly ranging from $180 to $720. Among these, 29 properties offer a private bathing option: ⟦L2⟧ and ⟦L3⟧ reserved for your group (a small number provide both).",
+  "11": "Mandara-yu is considered the original hot spring in Kinosaki, featuring two modest ceramic tubs placed outdoors. Yanagi-yu, the most petite bathhouse, contains a tub made from cypress wood. These two facilities operate solely from 15:00, timing well with a pre-dinner stroll. Jizo-yu is the preferred choice for local residents, and it offers a tepid secondary bath suitable for children."
+}
+```
+
+```json
+{
+    "31": "The majority of travelers choose to stay in the central area and explore on foot. Out of the 43 Kinosaki accommodations we feature, 20 are a short walk from Kinosaki Onsen Station. For the others, a bus from the local ryokan association greets specific limited express trains between 12:30 and 18:00. Nightly rates for two people generally range from around $180 up to $720, with a common point near $410. These numbers reflect standard low prices observed throughout the year; to check actual costs, input your travel dates on ⟦L1⟧. The following eight choices, each aimed at a distinct travel style, use information sourced from every inn's profile on our site (verified November 17–20, 2026).",
+    "34": "This is our editorial selection for its hot spring quality. Guest accommodations lack private bathrooms; you may book one of two private baths with continuously flowing water when unoccupied. Be mindful of the 22:00 curfew."
+}
+```
+
+```json
+{
+  "35": "The inn has 13 rooms and lacks any public bathing areas, meaning tattoos are always allowed. Two out of its three private hot-spring baths are complimentary for guests to use on a first-come, first-served basis. The minimum age for guests is 13.",
+  "50": "Traveling with suitcases? These ryokan are only a short stroll from the station: ⟦L1⟧, ⟦L2⟧ and ⟦L3⟧ (3 minutes), ⟦L4⟧ (5 minutes), and ⟦L5⟧ (7 minutes)."
+}
+```
+
+```json
+{
+  "64": "You'll find seven public bathhouses here, plus the tradition of visiting them in yukata and geta. Winter brings snow crab and Tajima beef. The town also ranks among Japan's most welcoming onsen destinations for guests with tattoos.",
+  "65": "Our guide covers every ⟦L1⟧, noting which rooms have a private bath, what dinner options are available, and policies regarding children. Go directly to the accommodations that match your criteria:"
+}
+```
+
+```json
+{
+    "59": "If you stay overnight, your ryokan will typically provide it at no cost, and you can use it until 1:00 PM when you leave. For a day trip, you have two options: purchase a Yumepa pass for 1,500 yen (750 yen per child) at any public bath, or pay 800 yen for a single entry. An overnight visit offers more value; look at the ⟦L1⟧.",
+    "63": "Kinosaki Onsen is family-friendly. The local tourism association provides a guide for families, the Jizo-yu bathhouse includes a warm pool for kids, and numerous ryokan accept children. Onishiya Suishoen and Yuraku Kinosaki Spa & Gardens have no age restrictions, and Mikuniya is also accommodating. However, a few premier inns do enforce minimum ages, like Nishimuraya Honkan (10+) and Sensui (13+). Check the ⟦L1⟧."
+}
+```
+
+```json
+{
+    "53": "Arrange your evening meal when you reserve your room. Every package listed on our inn pages indicates if dinner is part of it and the location for service. Many stores and eateries shut down for several hours in the early evening, typically from 17:00 until 20:00, since almost all local residents dine at their lodging. You can book a stay without meals (⟦L1⟧, for example, offers exclusively these rates), but then you must look for a restaurant during the single hour when the whole town has dinner.",
+    "54": "**From Kai: how to read a Kinosaki dinner plan.** A ryokan will usually offer one room with multiple packages, and the evening meal is almost invariably what differs. Winter crab menus are priced based on the amount and quality of crab provided. When crab is not desired, a Tajima beef package often gives more value for your budget. My background in a Tokyo hotel family taught me that a set dinner schedule shows how a kitchen works: a specific early time, like 17:00 at Sensui or 17:30 to 18:30 at Nishimuraya Honkan, means dishes are served sequentially, so returning late from the onsen is not a good idea."
+}
+```
+
+```json
+{
+  "25": "Kinosaki Onsen features 43 ryokan on our list. Six of them include rooms with an outdoor bath, and 23 more offer a private bath you can reserve. This makes the town a strong pick for couples or travelers who prefer not to bathe publicly.",
+  "26": "This is the key detail many overviews skip. Kinosaki allocates its onsen water for shared facilities, so in-room tubs usually contain heated regular water. This is precisely what ⟦L1⟧ notes for its rooms with open-air baths. Having your own bath is excellent for seclusion. For **genuine hot-spring water** in a private setting, you need to choose an inn with private onsen baths instead:"
+}
+```
+
+```json
+{
+    "31": "The town center is where most guests stay, and they get around on foot. Among the 43 Kinosaki accommodations we list, 20 are a short walk from Kinosaki Onsen Station. For the remaining inns, the local ryokan association provides a bus that meets certain limited express trains from 12:30 until 18:00. Nightly rates for two people typically start around $180 and go up to about $720, clustering near $410. These figures represent standard low prices seen over a full year; to find actual costs, enter your dates on ⟦L1⟧. The eight options below, each suited to a particular travel style, draw on information from every inn's profile on our site (verified November 17–20, 2026).",
+    "34": "This is our editorial choice for its hot spring quality. Guest rooms do not include private bathrooms; you can reserve one of two private baths with continuously flowing water when available. Please be aware of the 22:00 curfew."
+}
+```
+
+```json
+{
+  "1": "Kinosaki Onsen is a compact hot spring town on Hyogo's Sea of Japan coast, where visitors stroll between public bathhouses wearing cotton yukata robes. At check-in, most ryokan provide a complimentary pass granting access to every bath. A stay here is highly recommended. Our guide covers ⟦L1⟧, with nightly rates for two people typically between $180 and $720. Among these, 29 properties feature a private bathing option: ⟦L2⟧ and ⟦L3⟧ reserved for your group (a handful offer both).",
+  "11": "Mandara-yu is regarded as the original hot spring in Kinosaki, with two modest ceramic tubs situated outside. Yanagi-yu, the town's smallest bathhouse, contains a tub crafted from cypress wood. These two facilities operate only from 15:00, timing perfectly for a pre-dinner walk. Jizo-yu is the preferred choice for local residents, and it provides a lukewarm side bath intended for children."
+}
+```
+
+```json
+{
+    "35": "The property has 13 rooms and no public bathing facilities, so tattoos are always permitted. Two of its three private hot-spring baths are free for guests to use when available. The minimum age for staying is 13.",
+    "50": "Carrying suitcases? These ryokan are just a short walk from the station: ⟦L1⟧, ⟦L2⟧ and ⟦L3⟧ (3 minutes), ⟦L4⟧ (5 minutes), and ⟦L5⟧ (7 minutes)."
+}
+```
+
+```json
+{
+    "53": "Reserve your evening meal when you book your stay. Every package on our inn pages notes if dinner is included and its service location. Most shops and restaurants shut for several hours in the early evening, usually from 17:00 to 20:00, since nearly everyone in town is eating at their inn. You can book a room without meals (⟦L1⟧, for instance, sells only those rates), but then you must search for a restaurant during the single hour when the entire town dines.",
+    "54": "**From Kai: how to read a Kinosaki dinner plan.** A ryokan typically offers one room with multiple packages, and the dinner is almost always what changes. Winter crab menus are priced according to the quantity and quality of crab included. When crab is not wanted, a Tajima beef package frequently provides more value for your money. My background in a Tokyo hotel family taught me that a set dinner schedule reveals how a kitchen operates: a specific early time, such as 17:00 at Sensui or 17:30 to 18:30 at Nishimuraya Honkan, indicates dishes are served in sequence, so coming back late from the onsen is not advisable."
+}
+```
+
+```json
+{
+  "64": "You'll find seven public bathhouses here, plus the custom of walking between them in yukata and wooden clogs. Winter offers snow crab and Tajima beef. The town also stands out as one of Japan's most tattoo-friendly onsen destinations.",
+  "65": "Our list covers every ⟦L1⟧, displaying private baths, dinner plans, and children's rules for each room. Go directly to the accommodations that suit your needs:"
+}
+```
+
+```json
+{
+  "59": "If you book a room, your inn will likely include it at no charge, and you can use it until 1:00 PM on your departure day. For a daytime visit, you have a choice: purchase a Yumepa pass for 1,500 yen (750 yen per child) at any public bath, or pay 800 yen for a single entry. An overnight stay offers more value; look at the ⟦L1⟧.",
+  "63": "Yes. The local tourism association provides a guide for families, the Jizo-yu bathhouse features a lukewarm children's bath, and numerous ryokan accept children. Onishiya Suishoen and Yuraku Kinosaki Spa & Gardens welcome all ages, and Mikuniya is also family-friendly. However, some top inns do enforce minimum ages, like Nishimuraya Honkan (10+) and Sensui (13+). Check the ⟦L1⟧."
+}
+```
+
