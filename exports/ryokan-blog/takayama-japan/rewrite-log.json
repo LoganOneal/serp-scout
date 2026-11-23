@@ -1,0 +1,145 @@
+{
+ "model": "deepseek.v3.2",
+ "date": "2026-11-23",
+ "passages": 56,
+ "input_tokens": 259437,
+ "output_tokens": 25585,
+ "judge_model": "us.anthropic.claude-sonnet-4-6",
+ "judge_input_tokens": 49240,
+ "judge_output_tokens": 9162,
+ "rewritten": 38,
+ "accepted": {
+  "If you only have one night, stay near the station. [Oyado Koto No Yume](https://ryokansociety.com/takayama/oyado-koto-no-yume) is a 2-minute walk from it and [Ryokan Kaminaka](https://ryokansociety.com/takayama/ryokan-kaminaka) is a 3-minute walk, so you can drop your bags and be in the old town within minutes.": "For a single overnight stay, pick a place close to the station. [Oyado Koto No Yume](https://ryokansociety.com/takayama/oyado-koto-no-yume) is just a 2-minute walk away, and [Ryokan Kaminaka](https://ryokansociety.com/takayama/ryokan-kaminaka) is a 3-minute walk, so you can leave your luggage and reach the old town quickly.",
+  "On the hill east of the old town, a walking course of about 3.5 km links a string of temples and shrines and passes the site of Takayama's old castle. Allow about two hours. It's a quiet change from the crowds of Sanmachi.": "A walking course approximately 3.5 km long runs along the hill east of the old town. It connects a series of temples and shrines and goes past the site of the old Takayama castle. Plan for about two hours; it offers a peaceful break from the busy Sanmachi area.",
+  "The name \"Hida-Takayama\" is the same place. Locals and timetables use it to tell the city apart from other Takayamas in Japan.": "The name \"Hida-Takayama\" refers to the same location. It's used by locals and on schedules to distinguish this city from other places in Japan named Takayama.",
+  "**Hida-Furukawa.** A smaller, quieter old town a short train ride north of Takayama on the JR line. [Yatsusankan](https://ryokansociety.com/takayama/yatsusankan) there is rated 9.8 out of 10.": "**Hida-Furukawa.** This is a more compact and peaceful historic town located a brief train journey north of Takayama on the JR line. [Yatsusankan](https://ryokansociety.com/takayama/yatsusankan) there holds a rating of 9.8 out of 10.",
+  "**Meals:** room only up to dinner and breakfast. **Known for:** price.": "**Meals:** options range from room only to dinner and breakfast. **Known for:** its price.",
+  "Pick the filter that fits your trip:": "Choose the filter that matches your travel plans:",
+  "People ask whether it's too touristy. The old town is busy from late morning to mid-afternoon, when tour groups come through on their way to Shirakawa-go. Stay the night and you get the other hours: the morning markets before the buses arrive, and quiet lanes after the shops close.": "A common concern is whether it feels overly crowded. The historic area gets busy from late morning until mid-afternoon when tour groups visiting Shirakawa-go pass through. Overnight guests experience the quieter periods: the morning markets before buses come and the calm streets after shops shut.",
+  "Takayama has seven sake breweries, all more than 100 years old, and most are in Sanmachi. Several offer tastings at the counter.": "You'll find seven sake breweries in Takayama, each operating for over 100 years. Most sit in Sanmachi, and a few let you taste at the counter.",
+  "The two festivals are held on the same dates every year. Together they were inscribed by UNESCO in 2016 as part of Japan's float festivals. On festival dates, inns near the old town fill early, so book as soon as your dates are firm.": "Both festivals occur on identical dates annually. UNESCO inscribed them together in 2016 as part of Japan's float festivals. When festivals are on, lodgings close to the old town fill fast, so secure your booking once your plans are set.",
+  "**Meals:** breakfast box or room only. **Known for:** a small, calm stay.": "**Meals:** choose between a breakfast box or a room-only plan. **Known for:** its small scale and tranquil setting.",
+  "You take your shoes off at the entrance and carry them in a bag. In winter there are no slippers to borrow and the building isn't heated, so bring thick socks.": "Shoes are removed at the entryway and you carry them in a bag. Slippers are not available to use in winter, and since the building has no heating, wearing warm socks is a good idea.",
+  "Yes. Kyoto has more temples and Kanazawa has a bigger garden, but few towns in central Japan keep a whole merchant district this intact, and Takayama adds two daily morning markets, a living festival tradition and the mountains on its doorstep.": "It certainly is. While Kyoto possesses more temples and Kanazawa a larger garden, very few central Japanese towns preserve an entire merchant district so completely. Takayama also provides two daily morning markets, an active festival culture, and the mountains on its doorstep.",
+  "**One night** covers the town: arrive by early afternoon, walk Sanmachi and the riverside, and do the morning market and Takayama Jinya the next day before you leave.": "**One night** lets you see the town. Get there in the early afternoon, explore Sanmachi and the riverbank, then visit the morning market and Takayama Jinya the next morning before you go.",
+  "We picked these from each ryokan's own pages, last checked on November 16 and 17, 2026. Each one is chosen for one reason, with its trade-off. Guest ratings are from the reviews shown on each inn's page.": "These selections come straight from each ryokan's individual pages, verified on November 16 and 17, 2026. Every choice is made for a specific strength, along with its particular compromise. The guest scores are taken from reviews posted on each inn's page.",
+  "Many travelers don't choose: they go Nagoya to Takayama to Shirakawa-go to Kanazawa, or stop at Gero on the way up the Hida line.": "Many travelers don't pick one: they journey from Nagoya to Takayama, onward to Shirakawa-go and Kanazawa, or they pause at Gero while traveling up the Hida line.",
+  "Most of the stays we list cost $90 to $460 a night for two, and the middle of the range is about $190. Set your dates on our [Takayama page](https://ryokansociety.com/takayama) to see each inn's price.": "For two people, most ryokan we list run from $90 to $460 per night, with a typical price near $190. To view each inn's price, enter your dates on our [Takayama page](https://ryokansociety.com/takayama).",
+  "Hida no Sato is an open-air museum of more than 30 old farmhouses and storehouses from the Hida region, most of them from the Edo period. It's about 10 minutes by bus from the station, and admission is about 700 yen. If you're not going to Shirakawa-go itself, this is the next best thing.": "Hida no Sato is an outdoor museum featuring over 30 traditional farmhouses and storehouses from the Hida area, with most constructed during the Edo period. Admission runs about 700 yen, and it's a 10-minute bus ride from the station. For visitors who won't make it to Shirakawa-go, this museum is the next best thing.",
+  "Yes. December to February is the snowy season, and snow on the dark wooden houses of the old town is one of the best sights in Japan. Roads and buses can be affected, so check the tourism office's notices and [Nohi Bus](https://www.nouhibus.co.jp/english/) before a day trip. [See Takayama ryokan for winter dates \u2192](https://ryokansociety.com/takayama)": "It is. Snow falls from December through February, and the sight of snow on the old town's dark wooden houses is among Japan's finest. Road and bus service can be disrupted, so review alerts from the local tourism office and [Nohi Bus](https://www.nouhibus.co.jp/english/) when planning a day trip. [See Takayama ryokan for winter dates \u2192](https://ryokansociety.com/takayama)",
+  "This guide covers how many days to give Takayama, how to get there from Tokyo, Kyoto and Nagoya, what to do, when to go, and where to stay for each kind of trip. Prices, opening hours and bus times were checked on November 23, 2026.": "Our guide details how many days to spend in Takayama, transportation from Tokyo, Kyoto, and Nagoya, activities, the best visiting times, and lodging for each kind of trip. We confirmed pricing, operating hours, and bus schedules on November 23, 2026.",
+  "**Two nights** let you add a day trip. Shirakawa-go is about 50 minutes away by bus, and the Okuhida hot-spring villages and the alpine valley of Kamikochi are reached by bus from Takayama. If you'd rather sleep in the mountains, spend the first night in Takayama and the second at a ryokan in [Okuhida](https://ryokansociety.com/okuhida), where we list 33 ryokan from about $160 to $500 a night for two.": "**Two nights** give you time for an excursion. You can reach Shirakawa-go by bus in around 50 minutes. Buses from Takayama also go to the Okuhida hot-spring villages and the alpine valley of Kamikochi. To stay in the mountains, reserve your first night in Takayama and your second at a ryokan in [Okuhida](https://ryokansociety.com/okuhida), where we list 33 ryokan with nightly rates for two from about $160 to $500.",
+  "Two notes for this winter. The tourism office currently lists a road closure on Route 158 in Nyukawa, east of the city, and posts updates on how snow is affecting buses and roads. And the bus company asks passengers to allow extra time during the busy autumn season. Check [Nohi Bus](https://www.nouhibus.co.jp/english/) the day before a bus trip.": "A couple of winter travel tips. Presently, the local tourism office shows Route 158 in Nyukawa, east of the city, as closed, and provides status updates for roads and buses when it snows. The bus operator also requests that riders plan for extra travel time in the busy autumn season. Verify conditions with [Nohi Bus](https://www.nouhibus.co.jp/english/) the day before your bus journey.",
+  "Takayama has two morning markets. The Miyagawa market runs along the Miyagawa River between the Kajibashi and Yayoi bridges, and the smaller Jinya-mae market is in the square in front of Takayama Jinya. Both sell vegetables, pickles, miso, flowers and crafts.": "The town hosts two separate morning markets. You can find the Miyagawa market along the Miyagawa River's edge, stretching from Kajibashi Bridge to Yayoi Bridge. The smaller Jinya-mae market sits in the square directly facing Takayama Jinya. Each market provides vegetables, pickles, miso, flowers, and crafts.",
+  "If you'd rather not share a bath, Takayama has more private options than most towns its size. With onsen hotels included, we list [4 places to stay with a bath in the room](https://ryokansociety.com/takayama?bath=room) and [15 with a private bath you book](https://ryokansociety.com/takayama?bath=private) for your party alone. [Ryokan Murayama](https://ryokansociety.com/takayama/ryokan-murayama) has two private hot-spring baths at no extra charge, and [Hidatei Hanaougi](https://ryokansociety.com/takayama/hidatei-hanaougi) has rooms with their own open-air bath.": "For visitors who prefer not to bathe with others, Takayama offers more private bathing choices than most towns its size. This count includes onsen hotels, and we list [4 places to stay with a bath in the room](https://ryokansociety.com/takayama?bath=room) and [15 with a private bath you book](https://ryokansociety.com/takayama?bath=private) for your party alone. At [Ryokan Murayama](https://ryokansociety.com/takayama/ryokan-murayama), two hot-spring baths for private use are complimentary, and [Hidatei Hanaougi](https://ryokansociety.com/takayama/hidatei-hanaougi) provides rooms with their own open-air bath.",
+  "The spring festival, the Sanno Matsuri, is on April 14 and 15, and the autumn festival, the Hachiman Matsuri, is on October 9 and 10. The dates are the same every year. Inns near the old town fill early, so book as soon as you can.": "The Sanno Matsuri spring festival occurs April 14 and 15, with the Hachiman Matsuri autumn festival on October 9 and 10. These dates do not change from year to year. Accommodations close to the old town are reserved far ahead, so you need to make your booking early.",
+  "From Nagoya, yes, at about 2 hours 30 minutes each way by limited express. From Tokyo, Kyoto or Osaka it's too far for a day, and you'd miss the morning market. Spend at least one night.": "You can get there from Nagoya in around 2 hours and 30 minutes each way via limited express train. Coming from Tokyo, Kyoto, or Osaka isn't feasible for a single day, and you wouldn't see the morning market. Plan to stay overnight.",
+  "Autumn is my favorite time to visit. The hills above the town turn color, and the shrine steps around the old town are at their best.": "I prefer visiting in autumn. The hills above the town change color, and the shrine steps surrounding the old town look their best.",
+  "Takayama Station is on the JR Takayama Line. Most travelers arrive on the Hida limited express from Nagoya; the long-distance buses use the Nohi Bus Center near the station.": "Takayama Station lies along the JR Takayama Line. The Hida limited express from Nagoya is how most visitors get here; long-distance buses arrive at the nearby Nohi Bus Center.",
+  "In the middle of the day the old town is crowded. Early morning and evening are calm, which is the best reason to stay the night rather than visit on a tour.": "The historic district gets very busy during midday. It's much quieter in the early morning and evening, and that is the main advantage of an overnight stay compared to a tour visit.",
+  "Yes, at several inns, though there are no public bathhouses to walk between as in Kinosaki. For a private soak, see the [15 places with a private bath to book](https://ryokansociety.com/takayama?bath=private). For a classic onsen town nearby, look at [Okuhida](https://ryokansociety.com/okuhida) or [Gero Onsen](https://ryokansociety.com/gero-onsen).": "Several inns offer one, but you can't stroll between separate public bathhouses like in Kinosaki. To arrange a private bath, review the [15 places with a private bath to book](https://ryokansociety.com/takayama?bath=private). For a nearby classic onsen town, consider [Okuhida](https://ryokansociety.com/okuhida) or [Gero Onsen](https://ryokansociety.com/gero-onsen).",
+  "If you can't be here for the festival, the Takayama Festival Float Exhibition Hall at Sakurayama Hachimangu, the shrine at the north end of the old town, shows a rotating selection of the autumn festival's floats all year.": "Even if you miss the festival, you can view a changing display of the autumn festival's floats at the Takayama Festival Float Exhibition Hall. This hall is at Sakurayama Hachimangu, the shrine located at the north end of the old town, and it operates year-round.",
+  "Start at the red Nakabashi Bridge over the Miyagawa and walk east into the old lanes. Go early or late in the day for photos without crowds. Look up over the doorways of the sake breweries for the sugidama, a ball of cedar branches. It goes up green when the new sake is made and turns brown as the sake matures.": "Begin your walk at Nakabashi Bridge, the red one crossing the Miyagawa River, heading east into the historic district. Visiting early or late helps avoid crowds in your pictures. Watch for the sugidama above brewery doors, a sphere fashioned from cedar boughs. It is hung green to mark the new sake's completion, then browns while the sake ages.",
+  "When I ask an inn about tattoos, I don't ask \"are tattoos allowed?\" I ask whether the private bath (kashikiri-buro) can be reserved, and for what time. That question has a simple yes or no, it doesn't put the inn on the spot, and it gets you into the hot water either way. Our [guide to onsen in Japan](https://ryokansociety.com/blog/onsen-japan) covers the etiquette in full.": "My method for inquiring about tattoo policies avoids asking if they are permitted. Instead, I ask if the kashikiri-buro, or private bath, is available for booking and at what time. This question has a simple yes or no answer, does not make the inn uncomfortable, and gets you into the hot water regardless. The full etiquette is covered in our [guide to onsen in Japan](https://ryokansociety.com/blog/onsen-japan).",
+  "Most visitors spend their time in Sanmachi, the old merchant quarter east of the station across the Miyagawa River. Three parallel lanes of two-story wooden houses hold sake breweries, miso and pickle shops, cafes and small museums. Most sights are within walking distance of JR Takayama Station, so you don't need a car or a bus pass to see the town.": "The historic Sanmachi district, located east of the station across the Miyagawa River, attracts most tourists. Its three parallel streets are lined with two-story wooden buildings containing sake breweries, shops selling miso and pickles, cafes, and compact museums. Most attractions are a short stroll from JR Takayama Station, meaning a car or bus pass is unnecessary for exploring.",
+  "Hida beef is the dish people come for: marbled beef from cattle raised in the region, served as steak, grilled on a hoba magnolia leaf with miso, or as sushi from street stalls in the old town. Look also for Takayama ramen, a thin soy broth with curly noodles, and mitarashi dango, rice dumplings grilled with a soy glaze.": "The local specialty visitors seek is Hida beef, a marbled meat from cattle raised in this area. You can find it prepared as steak, grilled on a hoba magnolia leaf with miso, or served as sushi from old-town street stalls. Also sample Takayama ramen, which has a thin soy-based broth and curly noodles, and mitarashi dango, grilled rice dumplings coated in a soy glaze.",
+  "Takayama is often weighed against these towns. Counts and prices are from our destination pages, checked today; prices are for two a night.": "Takayama is frequently compared to those destinations. Our destination pages provide the current counts and rates, verified today; listed prices are per night for two people.",
+  "**Okuhida Onsen and Kamikochi.** Okuhida is a group of hot-spring villages in the mountains east of Takayama, reached by Nohi Bus. From Hirayu it's about 30 minutes on to Kamikochi, an alpine valley that closes for the winter. The Shinhotaka Ropeway is closed for maintenance from November 24 to 27, 2026.": "**Okuhida Onsen and Kamikochi.** The Okuhida area consists of several hot-spring villages situated in the mountains to the east of Takayama, and you access them via Nohi Bus. Continuing from Hirayu to Kamikochi, a mountain valley that shuts down each winter, takes approximately 30 minutes. Maintenance work will close the Shinhotaka Ropeway from November 24 through November 27, 2026.",
+  "**A day trip from Tokyo isn't worth it.** Takayama is about 4.5 hours from Tokyo each way, so you'd spend nine hours on trains for four or five in town. From Nagoya, at about 2 hours 30 minutes each way, a day trip works, but you miss the morning market.": "**A day trip from Tokyo is too much travel for too little time.** The journey from Tokyo takes around 4.5 hours one way, meaning nine hours of transit for just four or five hours in Takayama. Starting from Nagoya, with a trip of about 2 hours 30 minutes each direction, a day visit is possible, though you would not experience the morning market.",
+  "The Miyagawa market opens at 7:00 from April to November and at 8:00 from December to March, and winds down around noon. Go early: stalls start packing up once they sell out, and on rainy, snowy or winter days there are fewer of them.": "The Miyagawa market runs from 7:00 between April and November, changing to an 8:00 start from December through March, and it closes around noon. Arrive early, because stalls begin closing once their goods are sold, and you will find fewer vendors on rainy, snowy, or winter days."
+ },
+ "needs_review": [
+  {
+   "passage": 1,
+   "why": "the numbers must be exactly ['$460', '$90', '13', '3', '4'], written as digits in the same form (you had ['$460', '$90', '100', '13', '3', '4'])",
+   "using": "original"
+  },
+  {
+   "passage": 3,
+   "why": "fact checker: NEW changes 'among the most elaborate in Japan' to 'considered some of Japan's most intricate', adding the unsourced qualifier 'considered' and narrowing 'among the most elaborate' to 'some of Japan's most intricate', which alters both the attribution and the scope of the superlative.",
+   "using": "original"
+  },
+  {
+   "passage": 17,
+   "why": "the numbers must be exactly ['00', '16', '17', '18', '29', '3', '30', '30', '45', '500', '8'], written as digits in the same form (you had ['00', '16', '17', '18', '29', '3', '30', '30', '45', '45', '500', '8', '8'])",
+   "using": "original"
+  },
+  {
+   "passage": 26,
+   "why": "it added a time or period: evening",
+   "using": "original"
+  },
+  {
+   "passage": 27,
+   "why": "it added a time or period: evenings",
+   "using": "original"
+  },
+  {
+   "passage": 28,
+   "why": "fact checker: NEW changes 'varies by inn' (inn-by-inn comparison) to 'not the same at each property', which is acceptable, but NEW changes 'several inns' to 'some inns', which is a meaningful narrowing of scope, and changes 'bathhouse town' to 'bath town', dropping the 'house' element; additionally, NEW adds 'real' ('a real hot-spring village') and 'atmosphere', neither of which appears in OLD.",
+   "using": "original"
+  },
+  {
+   "passage": 30,
+   "why": "it added first person (I, my, we, our) where the original has none",
+   "using": "original"
+  },
+  {
+   "passage": 33,
+   "why": "the numbers must be exactly ['10', '14', '15', '16', '20', '20', '20', '2026', '322', '9.6'], written as digits in the same form (you had ['14', '15', '16', '20', '20', '20', '2026', '322', '9.6'])",
+   "using": "original"
+  },
+  {
+   "passage": 34,
+   "why": "the numbers must be exactly ['10', '10', '2012', '3', '630', '9.5'], written as digits in the same form (you had ['10', '2012', '3', '630', '9.5'])",
+   "using": "original"
+  },
+  {
+   "passage": 35,
+   "why": "the numbers must be exactly ['$581', '00', '00', '10', '15', '2', '2026', '22', '29', '3,633', '9.2'], written as digits in the same form (you had ['$581', '00', '00', '15', '2', '2026', '22', '29', '3,633', '9.2'])",
+   "using": "original"
+  },
+  {
+   "passage": 36,
+   "why": "the numbers must be exactly ['10', '10', '122', '24', '7', '9.3'], written as digits in the same form (you had ['10', '122', '24', '7', '9.3'])",
+   "using": "original"
+  },
+  {
+   "passage": 37,
+   "why": "the numbers must be exactly ['10', '10', '30', '75', '9.4'], written as digits in the same form (you had ['10', '30', '75', '9.4'])",
+   "using": "original"
+  },
+  {
+   "passage": 38,
+   "why": "the numbers must be exactly ['10', '16', '5', '50%', '53', '70%', '78', '9.0'], written as digits in the same form (you had ['16', '5', '50%', '53', '70%', '78', '9.0'])",
+   "using": "original"
+  },
+  {
+   "passage": 39,
+   "why": "the numbers must be exactly ['$323', '1', '10', '10', '13', '8.8', '964'], written as digits in the same form (you had ['$323', '1', '10', '13', '8.8', '964'])",
+   "using": "original"
+  },
+  {
+   "passage": 40,
+   "why": "the numbers must be exactly ['10', '15', '322', '5', '5', '8.8'], written as digits in the same form (you had ['15', '322', '5', '5', '8.8'])",
+   "using": "original"
+  },
+  {
+   "passage": 42,
+   "why": "the numbers must be exactly ['1,791', '10', '12', '6', '8.8'], written as digits in the same form (you had ['1,791', '12', '6', '8.8'])",
+   "using": "original"
+  },
+  {
+   "passage": 44,
+   "why": "fact checker: NEW replaces 'a few rooms' (OLD: 'few') with 'a handful of rooms' \u2014 acceptable synonym \u2014 but drops 'often' (OLD: 'often a small inner garden') and replaces it with 'frequently', which is fine; however, NEW also drops 'old' from 'old wooden townhouse' (OLD says 'an old wooden townhouse'), changing a detail.",
+   "using": "original"
+  },
+  {
+   "passage": 45,
+   "why": "fact checker: NEW adds 'remote' to describe the settlement ('This remote settlement'), a fact/opinion not present in OLD.",
+   "using": "original"
+  }
+ ],
+ "check_ok": true,
+ "issues": []
+}

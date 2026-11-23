@@ -1,0 +1,117 @@
+{
+ "kinds": [
+  [
+   "blog/editorial",
+   5
+  ],
+  [
+   "encyclopedia",
+   2
+  ],
+  [
+   "official/tourism board",
+   2
+  ],
+  [
+   "big guide site",
+   1
+  ]
+ ],
+ "beatable_articles": [
+  "https://www.japan-guide.com/e/e5900.html",
+  "https://www.jrpass.com/destinations/takayama-destination-guide",
+  "https://www.roughguides.com/japan/central-honshu/takayama/",
+  "https://www.wanderluststorytellers.com/things-to-do-in-takayama-japan/",
+  "https://www.japan-alps.com/takayama-where-to-stay/",
+  "https://onedayawaytravel.com/?p=2688"
+ ],
+ "fetched": 9,
+ "failed": [
+  "https://www.britannica.com/place/Takayama"
+ ],
+ "words_median": 2834,
+ "words_top3_median": 1878,
+ "images_median": 37,
+ "with_table": 3,
+ "with_faq_headings": 1,
+ "schema": [
+  [
+   "Organization",
+   5
+  ],
+  [
+   "Article",
+   4
+  ],
+  [
+   "ImageObject",
+   4
+  ],
+  [
+   "BreadcrumbList",
+   4
+  ],
+  [
+   "ListItem",
+   4
+  ],
+  [
+   "Person",
+   3
+  ],
+  [
+   "WebPage",
+   3
+  ],
+  [
+   "WebSite",
+   3
+  ],
+  [
+   "ReadAction",
+   2
+  ],
+  [
+   "NewsArticle",
+   1
+  ],
+  [
+   "TouristDestination",
+   1
+  ],
+  [
+   "TravelAgency",
+   1
+  ]
+ ],
+ "heading_terms_on_3plus_pages": [
+  "takayama",
+  "higashiyama",
+  "local",
+  "trip",
+  "morning",
+  "town",
+  "matsuri",
+  "hida",
+  "around",
+  "popular",
+  "travel",
+  "accommodation",
+  "visit",
+  "onsen",
+  "markets",
+  "kamikochi",
+  "mori",
+  "temple",
+  "walk",
+  "ryokan",
+  "sake",
+  "side",
+  "okuhida",
+  "shirakawa-go",
+  "time",
+  "days",
+  "stay",
+  "yatai"
+ ]
+}

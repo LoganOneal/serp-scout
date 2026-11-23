@@ -6,8 +6,8 @@ meta_description: "Guide to using an onsen in Japan, tattoo policies, top onsen 
 target_keyword: onsen japan
 secondary_keywords: [best onsen in japan, onsen etiquette, onsen rules, onsen meaning]
 author: kai
-published: 2026-11-21
-updated: 2026-11-21
+published: 2026-11-22
+updated: 2026-11-22
 hero: {image: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c9/251130_Yubatake%2C_Kusatsu_02.jpg/1920px-251130_Yubatake%2C_Kusatsu_02.jpg", alt: "Steaming hot-spring water running through wooden channels at the Yubatake in Kusatsu Onsen", credit: "Aspere, CC0, via Wikimedia Commons"}
 schema: Article
 ---

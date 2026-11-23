@@ -1,0 +1,826 @@
+```json
+{
+  "13": "Two things to know if you're visiting this winter. The local tourism office reports a closure on Route 158 in Nyukawa, east of the city, and shares updates on snow's impact on buses and roads. Also, Nohi Bus advises adding extra time for trips during the busy autumn period. Check ⟦L1⟧ the day before you travel by bus.",
+  "14": "Begin at Nakabashi Bridge, the red one crossing the Miyagawa, and head east into the historic streets. Visit early or late for pictures with fewer people. Look above the doorways at the sake breweries for the sugidama, a cedar branch ball. It's hung green when new sake is ready and slowly browns as the sake ages.",
+  "15": "Two morning markets operate in Takayama. The Miyagawa market stretches along the Miyagawa River between Kajibashi and Yayoi bridges. The smaller Jinya-mae market is set up in the square facing Takayama Jinya. Each sells local produce, pickles, miso, flowers, and handmade crafts.",
+  "16": "The Miyagawa market starts at 7:00 from April through November and at 8:00 from December through March, finishing around noon. Arrive early: stalls begin closing once their goods are gone, and you'll find fewer open on rainy, snowy, or cold winter days.",
+  "17": "Takayama Jinya served as the Edo-period government office where shogunate officials administered the Hida region. You can explore tatami rooms, offices, and storehouses. Entry costs 500 yen and is free for anyone aged 18 or younger. It opens at 8:45, closing at 17:00 from April to October and at 16:30 from November to March; last entry is 30 minutes before closing. It is closed from December 29 to January 3.",
+  "18": "You remove your shoes at the entrance and carry them in a provided bag. During winter, slippers are not available for borrowing and the building has no heating, so wear warm socks."
+}
+```
+
+```json
+{
+    "7": "Many travelers worry it feels too crowded. The historic district fills up between late morning and mid-afternoon, when tour groups stop by on visits to Shirakawa-go. By spending the night, you experience the quieter times: the morning markets before the buses pull in, and the peaceful streets after stores shut their doors.",
+    "8": "A single night is enough to see Takayama. Plan to get there by early afternoon, stroll through Sanmachi and along the river, then see the morning market and Takayama Jinya the following day before you depart.",
+    "9": "With two nights, you can fit in a side excursion. Shirakawa-go is roughly a 50-minute bus ride away. You can also reach the Okuhida onsen towns and the Kamikochi alpine valley by bus from Takayama. For a night in the mountains, consider your first night in Takayama and the second at a ryokan in ⟦L1⟧, where we have 33 ryokan listed, with rates starting around $160 and going up to $500 per night for two.",
+    "10": "Coming just for the day from Tokyo isn't a good idea. The trip from Tokyo takes about 4.5 hours each way, meaning nine hours of travel for just four or five hours in town. From Nagoya, at around 2 hours 30 minutes each way, a day trip is possible, but you wouldn't see the morning market.",
+    "11": "For a single overnight stay, pick a place close to the station. ⟦L1⟧ is just a 2-minute walk away, and ⟦L2⟧ is a 3-minute walk, so you can leave your luggage and reach the old town quickly.",
+    "12": "Takayama Station is on the JR Takayama Line. Most visitors take the Hida limited express train from Nagoya; long-distance buses stop at the Nohi Bus Center near the station."
+}
+```
+
+```json
+{
+    "19": "You can see some of the autumn festival floats any time at the Takayama Festival Float Exhibition Hall. It's located at Sakurayama Hachimangu shrine, which is at the northern edge of the old town, and displays a rotating collection of the floats.",
+    "20": "Hida no Sato is an open-air museum featuring over 30 historic Hida farmhouses and storehouses, with most dating back to the Edo period. The admission fee is around 700 yen, and it's roughly a 10-minute bus ride from the station. Visiting here is a good alternative if you aren't making the trip to Shirakawa-go itself.",
+    "21": "In Takayama, there are seven sake breweries, each over a century old. Most of them are situated in the Sanmachi district, and several provide counter tastings.",
+    "22": "A walking course approximately 3.5 km long runs along the hill east of the old town. It connects a series of temples and shrines and goes past the site of the old Takayama castle. Plan for about two hours; it offers a peaceful break from the busy Sanmachi area.",
+    "23": "The two festivals happen on the same dates annually. In 2016, UNESCO recognized them together as part of Japan's float festivals. For festival dates, book your stay early, as inns close to the old town get reserved quickly once plans are set.",
+    "24": "I think autumn is the best season for a visit. The mountains surrounding the town show their fall colors, and the shrine steps found throughout the old town look particularly beautiful."
+}
+```
+
+```json
+{
+    "25": "The dish visitors seek out is Hida beef, a marbled regional specialty. You'll find it as steak, grilled on a hoba leaf with miso, or as sushi from old-town stalls. Also try Takayama ramen, with its thin soy broth and curly noodles, and mitarashi dango, grilled rice dumplings with a soy glaze.",
+    "26": "Numerous inns close to the station don't offer evening meals. For instance, Oyado Koto No Yume sells only room-only or breakfast plans, and Ichinomatsu provides a breakfast box. To get a full dinner at your lodging, pick an inn that serves one, like Oyado Hachibei or Honjin Hiranoya Bekkan.",
+    "27": "Having grown up in Tokyo's hotel business, I know a breakfast-only plan isn't an inferior choice. In a quiet town like Takayama where restaurants shut early, it's sensible if you've reserved dinner at a Hida beef spot. Otherwise, book the dinner plan. An inn dinner is the simplest good meal here, and you won't search for an open restaurant at 8 p.m.",
+    "28": "Takayama isn't a dedicated hot-spring town like Kinosaki or Kusatsu, but several inns pipe in local water sold as Hida Takayama Onsen. The water differs: Wanosato has sulfurous water flowing directly into its large bath, while Hoshokaku and Honjin Hiranoya Bekkan have a simpler spring. For a full onsen experience, head to Okuhida in the mountains.",
+    "29": "If you prefer not to bathe with others, Takayama offers more private choices than many similar towns. Counting onsen hotels, we list 4 places to stay with a bath in the room and 15 with a private bath you book. Ryokan Murayama provides two private hot-spring baths at no extra cost, and Hidatei Hanaougi has rooms with their own open-air bath.",
+    "30": "Regarding tattoos, most Takayama inns have no written policy. A few explicitly state tattooed guests may only use private baths, like Wat Hotel & Spa Hida Takayama and Hida Hanasatonoyu Takayama Ouan. Our filter shows the 15 places where you can bathe privately with tattoos."
+}
+```
+
+```json
+{
+    "1": "**Takayama** is a historic merchant town in the Hida mountains of Gifu Prefecture, also known as Hida-Takayama. It's famous for its streets of dark wooden houses, two morning markets, century-old sake breweries, and the Takayama Festival in spring and fall. A stay of one night is worthwhile, and two nights let you visit Shirakawa-go or the Okuhida hot springs. We list ⟦L1⟧, plus 13 onsen hotels, 4 machiya, and 3 minshuku. Most charge between $90 and $460 per night for two people.",
+    "2": "Our guide explains how many days to plan for Takayama, how to travel there from Tokyo, Kyoto, and Nagoya, what to see and do, the best times to visit, and where to stay for different types of trips. We verified all prices, opening hours, and bus schedules on November 23, 2026.",
+    "3": "Takayama is a small city in the Hida region of northern Gifu, located in the mountains between Nagoya and the Sea of Japan coast. During the feudal period, it provided timber and expert carpenters and was governed directly by the shogunate. That wealth funded the preserved merchant houses and the exceptionally detailed festival floats you can see today.",
+    "4": "Sanmachi, the old merchant district east of the station across the Miyagawa River, is where most visitors spend their time. Its three parallel streets are lined with two-story wooden buildings housing sake breweries, miso and pickle shops, cafes, and small museums. The main attractions are all within walking distance of JR Takayama Station, so a car or bus pass isn't necessary for exploring the town.",
+    "5": "The name \"Hida-Takayama\" refers to the same location. It's used by locals and on schedules to distinguish this city from other places in Japan named Takayama.",
+    "6": "Yes, it is. While Kyoto has more temples and Kanazawa a larger garden, few central Japanese towns preserve an entire merchant district this completely. Takayama also offers two daily morning markets, a vibrant festival tradition, and the surrounding mountains."
+}
+```
+
+```json
+{
+    "43": "**Meals:** you can choose a breakfast box or book a room without meals. **Known for:** its quiet, intimate atmosphere.",
+    "44": "Takayama offers 4 machiya and 3 minshuku on our list. A machiya is a traditional wooden townhouse rented entirely, featuring tatami rooms and frequently a small garden. A minshuku is a guesthouse operated by a family, offering a handful of rooms and homemade meals. A machiya works well for a family or group wanting to cook and set their own schedule. A ryokan is preferable if you desire dinner served to you and a bath prepared for your use.",
+    "45": "**Shirakawa-go.** This village of steep thatched gassho farmhouses is roughly a 50-minute Nohi Bus ride away, and you must book the bus in advance. Many visitors stay overnight to see it after the daytime crowds depart: Onyado Yuinosho provides a reservable private bath and shared hot-spring baths, though tattoos are not permitted in the shared facilities.",
+    "46": "**Hida-Furukawa.** This is a more compact and peaceful historic town located a brief train journey north of Takayama on the JR line. Yatsusankan there holds a rating of 9.8 out of 10.",
+    "47": "**Okuhida Onsen and Kamikochi.** Okuhida refers to a collection of hot-spring villages in the mountains east of Takayama, accessible via Nohi Bus. From Hirayu, it's about 30 minutes onward to Kamikochi, an alpine valley that shuts down for winter. The Shinhotaka Ropeway will be closed for maintenance from November 24 to 27, 2026.",
+    "48": "Travelers frequently compare Takayama to these other towns. The counts and prices come from our destination pages and were verified today; listed prices are for two people per night."
+}
+```
+
+```json
+{
+    "37": "Hidatei Hanaougi has its own spring source, offering indoor and outdoor communal baths. Some of its 30 rooms include a private open-air bath. Dinner and breakfast are included, with dinner served in a private dining room. The inn is a 10-minute drive from the station; you can request a shuttle when booking. It holds a 9.4 rating from 75 reviews.",
+    "38": "Hoshokaku accepts children of all ages and prices meals accordingly: elementary school kids pay 70% of the adult rate, while preschoolers pay 50%, and a kids' meal set is available. Eleven of the 53 rooms feature an open-air bath. It's a 16-minute walk from the station, or a 5-minute taxi ride, with a complimentary shuttle offered under certain conditions. The rating is 9.0 from 78 reviews.",
+    "39": "Ryokan Murayama offers two private hot-spring baths you can book for free. It has 13 rooms and is a 1-minute walk from the Hida-no-Sato-shita bus stop, about a 10-minute bus ride from the station near Hida Folk Village. Children of any age are welcome. Rooms started at $323 per night for two, before taxes, at our last check. Its rating is 8.8 based on 964 reviews.",
+    "40": "Oyado Hachibei provides dinner-and-breakfast plans at roughly half the usual Takayama rate, across its 15 rooms. It's a 5-minute taxi ride from the station, or you can take the Nohi Bus to Hida no Sato and walk for 5 minutes. The property has no elevator. It's rated 8.8 out of 10 from 322 reviews.",
+    "41": "**Meals:** options range from room only to dinner and breakfast. **Known for:** its price.",
+    "42": "Ichinomatsu has 12 rooms and is a 6-minute walk from Takayama Station's west exit, priced a little below the local average. Plans are breakfast only, a morning box, or room only, so plan to dine out for dinner. It holds an 8.8 rating from 1,791 reviews."
+}
+```
+
+```json
+{
+    "31": "When I talk to an inn about tattoos, I don't ask if they're permitted. I ask if I can book the private bath, and when. This approach gets a clear answer, avoids putting anyone in an awkward position, and still gets you into the water. Our guide to onsen in Japan covers all the details.",
+    "32": "These selections come directly from each ryokan's own information, verified on November 16 and 17, 2026. Each one is highlighted for a specific strength, along with its compromise. Guest scores are pulled from the reviews displayed on each inn's page.",
+    "33": "Wanosato earned a single Michelin Key in 2026 and is located outside the main town, offering a shuttle from Takayama Station's west exit at 14:20, 15:20, and 16:20. Its large bath uses natural hot spring water. All rooms feature a private cypress tub, though that water is not from the spring. Meals are served in a common dining area. It holds a 9.6 rating from 322 reviews.",
+    "34": "Ryokan Kaminaka is a Registered Tangible Cultural Property, designated in 2012, just a 3-minute walk from JR Takayama Station, and has 10 rooms. Breakfast features local Hida-Takayama cuisine served with a view of a Japanese garden. The compromise: several rooms lack a private bath or toilet. It scores 9.5 from 630 reviews.",
+    "35": "Oyado Koto No Yume is a 2-minute walk from JR Takayama Station's east exit, with 29 rooms and one private observation bath fed by hot spring water, open from 15:00 to 22:00. Plans are room-only or breakfast-only, so arrange dinner elsewhere. It's rated 9.2 from 3,633 reviews, and rooms started at $581 per night for two before taxes in November 2026.",
+    "36": "Honjin Hiranoya Bekkan is a 10-minute walk from the station, with a complimentary shuttle from there and the bus center. All 24 rooms have a private bath and toilet, and the observation bath on the 7th floor uses Hida Takayama Onsen water. They can accommodate meals without egg, milk, or buckwheat, and prepare vegetarian options when feasible; dinner is in a private dining room. It has a 9.3 rating from 122 reviews."
+}
+```
+
+```json
+{
+  "55": "The historic district gets quite busy during midday. For a more peaceful atmosphere, go early in the morning or later in the evening. That's the main advantage of spending a night there instead of just stopping by.",
+  "56": "Choose the filter that matches your travel plans:"
+}
+```
+
+```json
+{
+  "49": "Most visitors don't pick just one: they travel from Nagoya to Takayama, then to Shirakawa-go and Kanazawa, or they pause at Gero along the Hida railway line.",
+  "50": "It is. December through February brings the snowy season, and seeing snow on the dark wooden houses in the old town is one of Japan's finest views. Roads and bus routes may face delays, so review alerts from the tourism office and Nohi Bus before planning a day trip. See Takayama ryokan for winter dates →",
+  "51": "The spring Sanno Matsuri happens April 14 and 15, and the autumn Hachiman Matsuri is October 9 and 10. These dates are fixed annually. Ryokan near the historic district get reserved quickly, so you should book promptly.",
+  "52": "Yes, several ryokan have them, but there are no public bathhouses you can walk between like in Kinosaki. For a private bath, check the 15 places with a private bath to book. For a traditional onsen town close by, consider Okuhida or Gero Onsen.",
+  "53": "From Nagoya, it is possible, taking roughly 2 hours 30 minutes each way on a limited express train. From Tokyo, Kyoto, or Osaka the distance is too great for a single day, and you would miss the morning market. Plan to stay at least one night.",
+  "54": "Most of the ryokan we list run from $90 to $460 per night for two people, with the typical price around $190. Use our Takayama page to check specific prices for your dates."
+}
+```
+
+```json
+{
+    "8": "**One night** lets you see all of Takayama. Get there in the early afternoon, explore Sanmachi and the riverbank, then visit the morning market and Takayama Jinya the next morning before you go.",
+    "9": "**Two nights** allow for an excursion. Shirakawa-go is roughly a 50-minute bus ride. You can also take a bus from Takayama to the Okuhida onsen towns or the Kamikochi alpine area. To stay in the mountains, book your first night in town and the second at a ryokan in ⟦L1⟧, where we have 33 ryokan listed, with nightly rates for two starting around $160 and reaching $500.",
+    "10": "**A day trip from Tokyo isn't worth it.** The journey from Tokyo takes around 4.5 hours each way, meaning nine hours of travel for just four or five hours there. From Nagoya, a day trip is feasible at about 2 hours 30 minutes each way, but you would not see the morning market.",
+    "12": "Takayama Station sits on the JR Takayama Line. Most visitors take the Hida limited express train from Nagoya; long-distance buses arrive at the nearby Nohi Bus Center.",
+    "13": "Two points for winter visitors. The local tourism office notes a closure on Route 158 in Nyukawa, east of the city, and provides updates on bus and road conditions due to snow. Also, Nohi Bus recommends allowing extra travel time during the busy autumn period. Check ⟦L1⟧ the day before your bus journey.",
+    "14": "Begin at Nakabashi Bridge, the red one spanning the Miyagawa River, and head east into the historic district. Visit early or late for less crowded photos. Above the doorways of sake breweries, look for the sugidama, a ball made from cedar branches. It is hung green when new sake is made and browns as the sake ages."
+}
+```
+
+```json
+{
+    "1": "**Takayama** is a historic merchant town in Japan's Hida mountains, within Gifu Prefecture, and it's frequently referred to as Hida-Takayama. Its attractions include streets of dark wooden houses, two morning markets, sake breweries over a century old, and the Takayama Festival in spring and fall. A single night is highly recommended, with two nights allowing for visits to Shirakawa-go or Okuhida hot springs. Our listings include ⟦L1⟧, plus 13 onsen hotels, 4 machiya, and 3 minshuku. Most charge from $90 to $460 per night for two people.",
+    "2": "Our guide details the ideal number of days for Takayama, transportation from Tokyo, Kyoto, and Nagoya, activities, the best visiting times, and lodging for various trip styles. We confirmed all pricing, operating hours, and bus schedules on November 23, 2026.",
+    "3": "Takayama is a compact city in northern Gifu's Hida region, situated in the mountains between Nagoya and the coast of the Sea of Japan. Feudal authorities directly governed it, benefiting from its timber and master carpenters. That historical prosperity funded the preserved merchant homes and the exceptionally detailed festival floats visible now.",
+    "4": "Sanmachi, the historic merchant area east of the station over the Miyagawa River, is where the majority of tourists go. Its three parallel streets feature two-story wooden buildings containing sake breweries, miso and pickle stores, cafes, and tiny museums. Since key attractions are a short walk from JR Takayama Station, exploring the town doesn't require a car or bus ticket.",
+    "6": "It certainly is. While Kyoto possesses more temples and Kanazawa a larger garden, very few central Japanese towns preserve an entire merchant district so completely. Takayama also provides two daily morning markets, an active festival culture, and surrounding mountain scenery.",
+    "7": "A common concern is whether it feels overly crowded. The historic area gets busy from late morning until mid-afternoon when tour groups visiting Shirakawa-go pass through. Overnight guests experience the quieter periods: the morning markets before buses come and the calm streets after shops shut."
+}
+```
+
+```json
+{
+    "15": "Takayama holds two separate morning markets. You'll find the Miyagawa market lining the Miyagawa River's banks from Kajibashi to Yayoi bridges. The Jinya-mae market, which is smaller, occupies the square directly outside Takayama Jinya. Each offers local vegetables, pickles, miso, flowers, and handmade crafts.",
+    "16": "From April through November, the Miyagawa market begins at 7:00, shifting to 8:00 between December and March, and typically ends by noon. It's wise to arrive soon after opening because vendors leave once their stock is depleted. Fewer stalls operate during rain, snow, or cold winter weather.",
+    "17": "Takayama Jinya functioned as the regional government headquarters for the shogunate's officials overseeing the Hida area during the Edo period. Visitors can walk through its tatami rooms, offices, and storehouses. The entry fee is 500 yen, though it's free for all visitors aged 18 or under. Opening hours are 8:45 to 17:00 from April to October and 8:45 to 16:30 from November to March, with last entry 30 minutes before closing. It remains closed from December 29 through January 3.",
+    "18": "Shoes are removed at the entrance and carried in a provided bag. Slippers are not offered for use in winter, and because the structure lacks heating, wearing warm socks is recommended.",
+    "19": "The Takayama Festival Float Exhibition Hall, located at Sakurayama Hachimangu shrine on the old town's northern edge, displays a rotating set of the autumn festival floats throughout the year.",
+    "20": "Hida no Sato is an open-air museum featuring over 30 traditional Hida farmhouses and storehouses, with most constructed during the Edo period. Admission costs around 700 yen, and it's a 10-minute bus ride from the station. For those not traveling to Shirakawa-go, visiting this museum is the next best thing."
+}
+```
+
+```json
+{
+    "21": "You'll find seven sake breweries in Takayama, each operating for over 100 years. Most sit in Sanmachi, and a few let you taste at the counter.",
+    "23": "Both festivals occur on identical dates annually. UNESCO inscribed them together in 2016 as part of Japan's float festivals. When festivals are on, lodgings close to the old town fill fast, so secure your booking once your plans are set.",
+    "24": "I prefer visiting in autumn. The hills surrounding the town change color, and the shrine steps found across the old town look their finest.",
+    "25": "The signature dish is Hida beef, a marbled local specialty. You can have it as steak grilled on a hoba leaf with miso, or as sushi from old-town stalls. Also try Takayama ramen, which features a light soy broth and curly noodles, and mitarashi dango, grilled rice dumplings coated in soy glaze.",
+    "26": "Plenty of inns located near the station do not provide dinner. ⟦L1⟧ offers only room-only or breakfast packages, and ⟦L2⟧ supplies a breakfast box. To enjoy a full dinner at your lodging, select an inn that serves one, like ⟦L3⟧ or ⟦L4⟧.",
+    "27": "Coming from a Tokyo hotel family, I learned early that a breakfast-only plan is not a lower-tier option. In a quiet town like Takayama where restaurants shut early, it's a practical choice if you've reserved dinner at a Hida beef spot. Otherwise, choose the dinner plan. An inn dinner is the simplest good meal available, and you avoid searching for a restaurant open at 8 pm."
+}
+```
+
+```json
+{
+  "28": "Takayama differs from dedicated onsen destinations such as Kinosaki or Kusatsu. However, a number of its ryokan supply their baths with local thermal water, marketed as Hida Takayama Onsen. The spring water isn't uniform: Wanosato features sulfurous water that feeds its main bath directly, while Hoshokaku and Honjin Hiranoya Bekkan offer a more basic type. To experience a complete hot-spring village, you would need to travel to Okuhida in the mountains.",
+  "29": "For visitors seeking privacy, Takayama provides a greater selection of exclusive bathing choices than comparable towns. Among onsen hotels, our listings include 4 places to stay with a bath in the room and 15 with a private bath you book. Ryokan Murayama offers two hot-spring baths for private use without an added fee, and Hidatei Hanaougi features accommodations that include an open-air bath.",
+  "30": "Most ryokan in Takayama have no published policy regarding tattoos. Some establishments, like Wat Hotel & Spa Hida Takayama and Hida Hanasatonoyu Takayama Ouan, explicitly state that guests with tattoos may only use private facilities. Our filter identifies the 15 places where you can bathe privately with tattoos.",
+  "31": "My approach when inquiring about tattoos is not to ask if they are permitted. Instead, I ask if the private bath (kashikiri-buro) is available for booking, and at what times. This method yields a clear answer, avoids an uncomfortable situation for the staff, and still allows you access to the water. Our guide to onsen in Japan covers the etiquette in full.",
+  "32": "These choices are drawn directly from information provided by each ryokan, verified on November 16 and 17, 2026. Each selection is highlighted for a particular strength, along with its corresponding compromise. The guest scores come from reviews displayed on each inn's own page.",
+  "33": "Wanosato received a single Michelin Key in 2026. It is located outside the main town and provides a shuttle from the west exit of Takayama Station at 14:20, 15:20, and 16:20. Its large bath uses natural hot spring water. All rooms contain a private cypress tub, though that water is not sourced from the spring. Meals are taken in a shared dining room. It has a 9.6 rating based on 322 reviews."
+}
+```
+
+```json
+{
+  "40": "At Oyado Hachibei, the 15 rooms offer dinner-and-breakfast plans for roughly half of Takayama's average nightly rate. You can reach it by taxi in 5 minutes from the station, or ride the Nohi Bus to Hida no Sato and walk another 5 minutes. The building lacks an elevator. Guests give it an 8.8 score from 322 reviews.",
+  "42": "Ichinomatsu's 12 rooms are a 6-minute walk from Takayama Station's west exit, priced slightly below the area's average. Its meal plans are breakfast only, a morning box, or room only, meaning you should arrange dinner elsewhere. The property has an 8.8 rating based on 1,791 reviews.",
+  "43": "**Meals:** choose between a breakfast box or a room-only plan. **Known for:** its small scale and tranquil setting.",
+  "44": "Our list for Takayama includes 4 machiya and 3 minshuku. A machiya is a full rental of a traditional wooden townhouse, complete with tatami rooms and frequently a tiny garden. A minshuku is a family-operated guesthouse offering a few rooms and meals cooked at home. Opt for a machiya if your family or group prefers to cook and keep a flexible schedule. Select a ryokan when you want dinner served and a bath prepared for your use.",
+  "45": "**Shirakawa-go.** This village features steep thatched gassho farmhouses and is around a 50-minute Nohi Bus ride away; bus seats require advance booking. Overnight stays are popular for experiencing the village after daytime crowds depart: Onyado Yuinosho provides a reservable private bath and shared hot-spring baths, but shared facilities do not permit tattoos.",
+  "47": "**Okuhida Onsen and Kamikochi.** Okuhida describes several hot-spring villages in the mountains east of Takayama, accessible via Nohi Bus. The journey from Hirayu to Kamikochi, an alpine valley closed in winter, takes about 30 minutes more. Maintenance will close the Shinhotaka Ropeway from November 24 to 27, 2026."
+}
+```
+
+```json
+{
+    "34": "Ryokan Kaminaka holds Registered Tangible Cultural Property status, earned in 2012. It sits just 3 minutes from JR Takayama Station and has 10 rooms. The morning meal showcases Hida-Takayama specialties, presented with a view of the garden. The catch is that some rooms do not include an en suite bath or toilet. Its score is 9.5 based on 630 reviews.",
+    "35": "Oyado Koto No Yume is a 2-minute walk from the JR Takayama Station east exit. It offers 29 rooms and one private observation bath with hot spring water, available from 15:00 to 22:00. Plans are room-only or breakfast-only, so you'll need to arrange dinner elsewhere. We found rooms from $581 per night for two before taxes in November 2026. It earns a 9.2 rating from 3,633 reviews.",
+    "36": "Honjin Hiranoya Bekkan is a 10-minute walk from the station, with complimentary shuttle service from there and the bus terminal. All 24 rooms come with a private bath and toilet. The observation bath on the 7th floor uses Hida Takayama Onsen water. They can accommodate meals without egg, milk, or buckwheat and prepare vegetarian options when feasible; dinner is served in a private dining room. It has a 9.3 rating from 122 reviews.",
+    "37": "Hidatei Hanaougi possesses its own hot spring source, providing indoor and outdoor communal baths. Some of its 30 rooms feature a private open-air bath. Dinner and breakfast are included, with dinner served in a private dining room. The inn is a 10-minute drive from the station; you can ask for the shuttle when booking. It holds a 9.4 rating from 75 reviews.",
+    "38": "Hoshokaku accepts kids of any age and prices meals accordingly: elementary school children pay 70% of the adult rate, preschoolers pay 50%, and a kids' meal set is available. Eleven of the 53 rooms have an open-air bath. It's a 16-minute walk from the station, or roughly a 5-minute taxi ride, with a free shuttle offered under specific conditions. The rating is 9.0 from 78 reviews.",
+    "39": "Ryokan Murayama provides two private hot spring baths you can book for free. It has 13 rooms and is a 1-minute walk from the Hida-no-Sato-shita bus stop, about a 10-minute bus ride from the station near Hida Folk Village. Children of all ages are welcome. Rooms started at $323 per night for two, before taxes, at our last check. Its rating is 8.8 from 964 reviews."
+}
+```
+
+{
+  "54": "The nightly rate for two people at most ryokan we list falls between $90 and $460, with $190 being a typical figure. To find the exact price for your dates, visit our ⟦L1⟧.",
+  "55": "The historic area becomes very crowded around midday. Mornings and evenings are much quieter, and that's the key benefit of an overnight stay versus a daytime trip."
+}
+
+```json
+{
+  "48": "Takayama frequently gets compared with these destinations. Our town pages provide the current counts and rates; listed prices cover two guests per evening.",
+  "49": "A lot of visitors don't select a single spot: they journey from Nagoya to Takayama, onward to Shirakawa-go and Kanazawa, or they break their trip at Gero while traveling the Hida railway.",
+  "50": "It is. Snow covers the ground from December through February, and the view of snow on the old town's dark wooden houses ranks among Japan's finest. Delays can impact roads and bus services, so review alerts from the local tourism office and Nohi Bus before arranging a day excursion. See Takayama ryokan for winter dates →",
+  "51": "The Sanno Matsuri spring festival occurs April 14 and 15, while the Hachiman Matsuri autumn festival falls on October 9 and 10. These dates remain constant annually. Accommodations close to the old town sell out fast, so make your reservation promptly.",
+  "52": "Yes, a number of ryokan offer them, but you won't find public bathhouses to stroll between like in Kinosaki. For a private bathing experience, consult the 15 places with a private bath to book. For a traditional hot spring resort close by, consider Okuhida or Gero Onsen.",
+  "53": "Starting from Nagoya, you can, with a limited express train ride taking around 2 hours 30 minutes one way. The distance from Tokyo, Kyoto, or Osaka is excessive for a single day, and you would also skip the morning market. You should plan to stay overnight at a minimum."
+}
+```
+
+```json
+{
+    "16": "From April through November, the Miyagawa market starts at 7:00, moving to 8:00 from December to March, and usually finishes by midday. Arriving soon after opening is smart, as vendors depart once their goods are gone. On days with rain, snow, or winter weather, fewer stalls are present.",
+    "17": "Takayama Jinya served as the local administrative headquarters for the shogunate's officers governing the Hida area in the Edo period. You can explore its tatami rooms, offices, and storage buildings. Entry costs 500 yen and is free for all visitors aged 18 and under. Hours are 8:45 to 17:00 from April to October and 8:45 to 16:30 from November to March, with final entry 30 minutes prior to closing. It is not open from December 29 until January 3.",
+    "18": "Shoes are removed at the entryway and you carry them in a bag. Slippers are not available to use in winter, and since the building has no heating, wearing warm socks is a good idea.",
+    "19": "Should you miss the festival itself, the Takayama Festival Float Exhibition Hall at Sakurayama Hachimangu, the shrine located at the old town's northern end, displays a rotating group of the autumn festival floats year-round.",
+    "20": "Hida no Sato is an outdoor museum with over 30 old farmhouses and storehouses from the Hida region, most built in the Edo period. Admission is around 700 yen, and it's a 10-minute bus trip from the station. For travelers not visiting Shirakawa-go, this museum is the closest alternative.",
+    "24": "I like visiting most in autumn. The hills over the town change color, and the shrine steps found around the old town look their finest."
+}
+```
+
+```json
+{
+    "9": "**Two nights** give you time for an excursion. Shirakawa-go is a 50-minute bus ride away. Buses from Takayama also go to the Okuhida onsen towns and the alpine valley of Kamikochi. To stay in the mountains, book your first night in the city and the second at a ryokan in ⟦L1⟧, where we have 33 ryokan listed, with rates for two ranging from about $160 to $500 per night.",
+    "10": "**A day trip from Tokyo isn't worthwhile.** The trip from Tokyo takes roughly 4.5 hours one way, so you'd travel nine hours for only four or five hours in town. From Nagoya, a day trip is possible at around 2 hours 30 minutes each way, but you would not see the morning market.",
+    "12": "Takayama Station is located on the JR Takayama Line. Most people get there via the Hida limited express train from Nagoya; long-distance buses stop at the nearby Nohi Bus Center.",
+    "13": "Two winter reminders. The local tourism office currently notes a closure on Route 158 in Nyukawa, east of the city, and provides updates on bus and road conditions due to snow. Additionally, the bus company advises allowing extra travel time during the busy autumn period. Check ⟦L1⟧ the day before your bus journey.",
+    "14": "Begin at Nakabashi Bridge, the red one crossing the Miyagawa River, and go east into the historic area. Visit early or late for less crowded pictures. Above the entrances to sake breweries, watch for the sugidama, a cedar-branch ball. It is hung green when new sake is ready and browns as the sake ages.",
+    "15": "Takayama operates two separate morning markets. The Miyagawa market stretches along the Miyagawa River banks from Kajibashi to Yayoi bridges. The smaller Jinya-mae market sits in the square right outside Takayama Jinya. Each one sells local produce, pickles, miso, flowers, and handmade crafts."
+}
+```
+
+```json
+{
+  "1": "**Takayama** is a historic merchant town in Japan's Hida mountains, within Gifu Prefecture, and it's frequently referred to as Hida-Takayama. Its attractions include streets of dark wooden houses, two morning markets, sake breweries over a century old, and the Takayama Festival in spring and fall. A single night is highly recommended, with two nights allowing for visits to Shirakawa-go or Okuhida hot springs. Our listings include ⟦L1⟧, plus 13 onsen hotels, 4 machiya, and 3 minshuku. Most charge from $90 to $460 per night for two people.",
+  "2": "Our guide details the number of days for Takayama, transportation from Tokyo, Kyoto, and Nagoya, activities, the best visiting times, and lodging for each kind of trip. We confirmed all pricing, operating hours, and bus schedules on November 23, 2026.",
+  "3": "Takayama is a compact city in northern Gifu's Hida region, situated in the mountains between Nagoya and the coast of the Sea of Japan. Feudal authorities directly governed it, benefiting from its timber and master carpenters. That historical prosperity funded the preserved merchant homes and the festival floats, which rank among the most elaborate in Japan.",
+  "4": "Sanmachi, the historic merchant area east of the station over the Miyagawa River, is where the majority of tourists go. Its three parallel streets feature two-story wooden buildings containing sake breweries, miso and pickle stores, cafes, and tiny museums. Since key attractions are a short walk from JR Takayama Station, exploring the town doesn't require a car or bus pass.",
+  "6": "It certainly is. While Kyoto possesses more temples and Kanazawa a larger garden, very few central Japanese towns preserve an entire merchant district so completely. Takayama also provides two daily morning markets, an active festival culture, and the mountains on its doorstep.",
+  "8": "**One night** lets you see the town. Get there in the early afternoon, explore Sanmachi and the riverbank, then visit the morning market and Takayama Jinya the next morning before you go."
+}
+```
+
+```json
+{
+    "25": "Hida beef is the signature dish visitors seek: marbled beef from cattle raised in the region. You can enjoy it as steak grilled on a hoba magnolia leaf with miso, or as sushi from old-town street stalls. Also sample Takayama ramen, which has a thin soy broth and curly noodles, and mitarashi dango, grilled rice dumplings with a soy glaze.",
+    "26": "Numerous lodgings close to the station do not offer dinner. ⟦L1⟧ sells only room-only and breakfast plans, and ⟦L2⟧ provides a breakfast box. For a full dinner at your accommodation, select an inn that serves one, like ⟦L3⟧ or ⟦L4⟧.",
+    "27": "Growing up in Tokyo within a hotel family taught me that a breakfast-only plan is not an inferior choice. In Takayama, where the evening is quiet and restaurants close early, such a plan works well if you have a dinner reservation at a Hida beef restaurant. Otherwise, opt for the dinner plan. An inn dinner is the easiest good meal you'll have in Takayama, sparing you a search for an open restaurant at 8 pm.",
+    "28": "Takayama is not a dedicated bath town like ⟦L1⟧ or Kusatsu. Still, several inns supply their baths with local hot-spring water, marketed as Hida Takayama Onsen. The spring water differs: ⟦L2⟧ uses sulfurous water that feeds its large bath directly from the source, while ⟦L3⟧ and ⟦L4⟧ use a simple spring. To visit a complete hot-spring village, travel up into the mountains to Okuhida.",
+    "29": "For visitors preferring privacy, Takayama offers more private bathing choices than most towns its size. With onsen hotels included, our listings feature ⟦L1⟧ and ⟦L2⟧ for your party alone. ⟦L3⟧ provides two private hot-spring baths at no extra cost, and ⟦L4⟧ has rooms with their own open-air bath.",
+    "30": "Regarding tattoos, most Takayama inns have no written policy. A few state explicitly that guests with tattoos may only use private baths, including Wat Hotel & Spa Hida Takayama and Hida Hanasatonoyu Takayama Ouan. Our filter identifies the ⟦L1⟧."
+}
+```
+
+```json
+{
+    "31": "My method for checking tattoo policies isn't to ask if they're permitted. I inquire if the private bath, or kashikiri-buro, is bookable and at which times. This gets a straightforward answer, doesn't place the inn in a difficult position, and still lets you enjoy the bath. Our ⟦L1⟧ explains all the rules.",
+    "32": "These selections come straight from each ryokan's individual pages, verified on November 16 and 17, 2026. Every choice is made for a specific strength, along with its particular compromise. The guest scores are taken from reviews posted on each inn's page.",
+    "33": "Wanosato earned a single Michelin Key in 2026. It's located outside the main town, offering a shuttle from Takayama Station's west exit at 14:20, 15:20, and 16:20. The large bath uses natural hot spring water. All rooms feature a private cypress tub, though that water is not from the spring. Meals are served in a communal dining space. Its rating is 9.6 based on 322 reviews.",
+    "34": "Ryokan Kaminaka has Registered Tangible Cultural Property status from 2012. It's a 3-minute walk from JR Takayama Station and offers 10 rooms. The morning meal highlights Hida-Takayama specialties, served with a garden view. The catch is that certain rooms lack a private bath or toilet. It holds a 9.5 score from 630 reviews.",
+    "35": "Oyado Koto No Yume is a 2-minute walk from JR Takayama Station's east exit. It has 29 rooms and one private observation bath with hot spring water, available from 15:00 to 22:00. Plans are room-only or breakfast-only, meaning you must arrange dinner separately. We saw rooms starting at $581 per night for two before taxes in November 2026. It has a 9.2 rating from 3,633 reviews.",
+    "36": "Honjin Hiranoya Bekkan is a 10-minute walk from the station, with a complimentary shuttle from there and the bus terminal. All 24 rooms include a private bath and toilet. The observation bath on the 7th floor uses Hida Takayama Onsen water. They can prepare meals without egg, milk, or buckwheat and offer vegetarian options when possible; dinner is served in a private dining room. Its rating is 9.3 from 122 reviews."
+}
+```
+
+```json
+{
+  "45": "**Shirakawa-go.** This village features steep thatched gassho farmhouses and is around a 50-minute Nohi Bus ride away; bus seats require advance booking. Overnight stays are common for seeing the village after daytime crowds depart: Onyado Yuinosho provides a reservable private bath and shared hot-spring baths, but shared facilities do not permit tattoos.",
+  "47": "**Okuhida Onsen and Kamikochi.** Okuhida refers to several hot-spring villages in the mountains east of Takayama, accessible via Nohi Bus. The trip from Hirayu to Kamikochi, an alpine valley closed in winter, takes about 30 minutes more. Maintenance will close the Shinhotaka Ropeway from November 24 to 27, 2026.",
+  "48": "Takayama frequently gets compared with these destinations. Our town pages provide the current counts and rates; listed prices cover two guests per night.",
+  "49": "Many travelers don't pick one: they journey from Nagoya to Takayama, onward to Shirakawa-go and Kanazawa, or they pause at Gero while traveling up the Hida line.",
+  "50": "It is. Snow covers the ground from December through February, and the view of snow on the old town's dark wooden houses ranks among Japan's finest. Roads and buses can be affected, so review alerts from the local tourism office and Nohi Bus before arranging a day excursion. See Takayama ryokan for winter dates →",
+  "51": "The Sanno Matsuri spring festival occurs April 14 and 15, while the Hachiman Matsuri autumn festival falls on October 9 and 10. These dates remain constant annually. Accommodations close to the old town sell out fast, so make your reservation promptly."
+}
+```
+
+```json
+{
+    "52": "Several ryokan have them, but you cannot stroll between public bathhouses like in Kinosaki. For a private bath, check the ⟦L1⟧. A nearby classic onsen town would be ⟦L2⟧ or ⟦L3⟧.",
+    "53": "You can from Nagoya, with a limited express train taking about 2 hours 30 minutes each way. The distance from Tokyo, Kyoto, or Osaka is too great for a day trip, and you would not see the morning market. Plan to spend a minimum of one night.",
+    "54": "For two people, most ryokan we list run from $90 to $460 per night, with a typical price near $190. To view each inn's price, enter your dates on our ⟦L1⟧.",
+    "55": "The historic district gets very busy around midday. It is much quieter in the early morning and evening. This calm is the primary advantage of an overnight stay compared to a daytime visit."
+}
+```
+
+```json
+{
+    "37": "Hidatei Hanaougi uses a spring from its own source, with shared indoor and outdoor baths. Of its 30 rooms, a portion include a private outdoor bath. Your stay covers dinner and breakfast, and dinner is served in your own dining space. The station is a 10-minute drive away; be sure to request the shuttle service at booking. Its guest rating is 9.4, drawn from 75 reviews.",
+    "38": "Hoshokaku accepts kids of every age, charging for meals accordingly: elementary schoolers pay 70% of the adult rate, preschoolers pay 50%, and a children's meal set is an option. Eleven rooms among its 53 have an open-air bath. You can walk from the station in 16 minutes, take a 5-minute taxi, or use the complimentary shuttle under certain terms. It holds a 9.0 rating based on 78 reviews.",
+    "39": "Ryokan Murayama offers two private hot spring baths for complimentary reservation. It has 13 rooms and sits just a 1-minute walk from the Hida-no-Sato-shita bus stop, roughly a 10-minute bus trip from the station near Hida Folk Village. Children of any age are accommodated. When we last looked, rooms began at $323 per night for two, before taxes. Guests give it an 8.8 score from 964 reviews.",
+    "40": "Oyado Hachibei provides dinner-and-breakfast plans across its 15 rooms for about half the average nightly cost in Takayama. A taxi from the station takes 5 minutes, or ride the Nohi Bus to Hida no Sato and walk for another 5. The building does not have an elevator. It earns an 8.8 rating from 322 reviews.",
+    "42": "Ichinomatsu features 12 rooms, positioned a 6-minute walk from Takayama Station's west exit, priced a bit below the area's median. Its plans are breakfast only, a morning box, or room only, so plan to dine out for your evening meal. The property has an 8.8 rating from 1,791 reviews.",
+    "44": "Our Takayama list also contains 4 machiya and 3 minshuku. A machiya is a full rental of a historic wooden townhouse, featuring tatami rooms and often a small inner garden. A minshuku is a guesthouse run by a family, offering a handful of rooms and homemade meals. Choose a machiya for a family or group that prefers to cook and keep its own schedule. Pick a ryokan when you want dinner provided and a bath ready for you."
+}
+```
+
+```json
+{
+    "9": "**Two nights** allow for an excursion. You can take a bus to Shirakawa-go in roughly 50 minutes. Buses from Takayama also serve the Okuhida hot-spring villages and the alpine Kamikochi valley. To sleep in the mountains, book your first night in the city and your second at a ryokan in ⟦L1⟧, where we have 33 ryokan listed, with nightly rates for two starting around $160 and going up to $500.",
+    "10": "**A day trip from Tokyo isn't a good idea.** The journey from Tokyo takes approximately 4.5 hours one way, meaning nine hours of travel for just four or five hours in Takayama. While a day trip from Nagoya is feasible at around 2 hours 30 minutes each way, you would not experience the morning market."
+}
+```
+
+```json
+{
+    "3": "Takayama is a compact city in the Hida area of northern Gifu, located in the mountains between Nagoya and the coast of the Sea of Japan. During the feudal period, it provided timber and expert carpenters and was under direct control of the shogunate. That wealth financed the merchant homes visible now and the festival floats, counted among Japan's most detailed.",
+    "4": "The majority of tourists concentrate on Sanmachi, the historic merchant district located east of the station, on the other side of the Miyagawa River. Its three parallel streets are lined with two-story wooden buildings housing sake breweries, miso and pickle vendors, cafes, and little museums. Most sights are an easy walk from JR Takayama Station, meaning a car or bus ticket isn't necessary for exploring the town."
+}
+```
+
+{
+  "1": "**Takayama** is a historic merchant town in Japan's Hida mountains, within Gifu Prefecture, and it's frequently referred to as Hida-Takayama. Its attractions include streets of dark wooden houses, two morning markets, sake breweries over a century old, and the Takayama Festival in spring and fall. A single night is highly recommended, with two nights allowing for visits to Shirakawa-go or Okuhida hot springs. Our listings include ⟦L1⟧, plus 13 onsen hotels, 4 machiya, and 3 minshuku. Most charge from $90 to $460 per night for two people.",
+  "2": "Our guide details the number of days for Takayama, transportation from Tokyo, Kyoto, and Nagoya, activities, the best visiting times, and lodging for each kind of trip. We confirmed pricing, operating hours, and bus schedules on November 23, 2026."
+}
+
+```json
+{
+  "12": "The JR Takayama Line serves Takayama Station. Nagoya is the primary access point via the Hida limited express train, while long-distance buses terminate at the adjacent Nohi Bus Center.",
+  "13": "A couple of seasonal advisories. Currently, the local tourism office reports a closure for Route 158 in Nyukawa, east of town, and shares status reports on road and bus conditions during snowfall. The bus operator also recommends building in additional time for travel throughout the busy autumn months. Before you take a bus, consult ⟦L1⟧ the prior day."
+}
+```
+
+```json
+{
+    "14": "Begin your walk at Nakabashi Bridge, the red one spanning the Miyagawa River, and head east into the preserved streets. Arriving early or late helps you capture pictures with fewer people. Keep an eye out above brewery entrances for the sugidama, a sphere made from cedar branches. It is displayed green to signal the season's new sake and gradually browns while the sake ages.",
+    "15": "The town operates two distinct morning markets. You'll find the Miyagawa market lining the banks of the Miyagawa River from Kajibashi Bridge to Yayoi Bridge. The Jinya-mae market, which is smaller, occupies the square directly facing Takayama Jinya. Each market offers locally grown vegetables, pickles, miso paste, fresh flowers, and handmade crafts."
+}
+```
+
+```json
+{
+    "19": "Even if you visit outside festival dates, you can still see some of the floats at the Takayama Festival Float Exhibition Hall. It's located within Sakurayama Hachimangu, the shrine found at the northern edge of the old town, and displays a changing set of floats from the autumn event throughout the year.",
+    "20": "Hida no Sato is an outdoor museum featuring over 30 traditional farmhouses and storehouses from the Hida area, with most constructed during the Edo period. Admission runs about 700 yen, and it's a 10-minute bus ride from the station. For visitors who won't make it to Shirakawa-go, this museum is the next best thing."
+}
+```
+
+```json
+{
+  "26": "A lot of accommodations around the station lack evening meals. You can book a room-only or breakfast-only stay at ⟦L1⟧, while ⟦L2⟧ provides a morning meal in a box. To have dinner at your lodging, pick a place that offers it, like ⟦L3⟧ or ⟦L4⟧.",
+  "27": "Being raised in Tokyo by a family in the hotel business taught me that a plan with just breakfast is not a worse option. Takayama evenings are peaceful and dining spots shut down early, so a breakfast-only inn works if you already reserved a table at a Hida beef restaurant. Without that reservation, choose the dinner plan. The simplest way to get a quality meal in Takayama is at your inn, avoiding a search for somewhere still serving food at 8 pm."
+}
+```
+
+```json
+{
+  "24": "I prefer to go during autumn. The wooded slopes above the settlement change hue, and the stone stairs surrounding the historic district appear most beautiful.",
+  "25": "The local specialty visitors want is Hida beef: well-marbled meat from cows bred locally. It comes as a steak cooked over a hoba magnolia leaf with miso, or as sushi sold at old-town market stalls. You should also try Takayama ramen, featuring a light soy-based soup and wavy noodles, along with mitarashi dango, which are skewered rice cakes broiled with a savory soy sauce coating."
+}
+```
+
+```json
+{
+  "28": "Takayama does not have the bathhouse-town character of ⟦L1⟧ or Kusatsu. However, a number of its inns offer hot-spring water piped in from local sources, marketed under the name Hida Takayama Onsen. The spring water itself is not uniform: ⟦L2⟧ provides sulfurous water from the source for its main bath, whereas ⟦L3⟧ and ⟦L4⟧ use a basic thermal spring. To experience a complete hot-spring village, you need to travel into the mountain area of Okuhida.",
+  "29": "For those seeking a private bathing experience, Takayama provides more choices than many similar towns. Including onsen hotels, our guide includes ⟦L1⟧ and ⟦L2⟧. At ⟦L3⟧, two hot-spring baths for private use are complimentary, and ⟦L4⟧ offers accommodations with a personal open-air bath."
+}
+```
+
+```json
+{
+    "16": "The Miyagawa market begins at 7:00 from April through November, shifting to an 8:00 start from December to March, and finishes around midday. Arriving early is best, as vendors leave after selling their items. During rainy, snowy, or winter weather, you will find a reduced number of stalls.",
+    "17": "Takayama Jinya was the administrative headquarters for the shogunate's officials overseeing the Hida region during the Edo period. Visitors can walk through its tatami rooms, offices, and storehouses. Entry costs 500 yen and is free for all visitors aged 18 and under. Opening hours are 8:45 to 17:00 from April to October and 8:45 to 16:30 from November to March, with last entry 30 minutes before closing. It is closed from December 29 until January 3."
+}
+```
+
+```json
+{
+    "30": "Most ryokans in Takayama have no official stance on tattoos posted online. A small number specifically mention that visitors with tattoos are restricted to private baths, such as Wat Hotel & Spa Hida Takayama and Hida Hanasatonoyu Takayama Ouan. You can find the 15 places where you can bathe privately with tattoos using our filter.",
+    "31": "My approach to checking tattoo policies is not to ask if they are permitted. Instead, I inquire if the private bath, or kashikiri-buro, is available for booking and during which hours. This receives a clear response, avoids putting the inn in an awkward position, and still allows you to enjoy the onsen. Our guide to onsen in Japan covers the etiquette in full."
+}
+```
+
+```json
+{
+    "33": "Wanosato earned a Michelin Key in 2026. Its location is outside the central town, and a shuttle departs from Takayama Station's west exit at 14:20, 15:20, and 16:20. The main bath uses natural hot spring water. Each room includes a private cypress tub, but that water is not from the spring. Meals are provided in a shared dining area. Its rating is 9.6 based on 322 reviews.",
+    "34": "Ryokan Kaminaka gained Registered Tangible Cultural Property designation in 2012. It is a 3-minute walk from JR Takayama Station and offers 10 guest rooms. The morning meal focuses on Hida-Takayama regional cuisine, presented with a view of the garden. However, a few rooms do not have a private bath or toilet. It has a 9.5 score from 630 reviews."
+}
+```
+
+```json
+{
+    "39": "Ryokan Murayama provides two complimentary private hot spring baths. It features 13 rooms and is located just a 1-minute walk from the Hida-no-Sato-shita bus stop, roughly a 10-minute bus ride from the station near Hida Folk Village. The inn welcomes children of any age. Our last check showed rooms starting at $323 per night for two, before taxes. It holds an 8.8 rating based on 964 reviews.",
+    "40": "Oyado Hachibei offers dinner-and-breakfast plans for its 15 rooms at around half the average nightly rate in Takayama. A taxi from the station takes 5 minutes, or you can ride the Nohi Bus to Hida no Sato and walk for 5 minutes. The property lacks an elevator. It receives an 8.8 score from 322 reviews."
+}
+```
+
+```json
+{
+  "35": "Oyado Koto No Yume sits just a 2-minute stroll east of JR Takayama Station. It offers 29 rooms and a single private observation bath fed by hot spring water, available from 15:00 until 22:00. Booking options are room-only or breakfast-only, meaning you'll need to arrange dinner elsewhere. When we looked in November 2026, rates for two people began at $581 per night before taxes. It holds a 9.2 score based on 3,633 reviews.",
+  "36": "Honjin Hiranoya Bekkan is about a 10-minute walk from the station, and a complimentary shuttle runs from there and the bus terminal. All 24 rooms come with a private bath and toilet. The observation bath on the 7th floor uses Hida Takayama Onsen water. They can accommodate requests for meals without egg, milk, or buckwheat, and will prepare vegetarian dishes when feasible; dinner is served in your own dining room. Its rating is 9.3 from 122 reviews."
+}
+```
+
+```json
+{
+    "42": "Ichinomatsu offers 12 rooms, located a 6-minute walk from Takayama Station's west exit, priced just below the area's median. Its available plans are breakfast only, a morning box, or room only, meaning you'll need to arrange dinner elsewhere. The property holds an 8.8 rating based on 1,791 reviews.",
+    "44": "Our Takayama list includes 4 machiya and 3 minshuku as well. A machiya is a complete rental of a historic wooden townhouse, containing tatami rooms and frequently a small interior garden. A minshuku is a family-operated guesthouse offering a few rooms and homemade meals. Choose a machiya for a family or group that prefers to cook and set its own schedule. Select a ryokan when you want dinner provided and a bath prepared for you."
+}
+```
+
+```json
+{
+  "37": "Hidatei Hanaougi draws from its own hot spring source and provides shared indoor and outdoor baths. Among its 30 rooms, a few come with a private open-air bath. Your stay includes dinner and breakfast, and dinner is served in a private dining space. The station is a 10-minute drive away; remember to ask for the shuttle service at the time of booking. It holds a 9.4 rating based on 75 reviews.",
+  "38": "Hoshokaku accepts children of any age, charging for their meals accordingly: elementary school kids pay 70% of the adult rate, preschoolers pay 50%, and a children's meal set is available. Eleven rooms out of its 53 feature an open-air bath. You can walk from the station in 16 minutes, take a 5-minute taxi, or use the complimentary shuttle under specific conditions. It has a 9.0 rating from 78 reviews."
+}
+```
+
+```json
+{
+  "45": "**Shirakawa-go.** This collection of steep, thatched gassho farmhouses is roughly a 50-minute Nohi Bus ride away, and seats must be booked ahead. Overnight visits are popular for experiencing the village once day-trippers have gone; ⟦L1⟧ offers a reservable private bath along with shared hot-spring baths, but tattoos are not permitted in the shared facilities.",
+  "47": "**Okuhida Onsen and Kamikochi.** Okuhida describes several hot-spring villages located in the mountains east of Takayama, accessible via Nohi Bus. Traveling from Hirayu to Kamikochi, an alpine valley closed during winter, adds about 30 minutes. Maintenance will shut the Shinhotaka Ropeway from November 24 through 27, 2026."
+}
+```
+
+```json
+{
+    "48": "Takayama is frequently measured against these destinations. Our town pages list the current counts and rates, verified today; listed prices are for two people each night.",
+    "50": "It is. Snow falls from December through February, and the sight of snow on the old town's dark wooden houses is among Japan's finest. Road and bus service can be disrupted, so review alerts from the local tourism office and ⟦L1⟧ when planning a day trip. ⟦L2⟧"
+}
+```
+
+```json
+{
+    "53": "You can reach it from Nagoya in roughly 2 hours and 30 minutes one way using a limited express train. Traveling from Tokyo, Kyoto, or Osaka is not practical for a single day, and you would not experience the morning market. A minimum of one overnight stay is necessary.",
+    "55": "The historic area becomes quite crowded around noon. Mornings and evenings are far more peaceful, and this tranquility is the key benefit of an overnight stay versus joining a tour."
+}
+```
+
+```json
+{
+    "51": "The Sanno Matsuri spring festival takes place April 14 and 15, while the Hachiman Matsuri autumn festival is held October 9 and 10. These dates are fixed annually. Lodgings around the historic district get reserved well in advance, so you should secure your booking quickly.",
+    "52": "You can find them at a number of inns, but you cannot visit separate public bathhouses on foot like in Kinosaki. To reserve a private bath, look at the ⟦L1⟧. Nearby traditional onsen towns include ⟦L2⟧ and ⟦L3⟧."
+}
+```
+
+{
+  "1": "**Takayama** is a historic merchant town in Japan's Hida mountains, within Gifu Prefecture, and it's frequently referred to as Hida-Takayama. Its attractions include streets of dark wooden houses, two morning markets, sake breweries over a century old, and the Takayama Festival in spring and fall. A single night is highly recommended, with two nights allowing for visits to Shirakawa-go or Okuhida hot springs. Our listings include ⟦L1⟧, plus 13 onsen hotels, 4 machiya, and 3 minshuku. Most charge from $90 to $460 per night for two people.",
+  "2": "Our guide details how many days to spend in Takayama, transportation from Tokyo, Kyoto, and Nagoya, activities, the best visiting times, and lodging for each kind of trip. We confirmed pricing, operating hours, and bus schedules on November 23, 2026."
+}
+
+```json
+{
+    "9": "**Two nights** give you time for an excursion. You can reach Shirakawa-go by bus in around 50 minutes. Buses from Takayama also go to the Okuhida hot-spring villages and the alpine valley of Kamikochi. To stay in the mountains, reserve your first night in Takayama and your second at a ryokan in ⟦L1⟧, where we list 33 ryokan with nightly rates for two from about $160 to $500.",
+    "10": "**A day trip from Tokyo isn't worth it.** The trip from Tokyo takes about 4.5 hours one way, so you'd have nine hours of travel for just four or five hours in town. A day trip from Nagoya works, at around 2 hours 30 minutes each way, but you miss the morning market."
+}
+```
+
+```json
+{
+    "3": "Takayama is a compact city in the Hida area of northern Gifu, situated in the mountains between Nagoya and the Sea of Japan. During the feudal period, it furnished timber and master carpenters and was under direct shogunate control. That prosperity funded the merchant homes visible now and the festival floats, considered some of Japan's most intricate.",
+    "4": "The majority of tourists focus on Sanmachi, the historic merchant district located east of the station, on the opposite side of the Miyagawa River. Its three parallel streets are lined with two-story wooden buildings containing sake breweries, miso and pickle sellers, cafes, and tiny museums. Most attractions are an easy stroll from JR Takayama Station, meaning a car or bus pass is not required for touring the city."
+}
+```
+
+```json
+{
+    "12": "The JR Takayama Line runs through Takayama Station. Nagoya is the most common starting point, with the Hida limited express train bringing the majority of visitors; long-distance buses stop at the nearby Nohi Bus Center.",
+    "13": "A couple of winter travel tips. Presently, the local tourism office shows Route 158 in Nyukawa, east of the city, as closed, and provides status updates for roads and buses when it snows. The bus operator also requests that riders plan for extra travel time in the busy autumn season. Verify conditions with ⟦L1⟧ the day before your bus journey."
+}
+```
+
+```json
+{
+  "19": "Even when the festival isn't happening, you can view a rotating display of the autumn festival's floats at the Takayama Festival Float Exhibition Hall. This hall is inside Sakurayama Hachimangu, the shrine situated at the old town's northern edge.",
+  "24": "I like visiting most in autumn. The hills above the town change color, and the stone steps surrounding the old town look their best."
+}
+```
+
+```json
+{
+    "25": "The local specialty everyone seeks is Hida beef, which is well-marbled meat from cattle raised in the area. You can have it as steak cooked over a hoba magnolia leaf with miso, or as sushi purchased from old-town street stalls. Also sample Takayama ramen, a light soy broth with wavy noodles, and mitarashi dango, grilled rice dumplings coated in a soy-based glaze.",
+    "26": "A number of lodgings close to the station do not provide dinner. You can book a room-only or breakfast-only plan at ⟦L1⟧, and ⟦L2⟧ offers a breakfast box. For a complete evening meal at your accommodation, select an inn that includes dinner, like ⟦L3⟧ or ⟦L4⟧."
+}
+```
+
+```json
+{
+  "16": "The Miyagawa morning market begins at 7:00 between April and November, moving to an 8:00 start from December through March, and it ends around midday. I recommend arriving soon after opening, because stalls begin to close as their goods sell, and you'll see fewer vendors on rainy, snowy, or cold winter days.",
+  "17": "Takayama Jinya served as the local government headquarters during the Edo period, where shogunate officials administered the Hida area. Visitors can explore its tatami-matted rooms, working offices, and storage buildings. Entry costs 500 yen and is complimentary for all guests aged 18 and under. Opening hours run from 8:45 to 17:00 from April to October and from 8:45 to 16:30 from November to March, with last entry 30 minutes before closing. The site is closed from December 29 through January 3."
+}
+```
+
+```json
+{
+    "14": "Begin your stroll at Nakabashi Bridge, the red one crossing the Miyagawa River, and proceed eastward into the historic district. Visiting during the early or late hours helps you take photographs with fewer visitors. Watch for the sugidama above brewery doorways; it's a sphere fashioned from cedar boughs. Brewers hang it green to mark the season's fresh sake, and it slowly browns as the sake ages.",
+    "15": "The town hosts two separate morning markets. You can find the Miyagawa market along the Miyagawa River's edge, stretching from Kajibashi Bridge to Yayoi Bridge. The smaller Jinya-mae market sits in the square directly facing Takayama Jinya. Each market provides vegetables, pickles, miso, flowers, and crafts."
+}
+```
+
+```json
+{
+    "27": "My family ran hotels in Tokyo, and from them I learned that a plan with only breakfast is not an inferior choice. Takayama evenings are quiet and dining places shut down early, so a ryokan serving just breakfast works if you have a reservation for Hida beef. Without that reservation, you should select the dinner plan. The most straightforward way to get a quality dinner in Takayama is at your inn, so you avoid hunting for a place that is open at 8 pm.",
+    "28": "Takayama lacks the bath-focused atmosphere of a town like ⟦L1⟧ or Kusatsu. However, several of its ryokan bring in hot-spring water from nearby sources, which is marketed as Hida Takayama Onsen. The spring water is not the same everywhere: ⟦L2⟧ receives sulfurous water directly from the source for its large bath, while ⟦L3⟧ and ⟦L4⟧ use a basic thermal spring. To visit a proper hot-spring village, you must travel into the Okuhida mountain area."
+}
+```
+
+```json
+{
+  "31": "My method for checking tattoo policies avoids asking if they are permitted. Instead, I ask if the kashikiri-buro, or private bath, can be booked and at what time. This gets a straightforward answer, doesn't make the inn uncomfortable, and still lets you use the onsen. Our full etiquette details are in the guide to onsen in Japan.",
+  "33": "Wanosato received a Michelin Key in 2026. It is located away from the main town. A shuttle leaves from the west exit of Takayama Station at 14:20, 15:20, and 16:20. The main bath uses natural hot spring water. All rooms feature a private cypress tub, but that water is not from the spring. Meals are served in a communal dining room. Its review score is 9.6 based on 322 ratings."
+}
+```
+
+```json
+{
+    "34": "Ryokan Kaminaka holds Registered Tangible Cultural Property status, designated in 2012. It's a 3-minute walk from JR Takayama Station and has 10 guest rooms. The morning meal highlights Hida-Takayama cuisine, served overlooking a Japanese garden. The compromise is that a few rooms lack a private bath or toilet. Its rating is 9.5 based on 630 reviews.",
+    "35": "Oyado Koto No Yume is a 2-minute walk east of JR Takayama Station, offering 29 rooms. It features a single private observation bath with hot spring water, available from 15:00 until 22:00. Booking plans are room-only or breakfast-only, so you must arrange dinner elsewhere. When we checked in November 2026, rates for two started at $581 per night before taxes. It has a 9.2 score from 3,633 reviews."
+}
+```
+
+```json
+{
+  "38": "Hoshokaku accepts kids of any age, charging for their meals based on age: elementary school children pay 70% of the adult rate, preschoolers pay 50%, and a children's meal set is offered. Out of 53 rooms, 11 include an open-air bath. You can reach it with a 16-minute walk from the station, a 5-minute taxi ride, or a free shuttle under certain conditions. It holds a 9.0 rating based on 78 reviews.",
+  "39": "Ryokan Murayama offers two complimentary private hot spring baths for guest use and has 13 rooms. It's situated a 1-minute walk from the Hida-no-Sato-shita bus stop, approximately a 10-minute bus ride from the station near Hida Folk Village. The ryokan welcomes children of all ages. Our last price check showed rooms starting at $323 per night for two, before taxes. It has an 8.8 rating from 964 reviews."
+}
+```
+
+```json
+{
+  "36": "Honjin Hiranoya Bekkan sits about 10 minutes on foot from the station, offering a complimentary shuttle from that location and the bus terminal. All 24 rooms feature a private bathroom. The observation bath on floor 7 draws from the Hida Takayama Onsen. They can arrange meals without egg, milk, or buckwheat, and will prepare vegetarian dishes if possible; your dinner is served in a private dining area. Its rating is 9.3 based on 122 reviews.",
+  "37": "Hidatei Hanaougi taps its own hot spring source, providing shared indoor and outdoor baths. A few of its 30 rooms include a private open-air bath. Your stay comes with dinner and breakfast, and dinner takes place in a private dining room. The station is a 10-minute drive away; be sure to reserve the shuttle service at booking. It has a 9.4 rating from 75 reviews."
+}
+```
+
+{
+  "44": "Our Takayama list also features 4 machiya and 3 minshuku. A machiya is a full rental of a historic wooden townhouse, featuring tatami rooms and typically a small interior garden. A minshuku is a guesthouse run by a family, offering a handful of rooms and home-cooked meals. Pick a machiya for a family or group that wishes to cook and keep its own hours. A ryokan is the right option when you want dinner provided and a bath prepared.",
+  "45": "**Shirakawa-go.** This village of steep, thatched gassho farmhouses is approximately a 50-minute Nohi Bus ride away, and bus seats require a reservation. Overnight stays are common for experiencing the village after day-trippers depart; ⟦L1⟧ provides a reservable private bath and shared hot-spring baths, but tattoos are prohibited in the shared facilities."
+}
+
+```json
+{
+    "40": "⟦L1⟧ provides dinner and breakfast plans for its 15 rooms, costing roughly half the average nightly rate in Takayama. A taxi ride from the station lasts 5 minutes; alternatively, ride the Nohi Bus to Hida no Sato and walk for 5 minutes. The building does not have an elevator. It earns an 8.8 score based on 322 reviews.",
+    "42": "⟦L1⟧ offers 12 rooms, positioned a 6-minute walk from Takayama Station's west exit, with rates slightly below the area's median. You can choose a breakfast-only plan, a morning box, or a room-only plan, requiring you to find dinner elsewhere. The property has an 8.8 rating from 1,791 reviews."
+}
+```
+
+```json
+{
+    "29": "For visitors who prefer not to bathe with others, Takayama offers more private bathing choices than most towns its size. This count includes onsen hotels, and we list ⟦L1⟧ and ⟦L2⟧ for your party alone. At ⟦L3⟧, two hot-spring baths for private use are complimentary, and ⟦L4⟧ provides rooms with their own open-air bath.",
+    "30": "Regarding tattoos, most ryokans in Takayama have no posted policy. A small number explicitly state that guests with tattoos are limited to private baths, such as Wat Hotel & Spa Hida Takayama and Hida Hanasatonoyu Takayama Ouan. The filter we provide shows the ⟦L1⟧."
+}
+```
+
+```json
+{
+    "51": "The Sanno Matsuri spring festival occurs April 14 and 15, with the Hachiman Matsuri autumn festival on October 9 and 10. These dates do not change from year to year. Accommodations close to the old town are reserved far ahead, so you need to make your booking early.",
+    "52": "You can get one at several inns, but you won't find separate public bathhouses to visit on foot like in Kinosaki. To enjoy a private soak, check the ⟦L1⟧. For a classic onsen town experience nearby, consider ⟦L2⟧ or ⟦L3⟧."
+}
+```
+
+```json
+{
+  "47": "**Okuhida Onsen and Kamikochi.** The Okuhida area consists of several hot-spring villages situated in the mountains to Takayama's east, which you can reach via Nohi Bus. Traveling onward from Hirayu to Kamikochi, an alpine valley closed during winter months, takes roughly 30 minutes. Maintenance will close the Shinhotaka Ropeway from November 24 through November 27, 2026.",
+  "48": "People frequently compare Takayama to these destinations. Our town pages provide the current counts and rates, verified today; listed prices are per night for two people."
+}
+```
+
+```json
+{
+  "53": "You can get there from Nagoya in around 2 hours and 30 minutes each way via limited express train. Coming from Tokyo, Kyoto, or Osaka isn't feasible for a single day, and you wouldn't see the morning market. Plan to stay overnight.",
+  "55": "The historic district gets very busy during midday. It's much quieter in the early morning and evening, and that peaceful atmosphere is the main advantage of an overnight stay compared to a tour visit."
+}
+```
+
+```json
+{
+  "1": "**Takayama** is a historic merchant town in Japan's Hida mountains, within Gifu Prefecture, and it's frequently referred to as Hida-Takayama. Its attractions include streets of dark wooden houses, two morning markets, sake breweries over a century old, and the Takayama Festival in spring and fall. A single night is highly recommended, with two nights allowing for visits to Shirakawa-go or Okuhida hot springs. Our listings include ⟦L1⟧, plus 13 onsen hotels, 4 machiya, and 3 minshuku. Most charge from $90 to $460 per night for two people.",
+  "3": "Takayama is a compact city in the Hida area of northern Gifu, situated in the mountains between Nagoya and the Sea of Japan. During the feudal period, it furnished timber and master carpenters and was under direct shogunate control. That prosperity funded the merchant homes visible now and the festival floats, which are among the most elaborate in Japan."
+}
+```
+
+```json
+{
+    "12": "Takayama Station lies along the JR Takayama Line. The Hida limited express from Nagoya is how most visitors get here; long-distance buses arrive at the nearby Nohi Bus Center.",
+    "14": "Begin at Nakabashi Bridge, the red one spanning the Miyagawa River, and head east into the old quarter. Coming early or late makes for less crowded photographs. Keep an eye out for the sugidama above brewery entrances; it's a sphere made from cedar boughs. Brewers hang it fresh and green to signal the season's new sake, and it gradually browns while the sake ages."
+}
+```
+
+```json
+{
+  "16": "The Miyagawa morning market begins at 7:00 between April and November, moving to an 8:00 start from December through March, and it ends around midday. Arrive soon after opening, because stalls begin to close as their goods sell, and you'll see fewer vendors on rainy, snowy, or cold winter days.",
+  "17": "Takayama Jinya served as the local government headquarters during the Edo period, where shogunate officials administered the Hida area. Visitors can explore its tatami-matted rooms, working offices, and storage buildings. Entry costs 500 yen and is complimentary for all guests aged 18 and under. Opening hours run from 8:45 to 17:00 from April to October and from 8:45 to 16:30 from November to March, with last entry 30 minutes before closing. The site is closed from December 29 through January 3."
+}
+```
+
+```json
+{
+  "19": "Even outside the festival dates, you can see a rotating display of the autumn festival's floats at the Takayama Festival Float Exhibition Hall. This hall is located inside Sakurayama Hachimangu, the shrine at the northern edge of the old town, and it's open all year.",
+  "24": "I prefer visiting in autumn. The hills above the town change color, and the shrine steps surrounding the old town look their best."
+}
+```
+
+```json
+{
+    "4": "The historic Sanmachi district, situated east of the station on the far side of the Miyagawa River, draws the bulk of tourists. Its three parallel streets are filled with two-story wooden structures housing sake breweries, shops selling miso and pickles, cafes, and compact museums. Nearly all points of interest are a short walk from JR Takayama Station, eliminating the need for a car or bus ticket to explore the area.",
+    "10": "**Traveling from Tokyo for a single day isn't advisable.** The journey from Tokyo takes roughly 4.5 hours one way, resulting in nine hours of transit for only four or five hours in Takayama. A day trip originating from Nagoya is feasible, with a travel time of about 2 hours 30 minutes each direction, though you would not experience the morning market."
+}
+```
+
+```json
+{
+  "30": "Most ryokans in Takayama have no written policy regarding tattoos. Some establishments, like Wat Hotel & Spa Hida Takayama and Hida Hanasatonoyu Takayama Ouan, explicitly limit guests with tattoos to private baths. You can find the 15 places where you can bathe privately with tattoos using our filter.",
+  "31": "My approach for inquiring about tattoo policies avoids asking if they are permitted. Instead, I ask if the kashikiri-buro, or private bath, is available for booking and at what time. This receives a direct answer, doesn't create discomfort for the inn, and gets you into the hot water either way. The full etiquette is covered in our guide to onsen in Japan."
+}
+```
+
+```json
+{
+    "25": "The local specialty visitors want is Hida beef, which is marbled meat from cattle raised locally. You can order it as steak, grilled on a hoba magnolia leaf with miso, or as sushi from old-town street stalls. Also try Takayama ramen, featuring a thin soy broth and curly noodles, and mitarashi dango, grilled rice dumplings with a soy glaze.",
+    "26": "A lot of accommodations close to the station do not offer dinner. You can book a room-only or breakfast-only plan at ⟦L1⟧, and ⟦L2⟧ provides a breakfast box. For a full dinner at your lodging, pick an inn that includes it, like ⟦L3⟧ or ⟦L4⟧."
+}
+```
+
+```json
+{
+    "33": "Wanosato earned a Michelin Key in 2026. Its location is outside the main town area. A shuttle departs from Takayama Station's west exit at 14:20, 15:20, and 16:20. The main bathing area uses natural hot spring water. Each room includes a private cypress tub, but that water is not from the hot spring. Meals are taken in a shared dining space. Its review score is 9.6 from 322 guest ratings.",
+    "34": "Ryokan Kaminaka has been a Registered Tangible Cultural Property since 2012. It is a 3-minute walk from JR Takayama Station and offers 10 rooms. The morning meal focuses on Hida-Takayama specialties, presented with a garden view. The compromise is that a few rooms do not include a private bath or toilet. It holds a rating of 9.5 based on 630 reviews."
+}
+```
+
+```json
+{
+    "27": "My family owned hotels in Tokyo, and from that I know a plan with just breakfast is not a lower-tier option. Takayama nights are calm and dining spots shut early, so a ryokan offering only breakfast is fine when you have a reservation for Hida beef. Without that reservation, you should choose the dinner plan. The simplest way to get a quality dinner in Takayama is at your inn, so you don't need to search for a restaurant that is open at 8 pm.",
+    "28": "Takayama does not have the bathhouse town feel of ⟦L1⟧ or Kusatsu. However, a number of its inns bring in hot-spring water, which is labeled Hida Takayama Onsen. The water is not identical at each place: ⟦L2⟧ gets sulfurous water directly from the source for its big bath, and ⟦L3⟧ and ⟦L4⟧ use a simple spring. To experience a proper hot-spring village, head into the Okuhida mountain region."
+}
+```
+
+```json
+{
+    "35": "⟦L1⟧ sits just a 2-minute stroll east of JR Takayama Station and provides 29 guest rooms. It has a single private observation bath fed by hot spring water, operating from 15:00 until 22:00. Booking options are room-only or with breakfast only, meaning you'll need to arrange dinner separately. Our November 2026 check found rates beginning at $581 per night for two people before tax. The property holds a 9.2 rating based on 3,633 reviews.",
+    "36": "⟦L1⟧ is located about a 10-minute walk from the station and offers a complimentary shuttle service from there and the bus center. All 24 rooms include a private bathroom. An observation bath on the 7th floor sources its water from the Hida Takayama Onsen. They can accommodate requests for meals without egg, milk, or buckwheat, and will prepare vegetarian dishes when feasible; your evening meal is served in a private dining space. It has earned a 9.3 score from 122 reviews."
+}
+```
+
+```json
+{
+  "37": "Hidatei Hanaougi draws from its own hot spring source, offering shared indoor and outdoor baths. A private open-air bath comes with some of its 30 rooms. Your stay includes dinner and breakfast, and dinner is served in a private dining space. The station is a 10-minute drive away; you should request the shuttle service at the time of booking. It holds a 9.4 rating based on 75 reviews.",
+  "38": "Hoshokaku accepts children of any age, charging for their meals according to age: elementary school kids pay 70% of the adult rate, preschoolers pay 50%, and a children's meal set is available. Out of 53 rooms, 11 feature a private open-air bath. You can get there with a 16-minute walk from the station, a 5-minute taxi ride, or a complimentary shuttle under specific conditions. It has a 9.0 rating from 78 reviews."
+}
+```
+
+```json
+{
+  "42": "Ichinomatsu provides 12 rooms, located a 6-minute walk from Takayama Station's west exit, with rates a bit below the area's median. You can book a breakfast-only plan, a morning box, or a room-only plan, meaning you'll need to dine out for dinner. It holds an 8.8 rating based on 1,791 reviews.",
+  "44": "Our Takayama list includes 4 machiya and 3 minshuku as well. A machiya is a full rental of a historic wooden townhouse, containing tatami rooms and usually a small interior garden. A minshuku is a family-operated guesthouse offering a handful of rooms and home-cooked meals. Choose a machiya for a family or group that prefers to cook and set its own schedule. A ryokan is the right pick when you want dinner provided and a bath prepared."
+}
+```
+
+```json
+{
+  "39": "Ryokan Murayama offers 13 rooms and two complimentary private hot spring baths for guests. It's a 1-minute walk from the Hida-no-Sato-shita bus stop, roughly a 10-minute bus ride from the station, near Hida Folk Village. Kids of any age can stay. Our last price check had rooms starting at $323 per night for two, before tax. It holds an 8.8 rating based on 964 reviews.",
+  "40": "Oyado Hachibei serves dinner and breakfast plans for its 15 rooms, costing around half the average nightly rate in Takayama. A taxi from the station takes 5 minutes; you can also ride the Nohi Bus to Hida no Sato and walk for 5 minutes. The property does not have an elevator. It receives an 8.8 score from 322 reviews."
+}
+```
+
+```json
+{
+  "55": "The historic district gets very busy during midday. It's much quieter in the early morning and evening, and that is the main advantage of an overnight stay compared to a tour visit."
+}
+```
+
+```json
+{
+  "45": "**Shirakawa-go.** This collection of steep, thatched gassho farmhouses lies roughly 50 minutes from Takayama via Nohi Bus, and you need a reservation for your seat. A lot of visitors spend the night to experience the village once day-trippers have gone; ⟦L1⟧ offers a reservable private bath along with shared hot-spring baths, but tattoos are not permitted in the shared facilities.",
+  "47": "**Okuhida Onsen and Kamikochi.** The Okuhida region comprises a group of hot-spring villages located in the mountains east of Takayama, accessible by Nohi Bus. Traveling onward from Hirayu to Kamikochi, an alpine valley closed each winter, takes around 30 minutes. Maintenance will shut the Shinhotaka Ropeway from November 24 through November 27, 2026."
+}
+```
+
+```json
+{
+    "48": "Visitors commonly consider Takayama alongside those destinations. Our town listings have the latest numbers and rates, verified today; quoted prices are per night for two.",
+    "52": "Several inns offer one, but you can't stroll between separate public bathhouses like in Kinosaki. To arrange a private bath, review the ⟦L1⟧. For a nearby classic onsen town, consider ⟦L2⟧ or ⟦L3⟧."
+}
+```
+
+```json
+{
+  "1": "**Takayama** is a historic merchant town in Japan's Hida mountains, within Gifu Prefecture, and it's frequently referred to as Hida-Takayama. Its attractions include streets of dark wooden houses, two morning markets, sake breweries over a century old, and the Takayama Festival in spring and fall. A single night is highly recommended, with two nights allowing for visits to Shirakawa-go or Okuhida hot springs. Our listings include ⟦L1⟧, plus 13 onsen hotels, 4 machiya, and 3 minshuku. Most charge from $90 to $460 per night for two people.",
+  "3": "This compact city sits in the Hida area of northern Gifu, among the mountains between Nagoya and the Sea of Japan. Historically, it provided timber and master carpenters during the feudal period and was under direct shogunate control. That wealth financed the merchant homes you can visit now and the festival floats, considered some of Japan's most detailed."
+}
+```
+
+{
+  "14": "Begin your walk at Nakabashi Bridge, the red one crossing the Miyagawa River, heading east into the historic district. Visiting early or late helps avoid crowds in your pictures. Watch for the sugidama above brewery doors, a sphere fashioned from cedar boughs. It is hung green to mark the new sake's completion, then browns while the sake ages.",
+  "16": "The Miyagawa market operates from 7:00 between April and November, shifting to an 8:00 opening from December through March, and it finishes around noon. Arrive shortly after the start, as stalls close when their items are gone, and you'll find fewer vendors on rainy, snowy, or cold winter days."
+}
+
+```json
+{
+    "17": "Takayama Jinya operated as the regional administrative center for the Hida area under the shogunate in the Edo period. You can tour its tatami-floored chambers, functional offices, and storage buildings. The entry fee is 500 yen, and it's free for all visitors aged 18 and under. Hours are 8:45 to 17:00 from April through October and 8:45 to 16:30 from November to March, with last admission 30 minutes before closing. It is not open from December 29 until January 3.",
+    "19": "Even if you miss the festival, you can view a changing display of the autumn festival's floats at the Takayama Festival Float Exhibition Hall. This hall is at Sakurayama Hachimangu, the shrine located at the north end of the old town, and it operates year-round."
+}
+```
+
+```json
+{
+    "27": "My family ran hotels in Tokyo, and I know a plan with only breakfast is not inferior. Takayama evenings are quiet and dining places close early, so a ryokan with just breakfast works if you have a Hida beef dinner reservation. Without that, you should select the dinner plan. The simplest way to get a good dinner in Takayama is at your inn, so you avoid searching for a restaurant open at 8 pm.",
+    "28": "Takayama does not feel like a bathhouse town such as ⟦L1⟧ or Kusatsu. However, many of its inns supply hot-spring water, which is called Hida Takayama Onsen. The water differs by property: ⟦L2⟧ receives sulfurous water directly from the source for its large bath, and ⟦L3⟧ and ⟦L4⟧ use a plain spring. To visit a true hot-spring village, travel into the mountains at Okuhida."
+}
+```
+
+```json
+{
+  "30": "Most ryokans in Takayama lack a written policy concerning tattoos. Some, such as Wat Hotel & Spa Hida Takayama and Hida Hanasatonoyu Takayama Ouan, clearly restrict guests with tattoos to private baths. You can locate the 15 places where you can bathe privately with tattoos via our filter.",
+  "31": "My method for inquiring about tattoo policies avoids asking if they are permitted. Instead, I ask if the kashikiri-buro, or private bath, is available for booking and at what time. This question has a simple yes or no answer, does not make the inn uncomfortable, and gets you into the hot water regardless. The full etiquette is covered in our guide to onsen in Japan."
+}
+```
+
+```json
+{
+    "4": "The historic Sanmachi district, located east of the station across the Miyagawa River, attracts most tourists. Its three parallel streets are lined with two-story wooden buildings containing sake breweries, shops selling miso and pickles, cafes, and compact museums. Most attractions are a short stroll from JR Takayama Station, meaning a car or bus pass is unnecessary for exploring.",
+    "10": "**Traveling from Tokyo for a single day is not recommended.** The trip from Tokyo takes roughly 4.5 hours one way, leading to nine hours of travel for four or five hours in Takayama. A day trip starting from Nagoya is possible, with a journey time of about 2 hours 30 minutes each direction, though you would not see the morning market."
+}
+```
+
+```json
+{
+  "33": "Wanosato earned a Michelin Key in 2026. Its location is outside the main town area. A shuttle departs from Takayama Station's west exit at 14:20, 15:20, and 16:20. The main bathing area uses natural hot spring water. Each room includes a private cypress tub, but that water is not from the hot spring. Meals are taken in a shared dining space. Its review score is 9.6 from 322 guest ratings.",
+  "34": "Ryokan Kaminaka has been a Registered Tangible Cultural Property since 2012. It is a 3-minute walk from JR Takayama Station and offers 10 rooms. The morning meal focuses on Hida-Takayama specialties, presented with a garden view. The compromise is that a few rooms do not include a private bath or toilet. It holds a rating of 9.5 based on 630 reviews."
+}
+```
+
+```json
+{
+    "25": "The local specialty visitors seek is Hida beef, a marbled meat from cattle raised in this area. You can find it prepared as steak, grilled on a hoba magnolia leaf with miso, or served as sushi from old-town street stalls. Also sample Takayama ramen, which has a thin soy-based broth and curly noodles, and mitarashi dango, grilled rice dumplings coated in a soy glaze.",
+    "26": "A number of lodgings close to the station do not provide dinner. ⟦L1⟧ offers exclusively room-only and breakfast plans, while ⟦L2⟧ supplies a breakfast box. For a complete evening meal at your accommodation, select an inn that includes dinner, like ⟦L3⟧ or ⟦L4⟧."
+}
+```
+
+```json
+{
+  "35": "⟦L1⟧ is located just two minutes on foot from the east side of JR Takayama Station. It features 29 guest rooms and a single private open-air bath supplied by natural hot spring water, available from 15:00 until 22:00. You can book a room-only plan or one that includes breakfast, requiring you to find your own evening meal elsewhere. Our November 2026 price check showed rates starting at $581 per night for two people, excluding taxes. The inn holds a 9.2 rating based on 3,633 guest reviews.",
+  "36": "⟦L1⟧ sits about a 10-minute walk from the train station and provides a complimentary shuttle from there and the bus terminal. All 24 of its rooms come with a private bathroom. An observation bath on the 7th floor draws its water from the Hida Takayama Onsen. They can arrange meals that avoid egg, milk, or buckwheat, and will prepare vegetarian dishes if feasible; your dinner is served in a personal dining area. It has received a 9.3 score from 122 reviews."
+}
+```
+
+```json
+{
+    "39": "Ryokan Murayama provides 13 rooms and two complimentary private hot spring baths. It's a 1-minute walk from the Hida-no-Sato-shita bus stop, which is a 10-minute ride from the station, placing you near Hida Folk Village. The ryokan accepts children of any age. Our last price check showed rates starting at $323 per night for two people, before tax. It holds an 8.8 rating from 964 reviews.",
+    "40": "Oyado Hachibei offers dinner and breakfast plans for its 15 rooms, at roughly half the average nightly cost in Takayama. A taxi from the station takes 5 minutes; you can also take the Nohi Bus to Hida no Sato and walk for 5 minutes. The building does not have an elevator. It earns an 8.8 score based on 322 reviews."
+}
+```
+
+```json
+{
+    "37": "Hidatei Hanaougi uses a private hot spring source, providing shared indoor and outdoor baths. A private open-air bath is attached to certain rooms among its 30 total. Your booking covers dinner and breakfast, and dinner takes place in your own dining area. The station is a 10-minute drive; you must ask for the shuttle service during booking. It holds a 9.4 score from 75 reviews.",
+    "38": "Hoshokaku allows kids of any age, charging for their food based on age: elementary school children pay 70% of the adult rate, preschoolers pay 50%, and a special children's meal is offered. Out of 53 rooms, 10 include a private open-air bath. You can reach it by walking 16 minutes from the station, taking a 5-minute taxi, or using a complimentary shuttle if certain requirements are met. It has a 9.0 rating based on 78 reviews."
+}
+```
+
+```json
+{
+  "48": "Takayama is frequently compared to those destinations. Our destination pages provide the current counts and rates, verified today; listed prices are per night for two people."
+}
+```
+
+{
+  "42": "Ichinomatsu offers 12 rooms, positioned a 6-minute walk from Takayama Station's west exit, with prices a bit below the area's median. You can select a breakfast-only plan, a morning box, or a room-only plan, requiring you to find dinner elsewhere. Its rating is 8.8 based on 1,791 reviews.",
+  "44": "Our Takayama selection also contains 4 machiya and 3 minshuku. A machiya is a complete rental of a historic wooden townhouse, featuring tatami rooms and often a small interior garden. A minshuku is a guesthouse run by a family, providing a few rooms and homemade meals. Pick a machiya for a family or group that wishes to cook and keep its own hours. A ryokan is the better option when you desire dinner provided and a bath prepared."
+}
+
+```json
+{
+  "45": "**Shirakawa-go.** This remote village is famous for its steep, thatched gassho farmhouses. You can get there on the Nohi Bus, a trip of roughly 50 minutes, but you must book your seat in advance. Lots of travelers opt to spend a night to enjoy the area once the daytime crowds have departed; ⟦L1⟧ provides a reservable private bath as well as shared hot-spring baths, but the shared facilities do not permit tattoos.",
+  "47": "**Okuhida Onsen and Kamikochi.** The Okuhida area consists of several hot-spring villages situated in the mountains to the east of Takayama, and you access them via Nohi Bus. Continuing from Hirayu to Kamikochi, a mountain valley that shuts down each winter, takes approximately 30 minutes. Maintenance work will close the Shinhotaka Ropeway from November 24 through November 27, 2026."
+}
+```
+
+```json
+{
+  "17": "Takayama Jinya served as the local administrative headquarters for the Hida area during the Edo period under the shogunate. Visitors can explore its tatami chambers, working offices, and storage buildings. The entry fee is 500 yen, and admission is complimentary for all guests aged 18 and under. Opening hours are 8:45 to 17:00 from April through October and 8:45 to 16:30 from November to March, with final entry 30 minutes prior to closing. It remains closed from December 29 until January 3.",
+  "26": "A lot of accommodations close to the station do not provide dinner service. ⟦L1⟧ offers exclusively room-only and breakfast packages, while ⟦L2⟧ provides a breakfast box. To have a full evening meal at your lodging, pick an inn that includes dinner, like ⟦L3⟧ or ⟦L4⟧."
+}
+```
+
+```json
+{
+    "10": "**A day trip from Tokyo is too much travel for too little time.** The journey from Tokyo takes around 4.5 hours one way, meaning nine hours of transit for just four or five hours in Takayama. Starting from Nagoya, with a trip of about 2 hours 30 minutes each direction, a day visit is possible, though you would not experience the morning market.",
+    "16": "The Miyagawa market runs from 7:00 between April and November, changing to an 8:00 start from December through March, and it closes around noon. Arrive early, because stalls begin closing once their goods are sold, and you will find fewer vendors on rainy, snowy, or winter days."
+}
+```
+
+```json
+{
+    "27": "My family owned hotels in Tokyo, and I can tell you a plan with only breakfast is not a lower-quality option. Takayama evenings are quiet and dining spots shut down early, so a ryokan offering just breakfast works well when you have a reservation for Hida beef. Without that, you should choose the dinner plan. The simplest way to get a good dinner in Takayama is at your ryokan, so you do not need to find a restaurant that is open at 8 pm.",
+    "28": "Takayama does not have the atmosphere of a bath town such as ⟦L1⟧ or Kusatsu. However, some inns bring in hot-spring water, which is marketed as Hida Takayama Onsen. The water quality is not the same at each property: ⟦L2⟧ gets sulfurous water directly from the spring for its big bath, and ⟦L3⟧ and ⟦L4⟧ use a plain type. To experience a real hot-spring village, travel into the mountains to Okuhida."
+}
+```
+
+```json
+{
+    "30": "Regarding tattoos, the majority of Takayama ryokans have no written policy. Some establishments explicitly limit visitors with tattoos to private bathing facilities, like Wat Hotel & Spa Hida Takayama and Hida Hanasatonoyu Takayama Ouan. You can find the 15 places where you can bathe privately with tattoos using our filter.",
+    "33": "Wanosato received a Michelin Key in 2026. It is located away from the central town. A shuttle service operates from the west exit of Takayama Station at 14:20, 15:20, and 16:20. The main bathing area uses natural hot spring water. All rooms feature a private cypress tub, but that water is not from the hot spring. Meals are provided in a communal dining room. Its guest rating is 9.6 based on 322 reviews."
+}
+```
+
+```json
+{
+  "1": "**Takayama** is a historic merchant town in the Hida mountains of Gifu Prefecture, Japan, also known as Hida-Takayama. You'll find streets with dark wooden houses, two morning markets, sake breweries older than 100 years, and the Takayama Festival in spring and fall. Spending one night is highly recommended, and two nights let you include Shirakawa-go or Okuhida hot springs. Our listings feature ⟦L1⟧, plus 13 onsen hotels, 4 machiya, and 3 minshuku. Most charge between $90 and $460 per night for two people.",
+  "3": "This compact city is located in the Hida region of northern Gifu, among the mountains between Nagoya and the Sea of Japan. During the feudal period, it provided timber and master carpenters and was under direct shogunate control. That wealth funded the merchant homes visitors see now and the festival floats, considered some of Japan's most intricate."
+}
+```
+
+```json
+{
+  "36": "Honjin Hiranoya Bekkan sits a 10-minute walk from the station and offers a complimentary shuttle from there and the bus center. All 24 rooms feature a private bathroom. Its 7th-floor observation bath draws from the Hida Takayama Onsen. They can accommodate requests for meals without egg, milk, or buckwheat, and will prepare vegetarian options when possible; your dinner is served in a private dining room. It holds a 9.3 rating from 122 reviews.",
+  "37": "Hidatei Hanaougi taps a private hot spring source, providing shared indoor and outdoor baths. A private open-air bath is attached to select rooms among its 30 total. Your stay includes dinner and breakfast, with dinner served in your own dining area. The station is a 10-minute drive away; you must request the shuttle service at booking. It has earned a 9.4 score from 75 reviews."
+}
+```
+
+```json
+{
+  "34": "Ryokan Kaminaka holds designation as a Registered Tangible Cultural Property, a status granted in 2012. It sits just 3 minutes from JR Takayama Station by foot and provides 10 guest rooms. The morning meal highlights regional specialties from Hida-Takayama, and you can enjoy it overlooking a traditional garden. As a compromise, a few of the accommodations lack an attached bathroom. Its guest rating is 9.5, drawn from 630 reviews.",
+  "35": "Oyado Koto No Yume is located a brief 2-minute stroll from the east side of JR Takayama Station. It offers 29 rooms and features a single private open-air bath fed by natural hot spring water, accessible from 15:00 to 22:00. Booking options are room-only or with breakfast, meaning you'll need to arrange your evening meal separately. When we looked in November 2026, rates began at $581 per night for two people, before tax. It has earned a 9.2 score from 3,633 reviews."
+}
+```
+
+```json
+{
+    "38": "Hoshokaku accepts children of any age. Their meal charges depend on age: elementary school kids pay 70% of the adult price, preschoolers pay 50%, and a children's meal set is available. Out of 53 rooms, eleven come with an open-air bath. You can walk from the station in 16 minutes, take a 5-minute taxi, or use a complimentary shuttle if some conditions are fulfilled. Its rating is 9.0 based on 78 reviews.",
+    "39": "Ryokan Murayama offers two complimentary private hot spring baths and has 13 rooms. It's a 1-minute walk from the Hida-no-Sato-shita bus stop, which is about a 10-minute bus ride from the station, putting you near Hida Folk Village. The ryokan welcomes children of all ages. Our last price check showed rooms starting at $323 per night for two people, before tax. It holds an 8.8 rating from 964 reviews."
+}
+```
+
+```json
+{
+    "44": "Our Takayama listings include 4 machiya and 3 minshuku. A machiya is a full rental of a historic wooden townhouse, containing tatami rooms and frequently a tiny interior garden. A minshuku is a family-operated guesthouse offering a handful of rooms and homemade meals. Choose a machiya for families or groups who prefer to cook and set their own schedule. A ryokan is preferable when you seek dinner provided and a bath prepared.",
+    "45": "**Shirakawa-go.** This remote settlement features steep, thatched gassho farmhouses. You can reach it via the Nohi Bus, a journey of about 50 minutes, but you need to book your ticket ahead of time. Many visitors choose to spend a night to experience the location once the daytime tourists have gone; Onyado Yuinosho offers a reservable private bath along with shared hot-spring baths, but the shared facilities do not allow tattoos."
+}
+```
+
+```json
+{
+  "40": "Oyado Hachibei provides dinner and breakfast for its 15 rooms, costing around half the average nightly rate in Takayama. A taxi ride from the station takes 5 minutes; alternatively, you can ride the Nohi Bus to Hida no Sato and then walk for 5 minutes. The property lacks an elevator. It holds an 8.8 rating from 322 reviews.",
+  "42": "Ichinomatsu features 12 rooms, located a 6-minute walk from Takayama Station's west exit, with rates slightly below the local median. You can choose a breakfast-only plan, a morning box, or a room-only plan, meaning you'll need to arrange dinner elsewhere. Its score is 8.8 based on 1,791 reviews."
+}
+```
+

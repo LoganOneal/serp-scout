@@ -1,0 +1,144 @@
+{
+ "checked": "2026-11-23",
+ "credits_rule": "All credits in the Photo credits section at the end",
+ "photos": [
+  {
+   "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/ff/One_of_the_three_main_streets_in_Sanmachi-Suji_%286156038234%29.jpg/1920px-One_of_the_three_main_streets_in_Sanmachi-Suji_%286156038234%29.jpg",
+   "source": "Wikimedia Commons",
+   "page": "https://commons.wikimedia.org/wiki/File:One_of_the_three_main_streets_in_Sanmachi-Suji_(6156038234).jpg",
+   "license": "CC BY 2.0",
+   "license_url": "https://creativecommons.org/licenses/by/2.0",
+   "attribution": "Maarten Heerlien from Voorschoten, The Netherlands, CC BY 2.0, via Wikimedia Commons",
+   "alt": "Dark wooden merchant houses lining a street in Sanmachi, Takayama's old town",
+   "placement": "hero, under the opening",
+   "credit_line": "Sanmachi old town: Maarten Heerlien from Voorschoten, The Netherlands, CC BY 2.0, via Wikimedia Commons",
+   "role": "hero"
+  },
+  {
+   "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6a/Morning_market_%2811272886764%29.jpg/1920px-Morning_market_%2811272886764%29.jpg",
+   "source": "Wikimedia Commons",
+   "page": "https://commons.wikimedia.org/wiki/File:Morning_market_(11272886764).jpg",
+   "license": "CC BY-SA 2.0",
+   "license_url": "https://creativecommons.org/licenses/by-sa/2.0",
+   "attribution": "KimonBerlin, CC BY-SA 2.0, via Wikimedia Commons",
+   "alt": "Shoppers at the stalls of the Miyagawa morning market in Takayama",
+   "placement": "Things to do: morning markets",
+   "credit_line": "Miyagawa morning market: KimonBerlin, CC BY-SA 2.0, via Wikimedia Commons",
+   "role": "section"
+  },
+  {
+   "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f1/Kyuhousha%2C_Hachiman_shrine_-_Takayama_Festival_Float_Exhibition_Hall_-_Takayama%2C_Gifu%2C_Japan_-_DSC06523.jpg/1920px-Kyuhousha%2C_Hachiman_shrine_-_Takayama_Festival_Float_Exhibition_Hall_-_Takayama%2C_Gifu%2C_Japan_-_DSC06523.jpg",
+   "source": "Wikimedia Commons",
+   "page": "https://commons.wikimedia.org/wiki/File:Kyuhousha,_Hachiman_shrine_-_Takayama_Festival_Float_Exhibition_Hall_-_Takayama,_Gifu,_Japan_-_DSC06523.jpg",
+   "license": "CC0",
+   "license_url": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
+   "attribution": "Daderot, CC0, via Wikimedia Commons",
+   "alt": "A gilded festival float with red lacquer on display at the Takayama Festival Float Exhibition Hall",
+   "placement": "When to go: festival",
+   "credit_line": "Festival float, Float Exhibition Hall: Daderot, CC0, via Wikimedia Commons",
+   "role": "section"
+  },
+  {
+   "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/75/Takayama%2C_Part_III_-_Takayama6358.jpg/1920px-Takayama%2C_Part_III_-_Takayama6358.jpg",
+   "source": "Wikimedia Commons",
+   "page": "https://commons.wikimedia.org/wiki/File:Takayama,_Part_III_-_Takayama6358.jpg",
+   "license": "CC0",
+   "license_url": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
+   "attribution": "lumoplank, CC0, via Wikimedia Commons",
+   "alt": "Visitors climbing stone steps to a torii gate and shrine hall in Takayama in autumn",
+   "placement": "When to go: autumn",
+   "credit_line": "Shrine steps in autumn: lumoplank, CC0, via Wikimedia Commons",
+   "role": "section"
+  },
+  {
+   "image": "https://static.cupid.travel/hotels/567508722.jpg",
+   "source": "Ryokan Society inn page",
+   "page": "https://ryokansociety.com/takayama/wanosato",
+   "license": "Inn photo (approved by Kai 2026-11-20)",
+   "attribution": "Courtesy of the ryokan, as shown on its Ryokan Society page",
+   "alt": "Thatched-roof building among tall trees at Wanosato",
+   "placement": "Under the wanosato H3, linked; 360px in at-a-glance table if a pick",
+   "role": "inn"
+  },
+  {
+   "image": "https://static.cupid.travel/hotels/72063838.jpg",
+   "source": "Ryokan Society inn page",
+   "page": "https://ryokansociety.com/takayama/ryokan-kaminaka",
+   "license": "Inn photo (approved by Kai 2026-11-20)",
+   "attribution": "Courtesy of the ryokan, as shown on its Ryokan Society page",
+   "alt": "Two-story wooden facade of Ryokan Kaminaka",
+   "placement": "Under the ryokan-kaminaka H3, linked; 360px in at-a-glance table if a pick",
+   "role": "inn"
+  },
+  {
+   "image": "https://static.cupid.travel/hotels/25379369.jpg",
+   "source": "Ryokan Society inn page",
+   "page": "https://ryokansociety.com/takayama/oyado-koto-no-yume",
+   "license": "Inn photo (approved by Kai 2026-11-20)",
+   "attribution": "Courtesy of the ryokan, as shown on its Ryokan Society page",
+   "alt": "Lobby with dark timber beams and lantern light at Oyado Koto No Yume",
+   "placement": "Under the oyado-koto-no-yume H3, linked; 360px in at-a-glance table if a pick",
+   "role": "inn"
+  },
+  {
+   "image": "https://static.cupid.travel/hotels/ex_4b3bd4c1_z.jpg",
+   "source": "Ryokan Society inn page",
+   "page": "https://ryokansociety.com/takayama/honjin-hiranoya-bekkan",
+   "license": "Inn photo (approved by Kai 2026-11-20)",
+   "attribution": "Courtesy of the ryokan, as shown on its Ryokan Society page",
+   "alt": "Lantern-lit wooden terrace with tables at Honjin Hiranoya Bekkan at dusk",
+   "placement": "Under the honjin-hiranoya-bekkan H3, linked; 360px in at-a-glance table if a pick",
+   "role": "inn"
+  },
+  {
+   "image": "https://static.cupid.travel/hotels/ex_16dcf9a9_z.jpg",
+   "source": "Ryokan Society inn page",
+   "page": "https://ryokansociety.com/takayama/hidatei-hanaougi",
+   "license": "Inn photo (approved by Kai 2026-11-20)",
+   "attribution": "Courtesy of the ryokan, as shown on its Ryokan Society page",
+   "alt": "Garden pines in front of Hidatei Hanaougi",
+   "placement": "Under the hidatei-hanaougi H3, linked; 360px in at-a-glance table if a pick",
+   "role": "inn"
+  },
+  {
+   "image": "https://static.cupid.travel/hotels/ex_5bfa6796_z.jpg",
+   "source": "Ryokan Society inn page",
+   "page": "https://ryokansociety.com/takayama/hoshokaku",
+   "license": "Inn photo (approved by Kai 2026-11-20)",
+   "attribution": "Courtesy of the ryokan, as shown on its Ryokan Society page",
+   "alt": "Terrace with a stone foot bath looking over the rooftops of Takayama at Hoshokaku",
+   "placement": "Under the hoshokaku H3, linked; 360px in at-a-glance table if a pick",
+   "role": "inn"
+  },
+  {
+   "image": "https://static.cupid.travel/hotels/33453932.jpg",
+   "source": "Ryokan Society inn page",
+   "page": "https://ryokansociety.com/takayama/ryokan-murayama",
+   "license": "Inn photo (approved by Kai 2026-11-20)",
+   "attribution": "Courtesy of the ryokan, as shown on its Ryokan Society page",
+   "alt": "Wooden ryokan building and garden at Ryokan Murayama",
+   "placement": "Under the ryokan-murayama H3, linked; 360px in at-a-glance table if a pick",
+   "role": "inn"
+  },
+  {
+   "image": "https://static.cupid.travel/hotels/323316582.jpg",
+   "source": "Ryokan Society inn page",
+   "page": "https://ryokansociety.com/takayama/oyado-hachibei",
+   "license": "Inn photo (approved by Kai 2026-11-20)",
+   "attribution": "Courtesy of the ryokan, as shown on its Ryokan Society page",
+   "alt": "Dinner of sashimi, beef and small dishes at Oyado Hachibei",
+   "placement": "Under the oyado-hachibei H3, linked; 360px in at-a-glance table if a pick",
+   "role": "inn"
+  },
+  {
+   "image": "https://static.cupid.travel/hotels/211628116.jpg",
+   "source": "Ryokan Society inn page",
+   "page": "https://ryokansociety.com/takayama/ichinomatsu-japanese-modern-hotel",
+   "license": "Inn photo (approved by Kai 2026-11-20)",
+   "attribution": "Courtesy of the ryokan, as shown on its Ryokan Society page",
+   "alt": "Ichinomatsu's traditional facade lit up at dusk",
+   "placement": "Under the ichinomatsu-japanese-modern-hotel H3, linked; 360px in at-a-glance table if a pick",
+   "role": "inn"
+  }
+ ]
+}
