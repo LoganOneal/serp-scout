@@ -1,0 +1,45 @@
+{
+ "date": "2026-11-21",
+ "writer": "deepseek.v3.2",
+ "reviewer": "us.anthropic.claude-sonnet-4-6",
+ "seconds": 244,
+ "seconds_rewrite": 135,
+ "qwen_tokens": {
+  "inputTokens": 60674,
+  "outputTokens": 19545
+ },
+ "claude_tokens": {
+  "inputTokens": 24248,
+  "outputTokens": 4248
+ },
+ "sections": 14,
+ "sections_kept_as_written": [
+  "An onsen is a bath filled from a natural hot spring, and Jap",
+  "## Onsen with tattoos: what actually works\n\nTattoos are stil",
+  "## Where to stay in Japan for your first onsen: our picks fo",
+  "## Book your onsen stay in Japan\n\nWe list [2,598 ryokan acro"
+ ],
+ "copied_pct": 64,
+ "review_flags": 49,
+ "fixed": 45,
+ "not_fixed": [
+  {
+   "new": "It's important to know that labels like 'private' or 'open-air' don't guarantee the water is from a natural hot spring, a common point of confusion for newcomers.",
+   "problem": "OLD says '\"Private\" and \"open-air\" don't mean hot-spring water, which surprises a lot of first-timers'; NEW changes 'surprises a lot of first-timers' to 'a common point of confusion for newcomers', which is a meaning change (surprise vs. confusion)."
+  },
+  {
+   "new": "On our own inn listings, we include this information when provided, using descriptions like 'free-flowing' or 'partially supplemented.'",
+   "problem": "OLD says 'we note it where the inn tells us, such as \"free-flowing\" or \"some water added\"'; NEW changes the example phrase 'some water added' to 'partially supplemented', which changes the wording of the actual description readers would look for."
+  },
+  {
+   "new": "For historic mountain bathhouses with wooden architecture: Look at [Nyuto], [Shibu], or [Kurokawa].",
+   "problem": "OLD says 'Old wooden onsen in the mountains'; NEW adds 'bathhouses' and 'architecture', narrowing the description to bathhouses with wooden architecture rather than old wooden onsen generally."
+  },
+  {
+   "sentence": "Bathing in a hot spring follows a few key guidelines that ensure a respectful and pleasant experience for everyone. The most common queries are answered here.",
+   "problem": "NEW adds an introductory sentence ('Bathing in a hot spring follows a few key guidelines...The most common queries are answered here.') that does not appear in OLD, adding a new framing claim."
+  }
+ ],
+ "structure_check_ok": true,
+ "structure_issues": []
+}
